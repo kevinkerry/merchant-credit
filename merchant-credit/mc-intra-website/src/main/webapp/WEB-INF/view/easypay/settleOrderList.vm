@@ -1,0 +1,58 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td ><input type="checkbox" id="J_Sel_All"/> 全选</td>
+		<td>日期</td>
+		<td>代理商户号</td>
+		<td>代理商户名称</td>
+		<td>成功总金额</td>
+		<td>退款金额</td>
+		<td>参与分润金额</td>
+		<td>手续费</td>
+		<td>分润金额</td>
+		<td>分润成本</td>
+		<td>审核状态</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+        <td>
+			#if($!{o.auditStatus}=='1')
+				<input name="settleOrderCheckbox" type="checkbox" value="$!{o.id}"></input>
+			#end
+			$!{velocityCount}
+		</td>
+		<td>$!{o.settlementTimes}</td>
+			<td>$!{o.promoterNo}</td>
+			<td>$!{o.promoterName}</td>
+			<td>$!{o.successAmount}</td>
+			<td>$!{o.refundAmount}</td>
+			<td>$!{o.participateProfitAmount}</td>
+			<td>$!{o.receivedFee}</td>
+			<td>$!{o.profitAmount}</td>
+			<td>$!{o.profitCost}</td>
+			<td>
+			#if($!{o.auditStatus}=='1') 待审核 #elseif($!{o.auditStatus}=='2') 已审核 #end
+			</td>
+		<td>
+			<a  href="javascript:;" onclick="javascript:downloadOrder('$!{o.id}');return false;" target="_blank" title="下载">下载</a>
+			#if($!{o.auditStatus}!='2')
+				<a  href="javascript:;" onclick="javascript:checkOrder('$!{o.id}');return false;" target="_blank" title="审核">审核</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>
+<script type="text/javascript">
+
+		jQuery("#J_Sel_All").bind("click",function(){
+    		if(jQuery(this).attr("checked")){
+    			jQuery(".listTb input[name=settleOrderCheckbox]").attr("checked","checked");
+    		}else{
+    			jQuery(".listTb input[name=settleOrderCheckbox]").removeAttr("checked");
+    		}
+		});
+
+</script>

@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>#if($page_title) $!page_title #else T+0业务后台系统 #end</title>
+
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+	<META HTTP-EQUIV="Expires" CONTENT="0">
+
+	<LINK href="#springUrl('/htdocs/css/jquery.idtabs.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/jquery.nyroModal.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/Style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/supply_style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/menu.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/artDialog/skins/default.css')" type="text/css" rel="stylesheet">
+	<style>
+    	body{ background:url("#springUrl('/htdocs/images/bgweb.jpg')") repeat-x left 42px;}
+    </style>
+
+	<script src="#springUrl('/htdocs/scripts/common.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/menuHover.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+	<script type="text/javascript">
+		var rootPath = '#springUrl("")';
+		var j = jQuery.noConflict();
+		jQuery.fx.off = true;
+		var contextPath = "$rc.contextPath";
+	</script>
+    
+	<script src="#springUrl('/htdocs/scripts/validator.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.bgiframe.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.nyroModal-1.5.5.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.idTabs.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.maxlength.js')" type="text/javascript"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/jquery.validate.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/artDialog/jquery.artDialog.js')"></script>
+	
+	#if($subjectTreeList)
+	<LINK href="#springUrl('/htdocs/css/subjecttree/jquery.popup.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/subjecttree/jquery.treeview.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<script type='text/javascript' src="#springUrl('/dwr/interface/SubjectTree.js')"></script>
+    <script type='text/javascript' src="#springUrl('/dwr/engine.js')"></script>
+    <script type='text/javascript' src="#springUrl('/dwr/util.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/subjecttree/jquery.popup.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/subjecttree/jquery.treeview.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/validator.js')"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+
+	#end
+
+	#if($bizcodeTreeList)
+	<LINK href="#springUrl('/htdocs/css/subjecttree/jquery.popup.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/subjecttree/jquery.treeview.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<script type='text/javascript' src="#springUrl('/dwr/interface/BizcodeTree.js')"></script>
+    <script type='text/javascript' src="#springUrl('/dwr/engine.js')"></script>
+    <script type='text/javascript' src="#springUrl('/dwr/util.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/subjecttree/jquery.popup.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/subjecttree/jquery.treeview.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/validator.js')"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+
+	#end
+
+	#if($bizTreeList)
+	<LINK href="#springUrl('/htdocs/css/subjecttree/jquery.popup.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/subjecttree/jquery.treeview.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<script type='text/javascript' src="#springUrl('/dwr/interface/BizcodeTree.js')"></script>
+    <script type='text/javascript' src="#springUrl('/dwr/engine.js')"></script>
+    <script type='text/javascript' src="#springUrl('/dwr/util.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/subjecttree/jquery.popup.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/subjecttree/jquery.treeview.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/validator.js')"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+
+	#end
+
+
+</head>
+<body>
+	<div class="Wrap">
+        <div class="Title">
+			<p>
+				您好，$!userHolder.getAuthUser().username <span>|</span>
+				<a href="#springUrl('/j_spring_security_logout')">退出</a> <span>|</span>
+				<a href="#springUrl('/index.htm')">返回首页</a>
+			</p>
+        </div>
+    	#parse("/control/menu.vm")
+    	$screen_content
+	</div>
+	#parse("/control/globalControl.vm")
+</body>
+</html>

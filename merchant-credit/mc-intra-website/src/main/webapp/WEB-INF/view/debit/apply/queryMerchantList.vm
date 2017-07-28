@@ -1,0 +1,31 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td>商户名称</td>
+		<td>商户号</td>
+		<td>代理商名称</td>
+		<td>代理商商户号</td>
+		<td>申请日期</td>
+		<td>是否承诺</td>
+		<td>商户材料</td>
+		<td>预审</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{temp.merchantName}</td>
+		<td>$!{temp.merchantNo}</td>
+		<td>$!{temp.promoterName}</td>
+		<td>$!{temp.promoterNo}</td>
+		<td>#showDate($!{temp.applyStartTime})</td>
+		<td>#if("$!{temp.isAgnetGuarantee}"=="1")是#else 否 #end</td>
+		<td><a href="#springUrl('/debitAudit/showDetailInfo.do')?applyId=$!{temp.id}" class="look" target="_blank">查看详情</a></td>
+		##只有状态是【用户资料提交中】且已拿到商户邮寄的材料才可以走下一步流程
+		<td>
+		#if("$!{temp.applyStatus}"=="2")<a href="javascript:preAudit('$!{temp.id}',false);">打回</a>&nbsp;<a href="javascript:preAudit('$!{temp.id}',true);">通过</a>#end
+		#if("$!{temp.applyStatus}"=="4")<a href="javascript:openAccount('$!{temp.id}');">开通借款</a>#end
+		</td>
+	</tr>
+	#end
+</table>

@@ -1,0 +1,33 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>分组</td>
+		<td>分组类型</td>
+		<td>分组值</td>
+		<td>生效日期</td>
+		<td>失效日期</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr class="settle_ttl">
+		<td>${groupMap.get($o.groupId)}</td>
+		<td>
+			#if ($!{o.groupType}=='1')
+				MCC分组
+			#elseif($!{o.groupType}=='2')
+				商户号分组
+			#elseif($!{o.groupType}=='3')
+				现场注册分组
+			#end
+		</td>
+		<td>$!{o.mccValues}</td>
+		<td>#formartDate2Str($!{o.effectiveTime})</td>
+		<td>#formartDate2Str($!{o.expireTime})</td>
+		<td>
+			<a class="smBtn" href="#springUrl('/settle/merchant/update/view.do')?id=$!{o.id}" class="look" target="_blank" title="修改">修</a>
+		</td>
+	</tr>
+	#end
+</table>

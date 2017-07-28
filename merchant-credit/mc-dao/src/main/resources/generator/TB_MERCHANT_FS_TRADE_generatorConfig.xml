@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<classPathEntry location="D:\maven\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.merchant.dao" targetProject="D:\workspace\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="D:\workspace\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.merchant.dao.mapper"  targetProject="D:\workspace\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.merchant.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.merchant.manager" implementationPackage="com.sdp.mc.merchant.manager.impl" generatorEnable="true"  targetProject="D:\workspace\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="TB_MARCHAT_FS_TRADE" domainObjectName="MerchantFsTradeDO">
+		<generatedKey column="MFT_ID" sqlStatement="select SEQ_TB_MARCHAT_FS_TRADE.nextval from dual" type="pre" />
+		<columnOverride column="MFT_ID" 						property="mftId" 				javaType="java.lang.Long" />
+    	<columnOverride column="MFQ_ID" 					    property="mfqId" 			javaType="java.lang.Long" />
+    	<columnOverride column="ORDER_NO" 						property="orderNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="TRADE_TIME" 						property="tradeTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="TXN_NO" 						property="txnNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="TRADE_TYPE" 						property="tradeType" 				javaType="java.lang.String"/>
+    	<columnOverride column="TRADE_STATUS" 						property="tradeStatus" 				javaType="java.lang.String"/>
+    	<columnOverride column="TRADE_AMOUNT" 						property="tradeAmount" 				/>
+    	<columnOverride column="TRADE_FEE" 						property="tradeFee" 				/>
+    	<columnOverride column="SETTLE_AMOUNT" 						property="settleAmount" 				/>
+    	<columnOverride column="CARD_TYPE" 						property="cardType" 				javaType="java.lang.String"/>
+    	<columnOverride column="SHORT_PAN" 						property="shortPan" 				javaType="java.lang.String"/>
+    	<columnOverride column="ISSUER_ID" 						property="issuerId" 				javaType="java.lang.String"/>
+    	<columnOverride column="TERMINAL_NO" 						property="terminalNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="TXN_STATUS" 						property="txnStatus" 				javaType="java.lang.String"/>
+    	<columnOverride column="TXN_TYPE" 						property="txnType" 				javaType="java.lang.String"/>
+    	<columnOverride column="TXN_CARD_TYPE" 						property="txnCardType" 				javaType="java.lang.String"/>
+    	<columnOverride column="TXN_ISSUER_ID" 						property="txnIssuerId" 				javaType="java.lang.String"/>
+    	<columnOverride column="TXN_SHORT_PAN" 						property="txnShortPan" 				javaType="java.lang.String"/>
+    </table>
+  </context>
+</generatorConfiguration>

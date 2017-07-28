@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	<!-- scan location -->
+	<aop:aspectj-autoproxy/>
+
+	<!-- Spring对分段文件上传（multipart file upload）的支持 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<!--文件最大值，单位字节 -->
+			<value>${maxUploadSize}</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+			<!--内存cache大小，字节 -->
+		</property>
+	</bean>
+
+	<context:component-scan base-package="com.sdp.mc.web.action,com.sdp.mc.web.rest.action,com.sdp.debit.web.*" />
+	<bean id="placeHolderConfig" class="com.sdp.mc.common.web.MCPropertyPlaceholderConfigurer">
+		<property name="propertiesFile" value="/opt/pay/config/merchant-credit/mc_all.properties"></property>
+	</bean>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" >
+		<property name="interceptors">
+			<list>
+				<!-- 用户信息拦截器 -->
+				<bean class="com.sdp.mc.web.interceptor.MCMerchantUserInterceptor" >
+					<property name="noNeedCheckMCMerchantUserRequest">
+						<list>
+							<value>common/main/quit</value>
+							<value>common/main/gotoEmpty</value>
+							<value>common/manager/download</value>
+							<value>common/merchant/recieveCreditLevel</value>
+						</list>
+					</property>
+				</bean>
+				<!-- 请求安全拦截器 -->
+				<bean class="com.sdp.mc.web.interceptor.RequestInterceptor" >
+					<property name="noNeedCheckRefererRequest">
+						<list>
+							<value>common/main/index</value>
+							<value>common/main/quit</value>
+							<value>common/main/gotoEmpty</value>
+
+							<!--暂时取消防刷策略-->
+							<value>posPromoter/agentApply/index</value>
+							<value>posPromoter/additionalMargin/index</value>
+							<value>posPromoter/toQueryPosMerchant</value>
+							<value>mposPromoter/agentApply/index</value>
+							<value>mposPromoter/additionalMargin/index</value>
+							<value>mposPromoter/toQueryPosMerchant</value>
+							<value>posMerchant/toSetFastConfirm</value>
+							<value>mposMerchant/toSetFastConfirm</value>
+
+							<value>posPromoter/funding/index</value>
+							<value>posPromoter/funding/history</value>
+							<value>mposPromoter/funding/index</value>
+							<value>mposPromoter/funding/history</value>
+
+							<value>posPromoter/dfs/init</value>
+							<value>posPromoter/debit/init</value>
+							<value>posPromoter/debit/apply</value>
+							<value>posPromoter/profit/queryAgentProfit</value>
+							<value>posPromoter/auditdebit/queryCreditLinesApply</value>
+							<value>posPromoter/auditdebit/applyInfo</value>
+							<value>posPromoter/auditdebit/agreement</value>
+
+							<value>mposPromoter/debit/init</value>
+							<value>mposPromoter/debit/apply</value>
+							<value>mposPromoter/profit/queryAgentProfit</value>
+							<value>mposPromoter/auditdebit/queryCreditLinesApply</value>
+							<value>mposPromoter/auditdebit/agreement</value>
+							<value>mposPromoter/auditdebit/applyInfo</value>
+
+							<value>posMerchant/debit/myDebitOrders</value>
+							<value>mposMerchant/debit/myDebitOrders</value>
+							<!-- 对账单 -->
+							<value>posPromoter/withdrawIndex</value>
+							<value>ajaxPaging/withdrawInfoList</value>
+
+							<value>posPromoter/merchantFastsettle/index</value>
+							<value>posPromoter/merchantFastsettle/fastsettleList</value>
+							<value>mposPromoter/merchantFastsettle/index</value>
+							<value>mposPromoter/merchantFastsettle/fastsettleList</value>
+
+							<value>posPromoter/profits/toquery</value>
+							<value>mposPromoter/profits/query</value>
+							
+							<value>easypay/*/*</value>
+							<value>easypay/*/*</value>
+						</list>
+					</property>
+					<property name="allowedRefererPrefix">
+						<list>
+							<value>${requestInterceptor.allowedRefererPrefix0}</value>
+							<value>${requestInterceptor.allowedRefererPrefix1}</value>
+							<value>${requestInterceptor.allowedRefererPrefix2}</value>
+						</list>
+					</property>
+					<property name="allowedOperateInterval" value="${requestInterceptor.allowedOperateInterval}" />
+				</bean>
+				<!-- 权限拦截器 -->
+				<bean class="com.sdp.mc.web.interceptor.RuleInterceptor">
+					<property name="noNeedCheckRuleFunctionName">
+						<list>
+							<value>common/main/index</value>
+							<value>common/main/quit</value>
+							<value>common/manager/download</value>
+							<value>common/merchant/recieveCreditLevel</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+							<value>text/html;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- velocity config -->
+	<bean id="velocityConfigurer"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath">
+			<value>/WEB-INF/view</value>
+		</property>
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+				<prop key="velocimacro.library">control/macros.vm</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 处理velocity布局 -->
+	<bean id="viewResolver"
+		class="com.sdp.mc.common.web.resolver.VelocityMultipleLayoutViewResolver">
+		<property name="cache" value="true" />
+		<property name="prefix" value="" />
+		<property name="suffix" value=".vm" />
+		<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />
+		<property name="contentType" value="text/html; charset=utf-8"></property>
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="requestContextAttribute" value="rc"/>
+		<property name="mappings">
+			<map>
+				<entry key="/control/json_result" value="main/layout/empty.vm" />
+				<entry key="/exception/uploadSizeExceeded" value="exception/uploadSizeExceeded.vm" />
+
+				<entry key="/main/fastsettle/*List" value="main/layout/empty.vm" />
+				<entry key="/main/fastsettle/initPosMerchantSettings" value="main/layout/nomenu.vm" />
+				<entry key="/main/debit/apply/applyDetailInfo" value="main/layout/empty.vm" />
+				<entry key="/main/debit/*/*List" value="main/layout/empty.vm" />
+
+				<entry key="/main/fastsettle/withdrawIndex" value="main/layout/newdefault.vm" />
+				<entry key="/main/fastsettle/withdrawInfoList" value="main/layout/nomenu.vm" />
+
+
+
+
+				<entry key="/main/fastsettle/posFastsettleIndex" value="main/layout/newdefault.vm" />
+				<entry key="/main/fastsettle/posFastsettleList" value="main/layout/nomenu.vm" />
+				<entry key="/main/fastsettle/mposFastsettleIndex" value="main/layout/newdefault.vm" />
+				<entry key="/main/fastsettle/mposFastsettleList" value="main/layout/empty.vm" />
+
+				<entry key="/main/underPromoter/queryIndex" value="main/layout/newdefault.vm" />
+				<entry key="/main/underPromoter/underPromoterList" value="main/layout/empty.vm" />
+				<entry key="/main/underPromoter/configEdit" value="main/layout/nomenu.vm" />
+
+				<entry key="/main/settle/settleorder/settleorderIndex" value="main/layout/newdefault.vm" />
+				<entry key="/main/settle/settleorder/settleorderList" value="main/layout/empty.vm" />
+
+				<entry key="/main/settle/promoterpfs/popup" value="main/layout/empty.vm" />
+				<entry key="/main/settle/promoterpfs/pfsList" value="main/layout/empty.vm" />
+				<entry key="/main/settle/oneselfpfs/oneselfLis" value="main/layout/empty.vm" />
+				<entry key="/main/settle/underclerkpfs/underclerkList" value="main/layout/empty.vm" />
+				
+				<entry key="/main/settle/underclerkpfs/summary" value="main/layout/empty.vm" />
+				<entry key="/main/settle/oneselfpfs/summary" value="main/layout/empty.vm" />
+
+				<entry key="/main/settle/*" value="main/layout/newdefault.vm" />
+				
+				
+				<entry key="/main/easypay/*Index" value="main/layout/newdefault.vm" />
+				<entry key="/main/easypay/*/*index" value="main/layout/newdefault.vm" />
+				<entry key="/main/easypay/*/*add" value="main/layout/newdefault.vm" />
+				<entry key="/main/easypay/*List" value="main/layout/empty.vm" />
+				<entry key="/main/easypay/*/*list" value="main/layout/empty.vm" />
+				<entry key="/main/easypay/*Detail" value="main/layout/newdefault.vm" />
+				<!-- 个性化布局扩展在此添加，需要将个性的放前面 -->
+				<entry key="*" value="main/layout/default.vm" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- jsp
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="viewClass">
+	        <value>org.springframework.web.servlet.view.JstlView</value>
+	    </property>
+	    <property name="prefix" value="/WEB-INF/view" />
+	    <property name="suffix" value=".jsp" />
+	</bean>
+ 	-->
+	<!-- 异常处理 -->
+	<bean id="exceptionResolver" class="com.sdp.mc.common.web.resolver.MCExceptionResolver">
+		<property name="defaultErrorView">
+			<value>/exception/error</value>
+		</property>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.sql.SQLException">/exception/dberror</prop>
+				<prop
+					key="org.springframework.web.multipart.MaxUploadSizeExceededException">/exception/uploadSizeExceeded</prop>
+<!-- 				<prop -->
+<!-- 					key="org.springframework.web.multipart.MaxUploadSizeExceededException">/main/fastsettle/merchant/settFastConfirm</prop> -->
+			</props>
+		</property>
+	</bean>
+
+</beans>

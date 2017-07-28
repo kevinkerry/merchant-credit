@@ -1,0 +1,31 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>商户号</td>
+		<td>商户名称</td>
+		<td>签约费率</td>
+		<td>开户状态</td>
+		<td>实名审核状态</td>
+		<td>注册日期</td>
+		<td width="100">二级代理商账号</td>
+		<td>操作员</td>
+	    <td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		<td>$!{o.rate}</td>
+		<td>$!{o.registerStatus}</td>
+		<td>$!{o.realNameStatus}</td>
+		<td>#showDateTime($!{o.createDate})</td>
+		<td>$!{o.secondProxy}</td>
+		<td>$!{o.operator}</td>
+        <td><a href="#relativeUrl('/easypay/merchant/detail.htm')?merchantNo=${o.merchantNo}" target="_blank">详情</a></td>
+	</tr>
+	#end
+</table>

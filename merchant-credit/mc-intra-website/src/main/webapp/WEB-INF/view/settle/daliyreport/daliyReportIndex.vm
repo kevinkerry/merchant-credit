@@ -1,0 +1,114 @@
+#set($page_title = '日常报表')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" enctype='multipart/form-data' action="#springUrl('/splitting/index.do')">
+		<input type="hidden" name="splittingStatus" id="splittingStatus"></input>
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+	    		<tr>
+					<td width="100" class="lbl">起止日期：</td>
+					<td width="600">
+                        <input type="text" id="queryStartTime" name="queryStartTime" class="date txt130" onclick="xDatePicker(1);" value="$!{queryStartTime}" readonly ="readonly" class="txt130" >
+							~
+						<input type="text" id="queryEndTime" name="queryEndTime" class="date txt130" onclick="xDatePicker(1);" value="$!{queryEndTime}" readonly ="readonly" class="txt130" >
+                	</td>
+	    		    <td width="100" class="lbl">分润方类型：</td>
+			        <td width="100">
+			        	<select name="splitProfitRoleType" id="splitProfitRoleType" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="0003" >POS代理商</option>
+        					<option value="0007" >MPOS代理商</option>
+        					<option value="0101" >云收银代理商</option>
+                        </select>
+			        </td>
+	    		    <td width="100" class="lbl">垫资方：</td>
+			        <td width="100">
+			        	<select name="loaningType" id="loaningType" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="0" >代理商垫资</option>
+        					<option value="1" >盛付通垫资</option>
+                        </select>
+			        </td>
+					<td width="100" class="lbl">结算类型：</td>
+			        <td width="100">
+			        	<select name="withdrawType" id="withdrawType" class="w130">
+                        	<option value="">全部</option>
+                            <option value="2" >T1</option>
+            				<option value="3" >D1</option>
+            				<option value="4" >T0</option>
+                        </select>
+			        </td>
+					<td></td>
+			    </tr>
+                <tr>
+					<td colspan="8" align="center">
+						 &nbsp;
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+                        <a href="javascript:;" class="btn2 settle" type="button" onclick="exportFile();return false;">下载</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+			        </td>
+				</tr>
+			</tbody>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = ['queryStartTime','queryEndTime','splitProfitRoleType', 'loaningType','withdrawType'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNum = jQuery("#currentPage_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/daily/ajaxPaging/reportList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	function exportFile(){
+		var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/daily/report/export/data.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("下载成功,请到下载中心下载.");
+				}
+		    }
+		});
+	}
+</script>

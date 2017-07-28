@@ -1,0 +1,181 @@
+#set($page_title = '银行卡代扣查询 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/withhold/ajaxPaging/batchList.do')" enctype='multipart/form-data'>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+			<input type="hidden" id="bizType" value="1" name="bizType"/>
+            <span style="color:red;margin-left:20px;">支持银行类型：$!{bankType}</span>
+			<tr>
+				<td><input type="file" size="40" filefilter="csv" id="file" name="file" /></td>
+				<td>
+					<input class="bluebtn" type="button" onclick="opExcel(0);" value="上传" style="cursor:pointer"/>
+					<input class="bluebtn" type="button" onclick="downloadTemplet();" value="下载模板" style="cursor:pointer"/>
+				</td>
+				<td colspan="2">
+					<span >
+					<p style="color: red">$!{msg}</p>
+					</span>
+
+                </td>
+			</tr>
+		</table>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+            <tr>
+				<td>银行名称：</td>
+				<td width="200">
+					<select name="bankName" id="bankName" style="width: 67%;">
+					<option value="">全部</option>
+    				#foreach($bankTmp in $bankMap.entrySet())
+    					<option value="$!{bankTmp.key}">$!{bankTmp.value}</option>
+    				#end
+				 </select>
+				</td>
+				<td>卡号：</td>
+				<td width="200">
+					<input type="text" id="cardNo" name="cardNo" value="$!{query.cardNo}" style="width: 67%;"/>
+				</td>
+            </tr>
+			<tr>
+				<td>证件号码：</td>
+				<td width="200">
+					<input type="text" id="paperNo" name="paperNo" value="$!{query.paperNo}" style="width: 67%;"/>
+				</td>
+				<td>姓名：</td>
+				<td width="200">
+					<input type="text" id="chName" name="chName" value="$!{query.chName}" style="width: 67%;"/>
+				</td>
+			</tr>
+		    <tr>
+		        <td class="lbl">商户号：</td>
+		        <td width="200">
+		        	<input type="text" id="merchantNo" name="merchantNo" value="$!{query.merchantNo}" style="width: 67%;">
+		        </td>
+		    	<td class="lbl">批次号：</td>
+		        <td width="200">
+        			<input type="text" id="batchNo" name="batchNo" value="$!{query.batchNo}" style="width: 67%;">
+		        </td>
+		    </tr>
+		    <tr>
+				<td class="lbl">状态：</td>
+		        <td width="200">
+				 <select name="status" id="status" style="width: 67%;">
+					<option value="">全部</option>
+    				#foreach($status in $statusEnums)
+    					<option value="$!{status.code}">$!{status.code}--$!{status.desc}</option>
+    				#end
+				 </select>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td colspan="4" align="center">
+		           <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging()">查询</a>
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+function doWithhold(batchNo,isReset){
+        if(confirm("是否进行扣款？")){
+        var data = {"batchNo":batchNo,"isReset":isReset};
+		jQuery.ajax( {
+            url:"#springUrl('/withhold/doWithhold.do')", // 跳转到 action
+            type:'post',
+			data: data ,
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				alert(data.errorMessage);
+				ajaxPaging();
+             },
+             error : function() {
+             }
+        });
+        }
+	}
+function opExcel(op){
+		if(op==0){
+			jQuery("#submitForm").attr("action","#springUrl('/withhold/upload.do')");
+		}
+		jQuery("#submitForm").submit();
+	}
+ function ajaxPaging(){
+    	var _ids = ['merchantNo','batchNo','status','bankName','cardNo','paperNo','chName'];
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"bizType":"1"};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withhold/ajaxPaging/batchList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    },
+			error : function() {
+            }
+		});
+    }
+   function deleteFile(batchNo){
+       var data = {"batchNo":batchNo};
+	    if(!confirm("确定要删除此记录吗？")){
+    		return;
+    	}
+		jQuery.ajax( {
+            url:"#springUrl('/withhold/delete.do')", // 跳转到 action
+            type:'post',
+			data: data ,
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				if(data=='0'){
+				  alert("删除成功,批次号:"+batchNo);
+				}else{
+				  alert("删除失败,批次号:"+batchNo);
+				}
+				ajaxPaging();
+             },
+             error : function() {
+
+             }
+        });
+	}
+	function madeResultFile(batchNo){
+       var data = {"batchNo":batchNo};
+		jQuery.ajax( {
+            url:"#springUrl('/withhold/madeResultFile.do')", // 跳转到 action
+            type:'post',
+			data: data ,
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				alert("请求成功");
+				ajaxPaging();
+             },
+             error : function() {
+             }
+        });
+	}
+
+	function downloadTemplet(){
+	  alert("下载后的模板用excel打开，不能出现科学技术法");
+	  jQuery("#submitForm").attr("action","#springUrl('/withhold/downloadTemplet.do')");
+	  jQuery("#submitForm").submit();
+	}
+
+</script>

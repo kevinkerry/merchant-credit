@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- <classPathEntry location="ojdbc14.jar" /> -->
+
+    <context id="OracleTables" targetRuntime="Ibatis2Java5">
+        <plugin type="com.shengpay.mybatis.plugins.TopSerializablePlugin"></plugin>
+        <plugin type="com.shengpay.mybatis.plugins.DateFixPlugin"></plugin>
+        <plugin type="com.shengpay.mybatis.plugins.ModelRenamePlugin">
+            <property name="suffix" value="PO" />
+        </plugin>
+        <plugin type="com.shengpay.mybatis.plugins.DeleteSqlMapBeforeMergePlugin"></plugin>
+
+        <commentGenerator type="com.shengpay.mybatis.generator.DBCommentGenerator">
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+            userId="mcredit" password="mcredit">
+            <property name="remarksReporting" value="true" />
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.shengpay.debit.dal.dataobject" targetProject="../debit-dao/src/main/java">
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="debit.ibatis" targetProject="../debit-dao/src/main/resources">
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="SPRING" targetPackage="com.shengpay.debit.daointerface" targetProject="../debit-dao/src/main/java">
+        </javaClientGenerator>
+
+
+        <!-- 数据库表 -->
+
+		<!--
+		 <table tableName="TB_WITHHOLDING_BRECH_INFO">
+            <generatedKey column="ID" sqlStatement="select mcredit.SEQ_WITHHOLDING_BRECH_INFO.nextval from dual" />
+        </table>
+        <table tableName="TB_WITHHOLDING_ORDER_INFO">
+            <generatedKey column="ID" sqlStatement="select mcredit.seq_withholding_order_info.nextval from dual" />
+        </table>
+         <table tableName="TB_WITHHOLDING_TRANS_LOG">
+            <generatedKey column="ID" sqlStatement="select mcredit.seq_withholding_trans_log.nextval from dual" />
+        </table>
+         <table tableName="ONEMETERLOAN_USERINFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_ONEMETERLOAN_USERINFO.nextval from dual" />
+        </table>
+         <table tableName="MSG_NOTICE_INFO">
+            <generatedKey column="ID" sqlStatement="select seq_MSG_NOTICE_INFO.nextval from dual" />
+        </table>
+ 		<table tableName="DM_AGENT_MERCHANT_SETTING_LIST">
+            <generatedKey column="ID" sqlStatement="select SEQ_DM_AGENT_SETTING_LIST.nextval from dual" />
+        </table>
+
+         <table tableName="DO_MERCHANT_APPLY_FAIL_LOG">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_MERCHANT_APPLY_FAIL_LOG.nextval from dual" />
+        </table>
+
+        <table tableName="DB_RISK_REQUEST_LOG">
+            <generatedKey column="ID" sqlStatement="select SEQ_DB_RISK_REQUEST_LOG.nextval from dual" />
+        </table>
+
+         <table tableName="DB_ORGANIZATION_INFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_DB_ORGANIZATION_INFO.nextval from dual" />
+         </table>
+
+         <table tableName="DB_ORG_CREDIT_SETTING">
+            <generatedKey column="ID" sqlStatement="select SEQ_DB_ORG_CREDIT_SETTING.nextval from dual" />
+         </table>
+
+          <table tableName="DB_NORMAL_SETTING">
+            <generatedKey column="ID" sqlStatement="select SEQ_DB_NORMAL_SETTING.nextval from dual" />
+         </table>
+
+           <table tableName="DM_MERCHANT_DEBIT_LOG_INFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_DM_MERCHANT_DEBIT_LOG_INFO.nextval from dual" />
+         </table>
+
+          <table tableName="DB_THREAD_BATCH">
+            <generatedKey column="ID" sqlStatement="select SEQ_DB_THREAD_BATCH.nextval from dual" />
+         </table>
+
+          <table tableName="DO_ME_CREDIT_LINES_APPLY_INFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_LINES_APPLY_INFO.nextval from dual" />
+         </table>
+
+          <table tableName="DO_MERCHANT_CREDIT_LINES_APPLY">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_ME_CREDIT_LINES_APPLY.nextval from dual" />
+         </table>
+
+           <table tableName="DM_MERCHANT_CREDIT_BASE_INFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_DM_ME_CREDIT_BASE_INFO.nextval from dual" />
+         </table>
+
+           <table tableName="DM_MERCHANT_DEBIT_INFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_DM_MERCHANT_DEBIT_INFO.nextval from dual" />
+         </table>
+
+           <table tableName="DB_THREAD_CONFIG">
+            <generatedKey column="ID" sqlStatement="select SEQ_DB_THREAD_CONFIG.nextval from dual" />
+         </table>
+
+         <table tableName="DO_MERCHANT_DEBIT_ORDER">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_MERCHANT_DEBIT_ORDER.nextval from dual" />
+         </table>
+
+          <table tableName="DO_MERCHANT_OVER_DUE_INFO">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_MERCHANT_OVER_DUE_INFO.nextval from dual" />
+         </table>
+
+           <table tableName="DO_AGENT_PROFIT">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_AGENT_PROFIT.nextval from dual" />
+         </table>
+
+            <table tableName="DO_TRANSFER_LOG">
+            <generatedKey column="ID" sqlStatement="select SEQ_DO_TRANSFER_LOG.nextval from dual" />
+         </table>
+ -->
+
+
+    </context>
+
+</generatorConfiguration>

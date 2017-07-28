@@ -1,0 +1,41 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>分润角色</td>
+		<td>分润方</td>
+		<td>奖励条件</td>
+		<td>结算类型</td>
+		<td>周期</td>
+		<td>垫资方</td>
+<!--		<td>商户分组</td>
+ 		<td>首次开通时间</td>
+		<td>金额范围</td>-->
+		<td>范围</td>
+		<td>分润比例</td>
+		<td>生效日期</td>
+		<td>失效日期</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr class="settle_ttl">
+		<td>$!{o.splitProfitRoleTypeStr}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.conditionStr}</td>
+		<td>$!{o.withdrawTypeStr}</td>
+		<td>$!{o.periodTypeStr}</td>
+		<td>$!{o.loaningTypeStr}</td>
+<!--		<td>$!{o.groupName}</td>
+ 		<td>#showDate($!{o.firstOpenTime})</td>
+		<td>$!{o.valueMin}~$!{o.valueMax}</td>-->
+		<td>$!{o.valueMin}~$!{o.valueMax}</td>
+		<td>$!{o.awardCoefficient}</td>
+		<td>#showDate($!{o.effectiveTime})</td>
+		<td>#showDate($!{o.expireTime})</td>
+		<td>
+			<a  class="smBtn" href="#springUrl('/cycle/rewards/update/view.do')?id=$!{o.id}" target="_blank" title="修改">修</a>
+		</td>
+	</tr>
+	#end
+</table>

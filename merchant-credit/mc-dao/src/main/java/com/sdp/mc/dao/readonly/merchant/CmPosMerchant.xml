@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CmPosMerchantDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.merchant.CmPosMerchantEO" extends="CmMerchantContractDAO.result">
+		<result property="posmId" column="posm_id_n" />
+		<result property="posmPosMerchantNo" column="POSM_POS_MERCHANT_NO_C" />
+		<result property="posmMerchantType" column="POSM_MERCHANT_TYPE_N" />
+		<result property="posmMerchantLevel" column="POSM_MERCHANT_LEVEL_N" />
+		<result property="posmSalesManager" column="POSM_SALES_MANAGER_V" />
+		<result property="posmDistrictId" column="POSM_DISTRICT_ID_N" />
+		<result property="posmAddress" column="POSM_ADDRESS_V" />
+		<result property="posmExternalMccId" column="POSM_EXTERNAL_MCC_ID_N" />
+		<result property="posmInternalMccId" column="POSM_INTERNAL_MCC_ID_N" />
+		<result property="posmPromoterId" column="POSM_PROMOTER_ID_N" />
+		<result property="posmAllopatryReturnGoods" column="POSM_ALLOPATRY_RETURN_GOODS_N" />
+		<result property="posmManualAuthComplete" column="POSM_MANUAL_AUTH_COMPLETE_N" />
+		<result property="posmCascadeAuthCancel" column="POSM_CASCADE_AUTH_CANCEL_N" />
+		<result property="posmBankCardDeal" column="POSM_BANK_CARD_DEAL_N" />
+		<result property="posmPpcCardDeal" column="POSM_PPC_CARD_DEAL_N" />
+		<result property="posmExpandBitmap" column="POSM_EXPAND_BITMAP_V" />
+		<result property="posmVersion" column="POSM_VERSION_N" />
+		<result property="posmCreateTime" column="POSM_CREATE_TIME_T" />
+		<result property="posmLastUpdateTime" column="POSM_LAST_UPDATE_TIME_T" />
+		<result property="posmExternalMccName" column="POSM_EXTERNAL_MCC_NAME_V" />
+		<result property="posmInternalMccName" column="POSM_INTERNAL_MCC_NAME_V" />
+		<result property="posmPromoterName" column="POSM_PROMOTER_NAME_V" />
+		<result property="posmDistrictName" column="POSM_DISTRICT_NAME_V" />
+		<result property="posmCreditCardDeal" column="POSM_CREDIT_CARD_DEAL_N" />
+		<result property="posmOriginalMerchantNo" column="POSM_ORIGINAL_MERCHANT_NO" />
+	</resultMap>
+
+		<resultMap id="posmResult" class="com.sdp.mc.dao.readonly.merchant.CmPosMerchantEO">
+		<result property="posmId" column="posm_id_n" />
+		<result property="posmPosMerchantNo" column="POSM_POS_MERCHANT_NO_C" />
+		<result property="posmMerchantType" column="POSM_MERCHANT_TYPE_N" />
+		<result property="posmMerchantLevel" column="POSM_MERCHANT_LEVEL_N" />
+		<result property="posmSalesManager" column="POSM_SALES_MANAGER_V" />
+		<result property="posmDistrictId" column="POSM_DISTRICT_ID_N" />
+		<result property="posmAddress" column="POSM_ADDRESS_V" />
+		<result property="posmExternalMccId" column="POSM_EXTERNAL_MCC_ID_N" />
+		<result property="posmInternalMccId" column="POSM_INTERNAL_MCC_ID_N" />
+		<result property="posmPromoterId" column="POSM_PROMOTER_ID_N" />
+		<result property="posmAllopatryReturnGoods" column="POSM_ALLOPATRY_RETURN_GOODS_N" />
+		<result property="posmManualAuthComplete" column="POSM_MANUAL_AUTH_COMPLETE_N" />
+		<result property="posmCascadeAuthCancel" column="POSM_CASCADE_AUTH_CANCEL_N" />
+		<result property="posmBankCardDeal" column="POSM_BANK_CARD_DEAL_N" />
+		<result property="posmPpcCardDeal" column="POSM_PPC_CARD_DEAL_N" />
+		<result property="posmExpandBitmap" column="POSM_EXPAND_BITMAP_V" />
+		<result property="posmVersion" column="POSM_VERSION_N" />
+		<result property="posmCreateTime" column="POSM_CREATE_TIME_T" />
+		<result property="posmLastUpdateTime" column="POSM_LAST_UPDATE_TIME_T" />
+		<result property="posmExternalMccName" column="POSM_EXTERNAL_MCC_NAME_V" />
+		<result property="posmInternalMccName" column="POSM_INTERNAL_MCC_NAME_V" />
+		<result property="posmPromoterName" column="POSM_PROMOTER_NAME_V" />
+		<result property="posmDistrictName" column="POSM_DISTRICT_NAME_V" />
+		<result property="posmCreditCardDeal" column="POSM_CREDIT_CARD_DEAL_N" />
+		<result property="posmOriginalMerchantNo" column="POSM_ORIGINAL_MERCHANT_NO" />
+	</resultMap>
+
+	<select id="selectByLastUpdateTimeRange" parameterClass="java.util.Map" resultMap="result">
+		<![CDATA[
+			select posm.*, mc.*
+			from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+			where posm.posm_id_n=mc.mc_id_n
+			and posm.posm_last_update_time_t >= #startLastUpdateTime#
+			and posm.posm_last_update_time_t <= #endLastUpdateTime#
+			order by posm.posm_id_n
+		]]>
+	</select>
+
+	<select id="selectById" parameterClass="java.lang.Long" resultMap="result">
+		<![CDATA[
+			select posm.*, mc.*
+			from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+			where posm.posm_id_n=mc.mc_id_n
+			and posm.posm_id_n=#posmId#
+		]]>
+	</select>
+
+	<select id="queryPosMerchantPolicyIdByMcId" parameterClass="java.lang.Long" resultClass="java.lang.String">
+		<![CDATA[
+			select posm.POSM_POLICY_ID_V
+			from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+			where posm.posm_id_n=mc.mc_id_n
+			and posm.posm_id_n=#posmId#
+		]]>
+	</select>
+	<select id="queryPosMerchantNoByMcId" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+			select posm.*, mc.*
+			from ppcpay.CM_POS_MERCHANT posm
+			where posm.posm_id_n=#posmId#
+		]]>
+	</select>
+
+	<!-- 出款调用  -->
+	<select id="queryMerchantNoByMerchantNo" parameterClass="java.util.Map" resultMap="result">
+		<![CDATA[
+			select posm.*, mc.*
+			from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+			where posm.posm_id_n=mc.mc_id_n
+			and mc.MC_MERCHANT_NO_V=#merchantNo#
+			and mc.mc_status_c='3'
+			and mc.mc_type_c=#mcType#
+		]]>
+	</select>
+	<!-- 出款调用   查所有的商户信息-->
+	<select id="queryMerchantNoByList" parameterClass="java.util.Map" resultMap="result">
+		<![CDATA[
+			select posm.*, mc.*
+			from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+			where posm.posm_id_n=mc.mc_id_n and mc.mc_status_c='3'
+			and (mc.mc_type_c='0001' or mc.mc_type_c='0006' or mc.mc_type_c='0003' or mc.mc_type_c='0007')
+		]]>
+	</select>
+
+	<select id="queryCmPosMerchantEOByMerchantNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+ 		 select posm.*, mc.*
+		 from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+		 where posm.posm_id_n=mc.mc_id_n and mc.mc_status_c=3 and mc.mc_type_c='0001' and mc.mc_merchant_no_v=#value#
+
+	</select>
+
+	<select id="queryCountByOriginalMerchantNo" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		select count(*) from ppcpay.CM_POS_MERCHANT cpm where cpm.posm_original_merchant_no = #merchantNo#
+	</select>
+
+	<select id="queryPosMerchantByNo"  parameterClass="java.lang.String" resultMap="posmResult">
+	select posm.* from ppcpay.CM_POS_MERCHANT posm where posm.posm_pos_merchant_no_c=#posMerchantNO#
+	</select>
+</sqlMap>

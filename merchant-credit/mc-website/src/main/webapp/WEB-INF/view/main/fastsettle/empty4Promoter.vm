@@ -1,0 +1,10 @@
+<div class="popup" id="pop1">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container">$!{msg}</div>
+	<p class="popup-tlc">
+		<a href="#" class="popup-confrim g-button" onclick="window.location.href='#relativeUrl('/agentApply/index.htm')#if("$!{promoterType}"=="0101")?promoterType=$!{promoterType} #end';">确定，去开通</a>
+		<a href="#" class="popup-cancel" onclick="document.getElementById('pop1').style.display='none';return false;">返回，不开通</a>
+	</p>
+</div>

@@ -1,0 +1,226 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/savePosMerchantSettings.htm')" method="post">
+<div class="detailCaption">快速结算设置</div>
+<table class="dtlTb" cellspacing="2" cellpadding="2" >
+    <tr>
+    	<td width="200" class="lbl2">快速结算服务</td>
+	    <td width="400">
+	    	<input type="hidden" id="merchantId" name="merchantId" value="$!{merchantInfo.merchantId}"/>
+	    	<input type="hidden" id="merchantNo" name="merchantNo" value="$!{merchantInfo.merchantNo}"/>
+	    	<input type="radio" name="merchantFsFlag" onclick="choseFastSettleFlag(1)" #if("$!{merchantInfo.merchantFsFlag}"=="1")checked#end value="1" />开启
+        	<input type="radio" name="merchantFsFlag" onclick="choseFastSettleFlag(0)" #if("$!{merchantInfo.merchantFsFlag}"=="0")checked#end value="0" />关闭
+        	<input type="hidden" id="mcType" name="mcType" value="$!{merchantInfo.mcType}"/>
+        	<input type="hidden" id="fsLimitMax" name="fsLimitMax" value="$!{fsLimitMax}"/>
+        	<input type="hidden" id="suggestMaxAmount" name="suggestMaxAmount" value="$!{suggestMaxAmount}"/>
+	    </td>
+    </tr>
+    <tr>
+    	<td class="lbl2">单日最高额度</td>
+		<td>
+			<input type="text" id="fastSettleLimit" name="fastSettleLimit" class="txt w120" maxlength="12" value="$!{fsLimit}" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');" />
+               </br> <span>修改范围:$!{suggestMinAmount}~#if($!{merchantInfo.loaningType}=='0') $!{merchantInfo.promoterFsLimit} #else $!{suggestMaxAmount} #end 元;</span>
+		</td>
+    </tr>
+		 <tr>
+    	<td class="lbl2">工作日费率</td>
+		<td>
+		    #if(${workdayFee})
+		    <input type="radio" id="workdayFee99" name="workdayFee" checked value="$!{workdayFee}" >$!NumberUtils.multiply100($!{workdayFee})%
+		    #end
+			#foreach($temp in $!{loaningConfigBean.workdayFees})
+				<input type="radio" id="workdayFee$velocityCount" name="workdayFee" #if("$!{currentEffectiveRatio.workDayWithDrawRatio}"=="$temp")checked #end #if("$!{merchantInfo.merchantFsFlag}"=="0")disabled#end  value="$temp" />$!NumberUtils.multiply100($temp)%
+				#if($!{merchantInfo.mcType}=='0006')
+				$!{wdCost}
+				#end
+			#end
+			#if($!{tomorrowEffectiveRatio} !='')
+			 <span style="color: #aaa;padding-left: 20px;">明日生效费率：$!tomorrowEffectiveRatio.workDayWithDrawRatio
+			 </span>
+			#end
+		</td>
+    </tr>
+    <tr>
+	    <td class="lbl2">非工作日费率</td>
+		<td>
+		    #if(${holidayFee})
+		    <input type="radio" id="holidayFee99" name="holidayFee" checked value="$!{holidayFee}" >$!NumberUtils.multiply100($!{holidayFee})%
+		    #end
+			#foreach($temp in $!{loaningConfigBean.holidayFees})
+			<input type="radio" id="holidayFee$velocityCount" name="holidayFee" #if("$!{currentEffectiveRatio.holidayWithDrawRatio}"=="$temp")checked#end #if("$!{merchantInfo.merchantFsFlag}"=="0")disabled#end value="$temp" />$!NumberUtils.multiply100($temp)%
+				#if($!{merchantInfo.mcType}=='0006')
+				$!{wdCost}
+				#end
+			#end
+			#if($!{tomorrowEffectiveRatio} !='')
+			 <span style="color: #aaa;padding-left: 20px;">明日生效费率：$!tomorrowEffectiveRatio.holidayWithDrawRatio
+			 </span>
+			#end
+		</td>
+	</tr>
+	<tr>
+    	<td class="lbl2">商户手机号</td>
+		<td>
+			<input type="text" id="merchantPhoneNo" name="merchantPhoneNo" class="txt w120" maxlength="12" value="$!{merchantInfo.merchantPhoneNo}"  #if("$!{merchantInfo.merchantFsFlag}"=="0") disabled #end/>
+		</td>
+    </tr>
+	<tr>
+	    <td class="lbl2">自动快速结算</td>
+		#if($!{merchantInfo.mcType}=='0201')
+		<td>
+			<input type="radio" name="autoFastSettle" checked value="0" />手动
+		</td>
+		#else
+		<td>
+			<input type="radio" name="autoFastSettle"  #if("$!{merchantInfo.autoFastSettleFlag}"=="1")checked #elseif("$!{merchantInfo.merchantFsFlag}"=="0")disabled#end value="1" />自动
+			<input type="radio" name="autoFastSettle"  #if("$!{merchantInfo.autoFastSettleFlag}"=="0")checked #elseif("$!{merchantInfo.merchantFsFlag}"=="0")disabled#end  value="0" />手动
+		</td>
+		#end
+	</tr>
+	<tr>
+		<td colspan="2">
+		<p style="color:red;font-size: 12px;display:inline;">设置为“自动”后，收单后自动实时结算到卡，无需人工操作 </p>
+		</td>
+	</tr>
+
+</table>
+<div class="alC" style="margin:20px auto 20px auto;" id="btnDiv">
+	#if($!{merchantInfo.loaningType})<a href="#" class="btn2" id="smtBtn"  onclick="saveSettFast();return false;">保存</a>#end
+		<a href="#" class="btn2" onclick="window.close();">返回</a>
+</div>
+</form>
+<script>
+var ltype=$!{merchantInfo.loaningType};
+var lmerchantIsSetLimit = $!{merchantIsSetLimit}
+
+function choseFastSettleFlag(val){
+	if(val==0){
+		jQuery("input[type='radio'][name='autoFastSettle']:eq(1)").attr("checked","checked");
+		jQuery("input[type='text']").attr("disabled",true);
+		jQuery("input[type='radio'][name!='merchantFsFlag']").attr("disabled",true);
+	}else{
+		//代理商垫资
+		if(ltype==0){
+			jQuery("input[type='text']").attr("disabled",false);
+			jQuery("input[type='radio']").attr("disabled",false);
+		}else{
+			jQuery("input[type='text'][name='merchantPhoneNo']").attr("disabled",false);
+			//当月更改费率是否超限 1:没超限，0：超限
+    		jQuery("input[type='radio']").attr("disabled",false);
+			jQuery("input[type='text'][name='fastSettleLimit']").attr("disabled",false);
+		}
+    }
+}
+
+	function saveSettFast(){
+	var workdayFee=$('input:radio[name="workdayFee"]:checked').val();
+	var holidayFee=$('input:radio[name="holidayFee"]:checked').val();
+	//if(holidayFee < workdayFee){
+		//alert("节假日费率不能小于工作日费率");
+		//return false;
+	//}
+	var mcType = jQuery("#mcType").val();
+	   var loaningType=$!{merchantInfo.loaningType};
+	   if(loaningType=='1'){
+	       var autoFastSettleRadios = jQuery("input[type='radio'][name='autoFastSettle']:checked").val();
+           if(mcType != "0006" && autoFastSettleRadios!='1'&&autoFastSettleRadios!='0'){
+    			alert('请至少选择一种自动快速结算方式');
+    			return;
+           }
+	   }
+
+		var flag = jQuery("#smtBtn").attr("disabled");
+		if(!flag){
+			jQuery("#smtBtn").attr("disabled",true);
+		}
+		var fastSettleFlagRadios = jQuery("input[name='merchantFsFlag']:checked");
+		if(fastSettleFlagRadios.length==0){
+			alert('请选择是否开通快速结算服务');
+			jQuery("#smtBtn").removeAttr("disabled");
+			return false;
+		}
+		var chckVal = fastSettleFlagRadios.eq(0).val();
+		if(chckVal=='1'){
+			if(document.getElementById("fastSettleLimit").disabled == false){
+				var fastSettleLimit=jQuery('#fastSettleLimit').val();
+				if(fastSettleLimit == ''){
+					alert('请输入单日最高额度');
+					jQuery("#smtBtn").removeAttr("disabled");
+					return false;
+				}
+			}
+		}else{
+			if(!confirm("注意：若该商户当前尚有未结算完毕的快速结算资金，可能会延迟到下一工作日结算，确认提交请点击【确定】，中断操作请点击【取消】")){
+				jQuery("#smtBtn").removeAttr("disabled");
+				return false;
+			}
+			jQuery("#fastSettleLimit").val("0");
+		}
+		//盛付通全资，若商户是非实时出款银行则不能提交
+		if("$!{merchantInfo.loaningType}"=="1"&&"$!{notDirect2Bank4ShengPay}"=="true"&&chckVal=="1"){
+			jQuery("#smtBtn").removeAttr("disabled");
+			alert("$!{errorMessage}");
+			return false;
+		}
+		var data = {
+			merchantId:jQuery("#merchantId").val(),
+			merchantNo:jQuery("#merchantNo").val(),
+			fsLimitMax:jQuery("#fsLimitMax").val(),
+			fastSettleFlag:chckVal,
+			fastSettleLimit:jQuery('#fastSettleLimit').val(),
+			workdayFee:jQuery("input[name='workdayFee']:checked").eq(0).val(),
+			holidayFee:jQuery("input[name='holidayFee']:checked").eq(0).val(),
+			merchantPhone:jQuery("#merchantPhoneNo").val(),
+			autoFastSettle:jQuery("input[name='autoFastSettle']:checked").eq(0).val()
+		};
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/savePosMerchantSettings.json')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	//移除
+		    	jQuery("#smtBtn").removeAttr("disabled");
+		    	if(data){
+		    		if(data.success){
+		    			alert("商户信息修改成功，该商户的快速结算服务已生效，费率将在下一个自然日生效！");
+		    			window.location.reload();
+		    		}else if(data&&data.errorCode=="nologin"){
+			    		window.location.reload();
+			    	}else{
+			    		alert(data.errorMessage);
+		    		}
+		    	}else{
+		    		alert("很抱歉，信息修改失败！");
+		    	}
+		    }
+		});
+	}
+
+	window.onload=function(){
+		if("$!{msg}" != ''){
+			alert("$!{msg}");
+			window.close();
+		}else if("$!{errorMessage}" != ''){
+			alert("$!{errorMessage}");
+		}
+		var autoFastSettleRadios = jQuery("input[type='radio'][name='autoFastSettle']:checked");
+		//首先默认选中手动
+		//jQuery("input[type='radio'][name='autoFastSettle']:eq(1)").attr("checked","checked");
+		//if(autoFastSettleRadios.length==0){
+		//	jQuery("input[type='radio'][name='autoFastSettle']:eq(0)").attr("checked","checked");
+		//}
+
+		if(autoFastSettleRadios.val()==0){//手动
+			jQuery("input[type='radio'][name='autoFastSettle']:eq(1)").attr("checked","checked");
+		}else if(autoFastSettleRadios.val()==2){//自动
+			jQuery("input[type='radio'][name='autoFastSettle']:eq(0)").attr("checked","checked");
+		}
+		var workdayFeeRadios = jQuery("input[name='workdayFee']:checked");
+		if(workdayFeeRadios.length==0){
+			jQuery("input[type='radio'][name='workdayFee']:eq(0)").attr("checked","checked");
+		}
+		var holidayFeeRadios = jQuery("input[name='holidayFee']:checked");
+		if(holidayFeeRadios.length==0){
+			jQuery("input[type='radio'][name='holidayFee']:eq(0)").attr("checked","checked");
+		}
+	};
+</script>

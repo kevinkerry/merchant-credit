@@ -1,0 +1,241 @@
+<style>
+#dialogBg{width:100%;height:100%;background-color:#000000;opacity:.8;filter:alpha(opacity=60);position:fixed;top:0;left:0;z-index:9999;display:none;}
+#dialog{ width: 300px; height: 180px; margin: 0 auto; display: none; background-color: #ffffff; position: fixed; top: 50%; left: 50%; margin: -120px 0 0 -150px; z-index: 10000; border: 1px solid #ccc; border-radius: 10px; -webkit-border-radius: 10px; box-shadow: 3px 2px 4px rgba(0,0,0,0.2); -webkit-box-shadow: 3px 2px 4px rgba(0,0,0,0.2); }
+.dialogTop{width:90%;margin:0 auto;border-bottom:1px dotted #ccc;letter-spacing:1px;padding:10px 0;text-align:right;}
+.editInfos{padding:15px 0;}
+.editInfos li{width:90%;margin:8px auto auto;text-align: center;}
+.ipt{border:1px solid #ccc;padding:5px;border-radius:3px;-webkit-border-radius:3px;box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset;margin-left:5px;}
+.ipt:focus{outline:none;border-color:#66afe9;box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);}
+
+</style>
+<form id="submitForm" name="submitForm" action="#relativeUrl('/easypay/qrcoderate/list.htm')" method="post">
+<div class="caption">云收银费率管理</div>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+		    <tbody>
+		    <tr>
+			<td width="10%" class="lbl">二维码号段：</td>
+			<td width="25%">
+			 <input type="text" id="qrCodeStart" name="qrCodeStart" class="txt w100 ">
+			            ~
+			            <input type="text" id="qrCodeEnd" name="qrCodeEnd" class="txt w100 " >
+			</td>
+		    <td width="10%" class="lbl">二级代理商商户号：</td>
+		    <td width="15%"><input type="text" id="childMerchantNo" name="childMerchantNo" class="txt w120"></td>
+			<td width="10%" class="lbl">二维码状态：</td>
+		    <td width="15%">
+			<select id="qrCodeStatus" name="qrCodeStatus">
+				<option value="">-全部-</option>
+				<option value="ASSIGN">-未使用-</option>
+                <option value="ACTIVE">-已使用-</option>
+				<option value="DISABLE">-已失效-</option>
+            </select>
+			</td>
+			<td width="10%" class="lbl">注册开关：</td>
+			<td width="15%">
+			<select id="allowStatus" name="allowStatus">
+				<option value="">-全部-</option>
+				<option value="Y">-开启-</option>
+                <option value="N">-关闭-</option>
+            </select>
+			</td>
+		</tr>
+		<tr>
+			        <td colspan="6" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();return false;" title="清除所有查询条件">清</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<div class="box">
+		<div id="dialogBg"></div>
+		<div id="dialog" >
+			<div class="dialogTop">
+				<a href="javascript:hideDialog();" class="claseDialogBtn" >关闭</a>
+			</div>
+				<ul class="editInfos">
+					<li><label>费率：
+							<select id="rateId">
+								#foreach($ra in $rates)
+									<option value="${ra}">${ra}</option>
+								#end
+                            </select>
+					</label></li>
+					<li>
+					<input type="button"  value="确  定" onclick="updateRate();"/>
+					</li>
+				</ul>
+		</div>
+</div>
+<script type="text/javascript">
+	var ALL_COND_ID = ['childMerchantNo','qrCodeStart','qrCodeEnd','qrCodeStatus','allowStatus'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+			jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+
+	window.onload=function(){
+		ajaxPaging();
+	};
+
+	function setTimeStartEnd(a, c, b, d) {
+        var e = new Date,
+        f = e.getFullYear(),
+        g = e.getMonth(),
+        e = e.getDate();
+        c.value = formatDate(new Date(f, g, e + a), 'yyyy-MM-dd') ;
+        d.value = formatDate(new Date(f, g, e + b), 'yyyy-MM-dd') ;
+	}
+
+	function queryInfo(){
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":20};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/qrcoderate/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+	function checkboxSwap(action){
+    	if(action=='selectAll'){
+    		jQuery("input[name='qrcodes']:enabled").attr("checked",true);
+    	}else{
+    		jQuery("input[name='qrcodes']:enabled").each(function(){
+
+    			var checkEm=jQuery(this);
+    			if(checkEm.attr('checked')){
+    				checkEm.attr("checked",false);
+    			}else{
+    				checkEm.attr("checked",true);
+    			}
+    		});
+    	}
+	}
+	function updateRate(){
+		var qrcodes='';
+		jQuery("input[name='qrcodes']:checked").each(function(){
+			qrcodes+=this.value+',';
+		});
+		if(qrcodes=='') return;
+		var rate=jQuery("#rateId").val();
+		var minRate=jQuery("#rateId").attr("min");
+		var maxRate=jQuery("#rateId").attr("max");
+		if(rate==''){
+			return false;;
+		}else{
+			rate=Number(rate);
+			if(isNaN(rate)){
+				alert("请输入数字！");
+				return false;
+			}
+			minRate=Number(minRate);
+			maxRate=Number(maxRate);
+			if(rate < minRate){
+			 	alert("利率太小！");
+				return false;
+			}
+			if(rate > maxRate){
+			 	alert("利率太大！");
+				return false;
+			}
+
+		}
+		loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":20,"qrcodes":qrcodes,"rate":rate};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/qrcoderate/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+				hideDialog();
+		    }
+		});
+
+	}
+	function showDialog(){
+		if(jQuery("input[name='qrcodes']:checked").size()==0){
+			alert("请先选择要修改的二维码！");
+			return ;
+		}
+		$('#dialogBg').fadeIn(300);
+    	$('#dialog').fadeIn();
+	}
+	function allow(status){
+		if(jQuery("input[name='qrcodes']:checked").size()==0){
+			alert("请先选择二维码！");
+			return ;
+		}
+		var status=status;
+		if(status=='Y'){
+			if(confirm('确定要开启吗？')){
+				allowStatus(status);
+			}
+		}else if(status=='N'){
+			if(confirm('确定要关闭吗？')){
+				allowStatus(status);
+			}
+		}
+	}
+	function allowStatus(allowStatus){
+		var qrcodes='';
+		jQuery("input[name='qrcodes']:checked").each(function(){
+			qrcodes+=this.value+',';
+		});
+		var data = {"qrcodes":qrcodes,"allowStatus":allowStatus};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/qrcoderate/allowStatus.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+		    	if (success==false){
+					alert(respMsg);
+				} else {
+					alert("操作成功！");
+					ajaxPaging();
+				}
+		    }
+		});
+	}
+	function hideDialog(){
+		$('#dialogBg').fadeOut(300,function(){
+    			$('#dialog').fadeOut();
+    	});
+	}
+	function upA(qrcode){
+		$("input[value='"+qrcode+"']").attr("checked",true);
+		showDialog();
+	}
+</script>

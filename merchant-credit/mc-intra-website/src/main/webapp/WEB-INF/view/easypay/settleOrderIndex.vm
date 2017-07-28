@@ -1,0 +1,256 @@
+#set($page_title = '结算单管理')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" enctype='multipart/form-data' action="#springUrl('/splitting/index.do')">
+		<input type="hidden" name="splittingStatus" id="splittingStatus"></input>
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+				<tr>
+            		<td class="lbl">结算周期：</td>
+                    <td width="100">
+                       <input type="text" id="settleQueryBeginTime" name="settleQueryBeginTime" value="$!{settleQueryBeginTime}" readonly="readonly" class="date txt130" onclick="xDatePicker2(1);" class="txt130" />
+            		</td>
+	    		  <!--  <td width="100" class="lbl">分润角色：</td>
+			        <td width="100">
+			        	<select name="queryPromoterRole" id="queryPromoterRole" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="0003" >POS代理商</option>
+        					<option value="0007" >MPOS代理商</option>
+        					<option value="0101" >云收银</option>
+                        </select>
+			        </td> -->
+					<td width="100" class="lbl">分润方商户号：</td>
+			        <td width="100">
+			        	<input type="text" value="" id="queryPromoterNo" class="txt130" name="queryPromoterNo">
+			        </td>
+					<td></td>
+					<td width="100" class="lbl">结算单状态：</td>
+			        <td width="100">
+			        	<select name="querySettleStatus" id="querySettleStatus" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="2" >已审核</option>
+        					<option value="1" >待审核</option>
+                        </select>
+			        </td>
+ 				</tr>
+                <tr>
+					<td colspan="8" align="center">
+						 &nbsp;
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+						<a href="javascript:;" onclick="javascript:batchCheck();return false;" class="btn2" target="_blank">批量审核</a>
+						#if($MCUrlUtil.canAccessUrl("/splitting/order/recount/data",$request))
+						<a href="javascript:;" onclick="javascript:recountData();return false;" class="btn2" target="_blank">重算上月数据</a>
+						#end
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+			        </td>
+				</tr>
+			</tbody>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = ['settleQueryBeginTime','settleQueryEndTime','queryPromoterRole', 'queryPromoterNo','querySettleStatus'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/easypaySettleOrder/settleOrderList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	function exportFile(){
+		var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/splitting/order/rewards/export/data.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("导出成功,请到下载中心下载.");
+					ajaxPaging();
+				}
+		    }
+		});
+	}
+//审核
+function checkOrder(id){
+	if(confirm('确定要审核通过吗？')){
+		var settleOrderIds = new Array();
+		settleOrderIds.push(id);
+		var data={"settleOrderIds":settleOrderIds.toString()};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/easypaySettleOrder/settleOrderToExamine.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("操作成功");
+					ajaxPaging();
+				}
+		    }
+		});
+    }
+}
+//审核不通过
+function checkNotOrder(id){
+	if(confirm('确定要审核不通过吗？')){
+		var settleOrderIds = new Array();
+		settleOrderIds.push(id);
+		var data={"settleOrderIds":settleOrderIds.toString()};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/easypaySettleOrder/settleOrderNotExamine.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("操作成功");
+					ajaxPaging();
+				}
+		    }
+		});
+    }
+}
+//批量审核
+function batchCheck(){
+	var settleOrderIds = new Array();
+	jQuery(".listTb input[type=checkbox][name=settleOrderCheckbox]:checked").each(function(){
+		 settleOrderIds.push(jQuery(this).val());
+	});
+	if(settleOrderIds.toString()=="" || settleOrderIds.toString().length==0) {
+		alert("请勾选结算单");
+		return false;
+	}
+	var totalCount = settleOrderIds.length;
+    if(confirm('共选中'+totalCount+'条记录,确定要审核吗？')){
+		var data={"settleOrderIds":settleOrderIds.toString()};
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/easypaySettleOrder/settleOrderToExamine.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("审核成功");
+					ajaxPaging();
+				}
+		    }
+		});
+    }
+}
+
+//下载结算单
+function downloadOrder(id){
+	var data = {id:id}
+	jQuery.ajax({
+		type: 'POST',
+	    url: "#springUrl('/easypaySettleOrder/settleOrderToExport.do')" ,
+	    data: data ,
+	    dataType: "json",
+	    success: function(data){
+	    	var success = data.success;
+			var respMsg= data.errorMessage;
+			if (success==false){
+				alert(respMsg);
+			} else {
+				alert("下载成功，请到下载中心下载.");
+			}
+	    }
+	});
+}
+//导出汇总
+function exportCollect() {
+	var pageNum = jQuery("#pageNum_submitForm").val();
+	pageNum=pageNum?pageNum:1;
+	var data = {"pageNum":pageNum};
+	for(i in ALL_COND_ID){
+		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+	}
+	jQuery.ajax({
+		type: 'POST',
+	    url: "#springUrl('/splitting/order/collect/export.do')" ,
+	    data: data ,
+	    dataType: "json",
+	    success: function(data){
+	    	var success = data.success;
+			var respMsg= data.errorMessage;
+			if (success==false){
+				alert(respMsg);
+			} else {
+				alert("导出汇总成功");
+			}
+	    }
+	});
+}
+//重算结算数据
+function recountData() {
+	var settleQueryBeginTime=jQuery("#settleQueryBeginTime").val();
+	var data = {"settleQueryBeginTime":settleQueryBeginTime};
+	 if(confirm('确定要重算吗？')){
+		jQuery.ajax({
+    		type: 'POST',
+    	    url: "#springUrl('/easypaySettleOrder/settleOrderToRecountData.do')" ,
+    	    data: data ,
+    	    dataType: "json",
+    	    success: function(data){
+    	    	var success = data.success;
+    			var respMsg= data.errorMessage;
+    			if (success==false){
+    				alert(respMsg);
+    			} else {
+    				alert("重算数据成功");
+    			}
+    	    }
+    	});
+	 }
+}
+</script>

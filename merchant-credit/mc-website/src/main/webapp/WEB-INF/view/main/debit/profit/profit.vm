@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="#staticResource('My97DatePicker/skin/msp/datepicker.css')?version=1" type="text/css">
+<script type="text/javascript" src="#staticResource('My97DatePicker/WdatePicker.js')"></script>
+<script type="text/javascript" src="#staticResource('My97DatePicker/calendar.js')"></script>
+<style>
+	.search_box div {
+    	margin-top: 8px;
+    }
+	.search_btn {
+	    text-align: center;
+	    margin: 0px;
+	}
+	.search_btn a {
+	    margin-left: 0px;
+	    margin-right: 0px;
+	    margin-top: 0px;
+	}
+</style>
+<form action="#relativeUrl('/profit/queryAgentProfit.htm')" method="post" id="profitForm">
+<input type="hidden" id="currentPage" 		name="currentPage" 		value="$!query.currentPage"/>##当前页
+<input type="hidden" id="pagesize"    		name="pageSize"    		value="$!query.pageSize"/>##页大小
+	<div class="content main_box">
+		##<h2 class="title">分润查询</h2>
+		<div class="search_box">
+			<div class="">
+				<span>商户名称：</span><input name="merchantName" type="text" value="$!query.merchantName">
+				<span>商户号：</span><input name="merchantNo" type="text" value="$!query.merchantNo">
+				##<span>分润状态：</span><select name="profitStatus"><option value="02">已分润</option><option value="01">未分润</option></select>
+			</div>
+			<div>
+				<span>借款申请日期：</span><input type="text" name="startTime" class="input-normal date" onfocus="xDatePicker(1);" value="$!query.startTime">~<input type="text" name="endTime" class="input-normal date" onfocus="xDatePicker(1);" value="$!query.endTime">
+			</div>
+			<div class="sub_btn search_btn">
+					<a href="#" id="a_btn">查询</a>
+			</div>
+		</div>
+		<table class="r_table">
+			<thead>
+				<tr>
+					<th>商户名称</th>
+					<th>商户号</th>
+					<th>借款申请日期 </th>
+					<th>借款本金</th>
+					<th>借款期限</th>
+					<th>借款起息日</th>
+					<th>借款到期日</th>
+					<th>分润金额</th>
+				</tr>
+			</thead>
+			#foreach($temp in $dataList)
+    		<tr>
+    			<td>$!{temp.merchantName}</td>
+				<td>$!{temp.merchantNo}</td>
+				<td>#showDate($!{temp.applyDate})</td>
+				<td>$!NumberUtils.format($!{temp.debitAmount})</td>
+				<td>$!{temp.borrowDays}</td>
+				<td>#showDate($!{temp.startTime})</td>
+				<td>#showDate($!{temp.endTime})</td>
+				<td>$!NumberUtils.format($!{temp.profitAmount})</td>
+    		</tr>
+    		#end
+		</table>
+		<p class="page">
+			#parse("/main/include/pager.vm")
+		</p>
+		<p class="tip">对某代理商名下的所有商户的每笔有效借款，在对应商户的借款成功还款之后，为代理商发放分润。分润发放规则为：按每笔借款逐笔发放。计算公式：单个商户某一笔借款的分润金额=$!{profitRate}%*借款金额*借款期限/365</p>
+	</div>
+</form>
+
+<script type="text/javascript">
+	function gotoPage(page) {
+        $("#currentPage").val(page);
+        $("#profitForm").submit();
+    }
+	$(function(){
+		$('#a_btn').bind('click',function(){
+			$("#profitForm").submit();
+		})
+	});
+</script>

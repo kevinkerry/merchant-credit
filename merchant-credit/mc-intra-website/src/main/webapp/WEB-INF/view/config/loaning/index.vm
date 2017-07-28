@@ -1,0 +1,51 @@
+#set($page_title = '垫资类型配管')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/loaningConfig/ajaxPaging/logningList.do')">
+		<table cellspacing="0" cellpadding="0" border="0" class="CardWord">
+			<tr>
+				<td>垫资类型：</td>
+				<td>
+					<select id="loaningType" name="loaningType">
+							<option value="" selected >全部</option>
+							<option value="0" >代理商垫资</option>
+							<option value="1" >盛付通垫资</option>
+                    </select>
+				<td align="center">
+					<a href="#" class="btn2" onclick="ajaxPaging();">查询</a>
+					<a href="#" class="btn2" onclick="jQuery('#optionKey').val('');">清空</a>
+				</td>
+			</tr>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+    //ajax翻页
+    function ajaxPaging(){
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	var loaningType = jQuery("#loaningType").val();
+    	if(loaningType!=""){
+    		data["loaningType"]=loaningType;
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/loaningConfig/ajaxPaging/logningList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+</script>

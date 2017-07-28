@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.2.0\ojdbc14-10.2.0.2.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.withdraw.dao" targetProject="..\withdraw-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="..\withdraw-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.withdraw.dao.mapper"  targetProject="..\withdraw-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.withdraw.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.withdraw.manager" implementationPackage="com.sdp.withdraw.manager.impl" generatorEnable="true"  targetProject="..\withdraw-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="FW_WITHDRAW_RATIO_INFO" domainObjectName="WithdrawRatioInfoDO">
+		<generatedKey column="ID" sqlStatement="select SEQ_FW_WITHDRAW_RATIO_INFO.nextval from dual" type="pre" />
+		<columnOverride column="ID" 						property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="BIZ_ID" 							property="bizId" 				javaType="java.lang.Long"/>
+    	<columnOverride column="RATIO_TYPE" 			property="ratioType" 			javaType="java.lang.Integer" />
+    	<columnOverride column="STATUS" 						property="status" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="EFFECTIVE_TIME" 					property="effectiveTime" 	jdbcType="TIMESTAMP"		/>
+    	<columnOverride column="EXPIRE_TIME" 					property="expireTime" 	jdbcType="TIMESTAMP"		/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    	
+    </table>
+  </context>
+</generatorConfiguration>

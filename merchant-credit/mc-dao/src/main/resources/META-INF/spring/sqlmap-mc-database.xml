@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" errorTracingEnabled="true" maxRequests="1024"
+		maxSessions="512" maxTransactions="128" useStatementNamespaces="true" />
+
+	<sqlMap resource="com/sdp/mc/dao/authorize/auth.xml" />
+	<sqlMap resource="com/sdp/mc/dao/lockoperator/LockOperator.xml" />
+	<sqlMap resource="com/sdp/mc/dao/userloginlog/McUserLoginLog.xml" />
+
+
+	<sqlMap resource="com/sdp/mc/dao/readonly/merchantcontract/CmMerchantContract.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/merchant/CmPosMerchant.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/merchant/CmPosMerchantNew.xml" />
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/msptxn/MspTxn.xml" /> -->
+	<sqlMap resource="com/sdp/mc/dao/readonly/operating/cm/merchantcontract/MerchantContractAbstract.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/operating/cm/merchantcontract/MerchantContract.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/merchantSettleItem/MerchantSettleItem.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/merchantsettle/MerchantSettle.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/msp/mspposmerchant/MspPosMerchant.xml" />
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/msptxn/mc/McMspTxn.xml" /> -->
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/msptxn/pmt/PmtMspTxn.xml" /> -->
+	<sqlMap resource="com/sdp/mc/dao/readonly/promoter/PromoterAbstract.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/promoter/Promoter.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/posmerchant/PosMerchantAbstract.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/posmerchant/PosMerchant.xml" />
+	<sqlMap resource="com/sdp/mc/dao/readonly/dictionary/Dictionary.xml" />
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/mspcardissuer/MspCardIssuer.xml" /> -->
+
+
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/cm/promoter/bizdistrict/PromoterBusinessDistrict.xml" /> -->
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/cm/promoter/bizdistrict/PromoterBusinessDistrictAbstract.xml" /> -->
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/cm/promoter/excludemcc/PromoterExcludeMcc.xml" /> --> 
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/cm/promoter/excludemcc/PromoterExcludeMccAbstract.xml" /> -->
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/cm/standardistrict/StandardDistrict.xml" /> -->
+<!-- 	<sqlMap resource="com/sdp/mc/dao/readonly/cm/district/District.xml" /> -->
+
+</sqlMapConfig>

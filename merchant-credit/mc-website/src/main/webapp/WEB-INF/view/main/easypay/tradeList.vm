@@ -1,0 +1,43 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>订单号</td>
+		<td>盛付通商户号</td>
+		<td>商户名称</td>
+		<td>支付时间</td>
+		<td>支付金额</td>
+		<td>手续费</td>
+		<td>手续费率</td>
+		<td>支付状态</td>
+		<td>支付类型</td>
+		<td>支付产品</td>
+		<td>支付方式</td>
+		<td>经手人</td>
+		<td width="100">二级代理商账号</td>
+		<td>备注</td>
+	    <td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.orderNo}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		<td>#showDateTime($!{o.payTime})</td>
+		<td>$!{o.payAmount}</td>
+		<td>$!{o.fee}</td>
+		<td>$!{o.rate}</td>
+		<td>$!{o.payStatus}</td>
+		<td>$!{o.payType}</td>
+		<td>$!{o.payProduct}</td>
+		<td>$!{o.payMethod}</td>
+		<td>$!{o.operator}</td>
+		<td>$!{o.secondProxy}</td>
+		<td>$!{o.notes}</td>
+		<td></td>
+	</tr>
+	#end
+</table>

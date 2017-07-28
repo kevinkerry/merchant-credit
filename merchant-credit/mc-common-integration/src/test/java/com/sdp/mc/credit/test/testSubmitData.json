@@ -1,0 +1,31 @@
+{
+    "code": "310110820904381",
+    "name": "吴伟",
+    "type": "Merchant",
+    "policyCode": "tiantiandai",
+    "policyTypes": [
+        {
+            "code": "MerchantBaseInfo",
+            "items": [
+                {
+                    "code": "Video",
+                    "attachment": "http://www.shengpay.com/xxxxx"
+                },
+                {
+                    "code": "RegisterTime",
+                    "value": "3",
+                    "attachment": "XXXX"
+                }
+            ]
+        },
+        {
+            "code": "Tradinfo",
+            "items": [
+                {
+                    "code": "scale",
+                    "value": "1"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sdp.mc</groupId>
+	<artifactId>mc-service-interface</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0</version>
+	<name>${project.artifactId} v${project.version}</name>
+	 <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+        </plugins>
+    </build>
+	<dependencies>
+		<!-- 模块依赖 -->
+		<dependency>
+			<groupId>com.shengpay.pos.operating</groupId>
+			<artifactId>operating-api</artifactId>
+			<version>1.3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.withdraw</groupId>
+			<artifactId>mc-withdraw-api</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>deployRelease</id>
+			<url>http://nexus.shengpaydev.com/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>deploySnapshot</id>
+			<url>http://nexus.shengpaydev.com/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+</project>

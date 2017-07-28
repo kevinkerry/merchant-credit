@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TB_WITHHOLDING_BRECH_INFO" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="BATCH_NO" property="batchNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="TOTAL_COUNT" property="totalCount" jdbcType="VARCHAR" />
+    <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="SUCESS_COUNT" property="sucessCount" jdbcType="VARCHAR" />
+    <result column="FAIL_COUNT" property="failCount" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="RESULT_CODE" property="resultCode" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="BATCH_TIME" property="batchTime" />
+    <result column="EXT" property="ext" jdbcType="VARCHAR" />
+    <result column="OPERNERID" property="opernerid" jdbcType="VARCHAR" />
+    <result column="OPERNERNAME" property="opernername" jdbcType="VARCHAR" />
+    <result column="BIZTYPE" property="biztype" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, BATCH_NO, MERCHANT_NO, TOTAL_COUNT, TOTAL_AMOUNT, SUCESS_COUNT, FAIL_COUNT, STATUS, 
+    RESULT_CODE, CREATE_TIME, UPDATE_TIME, BATCH_TIME, EXT, OPERNERID, OPERNERNAME, BIZTYPE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="TB_WITHHOLDING_BRECH_INFO.Base_Column_List" />
+    from TB_WITHHOLDING_BRECH_INFO
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_BRECH_INFO.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    select 
+    <include refid="TB_WITHHOLDING_BRECH_INFO.Base_Column_List" />
+    from TB_WITHHOLDING_BRECH_INFO
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    delete from TB_WITHHOLDING_BRECH_INFO
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoExample" >
+    delete from TB_WITHHOLDING_BRECH_INFO
+    <include refid="TB_WITHHOLDING_BRECH_INFO.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select mcredit.SEQ_WITHHOLDING_BRECH_INFO.nextval from dual
+    </selectKey>
+    insert into TB_WITHHOLDING_BRECH_INFO (ID, BATCH_NO, MERCHANT_NO, TOTAL_COUNT, 
+      TOTAL_AMOUNT, SUCESS_COUNT, FAIL_COUNT, STATUS, 
+      RESULT_CODE, CREATE_TIME, UPDATE_TIME, BATCH_TIME, 
+      EXT, OPERNERID, OPERNERNAME, BIZTYPE)
+    values (#id:DECIMAL#, #batchNo:VARCHAR#, #merchantNo:VARCHAR#, #totalCount:VARCHAR#, 
+      #totalAmount:DECIMAL#, #sucessCount:VARCHAR#, #failCount:VARCHAR#, #status:VARCHAR#, 
+      #resultCode:VARCHAR#, #createTime#, #updateTime#, #batchTime#, 
+      #ext:VARCHAR#, #opernerid:VARCHAR#, #opernername:VARCHAR#, #biztype:VARCHAR#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select mcredit.SEQ_WITHHOLDING_BRECH_INFO.nextval from dual
+    </selectKey>
+    insert into TB_WITHHOLDING_BRECH_INFO
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        BATCH_NO
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="totalCount" >
+        TOTAL_COUNT
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount" >
+        TOTAL_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="sucessCount" >
+        SUCESS_COUNT
+      </isNotNull>
+      <isNotNull prepend="," property="failCount" >
+        FAIL_COUNT
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="resultCode" >
+        RESULT_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="batchTime" >
+        BATCH_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        EXT
+      </isNotNull>
+      <isNotNull prepend="," property="opernerid" >
+        OPERNERID
+      </isNotNull>
+      <isNotNull prepend="," property="opernername" >
+        OPERNERNAME
+      </isNotNull>
+      <isNotNull prepend="," property="biztype" >
+        BIZTYPE
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        #batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalCount" >
+        #totalCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount" >
+        #totalAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="sucessCount" >
+        #sucessCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="failCount" >
+        #failCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resultCode" >
+        #resultCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="batchTime" >
+        #batchTime#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="opernerid" >
+        #opernerid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="opernername" >
+        #opernername:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="biztype" >
+        #biztype:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoExample" resultClass="java.lang.Integer" >
+    select count(*) from TB_WITHHOLDING_BRECH_INFO
+    <include refid="TB_WITHHOLDING_BRECH_INFO.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update TB_WITHHOLDING_BRECH_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.batchNo" >
+        BATCH_NO = #record.batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.totalCount" >
+        TOTAL_COUNT = #record.totalCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.totalAmount" >
+        TOTAL_AMOUNT = #record.totalAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.sucessCount" >
+        SUCESS_COUNT = #record.sucessCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.failCount" >
+        FAIL_COUNT = #record.failCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.resultCode" >
+        RESULT_CODE = #record.resultCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.batchTime" >
+        BATCH_TIME = #record.batchTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.ext" >
+        EXT = #record.ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.opernerid" >
+        OPERNERID = #record.opernerid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.opernername" >
+        OPERNERNAME = #record.opernername:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.biztype" >
+        BIZTYPE = #record.biztype:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_BRECH_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update TB_WITHHOLDING_BRECH_INFO
+    set ID = #record.id:DECIMAL#,
+      BATCH_NO = #record.batchNo:VARCHAR#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      TOTAL_COUNT = #record.totalCount:VARCHAR#,
+      TOTAL_AMOUNT = #record.totalAmount:DECIMAL#,
+      SUCESS_COUNT = #record.sucessCount:VARCHAR#,
+      FAIL_COUNT = #record.failCount:VARCHAR#,
+      STATUS = #record.status:VARCHAR#,
+      RESULT_CODE = #record.resultCode:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      BATCH_TIME = #record.batchTime#,
+      EXT = #record.ext:VARCHAR#,
+      OPERNERID = #record.opernerid:VARCHAR#,
+      OPERNERNAME = #record.opernername:VARCHAR#,
+      BIZTYPE = #record.biztype:VARCHAR#
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_BRECH_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    update TB_WITHHOLDING_BRECH_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="batchNo" >
+        BATCH_NO = #batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalCount" >
+        TOTAL_COUNT = #totalCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount" >
+        TOTAL_AMOUNT = #totalAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="sucessCount" >
+        SUCESS_COUNT = #sucessCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="failCount" >
+        FAIL_COUNT = #failCount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resultCode" >
+        RESULT_CODE = #resultCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="batchTime" >
+        BATCH_TIME = #batchTime#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        EXT = #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="opernerid" >
+        OPERNERID = #opernerid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="opernername" >
+        OPERNERNAME = #opernername:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="biztype" >
+        BIZTYPE = #biztype:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingBrechInfoPO" >
+    update TB_WITHHOLDING_BRECH_INFO
+    set BATCH_NO = #batchNo:VARCHAR#,
+      MERCHANT_NO = #merchantNo:VARCHAR#,
+      TOTAL_COUNT = #totalCount:VARCHAR#,
+      TOTAL_AMOUNT = #totalAmount:DECIMAL#,
+      SUCESS_COUNT = #sucessCount:VARCHAR#,
+      FAIL_COUNT = #failCount:VARCHAR#,
+      STATUS = #status:VARCHAR#,
+      RESULT_CODE = #resultCode:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      BATCH_TIME = #batchTime#,
+      EXT = #ext:VARCHAR#,
+      OPERNERID = #opernerid:VARCHAR#,
+      OPERNERNAME = #opernername:VARCHAR#,
+      BIZTYPE = #biztype:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

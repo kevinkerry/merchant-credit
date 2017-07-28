@@ -1,0 +1,156 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/easypay/trade/list.htm')" method="post">
+<div class="caption">云收银交易管理</div>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+		    <tbody>
+		    <tr>
+		    <td width="90" class="lbl">盛付通商户号：</td>
+		    <td width="140"><input type="text" id="merchantNo" name="merchantNo" class="txt w120"></td>
+			<td width="80" class="lbl">支付订单号：</td>
+			<td width="140"><input type="text" id="orderNo" name="orderNo" class="txt w120"></td>
+			<td class="lbl" >支付产品：</td>
+	        <td width="140">
+	            <select id="payProduct" name="payProduct" class="w130">
+					<option value="">全部</option>
+	                <option value="alipay">支付宝</option>
+					<option value="weixin">微信</option>
+	            </select>
+	        </td>
+	        <td class="lbl" >二级代理商账号：</td>
+	        <td width="140">
+	        	#if($!{promoterType} == '0003')
+	            <select name="secondProxy" id="secondProxy">
+    				<option value="" >全部
+    				</option>
+    				#foreach($operator in $!{operatorInfoList})
+    				<option value="$!{operator.operatorId}" >
+    					$!{operator.operatorId}-$!{operator.nickName}
+    				</option>
+    				#end
+				</select>
+				#else
+				<select name="secondProxy" id="secondProxy">
+					<option value="" >全部
+    				</option>
+					#foreach($child in $!{childMerchants})
+					<option value="$!{child.merchant_no}"
+					#if("$!{allot.childMerchant}"=="$!{child.merchant_no}|$!{child.merchant_name}")	selected #end
+					>
+						$!{child.merchant_no}-$!{child.merchant_name}
+					</option>
+					#end
+	            </select>
+				#end
+	        </td>
+		</tr>
+
+			    <tr>
+			    <td class="lbl" >支付类型：</td>
+			    <td width="200">
+	            <select id="payType" name="payType" class="w130">
+	                <option value="">全部</option>
+	                <option value="pay">收款</option>
+	                <option value="refund">退款</option>
+	            </select>
+	        </td>
+
+			        <td class="lbl">支付时间：</td>
+			        <td colspan="6">
+			            <input type="text" id="payStartTime" name="payStartTime" class="txt w180 date" onclick="xDatePicker(1);">
+			            ~
+			            <input type="text" id="payEndTime" name="payEndTime" class="txt w180 date" onclick="xDatePicker(1);">
+			            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('payStartTime'), 0, elm('payEndTime') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('payStartTime'), 0, elm('payEndTime') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('payStartTime'), 0, elm('payEndTime') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('payStartTime'), 0, elm('payEndTime') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('payStartTime'), -1, elm('payEndTime') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('payStartTime'), 0, elm('payEndTime') );return false;" title="交易时间范围：今天">今</a>
+			       <span class="red">(范围限30天)</span>
+			        </td>
+			        <td></td>
+			    </tr>
+			    <tr>
+			        <td colspan="8" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();return false;" title="清除所有查询条件">清</a>
+						<a href="#" class="btn2" onclick="downloadResult();return false;" title="下载">下载</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<script type="text/javascript">
+	var ALL_COND_ID = ['merchantNo','orderNo','payProduct', 'secondProxy', 'payType','payStartTime', 'payEndTime'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+			jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	
+	window.onload=function(){
+		setTimeStartEnd(0,elm("payStartTime"),0,elm("payEndTime"));
+		ajaxPaging();
+	};
+	function setTimeStartEnd(a, c, b, d) {
+        var e = new Date,
+        f = e.getFullYear(),
+        g = e.getMonth(),
+        e = e.getDate();
+        c.value = formatDate(new Date(f, g, e + a), 'yyyy-MM-dd') ;
+        d.value = formatDate(new Date(f, g, e + b), 'yyyy-MM-dd') ;
+	}
+
+	function queryInfo(){
+	
+		var dateStr1 = jQuery("#payStartTime").val();
+		var dateStr2 = jQuery("#payEndTime").val();
+		if(dateStr1 == null || dateStr1 == ""){
+			alert("请录入起始时间");
+			return false;
+		}
+		var dateEnd;
+		var dateBegin = new Date(dateStr1.replace(/-/g, "/"));
+		if(dateStr2 == null || dateStr2 == ""){
+			dateEnd = new Date();
+		}
+		dateEnd = new Date(dateStr2.replace(/-/g, "/"));
+
+		var dateDiff = dateEnd.getTime() - dateBegin.getTime();
+		var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));
+		
+		if(dayDiff > 30){
+			 alert("时间大于30天");
+			return false;
+		}
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":15};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/trade/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+      function downloadResult(){
+ 		jQuery("#submitForm").attr("action","#relativeUrl('/easypay/trade/DownLoad.htm')");
+ 		jQuery("#submitForm").submit();
+     }
+
+</script>

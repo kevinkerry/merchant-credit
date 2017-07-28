@@ -1,0 +1,95 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+#set( $flag = ("$!{auditInfo.promoterFsFlag}"=="0"))
+<div class="caption"> 
+           #if("$!{auditInfo.opType}"=="3")代理商保证金调额#elseif("$!{auditInfo.opType}"=="11")代理商临时调额#end详细</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0">
+	#parse("/newt0/apply/base.vm")
+    <table/>
+    <div style="height: 10px;border: 0px;"></div>
+    <table class="dtlTb" cellspacing="1" cellpadding="0">
+    #if("$!{auditInfo.status}"=="3"||"$!{auditInfo.status}"=="4"||"$!{auditInfo.status}"=="6")
+    <tr>
+		<td class="lbl" width="200">审批结果：</td>
+		<td width="300"><input type="radio" disabled="disabled" name="auditResult" #if("$!{auditInfo.status}"=="3"||"$!{auditInfo.status}"=="6")checked#end value="1" onclick="auditDescChange(this)" >通过
+			&nbsp;
+			<input type="radio" disabled="disabled" name="auditResult" #if("$!{auditInfo.status}"=="4")checked#end value="0" onclick="auditDescChange(this)" >拒绝</td>
+    </tr>
+     #if("$!{auditInfo.opType}"=="3")
+	<tr #if("$!{auditInfo.status}"=="3") #else style="display: none" #end>
+		<td class="lbl" width="200">垫资方：</td>
+		<td width="300">
+			<input type="radio" disabled="disabled" name="loaningType" #if("$!{auditInfo.loaningType}"=="1")checked#end value="1" onclick="fastSettleLimitChange(this)" >盛付通全资
+			&nbsp;
+			<input type="radio" disabled="disabled" name="loaningType" #if("$!{auditInfo.loaningType}"=="0")checked#end value="0" onclick="fastSettleLimitChange(this)" >代理商全资
+		</td>
+    </tr>
+    #end
+    
+	<tr id="fastSettleLimit_tr" #if("$!{auditInfo.status}"=="3"||"$!{auditInfo.status}"=="6") #else style="display: none" #end>
+		<td class="lbl" width="200">
+		 #if("$!{auditInfo.opType}"=="3")
+				工作日额度#elseif("$!{auditInfo.opType}"=="11")今日总额度调整为#end</td>
+		<td width="300">
+		<input id="fastSettleLimit" disabled="disabled" name="fastSettleLimit" #if("$!{auditInfo.loaningType}"=="0")disabled#end 
+		value='#if("$!{auditInfo.opType}"=="3") #if("$!{auditInfo.marginInfo.auditLimit}"=="")$!{auditInfo.marginInfo.auditLimit} #else$!{fastSettleLimit} #end #elseif("$!{auditInfo.opType}"=="11")$!{auditInfo.tempLimitInfo.auditLimit}#end'/>元</td>
+    </tr>
+    <tr #if("$!{auditInfo.status}"=="3"||"$!{auditInfo.status}"=="6") style="display: none" #end id="auditDesc_tr">
+		<td class="lbl" width="200">拒绝理由：</td>
+		<td width="300">
+		<input id="auditDesc" type="text" name="auditDesc" disabled="disabled" style="width: 220px;"  
+		value='#if("$!{auditInfo.opType}"=="3") $!{auditInfo.marginInfo.auditDesc} #elseif("$!{auditInfo.opType}"=="11")$!{auditInfo.tempLimitInfo.auditDesc}#end'/>
+		</td>
+    </tr>
+    #if("$!{auditInfo.operator}"=="")
+    #else
+    <tr>
+		<td class="lbl" width="200">审核人：</td>
+		<td width="300">
+		    $!{auditInfo.operator}($!{auditInfo.operatorId})
+		</td>
+    </tr>
+    #end
+    #end
+      #if("$!{auditInfo.status}"=="3"||"$!{auditInfo.status}"=="4"||"$!{auditInfo.status}"=="6")
+	<tr>
+		<td class="lbl" width="200">审核时间：</td>
+		<td width="300" style="font-weight:bold; ">
+		#if("$!{auditInfo.auditTime}"=="")
+		  #showDateTime($!{auditInfo.updateTime})
+	    #else
+		  #showDateTime($!{auditInfo.auditTime})
+		#end
+		</td>
+	</tr>
+	#end
+	
+     #if("$!{auditInfo.opType}"=="11" && "$!{auditInfo.status}"=="6")
+     <table/>
+    <div style="height: 10px;border: 0px;"></div>
+    <table class="dtlTb" cellspacing="1" cellpadding="0">
+	<tr>
+		<td class="lbl" width="200">撤销理由：</td>
+		<td width="300">
+		<input id="undoCause" type="text" name="undoCause" disabled="disabled" style="width: 220px;"  value="$!{auditInfo.tempLimitInfo.undoCause}"/>
+		</td>
+    </tr>
+    <tr>
+		<td class="lbl" width="200">撤销人：</td>
+		<td width="300">
+		    $!{auditInfo.tempLimitInfo.undoOperator}($!{auditInfo.tempLimitInfo.undoOperatorId})
+		</td>
+    </tr>
+	<tr>
+		<td class="lbl" width="200">撤销时间：</td>
+		<td width="300" style="font-weight:bold; ">
+		  #showDateTime($!{auditInfo.updateTime})
+		</td>
+	</tr>
+	#end
+    <tr>
+        <td colspan="4" align="center">
+            <a href="javascript:void(0);" class="btn2" id="closeBtn" onclick="window.close();">关闭</a>
+        </td>
+    </tr>
+</table>

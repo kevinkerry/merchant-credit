@@ -1,0 +1,34 @@
+<table height="5" border="0" align="center" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+<table width="700">
+	<tr>
+		<td width="40%" align="center">
+			<select name="unlimitedMcc" id='unlimitedMcc' size="10" style="width: 100%;height: 300px" multiple="multiple" >
+				#foreach($mccRO in $!{promoter.pemROs})
+					<option value="$!{mccRO.mccId}">$!{mccRO.mccId}($!{mccRO.mccName})</option>
+				#end
+			</select>
+		</td>
+		<td width="10%" align="center">
+			<input name="toRightBtn" type="button" disabled="disabled" onClick="chooseItems('unlimitedMcc', 'limitedMcc');return false;" value=" > " >
+			<input name="toLeftBtn" type="button" disabled="disabled" onClick="chooseItems('limitedMcc','unlimitedMcc');" value=" < " style="margin-top:30px;">
+		</td>
+		<td width="40%" align="center">
+			<select name="limitedMcc" id="limitedMcc" size="10" style="width: 100%;height: 300px" multiple="multiple" >
+				#foreach($limitMccRO in ${promoter.excPemROs})
+					<option value="$!{limitMccRO.mccId}">$!{limitMccRO.mccId}($!{limitMccRO.mccName})</option>
+				#end
+			</select>
+		</td>
+	</tr>
+</table>
+<table height="5" border="0" align="center" cellpadding="0"
+	cellspacing="0">
+	<tr>
+		<td></td>
+	</tr>
+</table>

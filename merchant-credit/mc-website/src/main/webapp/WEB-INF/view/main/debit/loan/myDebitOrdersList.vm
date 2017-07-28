@@ -1,0 +1,65 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<table class="r_table">
+	<thead>
+		<tr>
+			<th>申请日期</th>
+			<th>借款本金</th>
+			<th>借款利息</th>
+			<th>借款期限</th>
+			<th>起息日期</th>
+			<th>到期还款日</th>
+			<th>逾期天数</th>
+			<th>逾期费用</th>
+			<th>待还金额</th>
+			<th>状态</th>
+		</tr>
+	</thead>
+	#foreach($o in ${dataList})
+	<tr>
+		<td>#showDate($!{o.applyDate})</td>
+		<td>￥$!NumberUtils.format($!{o.debitAmount})</td>
+		<td>￥$!NumberUtils.format($!{o.interestAmount})</td>
+		<td>$!{o.borrowDays}天</td>
+		<td>#showDate($!{o.startTime})</td>
+		<td>#showDate($!{o.endTime})</td>
+		#set($days = $!MCUtil.daysBetween($!{o.endTime},$!{o.dueRepaymentTime}))
+		<td>#if($days<0||"$!{o.status}"=="4") 0 #else $days #end</td>
+		#if($o.overDueAmount)
+		#set($totalAmount = $o.debitAmount.add($o.overDueAmount))
+		#else
+		#set($totalAmount = $!{o.debitAmount})
+		#end
+		<td>#if($o.overDueAmount)￥$!NumberUtils.format($!{o.overDueAmount})#else ￥0.00 #end</td>
+		<td>
+			#if("$!{o.status}"=="0"||"$!{o.status}"=="3"||"$!{o.status}"=="4")
+				￥0
+			#elseif("$!{o.status}"=="1"||"$!{o.status}"=="2")
+				￥$!NumberUtils.format($!{totalAmount})
+			#end
+		</td>
+		<td>
+		#if("$!{o.status}"=="0")
+			放款中
+		#elseif("$!{o.status}"=="1"&&$days<0)
+			未到期
+		#elseif("$!{o.status}"=="1"&&$days==0)
+			已到期
+		#elseif("$!{o.status}"=="2")
+			已到期
+		#elseif("$!{o.status}"=="3"||"$!{o.status}"=="4")
+			已还清
+		#elseif("$!{o.status}"=="5")
+                    待放款
+        #elseif("$!{o.status}"=="6")
+                    放款中
+        #elseif("$!{o.status}"=="7")
+                    放款失败
+		#elseif("$!{o.status}"=="8")
+		拒绝放款
+		#end
+		</td>
+	</tr>
+	#end
+</table>
+#parse("/main/include/pager-ajax.vm")

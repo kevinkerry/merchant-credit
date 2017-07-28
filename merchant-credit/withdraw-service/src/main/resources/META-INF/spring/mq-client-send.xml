@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
+	default-autowire="byName">
+
+	<bean id="jmsService" class="com.snda.mq.MQServiceCreator"
+		factory-method="getMQService">
+		<constructor-arg>
+			<ref local="connectionFactory" />
+		</constructor-arg>
+	</bean>
+	<bean id="connectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+		init-method="start" destroy-method="stop">
+		<property name="connectionFactory">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<property name="brokerURL" value="${sdomq.java.naming.provider.url.mq1}" />
+				<property name="userName" value="${sdomq.java.naming.security.principal}" />
+				<property name="password" value="${sdomq.java.naming.security.credentials}" />
+			</bean>
+		</property>
+	</bean>
+</beans>

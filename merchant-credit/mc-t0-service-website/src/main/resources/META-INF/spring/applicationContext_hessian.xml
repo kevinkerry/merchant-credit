@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	http://cxf.apache.org/jaxws
+	http://cxf.apache.org/schemas/jaxws.xsd">
+	<!-- 使用Spring的HessianServie做代理 -->
+	<!-- <bean name="/mcMposHessian"
+		class="org.springframework.remoting.caucho.HessianServiceExporter">
+		service引用具体的实现实体Bean
+		<property name="service" ref="t0Service4Hessian" />
+		<property name="serviceInterface" value="com.sdp.mc.msp.api.MposHessianApi" />
+	</bean> -->
+	<bean name="/withdrawServiceHessian"
+		class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<!-- service引用具体的实现实体Bean -->
+		<property name="service" ref="withdrawServiceHessian" />
+		<property name="serviceInterface" value="com.sdp.withdraw.api.WithdrawT0ServiceAPI" />
+	</bean>
+	<bean name="/withdrawRatioService"
+		class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<!-- service引用具体的实现实体Bean -->
+		<property name="service" ref="withdrawRatioService4Hessian" />
+		<property name="serviceInterface" value="com.sdp.withdraw.api.ratio.MerchantWithdrawRatioAPI" />
+	</bean>
+	<bean name="/synMerchantInfoService"
+		class="org.springframework.remoting.caucho.HessianServiceExporter">
+		<!-- service引用具体的实现实体Bean -->
+		<property name="service" ref="synMerchantInfoService" />
+		<property name="serviceInterface" value="com.sdp.withdraw.api.merchant.SynMerchantInfoServiceAPI" />
+	</bean>
+</beans>

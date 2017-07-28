@@ -1,0 +1,113 @@
+<style >
+	 .detail{border-right:1px solid #000000;border-bottom:1px solid #000000;margin:auto;}
+	 .detail td{border-left:1px solid #000000;border-top:1px solid #000000;padding-left: 10px; }
+</style>
+<div class="caption">云收银二维码分配</div>
+<form action="#relativeUrl('/easypay/qrcode/detail.htm')" method="POST" onsubmit="return valid();">
+<table align="center" class="detail" width="950px" >
+	<tr>
+		<td width="20%">起始编号</td><td  width="20%">结束编号</td><td  width="10%" >数量</td><td  width="30%"> 下级代理商账号</td>
+	</tr>
+	<tr>
+		<td><input type="text" name="qrStartCode" id="qrStartCode" value="$!{allot.qrStartCode}"></td>
+		<td><input type="text" name="qrEndCode" id="qrEndCode" value="$!{allot.qrEndCode}"></td>
+        <td id="num"></td>
+		<td>
+			#if($!{promoterType} == '0003')
+				<select name="childMerchant" id="childMerchant">
+    				#foreach($operator in $!{operatorInfoList})
+    				<option value="$!{operator.operatorId}|$!{operator.nickName}" >
+    					$!{operator.nickName}
+    				</option>
+    				#end
+				</select>
+			#else
+			<select name="childMerchant" id="childMerchant">
+				#foreach($child in $!{childMerchants})
+				<option value="$!{child.merchant_no}|$!{child.merchant_name}"
+				#if("$!{allot.childMerchant}"=="$!{child.merchant_no}|$!{child.merchant_name}")	selected #end
+				>
+					$!{child.merchant_no}-$!{child.merchant_name}
+				</option>
+				#end
+            </select>
+			#end
+		</td>
+    </tr>
+	#if($errorMsg)
+	<tr>
+		<td colspan="4" align="center" style="color:red;">
+			错误提示：$errorMsg
+		</td>
+	</tr>
+	#end
+	<tr>
+		<td colspan="4" align="center">
+			<input type="submit" value="   提    交    "/>
+		</td>
+	</tr>
+</table>
+</form>
+<script type="text/javascript">
+var  calc=function(){
+	var s=$("#qrStartCode").val();
+	var e=$("#qrEndCode").val();
+	if(s=='' || e=='') return;
+	var s_n=parseInt(s.substr(1),10);
+	var e_n=parseInt(e.substr(1),10);
+	var dif=e_n-s_n+1;
+	$("#num").text(dif);
+};
+$(document).ready(function(){
+  $("#qrStartCode").blur(function (){
+  	var s=$("#qrStartCode").val();
+	var patt=new RegExp("^[A-Z]{1}[0-9]+");
+	if(s!=''){
+		if(!patt.test(s) ){
+			alert("编号不合规则！");
+			return;
+		}
+	}else{
+		return;
+	}
+  calc();
+  });
+  $("#qrEndCode").blur(function (){
+	 var e=$("#qrEndCode").val();
+	 var patt=new RegExp("^[A-Z]{1}[0-9]+");
+	 if(e!=''){
+		if(!patt.test(e) ){
+			alert("编号不合规则！");
+			return;
+		}
+	 }else{
+	 	return;
+	 }
+  calc();
+  });
+});
+function valid(){
+	var s=$("#qrStartCode").val();
+	var e=$("#qrEndCode").val();
+	var childMerchant=$("#childMerchant").val();
+
+	if(jQuery.trim(s)==''){
+		alert("开始编号没填写！");
+		return false;
+	}
+	if(jQuery.trim(e)==''){
+		alert("结束编号没填写！");
+		return false;
+	}
+	if(s.substr(0,1)!=e.substr(0,1)){
+		alert("开始编号和结束编号必须是一个号段！");
+		return false;
+	}
+	if(jQuery.trim(childMerchant)==''){
+		alert("下级代理商没有选择！");
+		return false;
+	}
+	return true;
+
+}
+</script>

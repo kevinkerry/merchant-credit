@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+		<title>盛付通-线下收单作业平台</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="Keywords" content="盛付通-线下收单作业平台" />
+		<meta name="Description" content="盛付通-线下收单作业平台" />
+		<meta name="renderer" content="webkit">
+		<link href="https://img0.shengpay.com/img/shengpay/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+		#parse("/control/page-script.vm")
+		<link rel="stylesheet" href="#staticResource('/css/base.css')?version=1" type="text/css" />
+		<link rel="stylesheet" href="#staticResource('/css/inc.css')?version=1" type="text/css" />
+		<link rel="stylesheet" href="#staticResource('/css/style.css')?version=1" type="text/css" />
+		
+		<link href="#staticResource('/My97DatePicker/skin/WdatePicker.css')" type="text/css" rel="stylesheet" />
+		
+		<script type="text/javascript" src="#staticResource('/js/base.js')?version=1"></script>
+		<script type="text/javascript" src="#staticResource('/js/baseExt.js')?version=1"></script>
+		<script type="text/javascript" src="#staticResource('/lib/jquery/jquery-1.8.2.min.js')"></script>
+		
+		<script type="text/javascript" src="#staticResource('/My97DatePicker/WdatePicker.js')"></script>
+		<script type="text/javascript" src="#staticResource('/My97DatePicker/calendar.js')"></script>
+	</head>
+	#parse("/main/layout/kf.vm")
+	<body>
+
+			$screen_content
+
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+    <property name="javaFileEncoding" value="UTF-8"/>
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.newt0.dao" targetProject="../mc-dao/src/main/java">
+
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.newt0.dao.mapper"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.newt0.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.newt0.manager" implementationPackage="com.sdp.mc.newt0.manager.impl" generatorEnable="true"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+    <!-- 短信模板-->
+    <table tableName="TB_MESSAGE_TEMPLATE" domainObjectName="MessageTemplateDO">
+        <generatedKey column="ID" sqlStatement="select SEQ_TB_MESSAGE_TEMPLATE.nextval from dual" type="pre" />
+        <columnOverride column="CREATED_AT" 					property="createdAt" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATED_AT" 					property="updatedAt" 				jdbcType="TIMESTAMP"/>
+    </table>
+	
+	<!--短息发送日志-->
+    <table tableName="TB_SEND_MESSAGE_LOG" domainObjectName="SendMessageLogDO">
+        <generatedKey column="ID" sqlStatement="select SEQ_TB_SEND_MESSAGE_LOG.nextval from dual" type="pre" />
+         <columnOverride column="CREATED_AT" 					property="createdAt" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATED_AT" 					property="updatedAt" 				jdbcType="TIMESTAMP"/>
+    </table>
+	
+    <!-- 垫资方类型
+    <table tableName="NEWT0_LOANING_CONFIG" domainObjectName="Newt0LoaningConfigDO">
+     	<columnOverride column="ID" 						    property="id" 						javaType="java.lang.Long" />
+     	 <columnOverride column="LOANING_TYPE" 					property="loaningType" 				javaType="java.lang.Integer" />
+        <columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table>
+    -->
+    <!--
+    <table tableName="NEWT0_AUDIT_INFO" domainObjectName="NewT0AuditInfoDO">
+    	<generatedKey column="ID" sqlStatement="select SEQ_NEWT0_AUDIT_INFO.nextval  from dual" type="pre" />
+    	<columnOverride column="OBJ_ID" 						property="objId" 				javaType="java.lang.Long" />
+    	<columnOverride column="OBJ_TYPE" 						property="objType" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="OP_TYPE" 						property="opType" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="STATUS" 						property="status" 				javaType="java.lang.Integer"/>
+    </table>
+    -->
+    <!--
+   <table tableName="NEWT0_PROMOTER" domainObjectName="Newt0PromoterDO">
+   		<generatedKey column="ID" sqlStatement="select SEQ_NEWT0_PROMOTER.nextval  from dual" type="pre" />
+    	<columnOverride column="ID" 						    property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="PROMOTER_ID" 				    property="promoterId" 		javaType="java.lang.Long"/>
+    	<columnOverride column="PROMOTER_MERCHANT_NO" 			property="promoterMerchantNo" 		javaType="java.lang.Long"/>
+    	<columnOverride column="LOANING_TYPE" 					property="loaningType" 			javaType="java.lang.Integer"/>
+       	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table>
+     -->
+      <!--
+     <table tableName="NEWT0_SDP_REMAIN_BALANCE" domainObjectName="Newt0SdpRemainBalanceDO">
+   		<generatedKey column="ID" sqlStatement="select SEQ_NEWT0_SDP_REMAIN_BALANCE.nextval  from dual" type="pre" />
+   	    <columnOverride column="START_TIME" 					property="startTime" 				jdbcType="TIMESTAMP"/>
+   	    <columnOverride column="END_TIME" 						property="endTime" 					jdbcType="TIMESTAMP"/>
+   	    <columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table>
+     
+ 	<table tableName="NEWT0_USEROPERA_RECORD" domainObjectName="NewT0UserOperaRecordDO">
+   		<generatedKey column="ID" sqlStatement="select SEQ_NEWT0_USEROPERA_RECORD.nextval  from dual" type="pre" />
+   	    <columnOverride column="ID" 						    property="id" 				javaType="java.lang.Long" />
+   	    <columnOverride column="BIZ_ID" 					    property="bizId" 			javaType="java.lang.Long" />
+   	    <columnOverride column="BIZ_TYPE" 						property="bizType" 			javaType="java.lang.Long" />
+    </table>
+    -->
+  </context>
+</generatorConfiguration>

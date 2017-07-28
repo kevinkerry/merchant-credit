@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_MERCHANT_CREDIT_LINES_APPLY" >
+  <!--
+    <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="APPLY_STATUS" property="applyStatus" jdbcType="VARCHAR" />
+    <result column="PROMOTER_No" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="APPLY_MERCHANT_INFO" property="applyMerchantInfo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_APPLY_AGENT_TIME" property="merchantApplyAgentTime" />
+    <result column="IS_AGNET_GUARANTEE" property="isAgnetGuarantee" jdbcType="VARCHAR" />
+    <result column="IS_NEED_AGNET_GUARANTEE" property="isNeedAgnetGuarantee" jdbcType="VARCHAR" />
+    <result column="APPLY_START_TIME" property="applyStartTime" />
+    <result column="APPLY_RISK_TIME" property="applyRiskTime" />
+    <result column="RISK_ANSWER_TIME" property="riskAnswerTime" />
+    <result column="MERCHANT_SEND_DATA_TIME" property="merchantSendDataTime" />
+    <result column="BORROW_TIME" property="borrowTime" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="RISK_LEVEL" property="riskLevel" jdbcType="VARCHAR" />
+    <result column="LEND_AMOUNT" property="lendAmount" jdbcType="DECIMAL" />
+    <result column="POLICY_START_TIME" property="policyStartTime" />
+    <result column="POLICY_END_TIME" property="policyEndTime" />
+    <result column="ORGANIZATION_CODE" property="organizationCode" jdbcType="VARCHAR" />
+    <result column="LEND_WALLER_ACCOUNT" property="lendWallerAccount" jdbcType="VARCHAR" />
+    <result column="LEND_MEMBER_ID" property="lendMemberId" jdbcType="VARCHAR" />
+    <result column="LEND_LOGIN_NAME" property="lendLoginName" jdbcType="VARCHAR" />
+    <result column="AUDITOR_NAME" property="auditorName" jdbcType="VARCHAR" />
+  </resultMap>
+  -->
+  <sql id="where_clause_for_page">
+  	<dynamic prepend="where">
+	    <isNotEmpty property="promoterNo">
+		    <isNotNull prepend="and" property="promoterNo">
+		    PROMOTER_NO = #promoterNo:VARCHAR#
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="promoterName">
+		    <isNotNull prepend="and" property="promoterName">
+		    PROMOTER_NAME like '%$promoterName$%'
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="merchantNo">
+		    <isNotNull prepend="and" property="merchantNo">
+		    	MERCHANT_NO = #merchantNo:VARCHAR#
+		    </isNotNull>
+	    </isNotEmpty>
+	     <isNotEmpty property="applyStatus">
+		    <isNotNull prepend="and" property="applyStatus">
+		    	 <![CDATA[APPLY_STATUS != #applyStatus:VARCHAR#]]>
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="merchantName">
+		    <isNotNull prepend="and" property="merchantName">
+		    	MERCHANT_NAME like '%$merchantName$%'
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="isNeedAgentGuarantee">
+		    <isNotNull prepend="and" property="isNeedAgentGuarantee">
+		    	IS_NEED_AGNET_GUARANTEE = #isNeedAgentGuarantee:VARCHAR#
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="isAgnetGuarantee">
+		    <isNotNull prepend="and" property="isAgnetGuarantee">
+		    	IS_AGNET_GUARANTEE = #isAgnetGuarantee:VARCHAR#
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="startTimeStr">
+	    	<isNotNull prepend="and" property="startTimeStr">
+	    	<![CDATA[
+	    		APPLY_START_TIME >= to_date( #startTimeStr#, 'yyyy-mm-dd hh24:mi:ss' )
+	    	]]>
+	    	</isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="endTimeStr">
+	    	<isNotNull prepend="and" property="endTimeStr">
+	    	<![CDATA[
+	    		APPLY_START_TIME <= to_date( #endTimeStr#, 'yyyy-mm-dd hh24:mi:ss' ) + 1
+	    	]]>
+	    	</isNotNull>
+	    <isNotEmpty property="applyStatus">
+	    	<isNotNull prepend="and" property="applyStatus">
+		    		APPLY_STATUS IN ($applyStatus$)
+	    	</isNotNull>
+	    </isNotEmpty>
+	    </isNotEmpty>
+    </dynamic>
+  </sql>
+  <select id="countMerchantCreditLineApply" resultClass="java.lang.Integer" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantCreditLinesApplyExample" >
+  	select count(id) from DO_MERCHANT_CREDIT_LINES_APPLY
+    <include refid="where_clause_for_page"/>
+  </select>
+  <select id="pageQueryMerchantCreditLineApply" resultMap="DO_MERCHANT_CREDIT_LINES_APPLY.BaseResultMap" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantCreditLinesApplyExample" >
+  	select t.* from (select tt.*, ROWNUM rnum from (
+	    select
+	    <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Base_Column_List" />
+	    from DO_MERCHANT_CREDIT_LINES_APPLY
+	    <include refid="where_clause_for_page"/>
+	    order by CREATE_TIME desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+
+  <select id="selectApplyIngOrder" parameterClass="java.util.Map" resultMap="DO_MERCHANT_CREDIT_LINES_APPLY.BaseResultMap">
+      select
+		<include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Base_Column_List" />
+	  from do_merchant_credit_lines_apply t
+	  <![CDATA[
+	  where t.merchant_no = #merchantNo#
+	  ]]>
+	  order by t.CREATE_TIME desc
+  </select>
+
+<sql id="where_clause_for_query">
+  	<dynamic prepend="where">
+	     <isNotEmpty property="applyStatus">
+		    <isNotNull prepend="and" property="applyStatus">
+		    	 <![CDATA[APPLY_STATUS = #applyStatus:VARCHAR#]]>
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="isNeedAgentGuarantee">
+		    <isNotNull prepend="and" property="isNeedAgentGuarantee">
+		    	IS_NEED_AGNET_GUARANTEE = #isNeedAgentGuarantee:VARCHAR#
+		    </isNotNull>
+	    </isNotEmpty>
+	    <isNotEmpty property="applyStartTime">
+	    	<isNotNull prepend="and" property="applyStartTime">
+	    	<![CDATA[
+	    		APPLY_START_TIME < to_date( #applyStartTime#, 'yyyy-mm-dd hh24:mi:ss' )
+	    	]]>
+	    	</isNotNull>
+	    </isNotEmpty>
+    </dynamic>
+  </sql>
+   <!-- 通过时间获取代理商担保超时的记录推送征信 -->
+ 	<update id="updateMerchantCreditLineStatusJob" parameterClass="java.util.Map" >
+	  update DO_MERCHANT_CREDIT_LINES_APPLY t
+	   set
+	   t.apply_status = '2',
+	   t.is_agnet_guarantee = '0',
+	   t.update_time=sysdate
+	   <include refid="where_clause_for_query"/>
+	</update>
+
+</sqlMap>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MerchantSettleDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.merchantsettle.MerchantSettleEO">
+		<result property="msId" column="ID"/>
+		<result property="msCreateTime" column="CREATE_TIME"/>
+		<result property="msUpdateTime" column="UPDATE_TIME"/>
+		<result property="msVersion" column="VERSION"/>
+		<result property="msMerchantNo" column="MERCHANT_NO"/>
+		<result property="msTerminalSettleFlag" column="TERMINAL_SETTLE_FLAG"/>
+		<result property="fastSettleLimit" column="FAST_SETTLE_LIMIT"/>
+		<result property="fastSettleFlag" column="FAST_SETTLE_FLAG"/>
+		<result property="fastSettleMinLimit" column="FAST_SETTLE_MIN_LIMIT"/>
+		<!-- 新增四个字段 -->
+		<result property="msAutoFastSettleFlg" column="AUTO_FAST_SETTLE_FLG"/>
+		<result property="msHolidayWithdrawFee" column="HOLIDAY_WITHDRAW_FEE"/>
+		<result property="msWorkdayWithdrawFee" column="WORKDAY_WITHDRAW_FEE"/>
+		<result property="msMerchantPhone" column="HAND_POHNE_NO"/>
+	</resultMap>
+
+	<resultMap id="grayFlagResult" extends="result" class="com.sdp.mc.dao.readonly.merchantsettle.MerchantSettleEO">
+		<result property="posMerchantNo" column="POSM_POS_MERCHANT_NO_C"/>
+	</resultMap>
+
+	<insert id="insert" parameterClass="com.sdp.mc.dao.readonly.merchantsettle.MerchantSettleEO">
+		<selectKey keyProperty="msId">
+			select seq_merchant_settle.nextval from dual
+		</selectKey>
+		insert into PCS.MERCHANT_SETTLE(CREATE_TIME,UPDATE_TIME,VERSION
+			<isNotEmpty prepend="," property="msId">
+				ID
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="msMerchantNo">
+				MERCHANT_NO
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="msTerminalSettleFlag">
+				TERMINAL_SETTLE_FLAG
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="fastSettleFlag">
+				FAST_SETTLE_FLAG
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="fastSettleLimit">
+				FAST_SETTLE_LIMIT
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="fastSettleMinLimit">
+				FAST_SETTLE_MIN_LIMIT
+			</isNotEmpty>
+		)
+		values(systimestamp,systimestamp,1
+			<isNotEmpty prepend="," property="msId">
+				#msId:NUMBERIC#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="msMerchantNo">
+				#msMerchantNo:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="msTerminalSettleFlag">
+				#msTerminalSettleFlag:NUMBERIC#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="fastSettleFlag">
+				#fastSettleFlag#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="fastSettleLimit">
+				#fastSettleLimit#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="fastSettleMinLimit">
+				#fastSettleMinLimit#
+			</isNotEmpty>
+		)
+	</insert>
+
+	<select id="selectEOByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select * from PCS.MERCHANT_SETTLE ms where ms.merchant_no = #merchantNo:VARCHAR# order by ms.id desc
+	</select>
+
+	<update id="updateByEO" parameterClass="com.sdp.mc.dao.readonly.merchantsettle.MerchantSettleEO">
+		update PCS.MERCHANT_SETTLE ms
+			set ms.terminal_settle_flag=#msTerminalSettleFlag:NUMBERIC#
+			   ,ms.FAST_SETTLE_FLAG=#fastSettleFlag#
+			   ,ms.FAST_SETTLE_LIMIT=#fastSettleLimit#
+			   ,ms.FAST_SETTLE_MIN_LIMIT=#fastSettleMinLimit#
+			   ,ms.version = ms.version+1
+			   ,ms.update_time= systimestamp
+		where ms.merchant_no=#msMerchantNo:VARCHAR# and ms.version=#msVersion:NUMBERIC#
+	</update>
+
+	<select id="queryMerchantSettleListByCreateYesterday" parameterClass="java.lang.String" resultMap="grayFlagResult" >
+		<![CDATA[
+          select posm.posm_pos_merchant_no_c,settle.*
+            from PCS.MERCHANT_SETTLE      settle,
+                 ppcpay.CM_MERCHANT_CONTRACT cm,
+                 ppcpay.CM_POS_MERCHANT      posm
+           where cm.mc_id_n = posm.posm_id_n
+             and cm.mc_merchant_no_v = settle.merchant_no
+             and cm.mc_status_c = '3'
+             and FAST_SETTLE_FLAG = 1
+             and UPDATE_TIME >= to_timestamp(#value# || ' 00:00:00.000000000', 'yyyy-mm-dd hh24:mi:ss.xff')
+             and UPDATE_TIME <= to_timestamp(#value# || ' 23:59:59.999999999', 'yyyy-mm-dd hh24:mi:ss.xff')
+        ]]>
+	</select>
+
+	<select id="selectByMerchantNo" parameterClass="java.util.Map" resultMap="result">
+		select * from PCS.MERCHANT_SETTLE ms where ms.merchant_no = #merchantNo:VARCHAR#
+		and FAST_SETTLE_FLAG = 1 order by ms.UPDATE_TIME DESC
+	</select>
+
+</sqlMap>

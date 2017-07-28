@@ -1,0 +1,29 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td></td>
+		<td>分润角色</td>
+		<td>分润方</td>
+		<td>时间段</td>
+		<td>结算手续费分润金额</td>
+		<td>提现手续费分润金额</td>
+		<td>周期总额阶梯奖惩金额</td>
+		<td>退费分润金额减项</td>
+		<td>合计分润额</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr class="settle_ttl">
+		<td>$!{velocityCount}</td>
+		<td>$!{o.promoterTypeDesc}</td>
+		<td>$!{o.promoterNo}</td>
+		<td>$!{o.settleDate}</td>
+		<td>$!{o.settleFeeProfits}</td>
+		<td>$!{o.withdrawFeeProfits}</td>
+		<td>$!{o.awardProfits}</td>
+		<td>$!{o.refundProfits}</td>
+		<td>$!{o.totalProfits}</td>
+	</tr>
+	#end
+</table>

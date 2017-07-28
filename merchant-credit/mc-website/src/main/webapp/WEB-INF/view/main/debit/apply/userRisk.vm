@@ -1,0 +1,36 @@
+<div class="content main_box">
+		#**
+		<div class="top_title">
+			<a href="javascript:;" class="btn_bg_off">额度申请</a>
+		</div>
+		**#
+		<div class="path clearfix" style="padding-left: 130px;">
+			<div class="step1 on l">
+				<span>1</span>
+				<p>上传资料</p>
+			</div>
+			<div class="step2 on l">
+				<span>2</span>
+				<p>提交申请 等待审核</p>
+			</div>
+			<div class="step3 l">
+				<span>3</span>
+				<p>审核通过</p>
+			</div>
+			#*<div class="step4 l">
+				<span>✔</span>
+				<p>下载授信协议，签约盖章，额度生效</p>
+			</div>*#
+		</div>
+		<div class="ban_table clearfix">
+			<div class="tips">
+				<p style="font-size:18px;padding-left:40px;padding-top:30px;">
+					#if($MESSAGE=='')
+					         您的额度申请正在申核中，我们会在3个工作日完成申批，请耐心等待！若有疑问请致电盛付通客服。
+					#else
+						${MESSAGE}
+					#end
+				</p>
+			</div>
+		</div>
+</div>

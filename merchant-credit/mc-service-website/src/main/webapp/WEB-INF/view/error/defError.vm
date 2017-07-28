@@ -1,0 +1,15 @@
+#set($page_title = '操作错误')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<br />
+    <label class="message">
+		#if($errorMsg)
+			$errorMsg
+		#elseif($exception)
+			操作错误：$!exception.message
+			--$!exception
+		#else
+			操作异常！请联系开发工程师！
+		#end
+	</label>
+</div>

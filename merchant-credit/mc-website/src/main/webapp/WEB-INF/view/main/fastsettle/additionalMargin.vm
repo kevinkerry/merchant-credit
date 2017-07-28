@@ -1,0 +1,362 @@
+#parse("/control/activejs.vm")
+<input type="hidden" id="addFlag" value="$!addFlag"/>
+<input type="hidden" id="opFlag" value="$!opFlag"/>
+<input type="hidden" id="redeemFlag" value="$!redeemFlag"/>
+<input type="hidden" id="opType" name="opType" />
+<input type="hidden" id="addUrl" value="#relativeUrl('/additionalMargin/add.json')"/>
+<input type="hidden" id="redeemUrl" value="#relativeUrl('/redeemMargin/redeem.json')"/>
+<input type="hidden" id="promoterType" value="$!promoterType"/>
+
+<div class="full-container">
+	<div class="mid-container">
+		<table class="data-table" align="center">
+			<tr>
+				<td colspan="2">
+					<label class="b">快速结算保证金：</label>
+					#if(!$!{fastSettleMargin}) 0.00 #else $!NumberUtils.formatWithComma($!{fastSettleMargin}) #end 元  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:void(0);" class="g-button #if(!$!opFlag) g-button-disable #end" #if($!opFlag) onclick="disWalletDiv('3');" #end>追加</a>
+					<a href="javascript:void(0);" #if(!$!opFlag || $!loaningType==-1)  class="g-button g-button-disable" #else class="g-button" onclick="disWalletDiv('4');" #end>取回</a>
+				</td>
+			</tr>
+			<tr>
+				<td><label class="b">快速结算额度：</label>#if(!$!{promoterInfo.fastSettleLimit}) 0.00 #else $!NumberUtils.formatWithComma($!{promoterInfo.fastSettleLimit}) #end 元
+				#if("$!{loaningType}"==1)（实时结算）#end</td>
+				<td><label class="b">快速结算剩余额度：</label>#if(!$!{promoterInfo.validCredit}) 0.00 #else $!NumberUtils.formatWithComma($!{promoterInfo.validCredit})元 #end</td>
+			</tr>
+			<!-- <tr>
+				<td><label class="b">快速结算可配置额度：</label>$!NumberUtils.formatWithComma($!{promoterInfo.fastConfigureLimit})元</td>
+				<td><label class="b">快速结算剩余可配置额度：</label>$!NumberUtils.formatWithComma($!{promoterInfo.remainConfigureLimit})元</td>
+			</tr> -->
+			<tr>
+				<td><label class="b">申请取回的保证金金额：</label>#if(!$!{currentRedeemMargin}) 0.00 #else $!NumberUtils.formatWithComma($!{currentRedeemMargin})元 #end</td>
+				<!-- <td><a href="javascript:void(0);" onclick="disMarginList();">查看更多</a></td> -->
+			</tr>
+		</table>
+	</div>
+
+	<!-- 追加/取回页面 -->
+	<form action="#relativeUrl('/additionalMargin/add.htm')" method="post" id="additionalAddMarginFormSubmit">
+		<input type="hidden" id="sActivexPubKey" value="$!{sActivexPubKey}">
+		<input type="hidden" id="certSerialNo" name="certSerialNo" value="$!{certSerialNo}">
+	    <input type="hidden" id="encryptedKey" name="encryptedKey" value="">
+		<div class="mid-container" style="display:none" id="walletDiv">
+			<div  align="left" style="color: red;margin-left: 5px;margin-bottom: 10px;" id="getWalletDiv">
+				<div>取回规则：</div>
+				<div>若保证金余额在#if(!$!{minimumMargin}) 0.00 #else $!NumberUtils.formatWithComma($!{minimumMargin}) #end 元及以下，
+					只能全部取回，到账时间#if(!$!{minimumMarginRedeem}) 0 #else $!{minimumMarginRedeem} #end 天；<br/>若保证金余额在#if(!$!{minimumMargin}) 0.00 #else $!NumberUtils.formatWithComma($!{minimumMargin}) #end 元以上，
+					则先取回超出#if(!$!{minimumMargin}) 0.00 #else $!NumberUtils.formatWithComma($!{minimumMargin}) #end 元的部分，到账时间#if(!$!{marginRedeem}) 0 #else $!{marginRedeem} #end天，后取回#if(!$!{minimumMargin}) 0.00 #else $!NumberUtils.formatWithComma($!{minimumMargin}) #end 元以内的部分，到账时间#if(!$!{minimumMarginRedeem}) 0 #else $!{minimumMarginRedeem} #end 天</div>
+			</div>
+			<table class="data-table" align="center">
+				<tr>
+					<td>当前钱包余额：</td>
+					<td><span class="red">#if(!$!{merchantBalance.publicAccountBalance}) 0.00 #else $!NumberUtils.formatWithComma($!{merchantBalance.publicAccountBalance})</span> #end 元</td>
+				</tr>
+				<tr>
+					<td id="marginLable" name="marginLable">请输入追加金额：</td>
+					<td>
+						<input id="additionalAmount" type="text" class="base-input" maxlength="13" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');"/>
+					</td>
+				</tr>
+				<tr>
+					<td>请输入密码：</td>
+					<td>
+						<div id="_ocx_password_str"></div>
+						<input id="password" type="password" name="password" style="display:none" maxlength="13" class="base-input">
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id="errorTip" class="red">通过盛付通钱包充值，请确保余额充足</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><a href="javascript:void(0);" onclick="confirmPay(this)" class="g-button">确认</a></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+
+	<div id="marginListDiv">
+		<form action="#relativeUrl('/additionalMargin/index.htm')" method="post" id="additionalMarginForm">
+			<input type="hidden" id="currentListDiv" 	name="currentListDiv" 	value="#if(!$!{currentListDiv})listDivAll#else$!{currentListDiv}#end"/>
+			<input type="hidden" id="currentPage" 		name="currentPage" 		value="$!query.currentPage"/>##当前页
+			<input type="hidden" id="pagesize"    		name="pageSize"    		value="$!query.pageSize"/>##页大小
+			<input type="hidden" id="promoterType" name="promoterType" value="$!promoterType"/>
+			<ul class="tabs">
+				<li #if("$!{currentListDiv}"=="listDivAll"||"$!{currentListDiv}"=="")class="active"#end onclick="tabSwitch('listDivAll');">历史记录</li>
+				<li #if("$!{currentListDiv}"=="listDivAdd")class="active"#end onclick="tabSwitch('listDivAdd');">追加记录</li>
+				<li #if("$!{currentListDiv}"=="listDivRedeem")class="active"#end onclick="tabSwitch('listDivRedeem');">取回记录</li>
+			</ul>
+			<div class="listContainer">
+				<div id="listDiv">
+					<table cellspacing="0" cellpadding="0" id="listTb" class="listTb">
+						<tbody>
+							<tr class="ttl">
+								<td>序号</td>
+								<td>交易时间</td>
+								<td>交易类型</td>
+								<td>交易金额</td>
+								<td>交易状态</td>
+								<td>预计到账时间</td>
+							</tr>
+							#foreach($temp in $marginOpReqList)
+							<tr class="">
+                                <td>$velocityCount</td>
+								<td>#showDateTime($!{temp.createTime})</td>
+								<td>#if("$!{temp.opType}"=="3")保证金追加#else保证金取回#end</td>
+								<td>$!NumberUtils.formatWithComma($!{temp.amount})元 </td>
+									<td>
+									#if("$!{temp.status}"=="0"||"$!{temp.status}"=="101")处理中
+									#elseif("$!{temp.status}"=="102")交易成功
+									#elseif("$!{temp.status}"=="201")处理中
+									#elseif("$!{temp.status}"=="202")交易成功
+									#elseif("$!{temp.status}"=="-300")拒绝放款
+									#elseif("$!{temp.status}"=="-9999")失败(已处理)
+									#else交易失败#end</td>
+								<td>#showDateTime($!{temp.redeemedTime})</td>
+							</tr>
+							#end
+						</tbody>
+					</table>
+					#parse("/main/include/pager.vm")
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="popup" id="pop1" style="display:none;margin-top:-140px;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc">
+		<a href="#relativeUrl('/agentApply/index.htm')" class="popup-cancel g-button" onclick="document.getElementById('pop1').style.display='none';">确定，去开通</a>
+		<a href="#" class="popup-confrim g-button" onclick="document.getElementById('pop1').style.display='none';return false;">返回，不开通</a>
+	</p>
+</div>
+
+<div class="popup" id="pop2" style="display:none;margin-top:-140px;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc"><a href="#" class="popup-confrim g-button" onclick="hidePop2();">返回</a></p>
+</div>
+
+<div class="popup" id="pop3" style="display:none;margin-top:-140px;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc"></p>
+</div>
+<!-- T0新增页面 -->
+<div class="popup" id="pop4" style="display:none;margin-top:-140px;">
+	<p class="popup-title" style="text-align:left;font-size:12px;font-weight:bold;line-height:20px;color: white;">
+		保证金取回提示
+	</p>
+	<div class="popup-container" style="margin-top: 2px;"></div>
+	<div style="margin-left: 10px;margin-bottom: 20px;">
+		<div id="getAmountID"></div>
+		<div>其中：</div>
+		<div id="dynamicAmountID"></div>
+		<div id="baodiAmountID"></div>
+	</div>
+	<p class="popup-tlc">
+		<a href="#" class="popup-cancel g-button" onclick="ConfimSub();">确认取回</a>
+		<a href="#" class="popup-confrim g-button" onclick="document.getElementById('pop4').style.display='none';return false;">取 消</a>
+	</p>
+</div>
+<script>
+	jQuery(function(){
+		var tmp = jQuery("#opFlag").val();
+		if(tmp=='false'){
+			showPop1("对不起，您还未开通快速结算服务功能，请先开通。");
+		}
+		if(navigator.userAgent.indexOf("Window") < 0) {
+	        jQuery("#password").show();
+	        jQuery("#_ocx_password_str").hide();
+	        jQuery("#_ocx_password").hide();
+	    }
+	});
+
+	function showPwdStr(){
+		if(navigator.userAgent.indexOf("Window") < 0) {
+	        jQuery("#password").show();
+	        jQuery("#_ocx_password_str").hide();
+	        jQuery("#_ocx_password").hide();
+	    }else{
+			jQuery("#password").hide();
+	        jQuery("#_ocx_password_str").show();
+	        jQuery("#_ocx_password").show();
+		}
+	}
+
+	function hiddenPwdStr(){
+	        jQuery("#_ocx_password_str").hide();
+	        jQuery("#_ocx_password").hide();
+			jQuery("#password").hide();
+	}
+
+	function disMarginList(){
+		jQuery("#marginListDiv").show();
+	}
+	//追加/取回保证金
+	function disWalletDiv(opType){
+		jQuery("#opType").val(opType);
+		jQuery("#additionalAmount").val('');
+		jQuery("#walletDiv").fadeOut("normal");
+		if(opType=='3'){
+			jQuery("#marginLable").html('请输入追加金额：');
+			jQuery("#getWalletDiv").hide();
+		}
+		else if(opType=='4'){
+			jQuery("#marginLable").html('请输入退回金额：');
+			jQuery("#getWalletDiv").show();
+		}
+		jQuery("#walletDiv").fadeIn("normal");
+	}
+
+	function tabSwitch(_id){
+		jQuery("#currentListDiv").val(_id);
+		jQuery("#additionalMarginForm").submit();
+	}
+	function gotoPage(page) {
+        jQuery("#currentPage").val(page);
+        jQuery("#additionalMarginForm").submit();
+    }
+    function showPop1(msg){
+		hiddenPwdStr();
+		jQuery("#pop1 .popup-container").html(msg);
+		jQuery("#pop1").show();
+	}
+	function showPop2(msg){
+		hiddenPwdStr();
+		jQuery("#pop2 .popup-container").html(msg);
+		jQuery("#pop2").show();
+	}
+	function hidePop2(){
+		jQuery("#pop2 .popup-container").html("");
+		jQuery("#pop2").hide();
+		showPwdStr();
+		document.location.reload(true);
+	}
+	function showPop3(){
+		hiddenPwdStr();
+		jQuery("#pop3 .popup-container").html("系统处理中，请耐心等待......");
+		jQuery("#pop3").show();
+	}
+	function hidePop3(){
+		jQuery("#pop3 .popup-container").html("");
+		jQuery("#pop3").hide();
+		showPwdStr();
+	}
+	//T0新增
+	function showPop4(){
+		hiddenPwdStr();
+		jQuery("#pop4 .popup-container").html("");
+		jQuery("#pop4").show();
+	}
+	function hidePop4(){
+		jQuery("#pop4 .popup-container").html("");
+		jQuery("#pop4").hide();
+		showPwdStr();
+	}
+	//追加/取回确认
+    function confirmPay(element){
+		if(!$!{opFlag}){
+    		showPop1("对不起，您还未开通快速结算服务功能，请先开通。");
+			return;
+		}
+		var additionalAmount = jQuery("#additionalAmount").val();
+    	var _additionalAmount = Number(additionalAmount);//取回金额
+    	var banlace = "$!NumberUtils.format($!{merchantBalance.publicAccountBalance})";
+    	banlace = banlace==""?0:parseFloat(banlace);
+
+		var opType = jQuery("#opType").val();
+		if('3'==opType){
+			if(additionalAmount.length<=0||_additionalAmount<Number(0.01)){
+				jQuery("#errorTip").html("输入金额错误，请重新输入追加金额，金额必须大于0.01元。");
+	    		jQuery("#errorTip").fadeIn("normal");
+	    		return false;
+	    	}
+		}else if('4'==opType){
+			if(additionalAmount.length<=0||_additionalAmount<Number(0.01)){
+				jQuery("#errorTip").html("输入金额错误，请重新输入取回金额，金额必须大于0.01元。");
+	    		jQuery("#errorTip").fadeIn("normal");
+	    		return false;
+	    	}
+		}
+
+		if(navigator.userAgent.indexOf("Window") < 0) {
+            jQuery("#encryptedKey").val("");
+        } else {
+            jQuery("#encryptedKey").val(editor.GetKey());
+            jQuery("#password").val(editor.GetValue());
+        }
+		//取回保证金额度
+		var fastSettleMargin = '$!{promoterInfo.fastSettleMargin}';
+		if('4'==opType){
+			if(Number(fastSettleMargin)-_additionalAmount==0 && Number(fastSettleMargin)-Number(banlace)>0){
+				jQuery("#getAmountID").empty().html('您申请取回：'+_additionalAmount+'元');//提取金额
+				jQuery("#dynamicAmountID").empty().html(Number(fastSettleMargin)-Number(banlace)+'元，$!{minimumMarginRedeem}天后到账');//浮动金额
+				jQuery("#baodiAmountID").empty().html(Number(banlace)+'元，$!{marginRedeem}天后到账');  //保底金额
+				showPop4();
+				return;
+			}
+		}
+		confirmPayPost(element)
+    }
+
+	//确认取回操作
+	function ConfimSub(){
+		document.getElementById('pop4').style.display='none';
+		var element = document.getElementById('additionalAddMarginFormSubmit');
+		confirmPayPost(element);
+	}
+
+
+	//NEW T0修改
+	function confirmPayPost(element){
+		doPay(element);
+	}
+
+    function doPay(element){
+		showPop3();
+    	var obj = jQuery(element);
+		obj.addClass("g-button-disable");
+		obj.attr("disabled",true);
+
+    	var addUrl = jQuery("#addUrl").val();
+		var redeemUrl = jQuery("#redeemUrl").val();
+		var opType = jQuery("#opType").val();
+		var url = ('4'==opType)?redeemUrl:addUrl;
+
+    	var additionalAmount = jQuery("#additionalAmount").val();
+    	var passwrod = jQuery("#password").val();
+    	var encryptedKey = jQuery("#encryptedKey").val();
+    	var certSerialNo = jQuery("#certSerialNo").val();
+		var promoterType = jQuery("#promoterType").val();
+    	var data = {promoterType:promoterType,amount:additionalAmount,passwrod:passwrod,encryptedKey:encryptedKey,certSerialNo:certSerialNo,opType:opType};
+		jQuery.ajax({
+			type: 'POST',
+		    url: url ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	obj.removeClass("g-button-disable");
+		    	obj.removeAttr("disabled");
+				hidePop3();
+		    	if(data.success){
+		    		showPop2(data.errorMessage);
+		    	}else if(data&&data.errorCode=="nologin"){
+		    		document.location.reload(true);
+		    	}else{
+		    		showPop2(data.errorMessage);
+		    	}
+		    }
+		});
+    }
+
+</script>

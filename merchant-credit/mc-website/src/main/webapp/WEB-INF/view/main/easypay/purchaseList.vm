@@ -1,0 +1,31 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>时间</td>
+		<td>订单编号</td>
+		<td>费率</td>
+		<td>物料类型</td>
+		<td>数量</td>
+		<td>支付金额</td>
+		<td>发票</td>
+	    <td>订单状态</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.qrCode}</td>
+		<td>$!{o.childMerchantNo}</td>
+		<td>$!{o.childMerchantName}</td>
+		<td>$!{o.rate}</td>
+		<td>$!{o.status}</td>
+		#if($!{o.status}=='0')
+		<td>未分配</td>
+		#else
+		<td>已分配</td>
+		#end
+	</tr>
+	#end
+</table>
+#parse("/main/include/page_ajax.vm")
+

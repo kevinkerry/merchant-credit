@@ -1,0 +1,46 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<table class="r_table">
+	<thead>
+		<tr>
+			<th>借款用途</th>
+			<th>申请时间</th>
+			<th>借款本金</th>
+			<th>借款利息</th>
+			<th>借款期限</th>
+			<th>借款状态</th>
+		</tr>
+	</thead>
+	#foreach($o in ${dataList})
+	<tr>
+		<td>#if($!{o.purposer}==1)资金周转#elseif($!{o.purposer}==2)短期货款#end</td>
+		<td>#showDate($!{o.applyDate})</td>
+		<td>￥$!NumberUtils.format($!{o.debitAmount})</td>
+		<td>￥$!NumberUtils.format($!{o.interestAmount})</td>
+		<td>$!{o.borrowDays}天</td>
+		<td>
+		#set($days = $!MCUtil.daysBetween($!{o.endTime},$!{o.dueRepaymentTime}))
+		#if("$!{o.status}"=="0")
+			放款中
+		#elseif("$!{o.status}"=="1"&&$days<0)
+			未到期
+		#elseif("$!{o.status}"=="1"&&$days==0)
+			已到期
+		#elseif("$!{o.status}"=="2")
+			已到期
+		#elseif("$!{o.status}"=="3"||"$!{o.status}"=="4")
+			已还清
+		#elseif("$!{o.status}"=="5")
+                    待放款
+        #elseif("$!{o.status}"=="6")
+                    放款中
+        #elseif("$!{o.status}"=="7")
+                    放款失败
+		#elseif("$!{o.status}"=="8")
+		拒绝放款
+		#end
+		</td>
+	</tr>
+	#end
+</table>
+#parse("/main/include/pager-ajax.vm")

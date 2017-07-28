@@ -1,0 +1,145 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">商户分组新增</div>
+<table class="dtlTb" cellspacing="0" cellpadding="0">
+	<tr>
+		<td class="lbl" >分组：<font color="red">*</font></td>
+        <td width="600">
+			<select name="groupId" id="groupId" class="w130" >
+            	<option value="">---</option>
+                #foreach($o in $groupList)
+                	<option value="$!{o.id}" #if("$!query.groupName"=="$o.groupName")selected#end>$!{o.groupCode}-$!{o.groupName}</option>
+    			#end
+            </select>
+        </td>
+    </tr>
+	<tr>
+		<td class="lbl" >分组类型：<font color="red">*</font></td>
+        <td>
+			<select name="groupType" id="groupType" class="w130" onchange="javascript:changeMccType();">
+                <option value="1" >MCC分组</option>
+				<option value="2" >根据商户号分组</option>
+            </select>
+        </td>
+    </tr>
+	<tr class="mccValueClass" style="display:none" >
+		<td class="lbl" >分组值：<font color="red">*</font></td>
+		<td>
+			 #foreach($o in $mccList)
+				<input name="checkbox" type="checkbox" value="${o.id}">  ${o.mcc} </input>
+				#if(($velocityCount)%10==0) <br/> #end
+			#end
+		</td>
+    </tr>
+
+	<tr style="display:none" class="otherValueClass">
+		<td class="lbl" >分组值：<font color="red">*</font></td>
+		<td>
+			<input type="text" id="mccValues" name="mccValues" maxlength="70" class="txt130" size="50" />
+		</td>
+	</tr>
+	<!--
+	<tr>
+		<td class="lbl" >状态：</td>
+        <td width="200">
+            <select id="status" name="status" class="w130">
+                <option value="">全部</option>
+                <option value="1" >有效</option>
+                <option value="0" >无效</option>
+            </select>
+        </td>
+	</tr>
+	-->
+	<tr>
+		<td class="lbl">生效时间：<font color="red">*</font></td>
+        <td>
+           <input type="text" id="effectiveTime" name="effectiveTime" class="date txt130" value="#formartDate2Str($!{effectiveTime})" onclick="xDatePicker(1);" class="txt130" >
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">失效时间：<font color="red">*</font></td>
+		<td>
+            <input type="text" id="expireTime" name="expireTime" class="date txt130" onclick="xDatePicker(1);" value="#formartDate2Str($!{expireTime})" class="txt130" >
+		</td>
+	</tr>
+	<tr>
+		<td colspan="6" align="center"><a href="#" class="btn2" id="queryBtn" onclick="saveAddOprate()">保存</a></td>
+	</tr>
+</table>
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+<script type="text/javascript">
+	window.onload = function(){
+		//setTimeStartEnd(0,elm("effectiveTime"),0,elm("expireTime"));
+		//setDateStartEndRang(0,"effectiveTime",0,"expireTime");
+		changeMccType();
+    }
+	function changeMccType(){
+		var options=$("#groupType option:selected");
+		//MCC分组
+		if (options.val()=="") {
+			$(".mccValueClass").css("display","none");
+			$(".otherValueClass").css("display","none");
+		} else if(options.val()==1){
+			$(".mccValueClass").css("display","");
+			$(".otherValueClass").css("display","none");
+		} else {
+			$(".mccValueClass").css("display","none");
+			$(".otherValueClass").css("display","");
+		}
+	}
+	function validate(){
+		var groupId = $("#groupId option:selected").val();
+		if (groupId==""){
+			alert("请选择分组");
+			return false;
+		}
+		var groupType = $("#groupType option:selected").val();
+		if (groupType==""){
+			alert("请选择分组类型");
+			return false;
+		}
+		var effectiveTime = $("#effectiveTime").val();
+		var expireTime = $("#expireTime").val();
+		if (effectiveTime==""){
+			alert("生效时间不能为空");
+			return false;
+		}
+		if (expireTime==""){
+			alert("失效时间不能为空");
+			return false;
+		}
+		return true;
+	}
+    //保存
+    function saveAddOprate(){
+    	if(!validate()){
+    		return false;
+    	}
+		var groupId = $("#groupId option:selected").val();
+		var groupType = $("#groupType option:selected").val();
+		var mccId = new Array();
+    	$(".mccValueClass input[type=checkbox][name=checkbox]:checked").each(function(){
+           mccId.push($(this).val());
+        });
+		var mccValues = $("#mccValues").val();
+		var status = $("#status option:selected").val();
+		var effectiveTime = $("#effectiveTime").val();
+		var expireTime = $("#expireTime").val();
+    	var data = {groupId:groupId,groupType:groupType,mccId:mccId.toString(),mccValues:mccValues,status:status,effectiveTime:effectiveTime,expireTime:expireTime};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/settle/merchant/add/opreate.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("添加成功");
+					window.close();
+				}
+		    }
+		});
+    }
+</script>

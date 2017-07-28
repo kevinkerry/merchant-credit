@@ -1,0 +1,6 @@
+
+<script type="text/javascript">
+var message="$!{msg.errorMessage}";
+var code="$!{msg.errorCode}";
+parent.uploadResult(code,message);
+</script>

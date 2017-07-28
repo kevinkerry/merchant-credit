@@ -1,0 +1,135 @@
+<script type="text/javascript" src="#staticResource('/js/mask.js')?version=1"></script>
+<link rel="stylesheet" href="#staticResource('My97DatePicker/skin/msp/datepicker.css')?version=1" type="text/css">
+<script type="text/javascript" src="#staticResource('My97DatePicker/WdatePicker.js')"></script>
+<script type="text/javascript" src="#staticResource('My97DatePicker/calendar.js')"></script>
+<style>
+	.search_box div {
+    	margin-top: 8px;
+    }
+	.search_btn {
+	    text-align: center;
+	    margin: 0px;
+	}
+	.search_btn a {
+	    margin-left: 0px;
+	    margin-right: 0px;
+	    margin-top: 0px;
+	}
+</style>
+<input type="hidden" id="guaranteeUrl" value="#relativeUrl('/auditdebit/audit.htm')"/>
+<input type="hidden" id="queryCreditLinesApplyUrl" value="#relativeUrl('/auditdebit/queryCreditLinesApply.htm')"/>
+
+<form action="#relativeUrl('/auditdebit/queryCreditLinesApply.htm')" method="post" id="auditForm">
+<input type="hidden" id="currentPage" 		name="currentPage" 		value="$!query.currentPage"/>##当前页
+<input type="hidden" id="pagesize"    		name="pageSize"    		value="10"/>##页大小
+	<div class="content main_box">
+		##<h2 class="title">商户查询</h2>
+		<div class="search_box">
+			<div class="">
+				<span>商户名称：</span><input name="merchantName" type="text" value="$!query.merchantName">
+				<span>商户号：</span><input name="merchantNo" type="text" value="$!query.merchantNo">
+				<span>是否承诺：</span>
+				<select name="isAgnetGuarantee">
+					<option value="">全部</option>
+					<option value="1" #if("${query.isAgnetGuarantee}"=="1")selected #end>已承诺</option>
+					<option value="0" #if("${query.isAgnetGuarantee}"=="0")selected #end>未承诺</option>
+				</select>
+			</div>
+			<div class="">
+				<span>借款申请日期:</span><input type="text" name="startTimeStr" class="input-normal date" onfocus="xDatePicker(1);" value="$!query.startTimeStr">~<input type="text" name="endTimeStr" class="input-normal date" onfocus="xDatePicker(1);" value="$!query.endTimeStr">
+            </div>
+			<div class="sub_btn search_btn">
+				<a href="#" id="a_btn">查询</a>
+			</div>
+		</div>
+		<table class="r_table s_table">
+			<thead>
+				<tr>
+					<th>商户名称</th>
+					<th>商户号</th>
+					<th>申请日期 </th>
+					<th>申请状态</th>
+					<th>是否承诺</th>
+					<th>商户材料</th>
+					<th>承诺协议</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			#foreach($temp in $dataList)
+				<tr #if("$!{temp.isAgnetGuarantee}"=="") class="jade_t" #else class="jade_f" #end>
+    			<td>$!{temp.merchantName}</td>
+				<td>$!{temp.merchantNo}</td>
+				<td>$!dateUtil.getNewFormatDateString($!{temp.applyStartTime})</td>
+				<td>
+					$!{temp.applyStatus}
+				</td>
+				<td>
+					#if($!{temp.isAgnetGuarantee}==1)
+						已承诺
+    				#elseif($!{temp.isAgnetGuarantee}==0)
+						未承诺
+        			#end
+				</td>
+				<td>
+					#if($!{temp.isNeedAgnetGuarantee} == 1)
+						<a href="#relativeUrl('/positionApplyDetail.htm')?id=$!{temp.id}" class="look" target="_blank">查看资料</a>
+					#else
+						<p class="look" >查看资料</p>
+					#end
+				</td>
+				<td><a href="#relativeUrl('/auditdebit/agreement.htm')?id=$!{temp.id}" class="look" target="_blank">查看协议</a></td>
+				<td>
+					#if($!{temp.isNeedAgnetGuarantee} == 1&&"$!{temp.isAgnetGuarantee}"=="")
+					<a href="javascript:confirmGuarantee('$!{temp.id}','1');" class="tf">是</a>
+					<a href="javascript:confirmGuarantee('$!{temp.id}','0');" class="tf">否</a>
+					#end
+				</td>
+    		</tr>
+    		#end
+		</table>
+		<p class="page">
+			#parse("/main/include/pager.vm")
+		</p>
+	</div>
+</form>
+
+<div class="mask"></div>
+<div class="mask_box" id="mask_box">
+	<input type="hidden" id="merchantCreditLinesApply_id"/>
+	<input type="hidden" id="guarantee"/>
+	<h2>提示</h2>
+	<p style="text-align:center"><strong>是否确认操作？</strong></p>
+	<div class="confirm c2">
+		<a href="javascript:agnetGuarantee();" class="confirm_btn">确认</a><a href="javascript:hidediv('mask_box');" class="close_btn">取消</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function confirmGuarantee(id,yesOrno){
+		$("#merchantCreditLinesApply_id").val(id);
+		$("#guarantee").val(yesOrno);
+		showDiv('mask_box');
+	}
+	function agnetGuarantee(){
+			jQuery.ajax({
+    			type: "POST",
+    			url: $('#guaranteeUrl').val(),
+    			data: {'guarantee':$('#guarantee').val(),'id':$('#merchantCreditLinesApply_id').val()},
+    			success: function(json) {
+					hidediv('mask_box');
+    				if (json.code == 666) {
+						location.href = $('#queryCreditLinesApplyUrl').val();
+					}
+    			}
+    		});
+	}
+	function gotoPage(page) {
+        $("#currentPage").val(page);
+        $("#auditForm").submit();
+    }
+	$(function(){
+		$('#a_btn').bind('click',function(){
+			$("#auditForm").submit();
+		})
+	});
+</script>

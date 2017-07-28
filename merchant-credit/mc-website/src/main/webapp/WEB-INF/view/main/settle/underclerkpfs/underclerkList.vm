@@ -1,0 +1,40 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/settle_pager.vm")
+<table class="listTb" cellspacing="0"   cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>下级拓展方号</td>
+		<td>下级拓展方名称</td>
+		<td>商户号</td>
+		<td>商户名称</td>
+		<td>商户类别</td>
+		<td>订单号</td>
+		<td>提现类型</td>
+		<td>提现成功时间</td>
+		<td>提现金额</td>
+		<td>分润规则</td>
+		<td>分润金额</td>
+	</tr>
+	#foreach($o in $query.queryList)
+	<tr>
+		<td>$!{velocityCount}</td>
+		<td>$!{o.underPromoterNo}</td>
+		<td>$!{o.underPromoterName}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		<td>$!{o.mcc}</td>
+		<td>$!{o.orderNo}</td>
+		<td>$!{o.serviceTypeDesc}</td>
+		<td>$!{o.withdrawTime}</td>
+		<td>$!{o.withdrawAmount}</td>
+		<td>
+		#if(${o.ruleBaseSplittingScale})
+		$!NumberUtils.bigDecimalMultiply100(${o.ruleBaseSplittingScale})%,$!{o.ruleWdSplitting}元
+		#else
+		&nbsp;
+		#end</td>
+		<td>$!{o.totalSplitting}</td>
+	</tr>
+	#end
+</table>

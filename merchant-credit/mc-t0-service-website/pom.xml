@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sdp.mc</groupId>
+		<artifactId>merchant-credit</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>mc-t0-service-website</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<name>mc-t0-service-website</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+	   <dependency>
+			<artifactId>withdraw-service</artifactId>
+			<groupId>com.sdp.withdraw</groupId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<artifactId>mc-service</artifactId>
+			<groupId>com.sdp.mc</groupId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-common-integration</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-msp-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.withdraw</groupId>
+			<artifactId>mc-withdraw-api</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+	</dependencies>
+</project>

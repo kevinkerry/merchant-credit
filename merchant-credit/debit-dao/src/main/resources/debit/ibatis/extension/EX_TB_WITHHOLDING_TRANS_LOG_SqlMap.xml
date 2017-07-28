@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TB_WITHHOLDING_TRANS_LOG" >
+ <select id="countWithholdingCount" resultClass="java.lang.Integer" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogExample" >
+    select count(id) from TB_WITHHOLDING_TRANS_LOG
+   <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+  </select>
+  <select id="pageQueryWithholdingList" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogExample" >
+    select t.* from (select tt.*, ROWNUM rnum from (
+        select
+        <include refid="TB_WITHHOLDING_TRANS_LOG.Base_Column_List" />
+        from TB_WITHHOLDING_TRANS_LOG
+        <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+        order by CREATE_TIME desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+</sqlMap>

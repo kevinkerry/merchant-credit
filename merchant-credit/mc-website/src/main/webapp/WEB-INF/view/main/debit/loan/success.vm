@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="common/css/inc.css">
+	<link rel="stylesheet" href="common/css/style.css">
+</head>
+<body>
+	<div class="content main_box">
+		<div class="path clearfix" style="padding-left: 220px;">
+			<div #if($!status==5 || $!status==6 || $!status==1 || $!status==7 || $!status==8 ) class="state state1 l" #else class="state state2 l" #end>
+				<span>1</span>
+				<p>填写借款金额、借款期限及借款用途等信息</p>
+			</div>
+			<div #if($!status==5 || $!status==6) class="state state2 l" #elseif($!status==1 || $!status==7 || $!status==8 ) class="state state1 l" #else class="state state3 l" #end>
+				<span>2</span>
+				<p>您的用款申请已经在处理中，请耐心等待结果。</p>
+			</div>
+			<div #if($!status==1 || $!status==7 || $!status==8 ) class="state state2 l" #else class="state state3 l" #end>
+				<span>3</span>
+				<p>审核完成。</p>
+			</div>
+		</div>
+		<div class="ban_table clearfix">
+			<div class="tips">
+					#if($!status==1) 
+						<p style="font-size:14px;padding-left:290px;padding-top:30px;line-height: 30px;">
+							<img src="#staticResource('img/ico-success.jpg')" align="left"/>$!tip
+						</p>
+					#elseif($!status==7)
+						<p style="font-size:14px;padding-left:290px;padding-top:30px;line-height: 20px;">
+							<img src="#staticResource('img/ico-error.jpg')" align="left"/>$!tip
+						</p>
+					#elseif($!status==8)
+						<p style="font-size:14px;padding-left:290px;padding-top:30px;line-height: 20px;">
+							<img src="#staticResource('img/ico-error.jpg')" align="left"/>$!tip
+						</p>
+					#else
+						<p style="font-size:14px;padding-left:190px;padding-top:30px;">$!tip</p>
+					#end
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

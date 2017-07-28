@@ -1,0 +1,141 @@
+package com.sdp.mc.common.enums;
+
+public enum FosReturnCodeEnums {
+
+	INVALIDATE_PARAMETER("01001","参数校验异常"),
+	PAYER_MEMBER_STATUS_INACTIVE("01001","付款人会员未激活"),
+	PAYER_MEMBER_STATUS_SUSPEND("01003","付款人会员休眠 "),
+	PAYER_MEMBER_STATUS_CANCELED("01004","付款人会员销户"),
+	PAYEE_MEMBER_STATUS_INACTIVE("01005","收款人会员未激活"),
+	PAYEE_MEMBER_STATUS_SUSPEND("01006","收款人会员休眠"),
+	PAYEE_EMBER_STATUS_CANCELED("01007","收款人会员销户"),
+	PAYER_ACCOUNT_INACTIVE("01008","付款人账户未激活"),
+	PAYER_ACCOUNT_LOCKED("01009","付款人账户锁定"),
+	PAYER_ACCOUNT_OUT_FORBIDDEN("01010","付款人账户止出 "),
+	PAYER_ACCOUNT_IN_FORBIDDEN("01011","付款人账户止入"),
+	PAYER_ACCOUNT_CANCELED("01012","付款人账户注销"),
+	PAYEE_ACCOUNT_INACTIVE("01013","收款人账户未激活"),
+	PAYEE_ACCOUNT_LOCKED("01014","收款人账户锁定 "),
+	PAYEE_ACCOUNT_OUT_FORBIDDEN("01015","收款人账户止出"),
+	PAYEE_ACCOUNT_IN_FORBIDDEN("01016","收款人账户止入"),
+	PAYEE_ACCOUNT_CANCELED("01017","收款人账户注销"),
+	PAYER_BALANCE_LACK("01018","付款人账户余额不足"),
+	PAYMENT_EXCEED_SINGLE_LIMIT("01019","付款人付款金额超过当次限额"),
+//	参数校验异常 	必填为空/类型不正确/长度不正确 	01001  	由服务调用者决定重调或者终止 	INVALIDATE_PARAMETER 
+//	付款人会员未激活 	 	01002 	 	PAYER_MEMBER_STATUS_INACTIVE 
+//	付款人会员休眠 	 	01003 	 	PAYER_MEMBER_STATUS_SUSPEND 
+//	付款人会员销户 	 	01004 	 	PAYER_MEMBER_STATUS_CANCELED 
+//	收款人会员未激活 	 	01005 	 	PAYEE_MEMBER_STATUS_INACTIVE 
+//	收款人会员休眠 	 	01006 	 	PAYEE_MEMBER_STATUS_SUSPEND 
+//	收款人会员销户 	 	01007 	 	PAYEE_EMBER_STATUS_CANCELED 
+//	付款人账户未激活 	 	01008 	 	PAYER_ACCOUNT_INACTIVE 
+//	付款人账户锁定 	 	01009 	 	PAYER_ACCOUNT_LOCKED 
+//	付款人账户止出 	 	01010 	 	PAYER_ACCOUNT_OUT_FORBIDDEN 
+//	付款人账户止入 	 	01011 	 	PAYER_ACCOUNT_IN_FORBIDDEN 
+//	付款人账户注销 	 	01012 	 	PAYER_ACCOUNT_CANCELED 
+//	收款人账户未激活 	 	01013 	 	PAYEE_ACCOUNT_INACTIVE 
+//	收款人账户锁定 	 	01014 	 	PAYEE_ACCOUNT_LOCKED 
+//	收款人账户止出 	 	01015 	 	PAYEE_ACCOUNT_OUT_FORBIDDEN 
+//	收款人账户止入 	 	01016 	 	PAYEE_ACCOUNT_IN_FORBIDDEN 
+//	收款人账户注销 	 	01017 	 	PAYEE_ACCOUNT_CANCELED 
+//	付款人账户余额不足 	 	01018 	 	PAYER_BALANCE_LACK 
+//	付款人付款金额超过当次限额 	 	01019 	 	PAYMENT_EXCEED_SINGLE_LIMIT 
+	PAYER_EXCEED_DAY_TRAFFIC_LIMIT("01020","付款人超过每日流量限制"),
+	PAYER_EXCEED_MONTH_TRAFFIC_LIMIT("01021","付款人超过每月流量限制"),
+	PAYEE_EXCEED_TRAFFIC_LIMIT("01022","收款人超过流量限制"),
+	PAYER_IN_BLACKLIST("01023","付款人被列入黑名单"),
+	PAYEE_IN_BLACKLIST("01024","收款人被列入黑名单"),
+	PAYER_NOT_MATCH_CARDNO_WITH_BANK("01025","收款人卡号与所属银行不符"),
+	BATCH_REQUEST_KEY_INVALIDATE("01026","批次请求才存储key不正确，找不到订单明细"),
+	NOT_SUPPORT_BANK("01027","银行不在支持的列表范围内"),
+	NOT_FOUND_ACCOUNT_IN_STORE("01028","在储值系统内未发现用户帐号"),
+	NOT_FOUND_MEMBER_IN_MA("01029","在MA系统内未发现用户帐号"),
+//	付款人超过每日流量限制 	 	01020 	 	PAYER_EXCEED_DAY_TRAFFIC_LIMIT 
+//	付款人超过每月流量限制 	 	01021 	 	PAYER_EXCEED_MONTH_TRAFFIC_LIMIT 
+//	收款人超过流量限制 	 	01022 	 	PAYEE_EXCEED_TRAFFIC_LIMIT 
+//	付款人被列入黑名单 	 	01023 	 	PAYER_IN_BLACKLIST 
+//	收款人被列入黑名单 	 	01024 	 	PAYEE_IN_BLACKLIST 
+//	收款人卡号与所属银行不符 	 	01025 	 	PAYER_NOT_MATCH_CARDNO_WITH_BANK 
+//	批次请求才存储key不正确，找不到订单明细 	 	01026 	 	BATCH_REQUEST_KEY_INVALIDATE 
+//	银行不在支持的列表范围内 	 	01027 	 	NOT_SUPPORT_BANK 
+//	在储值系统内未发现用户帐号 	 	01028 	 	NOT_FOUND_ACCOUNT_IN_STORE 
+//	在MA系统内未发现用户帐号 	 	01029 	 	NOT_FOUND_MEMBER_IN_MA 
+	ERROR_CODE_01030("01030","出款订单号重复"),
+	PAYMENT_AMOUNT_IS_NULL("01031","支付金额为空"),
+	APYMENT_AMOUNT_PRECISION_INVALIDATE("01032","支付金额精度不合法"),
+	CARD_RULE_INVALIDATE("01033","卡号规则不合法"),
+	BANK_SUPPORTED_INVALIDATE("01034","不支持的银行"),
+	BANK_AND_CARD_INVALIDATE("01035","卡号和银行号不一致"),
+	UPDATE_BATCH_INFO_FAILED("01036","更新批次信息失败"),
+	FOUNDOUT_FAILED("01037","未找到批次号"),
+	BATCH_QUERY_PARAM_INVALIDATE("01038","批次查询参数无效"),
+	BATCH_IN_PROCESS("01039","批次在队列中"),
+	BATCH_TRANSFER_FAILED_NOTIFY("01040","批次出款失败通知"),
+	BANK_REQUIRED_FIELD_INVALID("01041","银行要求的必填信息为空."),
+	CAN_NOT_ACCESS("01042","不允许使用出款服务"),
+	INVALID_ORDER_NO("01043","订单号无效"),
+	ORDER_TRANSFER_FAILED_NOTIFY("01044","订单转账失败通知"),
+	PARAM_CHECK_CSV_FORMAT("02000","CSV格式校验异常"),
+//	出款订单号重复 	 	01030 	 	 
+//	支付金额为空 	 	01031 	 	PAYMENT_AMOUNT_IS_NULL 
+//	支付金额精度不合法 	 	01032 	 	APYMENT_AMOUNT_PRECISION_INVALIDATE 
+//	卡号规则不合法	 	01033	 	CARD_RULE_INVALIDATE
+//	不支持的银行	 	01034	 	BANK_SUPPORTED_INVALIDATE
+//	卡号和银行号不一致	 	01035	 	BANK_AND_CARD_INVALIDATE
+//	更新批次信息失败		01036		UPDATE_BATCH_INFO_FAILED
+//	未找到批次号		01037		FOUNDOUT_FAILED
+//	批次查询参数无效		01038		BATCH_QUERY_PARAM_INVALIDATE
+//	批次在队列中		01039		BATCH_IN_PROCESS
+//	批次出款失败通知		01040		BATCH_TRANSFER_FAILED_NOTIFY
+//	银行要求的必填信息为空.		01041		BANK_REQUIRED_FIELD_INVALID
+//	不允许使用出款服务		01042		CAN_NOT_ACCESS
+//	订单号无效		01043		INVALID_ORDER_NO
+//	订单转账失败通知		01044		ORDER_TRANSFER_FAILED_NOTIFY        
+//	CSV格式校验异常		02000		PARAM_CHECK_CSV_FORMAT
+	CSV_CHECK_ORDER_DUPLICATED("02001","订单号重复"),
+	PARAM_CHECK_TOTAL_NUM("02002","总笔数校验失败"),
+	PARAM_CHECK_TOTAL_AMOUNT("02003","总金额校验失败"),
+	PARAM_CHECK_TOTAL_FEE("02004","总费用校验失败"),
+	PARAM_CHECK_OTHERS("02005","明细校验全失败"),
+	BATCH_NO_DUPLICATED("02006","批次号重复"),
+	CSV_FILE_INVALID("02007","读取CSV文件错误"),
+	ERROR_CODE_30000("30000","收款人账户帐户不存在 "),
+//	订单号重复		02001		CSV_CHECK_ORDER_DUPLICATED
+//	总笔数校验失败		02002		PARAM_CHECK_TOTAL_NUM
+//	总金额校验失败		02003		PARAM_CHECK_TOTAL_AMOUNT
+//	总费用校验失败		02004		PARAM_CHECK_TOTAL_FEE
+//	明细校验全失败		02005		PARAM_CHECK_OTHERS
+//	批次号重复		02006		BATCH_NO_DUPLICATED
+//	读取CSV文件错误		02007		CSV_FILE_INVALID
+//	收款人账户帐户不存在 	 	30000 
+	ERROR_CODE_30001("30001","付款人账户帐户不存在"),
+	ERROR_CODE_30002("30002","银行卡号与姓名不符"),
+//	付款人账户帐户不存在 	 	30001 
+//	银行卡号与姓名不符 	 	30002 
+	ERROR_CODE_90000("90000","计费系统故障"),
+	ERROR_CODE_90001("90001","流量系统故障"),
+	ERROR_CODE_90002("90002","储值系统故障"),
+	ERROR_CODE_90003("90003","未知的数据库异常"),
+//	计费系统故障 	 	90000 
+//	流量系统故障 	 	90001 
+//	储值系统故障 	 	90002 
+//	未知的数据库异常 	 	90003 
+
+	;
+	String code;
+	String desc;
+
+	FosReturnCodeEnums(String code, String desc) {
+		this.code = code;
+		this.desc = desc;
+	}
+
+	protected String getCode() {
+		return code;
+	}
+
+	protected String getDesc() {
+		return desc;
+	}
+
+}

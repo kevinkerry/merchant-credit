@@ -1,0 +1,82 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+    <script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+    <div class="caption"></div>
+    <table class="dtlTb" cellspacing="0" cellpadding="0">
+		<input type="hidden" id="msgCode" value="$!msg" />
+        <tr>
+            <td height="35">编号</td>
+            <td>
+				<input type="hidden" id="id" name="id" value="$!{tempDo.id}"/>
+				$!{tempDo.id}
+			</td>
+            <td height="35">短信编码</td>
+            <td>$!{tempDo.templateCode}</td>
+        </tr>
+        <tr>
+            <td height="35">标题</td>
+            <td colspan="3">
+                <input type="text" style="width:500px;" name="ext1" id="ext1" value="$!{tempDo.ext1}"/>
+            </td>
+        </tr>
+        <tr>
+            <td height="35">内容</td>
+            <td colspan="3">
+                <textarea id="templateInfo" style="width:500px;height:100px;" name="templateInfo">$!{tempDo.templateInfo}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td height="35">操作人</td>
+            <td>$!{tempDo.operator}</td>
+            <td height="35">操作人ID</td>
+            <td>$!{tempDo.operatorId}</td>
+        </tr>
+        <tr>
+            <td height="35">创建时按</td>
+            <td>#showDateTime($!{tempDo.createdAt})</td>
+            <td height="35">更新时间</td>
+            <td>#showDateTime($!{tempDo.updatedAt})</td>
+        </tr>
+        <tr>
+            <td height="35">发送规则</td>
+            <td>$!{tempDo.sendRule}</td>
+            <td height="35">备用字段</td>
+            <td colspan="3">$!{tempDo.ext2}</td>
+        </tr>
+        <tr>
+            <td colspan="4" align="center">
+				<a href="javascript:void(0);" class="btn2" id="closeBtn" onclick="saveOpdate();">保存</a>
+                <a href="javascript:void(0);" class="btn2" id="closeBtn" onclick="window.close();">关闭</a>
+            </td>
+        </tr>
+    </table>
+<script type="text/javascript">
+jQuery(function() {
+		var tmp = jQuery("#msgCode").val();
+		if (tmp != '') {
+			alert(tmp);
+		}
+	});
+function saveOpdate(){
+		var _ids = ['id','ext1','templateInfo'];
+    	var data = {"currentPage":'1'};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+
+	if(confirm("是否确认修改信息？")){
+			jQuery.ajax({
+				type: 'POST',
+			    url: "#springUrl('/msgTemplate/saveUpdate.do')" ,
+			    data: data ,
+			    dataType:'json',
+			    success: function(data){
+        			alert(data.errorMessage);
+        			window.location.reload();
+			    }
+			});
+		}
+}
+</script>

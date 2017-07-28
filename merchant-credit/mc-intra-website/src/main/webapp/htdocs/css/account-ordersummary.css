@@ -1,0 +1,9 @@
+/*order-summary*/
+.order-summary{ position: relative; padding-left: 120px; height: 100px; padding-top: 1px;}
+.order-summary .icon{ position: absolute; left: 10px; top: 10px;}
+.order-summary h1{ display: inline-block; font-family:"Microsoft YaHei",simhei; font-weight: normal;}
+.order-summary h1, .order-summary span{ margin-right: 20px;}
+.order-summary p{ margin-top: 12px;}
+.order-summary span{ font-size: 14px;}
+.order-summary .tip{ color: #f00;}
+.order-summary .buy{width: 84px; height: 28px; line-height: 28px; font-size: 14px; color: #fff; border:0; display: inline-block; text-align: center; background: url(../img/account/form-btn.png) no-repeat 0 0;}

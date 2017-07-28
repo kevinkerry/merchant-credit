@@ -1,0 +1,32 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td></td>
+		<td>分润日期</td>
+		<td>商户号 </td>
+		<td>商户名称</td>
+		<td>分润角色</td>
+		<td>分润类型</td>
+		<td>提现金额</td>
+		<td>提现分润(X%)金额</td>
+		<td>提现分润(X元)金额</td>
+		<td>提现日奖励分润 </td>
+		<td>分润总额</td>
+	</tr>
+	#foreach($o in $!{data})
+	<tr class="settle_ttl">
+		<td>$!{velocityCount}</td>
+		<td>$!{o.benefitdate}</td>
+		<td>$!{o.merchantNo}</td>
+        <td>$!{o.merchantName}</td>
+		<td>$!{o.benefitrole}</td>
+		<td>$!{o.benefittype}</td>
+		<td>$!{o.businessmoney}</td>
+		<td>$!{o.benefitxper}</td>
+		<td>$!{o.benefitx}</td>
+		<td>$!{o.benefitday}</td>
+		<td>$!{o.benefitsum}</td>
+	</tr>
+	#end
+</table>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	    http://www.springframework.org/schema/util
+	    http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://cxf.apache.org/jaxws
+		http://cxf.apache.org/schemas/jaxws.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<context:component-scan base-package="com.sdp.mc" />
+	<import resource="classpath:META-INF/spring/ac_mpos_sdk_service_dubbo.xml"/>
+
+	<!-- ma begin -->
+	<bean id="operatorService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdp.mc.ma.service.IOperatorService" />
+		<property name="address" value="${authorize.ws.clientservice.IOperatorService.wsdlUrl}" />
+	</bean>
+
+	<bean id="maOsrFullService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.ma.ws.api.service.osr.IMaOsrFullWS" />
+		<property name="address" value="${ma.osr.wsdl.url}/MaOsrFullService" />
+	</bean>
+	<bean id="operatorWSService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.ma.ws.api.service.osr.IOperatorWS" />
+		<property name="address" value="${ma.osr.wsdl.url}/OperatorService" />
+	</bean>
+	<!-- 出款凭证签名 -->
+    	<!-- 凭证库提交 -->
+ 	<bean class="com.shengpay.receipt.client.ReceiptClient" init-method="init" lazy-init="true" >
+<!--         <property name="ucsWsdl" value="${receipt.client.url}/service/UcsRemoteService?wsdl"/> -->
+<!--         <property name="ucsKey" value="zf656-normal-cert-6fcd5"/> -->
+<!--         <property name="pfxCertPath" value="/opt/receipt/Receipt001.pfx"/> -->
+        <property name="ucsWsdl" value="${receipt.client.url}"/>
+        <property name="ucsKey" value="${receipt.ucs.key}"/>
+        <property name="pfxCertPath" value="${receipt.client.pfx.path}"/>
+    </bean>
+	 <bean id="receiptRepositoryRemoteService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean" lazy-init="true">
+		<property name="serviceClass" value="com.shengpay.receipt.ws.ReceiptRepositoryRemoteService" />
+		<property name="address" value="${receipt.ws.url}" />
+	</bean>
+
+	<bean id="orgService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.ma.ws.api.service.osr.IOrgWS" />
+		<property name="address" value="${ma.osr.wsdl.url}/OrgService" />
+	</bean>
+
+	<bean id="maOnlineService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.ma.ws.api.service.online.IMaOnlineWS" />
+		<property name="address" value="${ma.online.service.wsdl.url}" />
+	</bean>
+
+	<bean id="accountQueryFacade" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.deposit.facade.account.AccountQueryFacade" />
+		<property name="address" value="${deposit.web.account.wsdl.url}/accountQueryFacade" />
+	</bean>
+	<!-- ma end -->
+
+	<!-- UESService WS -->
+	<bean id="uesRemoteService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.ues.services.UesRemoteService" />
+		<property name="address" value="${ues.service.address.url}" />
+	</bean>
+	<!-- fund -->
+	<!--
+	<bean id="uesRemoteService" class="com.shengpay.ues.services.UesRemoteService"
+		factory-bean="websiteUesRemoteServiceFactory" factory-method="create"
+		lazy-init="true" />
+	<bean id="websiteUesRemoteServiceFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
+		lazy-init="true">
+		<property name="serviceClass" value="com.shengpay.ues.services.UesRemoteService" />
+		<property name="address" value="${ues.service.address.url}" />
+	</bean>
+	 -->
+
+	<!-- FOS begin -->
+	<bean id="remitTransferService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdp.fos.service.RemitTransferService" />
+		<property name="address" value="${fos.service.wsdl.url}/remitTransferService" />
+	</bean>
+	<bean id="transferQueryService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.fos.ws.TransferQueryService" />
+		<property name="address" value="${fos.service.wsdl.url}/TransferQueryService" />
+	</bean>
+	<bean id="batchFundtransService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.fos.batch.ws.BatchFundtransService" />
+		<property name="address" value="${fos.batchfundtrans.service.wsdl.url}" />
+	</bean>
+
+	<bean id="withdrawService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdp.fos.service.WithdrawService" />
+		<property name="address" value="${fos.service.wsdl.url}/withdrawService" />
+	</bean>
+	<bean id="withdrawQueryService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.fos.ws.WithdrawQueryService" />
+		<property name="address" value="${fos.service.wsdl.url}/WithdrawQueryService" />
+	</bean>
+	<!-- FOS end -->
+
+	<!-- credit begin -->
+	<bean id="creditModelService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.credit.itf.CreditModelService" />
+		<property name="address" value="${creditModelService.service.wsdl.url}" />
+	</bean>
+	<bean id="creditDataService" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.credit.itf.CreditDataService" />
+		<property name="address" value="${creditDataService.service.wsdl.url}" />
+	</bean>
+	<!-- credit end -->
+
+	<!-- 钱包 start -->
+	<bean id="transSoapAPI" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.mas.common.api.payment.service.TransSoap" />
+		<property name="address" value="${mas.shengpay.wallet.withhold.url}" />
+	</bean>
+	<!-- 扣款  -->
+	<bean id="masMtcBankPaymentAPI" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.mas.common.api.payment.service.MtcBankPaymentAPI" />
+		<property name="address" value="${batchTrustCollect.service.wsdl.url}" />
+	</bean>
+	<!-- 状态查询  -->
+    <bean id="queryOrderAPI" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdo.mas.common.api.query.order.service.QueryOrderAPI" />
+		<property name="address" value="${mas.withold.order.status.query.url}" />
+	</bean>
+
+	<!-- 委托扣款状态查询 end -->
+	 <bean id="merchantRealNameAuth" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.poss.service.realname.remote.IMerchantRealNameAuth" />
+		<property name="address" value="${mpos.realname.bankinfo.url}" />
+	</bean>
+
+	<!-- 实名查询 -->
+    <jaxws:client id="verifyQueryService" serviceClass="com.shengpay.verify.common.facade.VerifyQueryService"
+        address="${rnas.address.url}verifyQueryService?wsdl" />
+
+     <bean id="openMerchant" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.shengpay.poss.merchant.crm.ws.openmerchant.service.OpenMerchant" />
+		<property name="address" value="${mpos.crm.url}" />
+	</bean>
+
+	<!-- <jaxws:client id="paymentFacade" serviceClass="com.sdp.mc.withdraw.IPaymentFacade"
+	   address="${withdraw.majorPayment.query.url}" /> -->
+
+	<!-- 出款银行 end -->
+	<bean id="fundoutBankQueryFacade" class="com.sdp.mc.common.ws.WSApiProxyFactoryBean">
+		<property name="serviceClass" value="com.sdp.fos.baseservice.FundoutBankQueryFacade" />
+		<property name="address" value="${fos.base.services.fundoutBankQueryService.url}" />
+	</bean>
+	<!-- 出款银行 end -->
+
+	<!-- 风控监控 -->
+	<bean id="sarsClientService" class="com.shengpay.sars.client.api.SarsServiceFactory" factory-method="newSarsService">
+	<constructor-arg>
+		<bean name="sarsEngineContext" id="sarsEngineContext" class="com.shengpay.sars.rules.engine.EngineContext">
+	        <property name="checkPoints">
+				<list>
+					<value>CP261</value>
+					<value>CP281</value>
+					<value>CP285</value>
+					<value>CP160</value>
+				</list>
+	        </property>
+	        <property name="path" value="${sarsClientService.sarsEngineContext.path}" />
+	        <property name="ruleServerWSDL" value="${sarsClientService.sarsEngineContext.ruleServerWSDL}" />
+	        <property name="sarsServerWsdl" value="${sarsClientService.sarsEngineContext.sarsServerWsdl}" />
+	        <property name="sarsServerMqEnvironment">
+	            <props>
+	                <prop key="java.naming.factory.initial">${sarsClientService.sarsEngineContext.jnf.initial}</prop>
+	                <prop key="java.naming.provider.url">${sarsClientService.sarsEngineContext.jnp.url}</prop>
+	                <prop key="java.naming.security.principal">${sarsClientService.sarsEngineContext.jns.principal}</prop>
+	                <prop key="java.naming.security.credentials">${sarsClientService.sarsEngineContext.jns.credentials}</prop>
+	            </props>
+	        </property>
+	        <property name="sarsServerMqDestination" value="com.shengpay.rms.verify" />
+		</bean>
+	</constructor-arg>
+</bean>
+<!-- cs服务 -->
+  <jaxws:client id="partyGroupFacade" serviceClass="com.shengpay.cs.facade.PartyGroupFacade"
+		address="${cs.facade.url}/${cs.facade.url_party_group}"/>
+</beans>

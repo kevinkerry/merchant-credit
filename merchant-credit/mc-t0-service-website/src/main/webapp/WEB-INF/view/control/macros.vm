@@ -1,0 +1,137 @@
+#macro( staticResource $value)$MCAppVarPropsUtil.getStringProp("mc.static.file.root.path")$value#end
+
+#macro( showDateTime $value)$!dateUtil.format($value, 'yyyy-MM-dd HH:mm:ss')#end
+
+#macro(showDate $value)$!dateUtil.format($value, 'yyyy-MM-dd')#end
+
+#macro(getTime)$!dateUtil.getCurrentTS().getTime()#end
+
+#macro(showDateToWebFormat $value)$!dateUtil.convert2WebFormat($value)#end
+
+#macro(enumIterator $clazz  $compareValue)
+#foreach($enumItem in $jdkEnumUtil.getEnumList($clazz))
+<option value="$enumItem.code" #if($stringUtil.equals("$enumItem.code", "$compareValue"))selected#end>$enumItem.message</option>
+#end
+#end
+
+#macro( enumIteratorMsg $clazz  $compareValue)
+#foreach($enumItem in $jdkEnumUtil.getEnumList($clazz))
+<option value="$enumItem.code" #if($stringUtil.equals("$enumItem.code", "$compareValue"))selected#end>$enumItem.msg</option>
+#end
+#end
+
+#macro( enumIteratorDesc $clazz  $compareValue)
+#foreach($enumItem in $jdkEnumUtil.getEnumList($clazz))
+<option value="$enumItem.code" #if($stringUtil.equals("$enumItem.code", "$compareValue"))selected#end>$enumItem.desc</option>
+#end
+#end
+
+#macro( enumIteratorShowMemo $clazz  $compareValue)
+#foreach($enumItem in $jdkEnumUtil.getEnumList($clazz))
+<option value="$enumItem.code" #if($stringUtil.equals($enumItem.code, $compareValue))selected#end>$enumItem.memo</option>
+#end
+#end
+
+#macro( enumIteratorForRadio $radioName $clazz  $compareValue)
+#foreach($enumItem in $jdkEnumUtil.getEnumList($clazz))
+<input type="radio" name="$radioName" value="$enumItem.code" #if($stringUtil.equals($enumItem.code, $compareValue))checked#end>$enumItem.message
+#end
+#end
+
+#macro ( enumMessage $clazz $compareProperty $returnProperty $compareValue)
+  $!jdkEnumUtil.getValueByKey($clazz, $compareProperty, $returnProperty, $compareValue)
+#end
+
+#macro ( enumMessageByCode $clazz $compareValue)
+  $!jdkEnumUtil.getValueByKey($clazz, "code", "message", $compareValue)
+#end
+
+#macro ( enumDescByCode $clazz $compareValue)
+  $!jdkEnumUtil.getValueByKey($clazz, "code", "desc", $compareValue)
+#end
+
+#macro( message $errorMsg $returnMsg $cols)
+	#if($errorMsg)
+	<tr>
+        <td colspan="$!cols" class="messageBar"><label class="message">错误：$errorMsg</label></td>
+    </tr>
+	#end
+	#if($returnMsg)
+	<tr>
+        <td colspan="$!cols" class="messageBar"><label class="message">提示：$returnMsg</label></td>
+    </tr>
+	#end
+#end
+
+#macro( fieldMessage $message)
+	#if($message)
+	<label class="message">$message</label>
+	#end
+#end
+
+#macro( fieldMessages $message)
+	#if($message)
+	  #foreach($error in $message) <label class="message">$error</label> <br> #end
+	#end
+#end
+
+#macro( showSubMenu $parentMenu )
+    #if(!$parentMenu.childrenMenu.isEmpty())
+    <ul>
+		#foreach($subMenu in ${parentMenu.childrenMenu})
+            #if ($stringUtil.equals($subMenu.actionUrl, "#"))
+            <li><a href="javascript:function(){};" class="fly">$!subMenu.menuName</a>
+            #showSubMenu($subMenu)
+            #else
+            <li><a href="#springUrl($!subMenu.actionUrl)" >$!subMenu.menuName</a>
+            #end
+            </li>
+        #end
+	</ul>
+	#end
+#end
+
+#macro( auditTypeIterator $compareValue)
+	#foreach($enumItem in $userHolder.getAuditTypeList())
+		<option value="$enumItem.code" #if($stringUtil.equals("$enumItem.code", $compareValue))selected#end>$enumItem.message</option>
+	#end
+#end
+
+##此方法用于修改信息完成后刷新当前窗口
+##  $needRefresh  是否要进行刷新操作     value=needFresh 需要刷新
+##  $refreshMessage  操作完成后的提示信息  例如：修改成功！
+#macro( resultRefreshPage $needRefresh $refreshMessage $url)
+	<script type="text/javascript">
+
+        	alert("sssss");
+
+        </script>
+	#if ($stringUtil.equals("$!needRefresh", "needFresh"))
+        <script type="text/javascript">
+         window.onload = refreshParentWindow();
+         function  refreshWindow(){
+        	rMessage = '$!refreshMessage';
+        	alert(rMessage);
+            window.location = '$url';
+         }
+        </script>
+	#end
+#end
+
+##此方法用于新打开页面添加/修改信息完成后关闭新打开的页面，并刷新父窗口
+##  $needRefresh  是否要进行刷新并关闭操作     value=needFresh 需要刷新并关闭
+##  $refreshMessage  操作完成后的提示信息  例如：修改成功！
+#macro( resultClosePageAndRefreshParentPage $needRefresh $refreshMessage)
+	#if ($stringUtil.equals("$!needRefresh", "needFresh"))
+        <script type="text/javascript">
+         window.onload = refreshParentWindow();
+         function  refreshParentWindow(){
+        	rMessage = '$refreshMessage';
+        	alert(rMessage);
+            opener.location.reload();
+            window.close();
+         }
+        </script>
+	#end
+#end
+

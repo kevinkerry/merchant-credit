@@ -1,0 +1,74 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/settle/order/list.htm')" method="post">
+<div class="caption">#if("${MC_MERCHANT_USER.currentMcType}"=="0003")T0分润对账单#else 分润对账单-提现部分#end</div>
+<table class="qryTb" cellspacing="0" width="80%"  cellpadding="0" border="0">
+	<tbody>
+		<tr>
+			<td width="80" class="lbl">
+			对账单号：</td>
+			<td width="140"><input type="text" id="settleOrderNo" name="settleOrderNo" class="txt w120"></td>
+
+			<td width="100" class="lbl">分润周期：</td>
+			<td width="140">
+				<input type="text" id="settleQueryBeginTime" name="settleQueryBeginTime" class="txt w180 date" onclick="xDatePicker2(1);" value="$!{settleQueryBeginTime}" readonly="readonly">
+			</td>
+		</tr>
+		<tr>
+	       <td colspan="8" align="center">
+				<a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();">查询</a>
+				<!-- <a href="#" class="btn2" id="queryBtn" onclick="javascript:exportFile();return false;">下载</a> -->
+			</td>
+		</tr>
+		<tr>
+			<td colspan="8" align="left">
+			  #if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+				<span class="red">注：<br/>                
+				分润周期是以出款成功时间为准，而不是以出款发起时间为准。例如：12月31日发起出款，1月1日出款成功，则这笔分润可以在1月的分润对账单中查询到。
+                </span>
+               	#else
+			   <span class="red">注：<br/>                
+				分润周期是以提现成功时间为准，而不是以提现发起时间为准。例如：12月31日发起提现，1月1日提现成功，则这笔分润可以在1月的分润对账单中查询到。
+                </span>
+                #end
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!--分页容器-->
+<div id="container"></div>
+</form>
+<script type="text/javascript">
+	var ALL_COND_ID=["settleOrderNo","settleQueryBeginTime"];
+    //ajax翻页
+    function ajaxPaging(){
+    	if (document.getElementById("settleQueryBeginTime").value=="") {
+    		alert("请选择分润周期");
+    		return false;
+    	}
+    	loading(!0);
+    	var currentPage=jQuery("#pageNum_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"pageNum":currentPage};
+    	for(i in ALL_COND_ID){
+			var val = document.getElementById(ALL_COND_ID[i]).value;
+			if(val!=""){
+    			data[ALL_COND_ID[i]] = val;
+    		}
+    	}
+    	data['timestamp'] = new Date().getTime();
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/settle/order/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+	//导出
+    function exportFile() {
+		$('#submitForm').attr('action', '#relativeUrl('/settle/order/export.htm')');
+		$('#submitForm').submit();
+	}
+</script>

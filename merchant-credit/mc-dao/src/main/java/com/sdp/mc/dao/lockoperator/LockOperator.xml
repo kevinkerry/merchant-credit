@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="LockOperatorDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.lockoperator.LockOperatorEO">
+		<result property="id" column="ID_N" />
+		<result property="operatorId" column="OPERATOR_ID_V" />
+		<result property="operatorName" column="OPERATOR_NAME_V" />
+		<result property="merchantNo" column="MERCHANT_NO_V" />
+		<result property="merchantType" column="MERCHANT_TYPE_V" />
+		<result property="lockStatus" column="LOCK_STATUS_N" />
+		<result property="clientIp" column="CLIENT_IP_V" />
+		<result property="lockMemo" column="LOCK_MEMO_V" />
+		<result property="lockTime" column="LOCK_TIME_D" />
+		<result property="version" column="VERSION_N" />
+		<result property="createTime" column="CREATE_TIME_T" />
+		<result property="lastUpdateTime" column="LAST_UPDATE_TIME_T" />
+	</resultMap>
+
+	<select id="getLockStatusByOperatorId" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		select lock_status_n
+		from MC_LOCK_OPERATOR
+		where operator_id_v=#operatorId#
+		order by CREATE_TIME_T desc
+	</select>
+	
+	<insert id="insert" parameterClass="com.sdp.mc.dao.lockoperator.LockOperatorEO">
+		insert into MC_LOCK_OPERATOR ( 
+			id_n, operator_id_v, operator_name_v, merchant_no_v, merchant_type_v,
+			lock_status_n, client_ip_v, lock_memo_v, lock_time_d, version_n,
+			create_time_t, last_update_time_t  ) 
+		values (
+			SEQ_MC_LOCK_OPERATOR.nextval, #operatorId#, #operatorName#, #merchantNo#, #merchantType#,
+			#lockStatus#, #clientIp#, #lockMemo#, #lockTime:TIMESTAMP#, 1,
+			systimestamp, systimestamp
+		)
+	</insert>
+	
+	<select id="getLockOperatorLast" parameterClass="java.lang.String" resultMap="result">
+		select *
+		from MC_LOCK_OPERATOR mlo
+		where mlo.lock_time_d =
+		       (select max(mloo.lock_time_d)
+		          from MC_LOCK_OPERATOR mloo
+		         where mloo.operator_id_v = #operatorId#)
+		   and mlo.operator_id_v = #operatorId#
+	</select>
+</sqlMap>

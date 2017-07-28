@@ -1,0 +1,76 @@
+#set($page_title = '提现费率管理') #set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post"
+			action="#springUrl('/whitelist/index.do')">
+			<table cellspacing="0" cellpadding="0" border="0" class="CardWord">
+				<tr>
+					<td>策略值：</td>
+					<td><input type="text" id="merchantNo" name="merchantNo"
+						value="$!{query.po.merchantNo}" />&nbsp;</td>
+					<td>策略类型：</td>
+					<td><select id="merchantType" name="merchantType"
+						value="$!{query.po.merchantType}">
+							<option value="">全部</option>
+<!-- 							<option value="0001">POS商户</option> -->
+<!-- 							<option value="0003">POS拓展方</option> -->
+							<option value="0006">MPOS商户</option>
+							<option value="0007">MPOS拓展方</option>
+<!-- 							<option value="1001">MCC</option> -->
+					</select></td>
+					<!-- <td>状态：</td>
+					<td><select id="status" name="status"
+						value="$!{query.po.status}">
+							<option value="">全部</option>
+							<option value="1">生效</option>
+							<option value="0">失效</option>
+					</select></td> -->
+				</tr>
+				<tr>
+					<td align="center" colspan="6"><a href="#" class="btn2"
+						onclick="ajaxPaging();">查询</a> <a href="#" class="btn2"
+						onclick="clearAll();">清空</a> 
+<!-- 						<a href="#springUrl('/withdrawCost/config/initEdit.do')" target="_blank" class="btn2">新增</a> -->
+						
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = ['merchantType', 'merchantNo' ];
+	function clearAll() {
+		for (i in ALL_COND_ID) {
+			jQuery("#" + ALL_COND_ID[i]).val("");
+		}
+	}
+
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"currentPage" : currentPage
+		};
+
+		for (i in ALL_COND_ID) {
+			data["po." + ALL_COND_ID[i]] = jQuery("#" + ALL_COND_ID[i]).val();
+		}
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/withdrawCost/config/list.do')?sessionId="+new Date().getTime(),
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+</script>

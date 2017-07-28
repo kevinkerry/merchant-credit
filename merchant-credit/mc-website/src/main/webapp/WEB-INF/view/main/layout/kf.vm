@@ -1,0 +1,29 @@
+<script type="text/javascript" charset="utf-8" src="https://gate.soperson.com/10040597/10074593.js"></script>
+<script type="text/javascript">
+var obj=jQuery("#doyoo_panel");
+obj.ready(function(){
+	var position = obj.position();
+	//alert( "left: " + position.left + ", top: " + position.top );
+	var top=10;
+	var type=1;
+	obj.css("top",top+"px");
+	/* self.setInterval(function(){
+		if(type==1){
+			if(top>0){
+				top=top-10;
+			}else{
+				type=2;
+				top=top+10;
+			}
+		}else{
+			if(top>150){
+				type=1;
+				top=top-10;
+			}else{
+				top=top+10;
+			}
+		}
+		obj.css("top",top+"px");
+	},200) */
+});
+</script>

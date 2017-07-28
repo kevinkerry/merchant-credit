@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PromoterDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.promoter.PromoterEO" extends="PromoterDAOAbstract.result" >
+		<result property="applyOpenAccountId" column="applyOpenAccountId"/>
+		<result property="applyOpenAccountStatus" column="applyOpenAccountStatus"/>
+		<result property="loaningType" column="loaning_type"/>
+	</resultMap>
+	<resultMap id="PromoterResult" class="com.sdp.mc.dao.readonly.promoter.PromoterEO" >
+	    <result property="promoterId" column="PMT_ID_N"/>
+		<result property="fastSettleMargin" column="PMT_FAST_SETTLE_MARGIN"/>
+		<result property="fastSettleLimit" column="PMT_FAST_SETTLE_LIMIT"/>
+		<result property="pmtFastSettleFlag" column="PMT_FAST_SETTLE_FLAG"/>
+		<result property="mcId" column="MC_ID_N" />
+		<result property="mcMerchantNo" column="MC_MERCHANT_NO_V" />
+		<result property="mcType" column="MC_TYPE_C" />
+		<result property="mcMerchantName" column="MC_MERCHANT_NAME_V" />
+		<result property="loaningType" column="loaning_type"/>
+		<result property="mcStatus" column="MC_STATUS_C"/>
+		<result property="pmtParentMerchantNo" column="PMT_PARENT_MERCHANT_V"/>
+		<result property="pmtLevel" column="PMT_LEVEL_N"/>
+	</resultMap>
+
+	<resultMap id="withdrawResult" class="com.sdp.mc.dao.readonly.promoter.PromoterEO" extends="CmMerchantContractDAO.result">
+		<result property="promoterId" column="PROMOTER_ID"/>
+		<result property="createAt" column="CREATE_TIME"/>
+		<result property="updateAt" column="UPDATE_TIME"/>
+		<result property="fastSettleMargin" column="PROMOTER_FS_MARGIN"/>
+		<result property="fastSettleLimit" column="PROMOTER_FS_LIMIT"/>
+		<result property="pmtFastSettleFlag" column="PROMOTER_FS_FLAG"/>
+		<result property="mcLoginAccount" column="MC_LOGIN_ACCOUNT_V" />
+		<result property="mcRegType" column="MC_REG_TYPE_N" />
+		<result property="mcCertiType" column="MC_CERTI_TYPE_N"  javaType="java.lang.Long"/>
+		<result property="mcCertiValue" column="MC_CERTI_VALUE_V" />
+		<result property="mcContractBeginDate" column="MC_CONTRACT_BEGIN_DATE_D" />
+		<result property="mcContractEndDate" column="MC_CONTRACT_END_DATE_D" />
+		<result property="mcContractRealEndDate" column="MC_CONTRACT_REAL_END_DATE_D" />
+		<result property="mcId" column="MC_ID_N" />
+		<result property="mcMerchantNo" column="MC_MERCHANT_NO_V" />
+		<result property="mcContractNo" column="MC_CONTRACT_NO_V" />
+		<result property="mcStatus" column="MC_STATUS_C" />
+		<result property="mcType" column="MC_TYPE_C" />
+		<result property="mcVersion" column="MC_VERSION_N" />
+		<result property="mcCreateTime" column="MC_CREATE_TIME_T" />
+		<result property="mcLastUpdateTime" column="MC_LAST_UPDATE_TIME_T" />
+		<result property="mcMerchantName" column="MC_MERCHANT_NAME_V" />
+	</resultMap>
+
+	<select id="queryCountPromoters" resultClass="java.lang.Integer" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterCond">
+		select count(info.PROMOTER_id)
+		from VIEW_PROMOTER_INFO info
+		where INFO.PROMOTER_TYPE in ('0003','0007','0101')
+		<isNotEmpty prepend="and" property="promoterType">
+			<isNotNull property="promoterType" >
+			INFO.PROMOTER_TYPE in ( $promoterType$ )
+			</isNotNull>
+		</isNotEmpty>
+		<isNotNull prepend="and" property="promoterName" >
+			<isNotEmpty property="promoterName">
+			INFO.PROMOTER_NAME like '%'||#promoterName:VARCHAR#||'%'
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull prepend="and" property="promoterNo" >
+			<isNotEmpty property="promoterNo">
+			INFO.PROMOTER_MERCHANT_NO in ( '$promoterNo$' )
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull prepend="and" property="pmtFastSettleFlag" >
+			<isNotEmpty property="pmtFastSettleFlag">
+			INFO.PROMOTER_FS_FLAG = '$pmtFastSettleFlag$'
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull prepend="and" property="loaningType" >
+			<isNotEmpty property="loaningType">
+			 INFO.LOANING_TYPE=$loaningType$
+			</isNotEmpty>
+		</isNotNull>
+		<isNotEmpty prepend="and" property="createTimeStartStr">
+			<isNotNull prepend="" property="createTimeStartStr">
+				<![CDATA[
+					info.create_time>= to_date(#createTimeStartStr#,'yyyy-mm-dd hh24:mi:ss')
+				]]>
+			</isNotNull>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="createTimeEndStr">
+			<isNotNull prepend="" property="createTimeEndStr">
+				<![CDATA[
+					info.create_time<= to_date(#createTimeEndStr#,'yyyy-mm-dd hh24:mi:ss')
+				]]>
+			</isNotNull>
+		</isNotEmpty>
+	</select>
+
+
+	<select id="queryPromoters" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterCond" resultMap="result">
+		select distinct info.*,aoa.ID applyOpenAccountId,aoa.STATUS applyOpenAccountStatus
+		  from VIEW_PROMOTER_INFO info
+		  left join MC_APPLY_OPEN_ACCOUNT aoa on info.PROMOTER_ID = aoa.PROMOTER_ID and aoa.ACCOUNT_TYPE = '281'
+		where INFO.PROMOTER_TYPE in ('0003','0007','0101')
+		<isNotEmpty prepend="and" property="promoterType">
+			<isNotNull property="promoterType" >
+			INFO.PROMOTER_TYPE in ( $promoterType$ )
+			</isNotNull>
+		</isNotEmpty>
+		<isNotNull prepend="and" property="promoterName" >
+			<isNotEmpty property="promoterName">
+			INFO.PROMOTER_NAME like '%'||#promoterName:VARCHAR#||'%'
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull prepend="and" property="promoterNo" >
+			<isNotEmpty property="promoterNo">
+			INFO.PROMOTER_MERCHANT_NO in ( '$promoterNo$' )
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull prepend="and" property="pmtFastSettleFlag" >
+			<isNotEmpty property="pmtFastSettleFlag">
+			INFO.PROMOTER_FS_FLAG = '$pmtFastSettleFlag$'
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull prepend="and" property="loaningType" >
+			<isNotEmpty property="loaningType">
+			 INFO.LOANING_TYPE=$loaningType$
+			</isNotEmpty>
+		</isNotNull>
+		<isNotEmpty prepend="and" property="createTimeStartStr">
+			<isNotNull prepend="" property="createTimeStartStr">
+				<![CDATA[
+					info.create_time>= to_date(#createTimeStartStr#,'yyyy-mm-dd hh24:mi:ss')
+				]]>
+			</isNotNull>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="createTimeEndStr">
+			<isNotNull prepend="" property="createTimeEndStr">
+				<![CDATA[
+					info.create_time<= to_date(#createTimeEndStr#,'yyyy-mm-dd hh24:mi:ss')
+				]]>
+			</isNotNull>
+		</isNotEmpty>
+		order by info.create_time desc,info.PROMOTER_BIZ_ID
+	</select>
+
+	<select id="queryPromoterByMcId" parameterClass="java.lang.Long" resultMap="result">
+		select distinct info.*,aoa.ID applyOpenAccountId,aoa.STATUS applyOpenAccountStatus
+		  from VIEW_PROMOTER_INFO info
+		  left join MC_APPLY_OPEN_ACCOUNT aoa on info.PROMOTER_ID = aoa.PROMOTER_ID and aoa.ACCOUNT_TYPE = '281'
+		where info.PROMOTER_ID=#mcId:NUMBERIC#
+
+	</select>
+
+	<select id="queryPromoterInfoByMerchantNo" parameterClass="java.lang.String" resultMap="PromoterDAOAbstract.promoterResult">
+        select info.*
+          from VIEW_MERCHANT_INFO info
+         where (info.mc_type='0001' or info.mc_type='0006'or info.mc_type='0201')
+           and info.merchant_no = #value#
+	</select>
+
+	<select id="queryPromoterInfoByMerchantInfo" parameterClass="java.util.Map" resultMap="PromoterDAOAbstract.promoterResult">
+        <!-- select cp.*,cmc.mc_merchant_no_v merchant_no
+          from ppcpay.CM_MERCHANT_CONTRACT cmc,
+               ppcpay.CM_PROMOTER          cp,
+               ppcpay.CM_POS_MERCHANT      posm
+         where cmc.mc_id_n = posm.posm_id_n
+           and posm.posm_promoter_id_n = cp.pmt_id_n
+           and cmc.mc_merchant_no_v = #merchantNo#
+           and cmc.mc_type_c=#mcType# -->
+
+         select cp.*,cmcp.mc_merchant_no_v merchant_no,CMCP.MC_TYPE_C mc_type
+          from ppcpay.CM_MERCHANT_CONTRACT cmc,
+                 ppcpay.CM_MERCHANT_CONTRACT cmcp,
+               ppcpay.CM_PROMOTER          cp,
+               ppcpay.CM_POS_MERCHANT      posm
+         where cmc.mc_id_n = posm.posm_id_n
+           and CMCP.MC_ID_N=CP.PMT_ID_N
+           and posm.posm_promoter_id_n = cp.pmt_id_n
+           and cmc.mc_merchant_no_v = #merchantNo#
+           and cmc.mc_type_c=#mcType#
+           AND cmc.mc_status_c = '3'
+            AND cmcp.mc_status_c = '3'
+	</select>
+    <select id="queryPromoterFastSettleInfo" parameterClass="java.util.Map" resultMap="PromoterDAOAbstract.promoterResult">
+    select cmp.* ,b.merchant_no merchant_no,b.merchant_type mc_type
+     from mcredit.fw_pos_merchant_info a left join mcredit.fw_pos_merchant_info b on a.parent_promoter_id=b.id
+     left join ppcpay.cm_promoter cmp on b.pos_merchant_id = cmp.pmt_id_n
+    where a.merchant_no = #merchantNo# and  a.merchant_type=#mcType#
+ 	</select>
+	<!-- T0出款调用  代理商额度-->
+	<select id="queryMerchantByMerchantNo" parameterClass="java.util.Map" resultMap="withdrawResult">
+           select cp.*,cmc.*
+          from ppcpay.CM_MERCHANT_CONTRACT cmc,
+               ppcpay.CM_PROMOTER          cp
+         where cmc.mc_id_n = cp.pmt_id_n
+           and cmc.mc_status_c='3'
+           and cp.PMT_FAST_SETTLE_FLAG=1
+           and cmc.mc_merchant_no_v = #merchantNo#
+           and cmc.mc_type_c=#mcType#
+           order by cmc.MC_LAST_UPDATE_TIME_T desc
+	</select>
+	<!-- 查询 代理商信息 -->
+	<select id="queryByMerchantNo" parameterClass="java.util.Map" resultMap="withdrawResult">
+        select cp.*,cmc.*
+          from ppcpay.CM_MERCHANT_CONTRACT cmc,
+               ppcpay.CM_PROMOTER          cp
+         where cmc.mc_id_n = cp.pmt_id_n
+           and cmc.mc_status_c='3'
+           and cmc.mc_merchant_no_v = #merchantNo#
+           and cmc.mc_type_c=#mcType#
+           order by cmc.MC_LAST_UPDATE_TIME_T desc
+	</select>
+	<!-- 出款调用  根据代理商ID查询代理商信息 -->
+	<select id="queryPromoterById" parameterClass="java.lang.Long" resultMap="withdrawResult">
+        select * from ppcpay.CM_PROMOTER prom inner join ppcpay.CM_MERCHANT_CONTRACT cmc
+		ON prom.pmt_id_n = cmc.mc_id_n
+		and prom.pmt_id_n=#posmPromoterId:NUMBERIC#
+		and cmc.mc_status_c='3'
+		and (cmc.mc_type_c='0003' or cmc.mc_type_c='0007' or cmc.mc_type_c='0101')
+
+	</select>
+
+
+	<select id="queryPromoterByMcMerchantNo" parameterClass="java.lang.String" resultClass="java.lang.Long">
+		select mc.mc_id_n from ppcpay.CM_MERCHANT_CONTRACT mc
+        where mc.mc_merchant_no_v=#promoterNo#
+        and mc.mc_status_c='3'
+        and mc.mc_type_c='0007'
+	</select>
+
+	<!-- 查询代理商出款额度 -->
+	<select id="queryPromoterByPromoterNo" parameterClass="java.util.Map" resultMap="PromoterDAOAbstract.promoterResult">
+		select * from ppcpay.CM_PROMOTER prom inner join ppcpay.CM_MERCHANT_CONTRACT cmc
+		ON prom.pmt_id_n = cmc.mc_id_n and cmc.mc_merchant_no_v = #merchantNo# and cmc.mc_status_c='3'
+	</select>
+	
+	<select id="queryPromoterAll" parameterClass="java.util.Map" resultMap="PromoterResult">
+		SELECT prom.*, cmc.*,NP.LOANING_TYPE
+         FROM ppcpay.CM_PROMOTER prom INNER JOIN ppcpay.CM_MERCHANT_CONTRACT cmc
+          ON prom.pmt_id_n = cmc.mc_id_n
+          left join MCREDIT.NEWT0_PROMOTER np on CMC.MC_ID_N=NP.PROMOTER_ID
+        WHERE cmc.mc_type_c IN ('0007', '0003','9999')
+        and cmc.mc_status_c='3'
+        order by cmc.MC_ID_N asc
+	</select>
+	
+	<select id="queryPromoterInfo" parameterClass="java.util.List" resultMap="PromoterResult">
+		SELECT prom.*, cmc.*,NP.LOANING_TYPE
+         FROM ppcpay.CM_PROMOTER prom INNER JOIN ppcpay.CM_MERCHANT_CONTRACT cmc
+          ON prom.pmt_id_n = cmc.mc_id_n
+          left join MCREDIT.NEWT0_PROMOTER np on CMC.MC_ID_N=NP.PROMOTER_ID
+        WHERE cmc.mc_type_c IN ('0007', '0003','9999')
+        and cmc.mc_status_c='3'
+		AND CMC.MC_MERCHANT_NO_V in
+		<iterate open="(" close=")" conjunction=",">
+               #list[]#
+        </iterate>
+         order by cmc.MC_ID_N asc
+	</select>
+
+	<resultMap class="java.util.HashMap" id="promoterInfoMap">
+		<result property="no" column="mc_merchant_no_v"/>
+		<result property="name" column="mc_merchant_name_v"/>
+	</resultMap>
+
+	<select id="selectPosPromoterInfo" parameterClass="java.util.List" resultMap="promoterInfoMap">
+		SELECT mc_merchant_no_v,
+		  mc_merchant_name_v
+		FROM ppcpay.CM_MERCHANT_CONTRACT
+		WHERE mc_type_c='0003'
+		AND mc_status_c='3'
+		AND mc_merchant_no_v in
+		<iterate open="(" close=")" conjunction=",">
+               #list[]#
+        </iterate>
+	</select>
+	<select id="selectMposPromoterInfo" parameterClass="java.util.List" resultMap="promoterInfoMap">
+		SELECT mc_merchant_no_v,
+		mc_merchant_name_v
+		FROM ppcpay.CM_MERCHANT_CONTRACT
+		WHERE mc_type_c='0007'
+		AND mc_status_c='3'
+		AND mc_merchant_no_v in
+		<iterate open="(" close=")" conjunction=",">
+               #list[]#
+        </iterate>
+	</select>
+
+	<select id="queryPromoterInfoByMerchantNoAndMcType" parameterClass="java.util.Map" resultMap="PromoterDAOAbstract.promoterResult">
+		select  prom.*, cmc.mc_merchant_no_v merchant_no ,cmc.MC_TYPE_C mc_type
+		from ppcpay.CM_PROMOTER prom inner join ppcpay.CM_MERCHANT_CONTRACT cmc
+		ON prom.pmt_id_n = cmc.mc_id_n and cmc.mc_merchant_no_v = #merchantNo# and cmc.MC_TYPE_C = #mcType# and cmc.mc_status_c='3'
+	</select>
+</sqlMap>

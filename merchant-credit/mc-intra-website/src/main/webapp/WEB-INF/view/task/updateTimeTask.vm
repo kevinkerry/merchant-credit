@@ -1,0 +1,112 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">定制任务编辑</div>
+<table class="dtlTb" cellspacing="0" cellpadding="0">
+	<input type="hidden" id="id" name="id" value="$!{timedTaskInfoDO.id}"></input>
+	<tr>
+
+	    <td class="lbl" >任务类型：<font color="red">*</font></td>
+	    <td width="600">
+			#if("$!{timedTaskInfoDO.taskType}"=="1")
+		sql
+		#elseif("$!{timedTaskInfoDO.taskType}"=="2")
+		定制
+		#elseif("$!{timedTaskInfoDO.taskType}"=="3")
+		reset
+		#end
+        </td>
+
+
+    </tr>
+    <tr>
+     <td class="lbl" >任务内容：<font color="red">*</font></td>
+        <td width="600">
+			$!{timedTaskInfoDO.taskContent}
+        </td>
+    </tr>
+
+    <tr>
+   <td class="lbl">生效时间：<font color="red">*</font></td>
+        <td>
+           <input type="text" id="effectiveTime" name="effectiveTime" class="date txt130" value="#showDateTime($!{timedTaskInfoDO.effectiveTime})" onclick="xDatePicker(2);" class="txt130" >
+		</td>
+    </tr>
+
+   <tr  class="otherValueClass">
+		<td class="lbl" >最大可重试次数：<font color="red">*</font></td>
+		<td>
+			<input type="text" id="retryTimes" name="retryTimes" maxlength="70" class="txt130" size="50" value="$!{timedTaskInfoDO.retryTimes}"/>
+		</td>
+	</tr>
+
+    <tr>
+      <td class="lbl" >创建时间：<font color="red">*</font></td>
+         <td width="600">
+-			$!{o.createTime}
+			#showDateTime($!{timedTaskInfoDO.createTime})
+         </td>
+     </tr>
+
+     <tr>
+      <td class="lbl" >更新时间：<font color="red">*</font></td>
+         <td width="600">
+-			$!{o.updateTime}
+			#showDateTime($!{timedTaskInfoDO.updateTime})
+         </td>
+     </tr>
+
+
+    <tr  class="otherValueClass">
+		<td class="lbl" >通知邮件：</td>
+		<td>
+			<input type="text" id="notifyEmail" name="notifyEmail" maxlength="70" class="txt130" size="50" value="$!{timedTaskInfoDO.notifyEmail}"/>
+		</td>
+	</tr>
+
+	 <tr  class="otherValueClass">
+		<td class="lbl" >通知手机：</td>
+		<td>
+			<input type="text" id="notifyPhone" name="notifyPhone" maxlength="70" class="txt130" size="50" value="$!{timedTaskInfoDO.notifyPhone}"/>
+		</td>
+	</tr>
+
+	<tr  class="otherValueClass">
+		<td class="lbl" >重试间隔时间(s)：<font color="red">*</font></td>
+		<td>
+			<input type="text" id="retryTimeInterval" name="retryTimeInterval" maxlength="70" class="txt130" size="50" value="$!{timedTaskInfoDO.retryTimeInterval}"/>
+		</td>
+	</tr>
+
+
+	<tr>
+		<td colspan="6" align="center"><a href="#" class="btn2" id="queryBtn" onclick="saveAddOprate()">保存</a></td>
+	</tr>
+</table>
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+<script type="text/javascript">
+    //保存
+    function saveAddOprate(){
+        var id = $("#id").val();
+		var notifyEmail = $("#notifyEmail").val();
+		var notifyPhone = $("#notifyPhone").val();
+		var effectiveTime = $("#effectiveTime").val();
+		var retryTimes = $("#retryTimes").val();
+		var retryTimeInterval = $("#retryTimeInterval").val();
+    	var data = {id:id,notifyEmail:notifyEmail,notifyPhone:notifyPhone,effectiveTime:effectiveTime,retryTimes:retryTimes,retryTimeInterval:retryTimeInterval};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/taskinfo/updateTimedTaskInfo.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("修改成功");
+					window.close();
+				}
+		    }
+		});
+    }
+</script>

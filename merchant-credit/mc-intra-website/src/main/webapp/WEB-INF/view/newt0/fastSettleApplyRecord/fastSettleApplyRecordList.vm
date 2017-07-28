@@ -1,0 +1,127 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<style>
+<!--   -->
+.zxx_text_overflow{width:5em; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+.zxx_text_overflow:hover{ text-overflow:display; -o-text-overflow:display; overflow:display;}
+
+.divcss5{width:50px;height:24px;line-height:24px; font-size:12px;overflow:hidden;text-overflow:ellipsis;-o-text-overflow:ellipsis;} 
+.divcss5:hover{ color:#333} 
+
+</style>
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>id</td>
+		<td>盛付通商户号</td>
+		<td>商户类型</td>
+		<td>MSP结算订单号</td>
+		<td>申请结算时间</td>
+		<td>出款时间</td>
+		<td>结算手续费</td>
+		<td>申请状态</td>
+		<td>出款状态</td>
+		<td>退费成功时间</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>$!{o.mfqId}&nbsp;</td>
+		<td>$!{o.merchantNo}&nbsp;</td>
+		<td>
+		#if("$!{o.mcType}"=="0001")
+		普通POS商户
+		#elseif("$!{o.mcType}"=="0006")
+		 mPOS商户
+		#else $!{o.mcType}&nbsp;
+		 #end</td>
+		<td>$!{o.settleBillNo}&nbsp;</td>
+		<td>#showDateTime($!{o.applyTime})</td>
+		<td>#showDateTime($!{o.withdrawResponseTime})</td>
+		<td>$!{o.fastSettleFee}</td>
+		<td>
+		<div class="zxx_text_overflow">
+		#if("$!{o.status}"=="0")
+			成功
+		#elseif("$!{o.status}"=="1")
+			商户无权限，或额度配制错误
+		#elseif("$!{o.status}"=="2")
+			代理商无权限，或额度配制错误
+		#elseif("$!{o.status}"=="3")	
+			商户额度不足
+		#elseif("$!{o.status}"=="4")	
+		          代理商额度不足	
+		#elseif("$!{o.status}"=="5")	
+			存在非法订单
+		#elseif("$!{o.status}"=="6")	
+			请求订单数太多
+		#elseif("$!{o.status}"=="7")	
+			入账失败
+		#elseif("$!{o.status}"=="8")	
+			结算失败
+		#elseif("$!{o.status}"=="9")	
+			提交金额低于下限
+		#elseif("$!{o.status}"=="10")	
+			风控拒绝
+		#elseif("$!{o.status}"=="11")	
+			当前时段不允许发起快速结算
+		#elseif("$!{o.status}"=="12")	
+			商户快速结算规则未配置或已失效
+		#elseif("$!{o.status}"=="13")	
+			不支持的结算卡机构
+		#elseif("$!{o.status}"=="14")	
+			不支持的卡类型
+		#elseif("$!{o.status}"=="15")	
+			不支持的卡产品编号
+		#elseif("$!{o.status}"=="16")	
+			当前时间不在结算规则生效时间范围内
+		#elseif("$!{o.status}"=="17")	
+			提现失败
+		#elseif("$!{o.status}"=="99")	
+			未知错误
+		#elseif("$!{o.status}"=="-1")	
+			初始
+	    #else
+	                     调用异常
+		#end
+		</div>
+		</td>
+		<td>
+		#if("$!{o.subStatus}"=="0")
+			已提交
+		#elseif("$!{o.subStatus}"=="1")
+			已结算
+		#elseif("$!{o.subStatus}"=="2")
+			已结算可退费
+		#elseif("$!{o.subStatus}"=="3")
+			退费中
+		#elseif("$!{o.subStatus}"=="4")
+			退费成功
+		#elseif("$!{o.subStatus}"=="5")	
+			退费失败
+		#elseif("$!{o.subStatus}"=="6")	
+			MSP异常订单
+		#elseif("$!{o.subStatus}"=="7")	
+			出款失败
+		#end
+		</td>
+		<td>
+			#if("$!{o.subStatus}"=="4")
+				#showDateTime($!{o.updateTime})
+			#end
+		</td>
+		<td>
+			## mpos不能退费
+			#if("$!{o.subStatus}"=="2")
+				<a class="lk1" href="javascript:remitSettleFee('$!{o.mfqId}');">退费</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>
+<script type="text/javascript">
+	jQuery("div.zxx_text_overflow").mouseover(function(){
+		jQuery(this).parent().attr("title",jQuery.trim(jQuery(this).html()));
+	});
+</script>
+

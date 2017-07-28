@@ -1,0 +1,50 @@
+<p class="Split">
+#if($query)
+	共$query.totalRowCount条记录，第$query.pageNO页/共$query.totalPageCount页
+	<a href="javascript:gotoPage('$formName', 1);">第一页</a>
+    #if($query.pageNO>1)
+		#set($previousPage=${query.pageNO} - 1)
+    	<a href="javascript:gotoPage('$formName', $previousPage);">前一页</a>
+	#end
+	#set ($temp=$query.pageNO/5)
+    #if($query.pageNO%5==0)
+    	#set ($n= $temp - 1)
+    #else
+    	#set ($n = $temp)
+    #end
+
+    #set ($leftPreviousePage=$n*5)
+    #set ($leftPage=$leftPreviousePage + 1)
+    #if($query.pageNO>5)
+    	<a href="javascript:gotoPage('$formName', $leftPreviousePage);">...</a>
+    #end
+
+    #set($curRightPage=$n*5+5)
+	#if($query.totalPageCount == 0)
+		#set ($rightPage=$leftPage)
+    #elseif($query.totalPageCount>$curRightPage)
+    	#set ($rightPage=$curRightPage)
+    #else
+    	#set ($rightPage=$query.totalPageCount)
+	#end
+    #foreach( $velocityCount in [$leftPage..$rightPage] )
+    	#if($velocityCount!=$query.pageNO)
+    		<a href="javascript:gotoPage('$formName', $velocityCount);">$velocityCount</a>
+    			#else
+    		<b>$velocityCount</b>
+    	#end
+    #end
+
+    #if($query.totalPageCount > $rightPage)
+    	#set ($rightNextPage=$rightPage + 1)
+    	<a href="javascript:gotoPage('$formName', $rightNextPage);">...</a>
+    #end
+    #if($query.pageNO < $query.totalPageCount)
+		#set($nextPage=${query.pageNO} + 1)
+    	<a href="javascript:gotoPage('$formName', $nextPage);">后一页</a>
+    #end
+    <a href="javascript:gotoPage('$formName', $query.totalPageCount);">最末页</a>
+    #else
+	第1页/共1页
+#end
+</p>

@@ -1,0 +1,147 @@
+ ##商户号、商户名称、结算时间（结算成功时间）、结算类型（T0）
+<form action="#relativeUrl('/profits/query.do')" method="post" id="submitForm" name="submitForm">
+	<div class="caption">#if("${MC_MERCHANT_USER.currentMcType}"=="0003")T0分润查询#else分润明细-提现部分 #end</div>
+	<table width="80%" class="qryTb">
+		<tr>
+			<td class="lbl">商户号：</td>
+			<td><input type="text" id="merchantNo" name="merchantNo" value="$!page.merchantNo" class="txt w120"></td>
+			<td class="lbl">商户名称：</td>
+			<td><input type="text" id="merchantName" name="merchantName" value="$!page.merchantName" class="txt w120"></td>
+
+			<td class="lbl">
+			#if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+			结算类型：
+			#else
+			提现类型：
+			#end
+			</td>
+			<td>
+				<select name="settleType" id="settleType" style="width:120px;">
+					<option value="" selected>全部</option>
+					#foreach($sts in $!{settleTypes})
+					<option value="$!{sts.code}">$!{sts.type}</option>
+					#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<input type="hidden" id="currentMcType" name="currentMcType" value="${MC_MERCHANT_USER.currentMcType}"/>
+			#if("${MC_MERCHANT_USER.currentMcType}"=="0007")
+			<td class="lbl">商户类别：</td>
+			<td><input type="text" id="mcc" name="mcc" value="$!page.mcc" class="txt w120"></td>
+			#end
+			<td class="lbl">
+			#if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+			出款成功时间：
+			#else
+			提现成功时间：
+			#end</td>
+			<td colspan="4">
+				<input type="text" id="queryStartTime" name="queryStartTime" class="txt w180 date" onclick="xDatePicker2(2);" readonly="readonly" value="$!page.queryStartTime">
+				~
+				<input type="text" id="queryEndTime" name="queryEndTime" class="txt w180 date" onclick="xDatePicker2(2);" readonly="readonly" value="$!page.queryEndTime">
+				<font color="#aaa">查询时间范围仅今天之前的数据（不包括今天）</font>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="8" align="center">
+				<a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();">查询</a>
+				<a href="#" class="btn2" id="queryBtn" onclick="javascript:exportFile();return false;">下载</a>
+				<a href="#" class="btn2" id="queryBtn" onclick="javascript:summary();return false;">汇总</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="8" align="left">
+			  #if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+				<span class="red">注：<br/>
+                                  1、本页面数据仅供参考，最终分润数据以每月的分润对账单为准！<br/>
+                                  2、分润产生是以出款成功时间为准，而不是以出款发起时间为准。例如：12月31日发起出款，1月1日出款成功，则可以在1月1日的分润明细中查询到。
+
+                </span>
+               	#else
+			   <span class="red">注：<br/>
+                                  1、本页面数据仅供参考，最终分润数据以每月的分润对账单为准！<br/>
+                                  2、分润产生是以提现成功时间为准，而不是以提现发起时间为准。例如：12月31日发起提现，1月1日提现成功，则可以在1月1日的分润明细中查询到。
+
+                </span>
+                #end
+			</td>
+		</tr>
+	</table>
+	<!--分页容器-->
+	<div id="container"></div>
+</form>
+<div id="pop1" style="display:none;position:absolute; top:0;bottom:0;left:0;right:0;opacity:0.9; background:#999; z-index: 9999;">
+ <div class="popup"  style="margin-top:-140px;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"><font color="#ffffff" style="font-size: 16px;font-weight: bold;">分润汇总</font></a>
+	</p>
+	<div id="summary_div" class="popup-container">
+
+	</div>
+	<p class="popup-tlc"><a href="javascript:void(0);" class="popup-cancel g-button" onclick="hidePop1();">关闭</a></p>
+</div>
+</div>
+<script type="text/javascript">
+	var ALL_COND_ID = [ "queryStartTime", "queryEndTime", "settleType","merchantNo", "merchantName",#if("${MC_MERCHANT_USER.currentMcType}"=="0007") "mcc" #end];
+	//ajax翻页
+	function ajaxPaging() {
+		loading(!0);
+		var currentPage = jQuery("#pageNum_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"pageNum" : currentPage
+		};
+		for (i in ALL_COND_ID) {
+			var val = document.getElementById(ALL_COND_ID[i]).value;
+			if (val != "") {
+				data[ALL_COND_ID[i]] = val;
+			}
+		}
+		data['timestamp'] = new Date().getTime();
+		jQuery.ajax({
+			type : 'POST',
+			url : "#relativeUrl('/profits/query.htm')",
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+				loading(!1);
+			}
+		});
+	}
+	function exportFile() {
+		var currentMcType = document.getElementById("currentMcType").value;
+		if(currentMcType == '0003'){
+		$('#submitForm').attr('action', '#relativeUrl('/profits/downloads/view.do')');
+		}else{
+		$('#submitForm').attr('action', '#relativeUrl('/profits/mposDownloads/view.do')');
+		}
+		$('#submitForm').submit();
+	}
+
+	function summary() {
+		var data = {};
+		for (i in ALL_COND_ID) {
+			var val = document.getElementById(ALL_COND_ID[i]).value;
+			if (val != "") {
+				data[ALL_COND_ID[i]] = val;
+			}
+		}
+		data['timestamp'] = new Date().getTime();
+		jQuery.ajax({
+			type : 'POST',
+			url : "#relativeUrl('/profits/summary.htm')",
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#pop1 .popup-container").empty().append(data);
+				jQuery("#pop1").show();
+			}
+		});
+	}
+	function hidePop1(){
+		//jQuery("#pop1 .popup-container .ttl").html("");
+		jQuery("#pop1").hide();
+	}
+</script>

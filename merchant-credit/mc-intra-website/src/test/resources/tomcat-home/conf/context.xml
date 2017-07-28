@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The contents of this file will be loaded for each web application --><Context>
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <!-- Uncomment this to disable session persistence across Tomcat restarts -->
+    <!--
+    <Manager pathname="" />
+    -->
+
+    <!-- Uncomment this to enable Comet connection tacking (provides events
+         on session expiration as well as webapp lifecycle) -->
+    <!--
+    <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
+    -->
+
+	<!--  <Resource name="mcDataSource" auth="Container"
+                driverClassName="oracle.jdbc.driver.OracleDriver"
+                maxActive="5"
+                maxIdle="2"
+                maxWait="10000"
+                username="mcredituser"
+                password="mcredituser"
+                type="javax.sql.DataSource"
+                url="jdbc:oracle:thin:@10.132.81.134:1521:dsdb1" /> -->
+	 <Resource name="mcDataSource" auth="Container"
+                driverClassName="oracle.jdbc.driver.OracleDriver"
+                maxActive="5"
+                maxIdle="2"
+                maxWait="10000"
+                username="mcredituser"
+                password="mcredituser"
+                type="javax.sql.DataSource"
+                url="jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:SNDAPAY" />
+
+    <Resource name="ppcPayDataSource" auth="Container"
+                driverClassName="oracle.jdbc.driver.OracleDriver"
+                maxActive="5"
+                maxIdle="2"
+                maxWait="10000"
+                username="ppcpayuser"
+                password="ppcpayuser"
+                type="javax.sql.DataSource"
+                url="jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:SNDAPAY" />
+<!--     <Resource name="ppcPayDataSource" auth="Container" -->
+<!--                 driverClassName="oracle.jdbc.driver.OracleDriver" -->
+<!--                 maxActive="5" -->
+<!--                 maxIdle="2" -->
+<!--                 maxWait="10000" -->
+<!--                 username="ppcpayuser" -->
+<!--                 password="ppcpayuser" -->
+<!--                 type="javax.sql.DataSource" -->
+<!--                 url="jdbc:oracle:thin:@10.132.81.134:1521:dsdb1" /> -->
+</Context>

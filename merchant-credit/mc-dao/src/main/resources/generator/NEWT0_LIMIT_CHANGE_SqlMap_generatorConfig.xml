@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="D:\maven\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.newt0.dao" targetProject="D:\workspace\trunk\mc-dao\src\main\java\">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+ <!--    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="D:\workspace\trunk\mc-dao\src\test\java\">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator> -->
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.newt0.dao.mapper"  targetProject="D:\workspace\trunk\mc-dao\src\main\java\">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.newt0.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.newt0.manager" implementationPackage="com.sdp.mc.newt0.manager.impl" generatorEnable="true"  targetProject="D:\workspace\trunk\mc-dao\src\main\java\">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	 <table tableName="NEWT0_MC_LIMIT_CHANGE_DTL" domainObjectName="Newt0McLimitChangeDtlDO">
+		<generatedKey column="CHANGE_ID"  sqlStatement="select SEQ_MC_LIMIT_CHANGE_DTL.nextval from dual" type="pre" />
+    	<columnOverride column="CHANGE_ID" 							property="changeId" 						javaType="java.lang.Long" />
+    	<columnOverride column="REQ_ID" 							property="reqId" 						javaType="java.lang.Long" />
+    	<columnOverride column="CFM_ID" 							property="cfmId" 						javaType="java.lang.Long" />
+    	<columnOverride column="STATUS" 						property="status" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table> 
+	<table tableName="NEWT0_MC_LIMIT_CHANGE_REQ" domainObjectName="Newt0McLimitChangeReqDO">
+		<generatedKey column="REQ_ID"  sqlStatement="select SEQ_MC_LIMIT_CHANGE_REQ.nextval from dual" type="pre" />
+    	<columnOverride column="REQ_ID" 							property="reqId" 						javaType="java.lang.Long" />
+    	<columnOverride column="STATUS" 						property="status" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="REQ_NUM" 						property="reqNum" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="REQ_TYPE" 						property="reqType" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="SUCCESS_NUM" 						property="successNum" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="FAIL_NUM" 						property="failNum" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="REQ_TIME" 					property="reqTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table>
+  </context>
+</generatorConfiguration>

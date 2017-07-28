@@ -1,0 +1,525 @@
+<div style="width:100%;height:30px;position: absolute;z-index:999">
+	<ul class="mnMain" id="$mnMain" >
+		#if(${MC_MERCHANT_USER.isPosPromoterType})
+		<li class="menu$posPromoter" style="display: none;">商户管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("promoterAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/applyPosm/toQueryApplyPosm.do" name="menu$posPromoter">进件查询</a></li>#end
+				#if($MCUtil.canAccessMenu("merchantAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/posMerchantAdmin/toQueryPosMerchant.do" name="menu$posPromoter">商户查询</a></li>#end
+				#if($MCUtil.canAccessMenu("terminalAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/terminalAdmin/toQueryTerminal.do" name="menu$posPromoter">终端查询</a></li>#end
+				#if($MCUtil.canAccessMenu("eventQuery",$request))<li><a class="menu" href="${MSPContextPath}/common/eventAdmin/toQueryEvent.do?mType$=posPromoter" name="menu$posPromoter">事件查询</a></li>#end
+				#if($MCUtil.canAccessMenu("ucEventQuery",$request))
+						<li><a class="menu" href="${MSPContextPath}/uc/common/eventAdmin/toQueryEvent.do?mType$=posPromoter" name="menu$posPromoter">银联事件查询</a></li>
+					#end
+					#if($MCUtil.canAccessMenu("settPayPosQuery",$request))
+						<li><a class="menu" href="${MSPContextPath}/posPromoter/posMerchantAdmin/toQuerySettPay.do" name="menu$posPromoter">支付业务查询</a></li>
+					#end
+					#if(${MC_MERCHANT_USER.isBatchPromoter})
+						#if($MCUtil.canAccessMenu("batchHandle",$request))
+							<li><a class="menu" href="${MSPContextPath}/posPromoter/merchantBatchFile/toQueryBatch.do" name="menu$posPromoter">批量进件</a></li>
+						#end
+					#end
+					#if($MCUtil.canAccessMenu("merchantOnsiteRegisterApp",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/posPromoter/merchantOnsiteRegister/toQueryMerchantOnsiterRegister.do"
+							name="menu$posPromoter">现场注册查询</a></li>
+					#end
+					#if($MCUtil.canAccessMenu("merchantRateAdminPos",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/posPromoter/posMerchantAdmin/toQueryPosMerchantRate.do"
+							name="menu$posPromoter">96价改重签费率登记</a></li>
+					#end
+
+					#if($MCUtil.canAccessMenu("promoterAdminUpdatePos",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/posPromoter/updateApplyPosm/toQueryUpdateApplyPosm.do"
+							name="menu$posPromoter">商户资质更新</a></li>
+					#end
+                    ##<li><a class="menu" href="${MSPContextPath}/common/main/cmTop.do" name="menu$posPromoter">资管同步菜单</a></li>
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none;">交易管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("txnAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/txn/toQueryTxn.do" name="menu$posPromoter">交易查询</a></li>#end
+				#if($MCUtil.canAccessMenu("transInvAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/transInv/queryInv/toQueryInv.do?mType$=posPromoter" name="menu$posPromoter">调单查询</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none;">分润管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("profitAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/profit/toQueryProfitSettleOrder.do" name="menu$posPromoter">分润对账单</a></li>#end
+				#if($MCUtil.canAccessMenu("profitQueryPosT0",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/settle/order/index.htm" name="menu$mposPromoter">T0分润对账单</a></li>#end
+				#if($MCUtil.canAccessMenu("settleProfitFeeNode",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/settleProfitFee/toQuerySettleProfitFee.do" name="menu$posPromoter">结算分润查询</a></li>#end
+				#if($MCUtil.canAccessMenu("settleProfitFeeNodeT0",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/profits/toquery.htm" name="menu$mposPromoter">T0分润查询</a></li>#end
+				#if($MCUtil.canAccessMenu("paymentProfitFeeNode",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/acceptanceProfitFee/toQueryAcceptanceProfitFee.do" name="menu$posPromoter">收单分润查询</a></li>#end
+				##if($MCUtil.canAccessMenu("paymentOnsiteRegsiterProfitFee",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/underPromoter/queryUnderPromoter/index.htm" name="menu$posPromoter">下级分润配置（结算）</a></li>#end
+				#if($MCUtil.canAccessMenu("paymentOnsiteRegsiterProfitFee",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/posPromoter/acceptanceOnsiteRegsiterProfitFee/toQueryAcceptanceOnsiteRegsiterProfitFee.do"
+							name="menu$posPromoter">现场注册奖励分润查询</a></li>
+					#end
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none;">机具管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("posOrderAdminQry",$request))
+					<li><a class="menu" href="${MSPContextPath}/posPromoter/sp/order/toQueryOrder.do" name="menu$posPromoter">订单管理</a></li>
+				#end
+				<li><a class="menu"
+						href="${MSPContextPath}/posPromoter/sp/addr/toQuery.do"
+						name="menu$posPromoter">收货信息</a></li>
+				<li><a class="menu"
+						href="${MSPContextPath}/posPromoter/sp/invoice/toQuery.do"
+						name="menu$posPromoter">发票信息</a></li>
+				#if($MCUtil.canAccessMenu("machineAdminQry",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/posPromoter/machine/toQueryMachineRecord.do"
+							name="menu$posPromoter">机具库存管理</a></li>
+				#end
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none;">信息管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("posPromoterNoticeAdmin",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/notice/toQueryNotice.do" name="menu$posPromoter">通知</a></li>#end
+				<li><a class="menu" href="${MSPContextPath}/common/downloadCenter/toQueryDownloadRecord.do" name="menu$common">文件下载</a></li>
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none;">快速结算
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("agentFastSettleApply4pos",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/agentApply/index.htm" name="menu$posPromoter">在线申请</a></li>#end
+				#if($MCUtil.canAccessMenu("marginMgt4pos",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/additionalMargin/index.htm" name="menu$posPromoter">保证金管理</a></li>#end
+				#if($MCUtil.canAccessMenu("posMerchant4pos",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/toQueryPosMerchant.htm" name="menu$posPromoter">商户T0配置</a></li>#end
+				###if($MCUtil.canAccessMenu("txnAdminPos",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/txn/toQueryTxn.do" name="menu$posPromoter">交易管理</a></li>#end
+				#if($MCUtil.canAccessMenu("merchantFastSettleLog4pos",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/merchantFastsettle/index.htm" name="menu$posPromoter">商户T0出款记录</a></li>#end
+				###if($MCUtil.canAccessMenu("settleProfitFeeNode",$request))<li><a class="menu" href="${MSPContextPath}/posPromoter/settleProfitFee/toQuerySettleProfitFee.do" name="menu$posPromoter">分润管理</a></li>#end
+				###if($MCUtil.canAccessMenu("withFunding4pos",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/funding/index.htm" name="menu$posPromoter">在线申请配资</a></li>#end
+				###if($MCUtil.canAccessMenu("agentFastSettle4PosCfgAssetDtl",$request))<li><a class="menu" href="$rc.contextPath/posPromoter/funding/history.htm" name="menu$posPromoter">配资申请明细</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none;">结算管理
+			<ul class="mnSub mnSubHidden">
+				#if(${MC_MERCHANT_USER.isBatchPromoter})
+					#if($MCUtil.canAccessMenu("promoterAdminDelegateFundOut",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/posPromoter/delegateFundOut/toQueryDelegateFundOut.do"
+							name="menu$posPromoter">出款查询</a></li>
+					#end
+				#end
+			</ul>
+		</li>
+		<li class="menu$posPromoter" style="display: none">云收银管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("cloudCashierMerchantPos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/merchant/index.htm" name="menu$posPromoter">商户查询</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierTradePos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/trade/index.htm" name="menu$posPromoter">交易查询</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierQrcodePos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/qrcode/index.htm" name="menu$posPromoter">二维码管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierChannelPos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/merchant/channel.htm" name="menu$posPromoter">支付渠道管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierRatePos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/qrcoderate/index.htm" name="menu$posPromoter">费率管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayPfsOrder4pos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/easypayPfsOrderIndex.htm" name="menu$mposPromoter">云收银分润结算单</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayEnterpriseAccountPos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/enterpriseAccount/index.htm" name="menu$posPromoter">云收银企业账户管理</a></li>
+				#end
+				###if($MCUtil.canAccessMenu("cloudCashierPurchasePos",$request))
+				##<li><a class="menu" href="$rc.contextPath/posPromoter/easypay/purchase/index.htm" name="menu$posPromoter">二维码采购</a></li>
+				###end
+
+				##云收银pos代理商菜单
+				#if($MCUtil.canAccessMenu("easypayAgentFastSettleApply4pos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/agentApply/index.htm?promoterType=0101" name="menu$posPromoter">在线申请</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayMarginMgt4pos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/additionalMargin/index.htm?promoterType=0101" name="menu$posPromoter">保证金管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayPosMerchant4pos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/toQueryPosMerchant.htm?promoterType=0101" name="menu$posPromoter">商户提现管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayMerchantFastSettleLog4pos",$request))
+				<li><a class="menu" href="$rc.contextPath/posPromoter/merchantFastsettle/index.htm?promoterType=0101" name="menu$posPromoter">商户提现记录</a></li>
+				#end
+				
+			</ul>
+		</li>
+		#end
+
+		#if(${MC_MERCHANT_USER.isPosMerchantType})
+		<li class="menu$posMerchant" style="display: none;">商户管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("terminalAdminPosMerchant",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/terminalAdmin/toQueryTerminal.do" name="menu$posMerchant">终端查询</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$posMerchant" style="display: none;">交易管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("txnQueryPosMerchant",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/txn/toQueryTxn.do" name="menu$posMerchant">交易查询</a></li>#end
+				#if($MCUtil.canAccessMenu("posMerchantStlAdmin",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/statement/toQueryStatement.do" name="menu$posMerchant">对账单查询</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$posMerchant" style="display: none;">结算管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("settleQueryDetail",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/settlementAdmin/detail/toQuery.do" name="menu$posMerchant">结算明细查询</a></li>#end
+				#if($MCUtil.canAccessMenu("settleQueryMerchant",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/settlementAdmin/merchant/toQuery.do" name="menu$posMerchant">商户结算汇总</a></li>#end
+				#if($MCUtil.canAccessMenu("settleQueryTerminal",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/settlementAdmin/terminal/toQuery.do" name="menu$posMerchant">终端结算汇总</a></li>#end
+				#if(${MC_MERCHANT_USER.isGroupMerchantType})
+					#if($MCUtil.canAccessMenu("settleQueryGroup",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/settlementAdmin/group/toQuery.do" name="menu$posMerchant">分组结算汇总</a></li>#end
+				#end
+			</ul>
+		</li>
+		<li class="menu$posMerchant" style="display: none;">信息中心
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("posMerchantNoticeAdmin",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/notice/toQueryNotice.do" name="menu$posMerchant">通知</a></li>#end
+				<li><a class="menu" href="${MSPContextPath}/common/downloadCenter/toQueryDownloadRecord.do" name="menu$common">文件下载</a></li>
+			</ul>
+		</li>
+		<li class="menu$posMerchant" style="display: none;">快速结算
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("posMerchantFastSettleAdmin",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/fastSettle/toQueryFastSettleTxn.do " name="menu$posMerchant">申请交易</a></li>#end
+				##if($MCUtil.canAccessMenu("txnQueryPosMerchant",$request))<li><a class="menu" href="http://msp.sdptest.shengpay.com:8088/msp-web/posMerchant/txn/toQueryTxn.do" name="menu$posMerchant" target="_blank">查询交易11111</a></li>#end
+				#if($MCUtil.canAccessMenu("txnQueryPosMerchant",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/txn/toQueryTxn.do" name="menu$posMerchant">查询交易</a></li>#end
+				#if($MCUtil.canAccessMenu("posMerchantStlAdmin",$request))<li><a class="menu" href="${MSPContextPath}/posMerchant/statement/toQueryStatement.do" name="menu$posMerchant" style="text-decoration: line-through;">查询对账单</a></li>#end
+				#if($MCUtil.canAccessMenu("posMerchantFastSettleStlAdmin",$request))<li><a class="menu" href="$rc.contextPath/posMerchant/withdrawIndex.htm" name="menu$posMerchant">T0结算对账单</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$posMerchant" style="display: none;">天天贷
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("mCreditProductDetail4POS",$request))<li><a class="menu" href="$rc.contextPath/posMerchant/credit/productDetail.htm" name="menu$posMerchant">产品说明</a></li>#end
+				#if($MCUtil.canAccessMenu("mCreditAgree4POS",$request))<li><a class="menu" href="$rc.contextPath/posMerchant/credit/agreeTemp.htm" name="menu$posMerchant">授信协议</a></li>#end
+				#if($MCUtil.canAccessMenu("mCreditLines4POS",$request))<li><a class="menu" href="$rc.contextPath/posMerchant/credit/init.htm" name="menu$posMerchant">额度申请</a></li>#end
+				#if($MCUtil.canAccessMenu("mCreditDebit4POS",$request))<li><a class="menu" href="$rc.contextPath/posMerchant/debit/init.htm" name="menu$posMerchant">借款申请</a></li>#end
+				#if($MCUtil.canAccessMenu("mCreditDebitMgr4POS",$request))<li><a class="menu" href="$rc.contextPath/posMerchant/debit/myDebitOrders.htm" name="menu$posMerchant">借款管理</a></li>#end
+			</ul>
+		</li>
+		#end
+		#if(${MC_MERCHANT_USER.isMposPromoterType})
+		<li class="menu$mposPromoter" style="display: none;">商户管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("merchantAdminMPos",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/mposMerchantAdmin/toQueryMPosMerchant.do" name="menu$mposPromoter">商户查询</a></li>#end
+				#if($MCUtil.canAccessMenu("merchantUnderAdminMPos",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/mposMerchantAdmin/toUnderMposMerchants.do" name="menu$mposPromoter">已注册商户下拨</a></li>#end
+				##if($MCUtil.canAccessMenu("mposDeviceStore",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/deviceStore/toQueryDeviceStore.do" name="menu$mposPromoter">机具查询</a></li>#end
+				##if($MCUtil.canAccessMenu("mposActivatedAdmin",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/deviceActivated/toQueryDeviceActivated.do" name="menu$mposPromoter">刷卡头激活明细</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$mposPromoter" style="display: none;">交易管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("orderAdminMPos",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/order/toQueryOrder.do" name="menu$mposPromoter">交易查询</a></li>#end
+				#if($MCUtil.canAccessMenu("transInvAdminMPos",$request))<li><a class="menu" href="${MSPContextPath}/transInv/queryInv/toQueryInv.do?mType$=mposPromoter" name="menu$mposPromoter">调单查询</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$mposPromoter" style="display: none;">机具管理
+				<ul class="mnSub mnSubHidden">
+					#if($MCUtil.canAccessMenu("mposDeviceStore",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/mposPromoter/deviceStore/toQueryDeviceStore.do"
+							name="menu$mposPromoter">机具查询</a></li>
+					#end
+					#if($MCUtil.canAccessMenu("mposActivatedAdmin",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/mposPromoter/deviceActivated/toQueryDeviceActivated.do"
+							name="menu$mposPromoter">刷卡头激活明细</a></li>
+					#end
+					#if($MCUtil.canAccessMenu("mposQureyUnderPromoterSNAdmin",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/mposPromoter/promoterSN/toQueryUnderPromoterSN.do"
+							name="menu$mposPromoter">机具下拨查询</a></li>
+					#end
+					#if($MCUtil.canAccessMenu("mposQureyBackPromoterSNAdmin",$request))
+						<li><a class="menu"
+							href="${MSPContextPath}/mposPromoter/promoterSN/toQueryBackPromoterSN.do"
+							name="menu$mposPromoter">机具回拨查询</a></li>
+					#end
+				</ul>
+			</li>
+		<li class="menu$mposPromoter" style="display: none;">机具采购
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("mposOrderAdminQry",$request))
+        			<li><a class="menu"
+        				href="${MSPContextPath}/mposPromoter/sp/order/toQueryOrder.do"
+        				name="menu$posPromoter">订单管理</a></li>
+				#end
+    			<li><a class="menu"
+    				href="${MSPContextPath}/mposPromoter/sp/addr/toQuery.do"
+    				name="menu$posPromoter">收货信息</a></li>
+    			<li><a class="menu"
+    				href="${MSPContextPath}/mposPromoter/sp/invoice/toQuery.do"
+    				name="menu$posPromoter">发票信息</a></li>
+			</ul>
+		</li>
+		<li class="menu$mposPromoter" style="display: none;">分润管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("profitAdminMPos",$request))
+					<li><a class="menu"
+						href="${MSPContextPath}/mposPromoter/profit/toQueryProfitSettleOrder.do"
+						name="menu$mposPromoter">分润对账单-刷卡部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("profitQueryMPosT0",$request))
+					<li><a class="menu"
+						href="$rc.contextPath/mposPromoter/settle/order/index.htm"
+						name="menu$mposPromoter">分润对账单-提现部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("paymentProfitFeeNode",$request))
+					<li><a class="menu"
+						href="${MSPContextPath}/mposPromoter/acceptanceProfitFee/toQueryAcceptanceProfitFee.do"
+						name="menu$mposPromoter">分润明细-刷卡部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("settleProfitFeeNodeMposT0",$request))
+					<li><a class="menu"
+						href="$rc.contextPath/mposPromoter/profits/toquery.htm"
+						name="menu$mposPromoter">分润明细-提现部分</a></li>
+				#end
+            </ul>
+        </li>
+
+		<li class="menu$mposPromoter" style="display: none;">下级拓展商管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("mposSetProfitFreeMerchantAdmin",$request))
+					<li><a class="menu"
+                   href="${MSPContextPath}/mposPromoter/profitFreeMerchant/toQueryProfitFreeMerchant.do"
+                     name="menu$mposPromoter">下级拓展商分润配置</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("mposQueryOrderFreeProfitAdmin",$request))
+					<li><a class="menu"
+						href="${MSPContextPath}/mposPromoter/orderFreeProfit/toQueryLowerLevelProfit.do"
+						name="menu$mposPromoter">下级分润-刷卡部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("mposQueryOrderFreeProfitAdminT0",$request))
+					<li><a class="menu"
+						href="$rc.contextPath/mposPromoter/underclerk/profits/toquery.htm"
+						name="menu$mposPromoter">下级分润-提现部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("mposQuerySumSubOrderFreeProfit",$request))
+					<li><a class="menu"
+						href="${MSPContextPath}/mposPromoter/orderFreeProfit/toQuerySumSubOrderFreeProfitResult.do"
+                         name="menu$mposPromoter">下级拓展商分润汇总</a></li>
+				#end
+            </ul>
+        </li>
+		<li class="menu$mposPromoter" style="display: none;">快速结算
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("agentFastSettleApply4pos",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/agentApply/index.htm" name="menu$mposPromoter">在线申请</a></li>#end
+				#if($MCUtil.canAccessMenu("marginMgt4pos",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/additionalMargin/index.htm" name="menu$mposPromoter">保证金管理</a></li>#end
+				##if($MCUtil.canAccessMenu("posMerchant4pos",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/toQueryPosMerchant.htm" name="menu$mposPromoter">商户管理</a></li>#end
+				#if($MCUtil.canAccessMenu("posMerchant4pos",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/toQueryPosMerchant.htm" name="menu$mposPromoter">商户提现管理</a></li>#end
+
+				###if($MCUtil.canAccessMenu("orderAdminMPos",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/order/toQueryOrder.do" name="menu$mposPromoter">交易管理</a></li>#end
+				#if($MCUtil.canAccessMenu("merchantFastSettleLog4Mpos",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/merchantFastsettle/index.htm" name="menu$mposPromoter">商户提现记录</a></li>#end
+				###if($MCUtil.canAccessMenu("settleProfitFeeNode",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/settleProfitFee/toQuerySettleProfitFee.do" name="menu$mposPromoter">分润管理</a></li>#end
+
+				###if($MCUtil.canAccessMenu("withFunding4pos",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/funding/index.htm" name="menu$mposPromoter">在线申请配资</a></li>#end
+				###if($MCUtil.canAccessMenu("agentFastSettle4MPosCfgAssetDtl",$request))<li><a class="menu" href="$rc.contextPath/mposPromoter/funding/history.htm" name="menu$mposPromoter">配资申请明细</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$mposPromoter" style="display: none">云收银管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("cloudCashierMerchantMpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/merchant/index.htm" name="menu$mposPromoter">商户查询</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierTradeMpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/trade/index.htm" name="menu$mposPromoter">交易查询</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierQrcodeMpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/qrcode/index.htm" name="menu$mposPromoter">二维码管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierChannelMPos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/merchant/channel.htm" name="menu$mposPromoter">支付渠道管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierRateMPos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/qrcoderate/index.htm" name="menu$mposPromoter">费率管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayPfsOrder4Mpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/easypayPfsOrderIndex.htm" name="menu$mposPromoter">云收银分润结算单</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayEnterpriseAccountMPos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/enterpriseAccount/index.htm" name="menu$posPromoter">云收银企业账户管理</a></li>
+				#end
+				###if($MCUtil.canAccessMenu("cloudCashierPurchaseMPos",$request))
+				##<li><a class="menu" href="$rc.contextPath/mposPromoter/easypay/purchase/index.htm" name="menu$mposPromoter">二维码采购</a></li>
+				###end
+				##云收银mpos代理商菜单
+				#if($MCUtil.canAccessMenu("easypayAgentFastSettleApply4Mpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/agentApply/index.htm?promoterType=0101" name="menu$mposPromoter">在线申请</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayMarginMgt4Mpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/additionalMargin/index.htm?promoterType=0101" name="menu$mposPromoter">保证金管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayPosMerchant4Mpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/toQueryPosMerchant.htm?promoterType=0101" name="menu$mposPromoter">商户提现管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("easypayMerchantFastSettleLog4Mpos",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPromoter/merchantFastsettle/index.htm?promoterType=0101" name="menu$mposPromoter">商户提现记录</a></li>
+				#end
+				##云收银分润结算单
+				
+			</ul>
+		</li>
+		<li class="menu$mposPromoter" style="display: none;">信息管理
+        	<ul class="mnSub mnSubHidden">
+        		#if($MCUtil.canAccessMenu("mposPromoterNoticeAdmin",$request))<li><a class="menu" href="${MSPContextPath}/mposPromoter/notice/toQueryNotice.do" name="menu$mposPromoter">通知</a></li>#end
+        		<li><a class="menu" href="${MSPContextPath}/common/downloadCenter/toQueryDownloadRecord.do" name="menu$common">文件下载</a></li>
+        	</ul>
+        </li>
+		#end
+
+		#if(${MC_MERCHANT_USER.isMposSDKPromoterType})
+		<li class="menu$mposSDK" style="display: none;">注册商户管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("mposSdkBatchRegUpload",$request))<li><a class="menu" href="${MSPContextPath}/mposSDK/batchReg/toUploadBatchReg.do" name="menu$mposSDK">批量注册商户</a></li>#end
+				#if($MCUtil.canAccessMenu("mposSdkBatchRegQuery",$request))<li><a class="menu" href="${MSPContextPath}/mposSDK/batchRegQry/toBatchRegQry.do" name="menu$mposSDK">注册结果查询</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$mposSDK" style="display: none;">提现管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("mposSdkWithdrawQuery",$request))<li><a class="menu" href="${MSPContextPath}/mposSDK/withdrawDepositSet/toWithdrawDepositSetQry.do" name="menu$mposSDK">提现设置</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$mposSDK" style="display: none;">LOGO管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("mposSdkUploadLogo",$request))<li><a class="menu" href="${MSPContextPath}/mposSDK/uploadLogo/toUploadLogo.do" name="menu$mposSDK">上传LOGO名称</a></li>#end
+			</ul>
+		</li>
+		<li class="menu$mposSDK" style="display: none">下载中心
+			<ul class="mnSub mnSubHidden">
+				<li><a class="menu" href="${MSPContextPath}/common/downloadCenter/toQueryDownloadRecord.do" name="menu$common">文件下载</a></li>
+			</ul>
+		</li>
+		#end
+
+		#if(${MC_MERCHANT_USER.isFactoryType})
+		<li class="menu$factory" style="display: none;">机具管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("fcyOrderAdminQry",$request))
+					<li><a class="menu" href="${MSPContextPath}/factory/sp/order/toQueryOrder.do" name="menu$factory">订单管理</a></li>
+				#end
+			</ul>
+		</li>
+		<li class="menu$factory" style="display: none;">信息管理
+			<ul class="mnSub mnSubHidden">
+				<li><a class="menu" href="${MSPContextPath}/common/downloadCenter/toQueryDownloadRecord.do" name="menu$common">文件下载</a></li>
+			</ul>
+		</li>
+		#end
+
+	#if(${MC_MERCHANT_USER.isMposPartnerPromoterType})
+		<li class="menu$mposPartnerPromoter" style="display: none">商户管理
+		<ul class="mnSub mnSubHidden">
+		  #if($MCUtil.canAccessMenu("mposPartnerAdminMPos",$request))<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/mposMerchantAdmin/toQueryMPosMerchant.do" name="menu$mposPartnerPromoter">商户查询</a></li>#end
+		  #if($MCUtil.canAccessMenu("mposPartnerUnderMerchantAdmin",$request))<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/mposMerchantAdmin/toUnderMposMerchants.do" name="menu$mposPartnerPromoter">已注册商户下拨</a></li>#end
+		  #if($MCUtil.canAccessMenu("mposPartnerBackMerchantAdmin",$request))<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/mposMerchantAdmin/toBackMposMerchantsToParent.do" name="menu$mposPartnerPromoter">已注册商户回拨</a></li>#end
+		</ul>
+		</li>
+		<li class="menu$mposPartnerPromoter" style="display: none">交易管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("orderAdminMposPartner",$request))
+					<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/order/toQueryOrder.do" name="menu$mposPartnerPromoter">交易查询</a></li>
+				#end
+			</ul>
+		</li>
+		<li class="menu$mposPartnerPromoter" style="display: none">机具管理
+			<ul class="mnSub mnSubHidden">
+			 #if($MCUtil.canAccessMenu("mposPartnerQureySNAdmin",$request))
+				<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/deviceStore/toQueryDeviceStore.do" name="menu$mposPartnerPromoter">机具查询</a></li>
+			 #end
+			 #if($MCUtil.canAccessMenu("mposPartnerActivatedAdmin",$request))
+				<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/deviceActivated/toQueryDeviceActivated.do" name="menu$mposPartnerPromoter">刷卡头激活明细</a></li>
+			 #end
+    		 #if($MCUtil.canAccessMenu("mposPartnerQureyUnderSNAdmin",$request))
+    			<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/promoterSN/toQueryUnderPromoterSN.do" name="menu$mposPartnerPromoter">机具下拨查询</a></li>
+			 #end
+			 #if($MCUtil.canAccessMenu("mposPartnerQureyBackSNAdmin",$request))
+				<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/promoterSN/toQueryBackPromoterSN.do" name="menu$mposPartnerPromoter">机具回拨查询</a></li>
+			 #end
+			</ul>
+		</li>
+		<li class="menu$mposPartnerPromoter" style="display: none">分润管理
+			<ul class="mnSub mnSubHidden">
+			   #if($MCUtil.canAccessMenu("mposPartnerQueryFreeProfitAdmin",$request))
+				<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/orderFreeProfit/toQueryOrderFreeProfit.do" name="menu$mposPartnerPromoter">本级分润-刷卡部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("mposPartnerQueryFreeProfitAdmT0",$request))<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/oneself/profits/toquery.htm" name="menu$mposPartnerPromoter">本级分润-提现部分</a></li>#end
+		</ul>
+		</li>
+		#if(${MC_MERCHANT_USER.currentlevel} && ${MC_MERCHANT_USER.currentlevel} lt 5)
+		<li class="menu$mposPartnerPromoter" style="display: none">下级拓展商管理
+		   <ul class="mnSub mnSubHidden">
+				  #if($MCUtil.canAccessMenu("mposPartnerProfitFreeMerchantAdmin",$request))
+			      <li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/profitFreeMerchant/toQueryProfitFreeMerchant.do"
+                       name="menu$mposPartnerPromoter">下级拓展商分润配置</a></li>
+                   #end
+				 #if($MCUtil.canAccessMenu("mposPartnerQueryFreeProfitAdmin",$request))
+				<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/orderFreeProfit/toQueryLowerLevelProfit.do" name="menu$mposPartnerPromoter">下级分润-刷卡部分</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("mposPartnerQueryFreeProfitAdmT0",$request))<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/underclerk/profits/toquery.htm" name="menu$mposPartnerPromoter">下级分润-提现部分</a></li>#end
+				#if($MCUtil.canAccessMenu("mposPartnerSumSubOrderProfit",$request))
+				<li><a class="menu" href="${MSPContextPath}/mposPartnerPromoter/orderFreeProfit/toQuerySumSubOrderFreeProfitResult.do" name="menu$mposPartnerPromoter">下级拓展商分润汇总</a></li>
+				#end
+			</ul>
+		</li>
+        #end
+		 <li class="menu$mposPartnerPromoter" style="display: none">云收银管理
+			<ul class="mnSub mnSubHidden">
+				#if($MCUtil.canAccessMenu("cloudMerchantPartnerPromoter",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/easypay/merchant/index.htm" name="menu$mposPartnerPromoter">商户查询</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudTradeMposPartnerPromoter",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/easypay/trade/index.htm" name="menu$mposPartnerPromoter">交易查询</a></li>
+				#end
+				<!-- #if($MCUtil.canAccessMenu("cloudQrcodeMposPartnerPromoter",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/easypay/qrcode/index.htm" name="menu$mposPartnerPromoter">二维码管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudChannelMposPartnerPromoter",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/easypay/merchant/channel.htm" name="menu$mposPartnerPromoter">支付渠道管理</a></li>
+				#end
+				#if($MCUtil.canAccessMenu("cloudCashierRateMPosPartnerPromoter",$request))
+				<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/easypay/qrcoderate/index.htm" name="menu$mposPartnerPromoter">费率管理</a></li>
+				#end-->
+			</ul>
+		</li>
+		<li class="menu$mposPartnerPromoter" style="display: none">信息管理
+			<ul class="mnSub mnSubHidden">
+				<li><a class="menu" href="${MSPContextPath}/common/downloadCenter/toQueryDownloadRecord.do" name="menu$common">文件下载</a></li>
+				<li><a class="menu" href="$rc.contextPath/mposPartnerPromoter/easypay/merchant/channel.htm" name="menu$posPromoter">支付渠道管理</a></li>
+			</ul>
+		</li>
+
+		#end
+
+
+		#if(${MC_MERCHANT_USER.adminFlag} && !${MC_MERCHANT_USER.isMposPartnerPromoterType})
+		<li class="menu$common" style="display: none">角色管理
+			<ul class="mnSub mnSubHidden">
+				<li><a class="menu" href="${MSPContextPath}/common/authorize/toQueryRole.do" name="menu$common">角色设置</a></li>
+			</ul>
+		</li>
+
+		#end
+	</ul>
+</div>
+<script>
+	window['$mnMain'] = new MyMenu( '$mnMain', '$mnMain' );
+	window['$mnMain'].setCurrentLabel('$!{label}','$!{mType}');
+	window['$mnMain'].init('$!{mType}');
+	window['$mnMain'].highLightMenu('$!{mType}');
+	addEvent( window, 'resize', function(){} );
+	#**
+	var r1,r2,r3;
+	#if($MCUtil.canAccessMenu("posPromoterNotice",$request))r1 = 'posPromoter'#end
+	#if($MCUtil.canAccessMenu("mposPromoterNotice",$request))r2 = 'mposPromoter'#end
+	#if($MCUtil.canAccessMenu("posMerchantNotice",$request))r3 = 'posMerchant'#end
+	window.onload=function(){
+		var	label=window['$mnMain'].vars.currentLabel;
+		if((label!=r1)&&(label!=r2)&&(label!=r3)){
+			return;
+		}
+		var fn='$!{thisFn}';
+		if(fn=='fastSettle/agentApply/index'){
+			loadIndexPage(label);
+		}
+	}
+	**#
+</script>

@@ -1,0 +1,300 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">额度规则编辑</div>
+<form name="lambdaForm" action="#springUrl('/limitrule/saveEdit.do')">
+	<input type="hidden" id="ruleId" name="id" value="$!{entity.id}"/>
+	<input type="hidden" id="ruleLambda" name="ruleLambda" value='$!{entity.ruleLambda}'/>
+	<input type="hidden" id="createDate" name="createDate" value="$!{entity.createDate}"/>
+	<input type="hidden" id="ruleName" name="ruleName" value="$!{entity.ruleName}"/>
+</form>
+<table class="dtlTb" cellspacing="0" cellpadding="0" style="width:98%;">
+    <tr>
+    	<td class="lbl" width="100">应用场景：</td>
+        <td width="150">
+        	<input type="text" id="ruleNameShow" readonly="readonly" maxlength="32" value="$!{entity.ruleName}" class="txt130" size="32"/>
+        </td>
+   		<td class="lbl" width="100">规则状态：</td>
+        <td width="200" style="text-align: left;line-height: normal;">
+         <input id="u19_input" type="radio" value="1" name="status" checked=""><label for="u19_input">启用</label>
+         <input id="u11_input" type="radio" value="0" name="status">   <label for="u11_input">禁用  </label>
+        </td>
+    </tr>
+     <tr>
+   		<td class="lbl" width="100">时间范围：</td>
+        <td colspan="3">
+        	&nbsp;#showDateTime($!{startTime}) &nbsp;到&nbsp;#showDateTime($!{endTime})
+        </td>
+    </tr>
+     <tr>
+        <td colspan="4">
+        
+        	<table class="dtlTb" cellspacing="0" cellpadding="0" width="90%">
+        	    <tr>
+		        	<td>
+		        	&nbsp;&nbsp;
+		        	</td>
+		        </tr>
+	        	<tr name="ruleLambdaTr" type="source" style="padding:5px;">
+		        	<td style="border:1px dashed #666;margin: 5px;">
+		        	 <div style="padding:5px;">
+		        	   (活跃天数<select name="activeJudgeSymbol" >
+		        	  <option value="empty">&nbsp;</option>
+			          <option value="gt"> &gt;</option>
+			          <option selected="" value="gteq">&gt;=</option>
+			          <option value="lt"> &lt;</option>
+			          <option value="lteq">&lt;=</option>
+			          <option value="eq">=</option>
+			        </select>
+			        <input type="text" id="activeDayNum" name="activeDayNum" maxlength="2" value="5" class="txt130" size="2"/>
+			                         天)  <select name="conditionJudgeSymbol">
+			          <option value="empty">&nbsp;</option>
+			          <option value="and"> 且</option>
+			          <option selected="" value="or">或</option>
+			        </select>
+			         (
+			         <input type="text" id="dailyMinValue" name="dailyMinValue" maxlength="6" value="5" class="txt130" size="6"/>
+			         <select name="dailyMinSymbol">
+			          <option value="empty">&nbsp;</option>
+			          <option value="lt"> &lt;</option>
+			          <option selected="" value="lteq">&lt;=</option>
+			        </select>
+			        日均交易额
+			         <select name="dailyMaxSymbol">
+			          <option value="empty">&nbsp;</option>
+			          <option value="lt"> &lt;</option>
+			          <option value="lteq">&lt;=</option>
+			          <option value="eq">=</option>
+			        </select>
+			         <input type="text" id="dailyMaxValue" name="dailyMaxValue" maxlength="6" value="" class="txt130" size="6"/>
+			         )</div>
+			         <hr style="border:1px dashed #ccc;margin: 5px 2px;"/> 
+			         <div style="margin-left: 30%; padding:5px;">
+			           快速结算额度=<select name="compareType" onchange="onCompareType(this);">
+			          <option value="min" selected="">较小值</option>
+			          <option value="max">较大值</option>
+			          <option value="eq">固定值</option>
+			        </select>
+			        <span name="compareSpan">
+			        (日均交易额
+			        <select name="dailyComputeSymbol">
+			          <option value="plus" >+</option>
+			          <option value="minus">-</option>
+			          <option value="multiply" selected="">×</option>
+			          <option value="divide">÷</option>
+			        </select>
+			        <input type="text" id="dailyMultiple" name="dailyMultiple" maxlength="6" value="5" class="txt130" size="6"/>
+			         ,总额
+			         <select name="totalComputeSymbol">
+			          <option value="plus" >+</option>
+			          <option value="minus">-</option>
+			          <option value="multiply" selected="">×</option>
+			          <option value="divide" >÷</option>
+			        </select>
+			         <input type="text" id="totalPercent" name="totalPercent" maxlength="4" value="5" class="txt130" size="4"/>)</span>
+			        <span name="valueSpan" style="display: none;">
+			        <input type="text" id="fixedValue" name="fixedValue" maxlength="6" value="5" class="txt130" size="6"/>
+			         </span>
+			         </div>
+		        	</td>
+		        	<td>
+		        	 &nbsp;&nbsp;<a href="javascript:void(0)" onclick="updateLambda(this)" class="btn2" name="btn">添加</a>
+		        	</td>
+	        	</tr>
+	        	 <tr>
+		        	<td>
+		        	&nbsp;&nbsp;
+		        	</td>
+		        </tr>
+        	</table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4" align="center">
+            <a href="#" class="btn2" id="queryBtn" onclick="saveEdit()">保存</a>
+        </td>
+    </tr>
+</table>
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+<script type="text/javascript">
+jQuery(function(){
+	init();
+	
+});
+   function init(){
+	  var ruleLambda= jQuery("#ruleLambda").val();
+	  var ruleLambdaTr=jQuery("tr[name=ruleLambdaTr]:first")
+	  if(ruleLambda==''||ruleLambda==undefined){
+		  clearLambdaValue(ruleLambdaTr);
+	  }else{
+		  var json = jQuery.parseJSON(ruleLambda);
+		  for(var i=0; i<json.length; i++)  
+		  {  
+				if(i==0){
+					lambdaAssign(json[i],ruleLambdaTr);
+					changeCompareShow(ruleLambdaTr.find("select[name=compareType]"));
+				}else{
+					var ruleLambdaClone=ruleLambdaTr.clone();
+					lambdaAssign(json[i],ruleLambdaClone);
+					ruleLambdaClone.removeAttr("type");
+					ruleLambdaClone.find("a[name=btn]").html("删除");
+					changeCompareShow(ruleLambdaClone.find("select[name=compareType]"));
+					jQuery("tr[name=ruleLambdaTr]:last").after(ruleLambdaClone);
+				}
+		  }  
+	  }
+   }
+   function lambdaAssign(json,ruleLambdaHtmlObj){
+	    var activeJudgeSymbol=json.activeJudgeSymbol;
+		var activeDayNum=json.activeDayNum;
+		var dailyMaxValue=json.dailyMaxValue;
+		var dailyMinValue=json.dailyMinValue;
+		var dailyMultiple=json.dailyMultiple;
+		var totalPercent=json.totalPercent;
+		var fixedValue=json.fixedValue;
+		var conditionJudgeSymbol=json.conditionJudgeSymbol;
+		var dailyMaxSymbol=json.dailyMaxSymbol;
+		var dailyMinSymbol=json.dailyMinSymbol;
+		var compareType=json.compareType;
+		var dailyComputeSymbol=json.dailyComputeSymbol;
+		var totalComputeSymbol=json.totalComputeSymbol;
+		ruleLambdaHtmlObj.find("select[name=activeJudgeSymbol]").val(activeJudgeSymbol);
+		ruleLambdaHtmlObj.find("input[name=activeDayNum]").val(activeDayNum);
+		ruleLambdaHtmlObj.find("input[name=dailyMaxValue]").val(dailyMaxValue);
+		ruleLambdaHtmlObj.find("input[name=dailyMinValue]").val(dailyMinValue);
+		ruleLambdaHtmlObj.find("input[name=dailyMultiple]").val(dailyMultiple);
+		ruleLambdaHtmlObj.find("input[name=totalPercent]").val(totalPercent);
+		ruleLambdaHtmlObj.find("input[name=fixedValue]").val(fixedValue);
+		ruleLambdaHtmlObj.find("select[name=conditionJudgeSymbol]").val(conditionJudgeSymbol);
+		ruleLambdaHtmlObj.find("select[name=dailyMaxSymbol]").val(dailyMaxSymbol);
+		ruleLambdaHtmlObj.find("select[name=dailyMinSymbol]").val(dailyMinSymbol);
+		ruleLambdaHtmlObj.find("select[name=compareType]").val(compareType);
+		ruleLambdaHtmlObj.find("select[name=dailyComputeSymbol]").val(dailyComputeSymbol);
+		ruleLambdaHtmlObj.find("select[name=totalComputeSymbol]").val(totalComputeSymbol);
+		
+   }
+   
+   function onCompareType(obj){
+	   var jquerObj=jQuery(obj);
+	   changeCompareShow(jquerObj);
+   }
+   function changeCompareShow(jquerObj){
+	   if("eq"==jquerObj.val()){
+		   jquerObj.parent().find("span[name=compareSpan]").hide();
+		   jquerObj.parent().find("span[name=valueSpan]").show();
+	   }else{
+		   jquerObj.parent().find("span[name=compareSpan]").show();
+		   jquerObj.parent().find("span[name=valueSpan]").hide();
+	   }
+   }
+    function updateLambda(obj){
+    	 var lambdaObj=jQuery(obj).parent().parent();
+    	 if("source"==lambdaObj.attr("type")){
+    		 var cloneObj=lambdaObj.clone();
+    		 cloneObj.removeAttr("type");
+    		 cloneObj.find("a[name=btn]").html("删除");
+    		 clearLambdaValue(cloneObj);
+    		 jQuery("tr[name=ruleLambdaTr]:last").after(cloneObj);
+    	 }else{
+    		 lambdaObj.remove();
+    	 }
+    }
+    function clearLambdaValue(obj){
+    	obj.find("input:text").val("");
+    	obj.find("select").val("empty");
+    	obj.find("span[name=compareSpan]").show();
+    	obj.find("span[name=valueSpan]").hide();
+    	
+    }
+	function validate(){
+		var reg=/^(([0-9]+\.[0-9]*)|([0-9]*[1-9][0-9]*))$/;　
+		var flag=true;
+		jQuery("input:text").each(function(){
+			var obj=jQuery(this);
+			var objValue=obj.val();
+			if(objValue!=null&&objValue!=''&&objValue!=undefined&&!obj.attr("readonly")){
+				if(!reg.test(objValue)){
+					alert("请输入正确的数字！");
+					obj.focus();
+					flag=false;
+					return false;
+				}
+				if("activeDayNum"==obj.attr("name")&&parseInt(objValue,  10)>=30){
+					alert("活跃天数不能超过30天，含30天！");
+					obj.focus();
+					flag=false;
+					return false;
+				}
+				/* if("totalPercent"==obj.attr("name")&&parseInt(objValue,  10)>100){
+					alert("总额百分比不能大于100！");
+					obj.focus();
+					flag=false;
+					return false;
+				} */
+			}
+		});
+		return flag;
+	}
+	function getLambdaJson(){
+		var json="";
+		var lambdas=jQuery("tr[name=ruleLambdaTr]");
+		if(lambdas.size()>0){
+			lambdas.each(function(index){
+				var obj=jQuery(this);
+				var activeJudgeSymbol=obj.find("select[name=activeJudgeSymbol]").val();
+				var activeDayNum=obj.find("input[name=activeDayNum]").val();
+				var dailyMaxValue=obj.find("input[name=dailyMaxValue]").val();
+				var dailyMinValue=obj.find("input[name=dailyMinValue]").val();
+				var dailyMultiple=obj.find("input[name=dailyMultiple]").val();
+				var totalPercent=obj.find("input[name=totalPercent]").val();
+				var fixedValue=obj.find("input[name=fixedValue]").val();
+				var conditionJudgeSymbol=obj.find("select[name=conditionJudgeSymbol]").val();
+				var dailyMaxSymbol=obj.find("select[name=dailyMaxSymbol]").val();
+				var dailyMinSymbol=obj.find("select[name=dailyMinSymbol]").val();
+				var compareType=obj.find("select[name=compareType]").val();
+				var dailyComputeSymbol=obj.find("select[name=dailyComputeSymbol]").val();
+				var totalComputeSymbol=obj.find("select[name=totalComputeSymbol]").val();
+				json+='{"activeJudgeSymbol":"'+activeJudgeSymbol+
+				       '","activeDayNum":"'+activeDayNum+
+				       '","dailyMaxValue":"'+dailyMaxValue+
+				      '","dailyMinValue":"'+dailyMinValue+
+				       '","dailyMultiple":"'+dailyMultiple+
+				       '","totalPercent":"'+totalPercent+
+				       '","fixedValue":"'+fixedValue+
+				       '","conditionJudgeSymbol":"'+conditionJudgeSymbol+
+				       '","dailyMaxSymbol":"'+dailyMaxSymbol+
+				       '","dailyMinSymbol":"'+dailyMinSymbol+
+				       '","compareType":"'+compareType+
+				       '","dailyComputeSymbol":"'+dailyComputeSymbol+
+				       '","totalComputeSymbol":"'+totalComputeSymbol+
+					'"}';
+					if(index<lambdas.size()-1){
+						json+=","
+					}
+			});
+			json="["+json+"]"
+		}
+		return json;
+	}
+    //保存
+    function saveEdit(){
+    	if(!validate()){
+    		return false;
+    	}
+    	var lambdaJson=getLambdaJson();
+    	jQuery("#ruleLambda").val(lambdaJson);
+		jQuery("#ruleId").val()
+		    	 jQuery.ajax({
+					type: 'POST',
+				    url: "#springUrl('/limitrule/saveEdit.htm')?sessionId="+new Date().getTime(),
+				    data: {id:jQuery("#ruleId").val(),
+				    	ruleName:jQuery("#ruleName").val(),
+				    	status:jQuery("input[name='status']:checked").val(),
+				    	ruleLambda:jQuery("#ruleLambda").serialize()},
+				    dataType: "json",
+				    success: function(data){
+				    	var msg = data?data.errorMessage:"系统繁忙";
+				    	alert(msg);
+				    	window.close();
+				    }
+		});  
+    }
+</script>

@@ -1,0 +1,81 @@
+<div class="caption">云收银商户详情</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0" width="950px">
+	<tr>
+		<td colspan="4" style="background-color: steelblue;color: white;">基本信息</td>
+    </tr>
+	<tr>
+		<td>手机号：</td>
+		<td colspan="3">$!{detail.phoneNo}</td>
+	</tr>
+	<tr>
+		<td>门店名称：</td>
+		<td colspan="3">$!{detail.storeName}</td>
+	</tr>
+	<tr>
+		<td>商户地址：</td>
+		<td colspan="3">$!{detail.provinceName} $!{detail.cityName} $!{detail.detailAddress}</td>
+	</tr>
+	<tr>
+		<td>经营人姓名：</td>
+		<td colspan="3">$!{detail.merchantName}</td>
+	</tr>
+	<tr>
+		<td>身份证号码：</td>
+		<td colspan="3">$!{detail.idNo}</td>
+	</tr>
+	<tr>
+		<td colspan="4" style="background-color: steelblue;color: white;">收单费率</td>
+    </tr>
+	<tr>
+		<td>支付宝费率：</td>
+		<td colspan="3">$!{detail.rate}</td>
+	</tr>
+	<tr>
+		<td>支付宝费率：</td>
+		<td colspan="3">$!{detail.rate}</td>
+	</tr>
+	<tr>
+		<td>微信费率：</td>
+		<td colspan="3">$!{detail.rate}</td>
+	</tr>
+	<tr>
+		<td>QQ钱包费率：</td>
+		<td colspan="3">$!{detail.rate}</td>
+	</tr>
+	<tr>
+		<td colspan="4" style="background-color: steelblue;color: white;">支付渠道</td>
+    </tr>
+	#foreach($channel in $!{detail.payChannels})
+    #if($!{channel.payChannel}=='al' || $!{channel.payChannel}=='wx') 
+	<tr>
+		<td>${channel.payChannelName}：</td>
+		<td colspan="3">#if($!{channel.status}=='VALID') 已开通  #else 已关闭  #end</td>
+	</tr>
+	#end
+	#end
+	
+	<tr>
+		<td colspan="4" style="background-color: steelblue;color: white;">提现银行卡信息</td>
+    </tr>
+	<tr>
+		<td>账户号：</td>
+		<td>$!{detail.settleCardNo}</td>
+		<td>账户开户名：</td>
+		<td>$!{detail.accountName}</td>
+	</tr>
+	<tr>
+		<td>账户开户行：</td>
+		<td>$!{detail.bankName}</td>
+		<td>账户开户行支行：</td>
+		<td>$!{detail.branchName}</td>
+	</tr>
+	<tr>
+		<td colspan="4" style="background-color: steelblue;color: white;">资质审核信息</td>
+    </tr>
+	<tr>
+		<td>开户状态：</td>
+		<td>$!{detail.registerStatus}</td>
+		<td>实名认证状态：</td>
+		<td>$!{detail.realNameStatus}</td>
+	</tr>
+</table>

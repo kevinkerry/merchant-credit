@@ -1,0 +1,105 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/ajaxPaging/withdrawInfoList.htm')" method="post">
+<div class="caption">T0结算对账单</div>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+		    <tbody>
+			    <tr>
+			        <td class="lbl">结算时间：</td>
+			        <td colspan="6">
+			            <input type="text" id="startCreateTimeStr" name="startCreateTimeStr" class="txt w180 date" onclick="xDatePicker(2);">
+			            ~
+			            <input type="text" id="endCreateTimeStr" name="endCreateTimeStr" class="txt w180 date" onclick="xDatePicker(2);">
+			            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('startCreateTimeStr'), -1, elm('endCreateTimeStr') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：今天">今</a>
+			       <span class="red">(范围限360天)</span>
+			        <input type="hidden" id="merchantNo" name="merchantNo" value="$!{merchantNo}"/>
+			        </td>
+			        <td></td>
+			    </tr>
+			    <tr>
+			        <td colspan="8" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();return false;" title="清除所有查询条件">清</a>
+			            <a href="#" class="btn2" onclick="downloadResult();return false;" title="下载">下载</a>
+			        </td>
+			    </tr>
+			    <tr>
+			    <td colspan="8" align="center">
+			    <span class="red">注：原“查询对账单”内现在仅显示收单手续费，结算手续费一律显示为0。具体的t0结算手续费，请以本页面数据为准</span>
+			    </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<script type="text/javascript">
+	var ALL_COND_ID = ['merchantNo', 'startCreateTimeStr', 'endCreateTimeStr'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+			if(ALL_COND_ID[i] != 'merchantNo'){
+				jQuery("#"+ALL_COND_ID[i]).val("");
+			}
+    	}
+	}
+	window.onload=function(){
+		setTimeStartEnd(0,elm("startCreateTimeStr"),0,elm("endCreateTimeStr"));
+		ajaxPaging();
+	};
+	
+	function queryInfo(){
+		var dateStr1 = jQuery("#startCreateTimeStr").val();
+		var dateStr2 = jQuery("#endCreateTimeStr").val();
+		if(dateStr1 == null || dateStr1 == ""){
+			alert("请录入起始时间");
+			return false;
+		}
+		var dateEnd;
+		var dateBegin = new Date(dateStr1.replace(/-/g, "/"));
+		if(dateStr2 == null || dateStr2 == ""){
+			dateEnd = new Date();
+		}
+		dateEnd = new Date(dateStr2.replace(/-/g, "/"));
+		
+		var dateDiff = dateEnd.getTime() - dateBegin.getTime(); 
+		var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000)); 
+		if(dayDiff > 360){
+			 alert("时间大于360天");
+			return false;
+		}
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/ajaxPaging/withdrawInfoList.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+    
+    //出款重试
+     function downloadResult(){
+ 		jQuery("#submitForm").attr("action","#relativeUrl('/withdrawDownload.htm')");
+ 		jQuery("#submitForm").submit();
+     }
+    
+</script>

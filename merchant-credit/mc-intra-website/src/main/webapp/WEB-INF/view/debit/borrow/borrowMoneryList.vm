@@ -1,0 +1,84 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr><td>订单号</td>
+		<td>商户名称</td>
+		<td>商户号</td>
+		<td>代理商名称</td>
+		<td>代理商商户号</td>
+
+		<td>状态</td>
+		<td>逾期天数</td>
+		<td>逾期利息</td>
+		<td>借款日期</td>
+		<td>还款日期</td>
+
+		<td>借款本金</td>
+		<td>借款利息</td>
+		<td>手续费</td>
+		<td>详细</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{temp.id}</td>
+		<td>$!{temp.merchantName}</td>
+		<td>$!{temp.merchantNo}</td>
+		<td>$!{temp.promoterName}</td>
+		<td>$!{temp.promoterNo}</td>
+		<td>
+			#set($days = $!MCUtil.daysBetween($!{temp.endTime},$!{temp.dueRepaymentTime}))
+			#if("$!{temp.status}"=="0")
+				初始(放款中)
+    		#elseif("$!{temp.status}"=="1"&&$days<0)
+    			还款中(未到期)
+    		#elseif("$!{temp.status}"=="1"&&$days==0)
+    			还款中(已到期)
+    		#elseif("$!{temp.status}"=="2")
+    			逾期中(已到期)
+    		#elseif("$!{temp.status}"=="3"||"$!{temp.status}"=="4")
+    			#if("$!{temp.status}"=="3")逾期还款成功 #elseif("$!{temp.status}"=="4") 正常还款成功#end  (已还清)
+    		#end
+		</td>
+		<td >
+			<span style="color:red">#if($days<0||"$!{temp.status}"=="4") 0 #else $days #end</span></td>
+		</td>
+		<td >#if($!{temp.overDueAmount}>0)
+				<span style="color:red">$!{temp.overDueAmount}</span>
+			#else
+				$!{temp.overDueAmount}
+			#end
+		</td>
+		<td>#showDate($!{temp.transferTime})</td>
+		<td>#showDate($!{temp.endTime})</td>
+
+		<td>$!{temp.debitAmount}</td>
+		<td>$!{temp.interestAmount}</td>
+		<td>$!{temp.serviceAmount}</td>
+		<td><a href="#springUrl('/borrowMoney/detail.do')?merchantNo=$!{temp.merchantNo}&id=$!{temp.id}" class="look" target="_blank">详情</a></td>
+
+	</tr>
+	#end
+</table>
+<p>
+<a href="#" onclick="downloadCsv()">保存csv文件</a>
+</p>
+<script>
+
+ function downloadCsv(){
+    	var _ids = ['merchantNo','merchantName','borrowStartTimeStr','borrowEndTimeStr','repaymentStartTimeStr','repaymentEndTimeStr','status'];
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+		var str = "";
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+				str = str + _ids[i] +"=" + val + "&";
+    		}
+    	}
+    	window.location.href="downloadCsv.do?" + str;
+    }
+
+
+</script>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+
+<beans>
+	<!-- 
+	<bean id="mcDataSource"
+		class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@10.132.81.134:1521:dsdb1" />
+		<property name="username" value="MCredit" />
+		<property name="password" value="MCredit" />
+		<property name="suppressClose" value="true"/>
+	</bean>
+	 -->
+	
+	<bean id="mcDataSource"
+		class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:sndapay" />
+		<property name="username" value="MCreditUser" />
+		<property name="password" value="MCreditUser" />
+		<property name="suppressClose" value="true"/>
+	</bean>
+	
+	<bean id="ppcPayDataSource"
+		class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:sndapay" />
+		<property name="username" value="ppcpayuser" />
+		<property name="password" value="ppcpayuser" />
+		<property name="suppressClose" value="true"/>
+	</bean>
+</beans>
+

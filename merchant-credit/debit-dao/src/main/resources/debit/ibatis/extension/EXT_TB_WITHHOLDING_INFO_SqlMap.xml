@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="EXT_TB_WITHHOLDING_INFO">
+	<sql id="page_where_clause">
+			where 1=1
+			<isNotEmpty property="batchNo">
+					and BATCH_NO = #batchNo:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty property="merchantNo">
+					and merchant_no= #merchantNo:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty property="status">
+					and STATUS= #status:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty property="bizType">
+					and BIZTYPE= #bizType:VARCHAR#
+			</isNotEmpty>
+			and BATCH_NO in (
+			SELECT DISTINCT o.BATCH_NO from MCREDIT.TB_WITHHOLDING_ORDER_INFO o where 1=1
+			<isNotEmpty property="bankName">
+					and bank_name like '$bankName$%'
+			</isNotEmpty>
+			<isNotEmpty property="cardNo">
+					and card_no like '$cardNo$%'
+			</isNotEmpty>
+			<isNotEmpty property="paperNo">
+					and paper_no like '$paperNo$%'
+			</isNotEmpty>
+			<isNotEmpty property="chName">
+					and ch_name like '$chName$%'
+			</isNotEmpty>
+			)
+	</sql>
+
+	<select id="countWithholdingCount" resultClass="java.lang.Integer"
+		parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtTbWithholdingBrechInfoExample">
+		select count(id) from TB_WITHHOLDING_BRECH_INFO
+		<include refid="EXT_TB_WITHHOLDING_INFO.page_where_clause" />
+	</select>
+	<select id="pageQueryWithholdingList" resultMap="TB_WITHHOLDING_BRECH_INFO.BaseResultMap"
+		parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtTbWithholdingBrechInfoExample">
+		select t.* from (select tt.*, ROWNUM rnum from (
+		select
+		<include refid="TB_WITHHOLDING_BRECH_INFO.Base_Column_List" />
+		from TB_WITHHOLDING_BRECH_INFO
+		<include refid="EXT_TB_WITHHOLDING_INFO.page_where_clause" />
+		order by CREATE_TIME desc
+		) tt) t where t.rnum <![CDATA[<=]]>
+		#pageLastItem:NUMERIC# and t.rnum <![CDATA[>=]]>
+		#pageFristItem:NUMERIC#
+	</select>
+</sqlMap>

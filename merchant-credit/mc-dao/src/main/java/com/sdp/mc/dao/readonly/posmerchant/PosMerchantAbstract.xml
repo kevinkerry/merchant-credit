@@ -1,0 +1,1291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PosMerchantDAOAbstract">
+    <resultMap id="result" class="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO"
+               extends="MerchantContractDAOAbstract.result">
+        <result property="posmBusinessLicense" column="POSM_BUSINESS_LICENSE_V" />
+        <result property="posmLegalPerson" column="POSM_LEGAL_PERSON_V" />
+        <result property="posmBusinessName" column="POSM_BUSINESS_NAME_V" />
+        <result property="posmProvinceId" column="POSM_PROVINCE_ID_N" />
+        <result property="posmSptReturnGoodsBs" column="POSM_SPT_RETURN_GOODS_BS_N" />
+        <result property="posmSptReturnGoods" column="POSM_SPT_RETURN_GOODS_N" />
+        <result property="posmSptPreAuth" column="POSM_SPT_PRE_AUTH_N" />
+        <result property="posmSptTermPreAuthCmplt" column="POSM_SPT_TERM_PRE_AUTH_CMPLT_N" />
+        <result property="posmSptTermPreAuthRevt" column="POSM_SPT_TERM_PRE_AUTH_REVT_N" />
+        <result property="posmCreditCardDeal" column="POSM_CREDIT_CARD_DEAL_N"/>
+        <result property="posmExternalMccName" column="POSM_EXTERNAL_MCC_NAME_V"/>
+        <result property="posmInternalMccName" column="POSM_INTERNAL_MCC_NAME_V"/>
+        <result property="posmPromoterName" column="POSM_PROMOTER_NAME_V"/>
+        <result property="posmDistrictName" column="POSM_DISTRICT_NAME_V"/>
+        <result property="posmId" column="POSM_ID_N"/>
+        <result property="posmPosMerchantNo" column="POSM_POS_MERCHANT_NO_C"/>
+        <result property="posmMerchantType" column="POSM_MERCHANT_TYPE_N"/>
+        <result property="posmMerchantLevel" column="POSM_MERCHANT_LEVEL_N"/>
+        <result property="posmSalesManager" column="POSM_SALES_MANAGER_V"/>
+        <result property="posmDistrictId" column="POSM_DISTRICT_ID_N"/>
+        <result property="posmAddress" column="POSM_ADDRESS_V"/>
+        <result property="posmExternalMccId" column="POSM_EXTERNAL_MCC_ID_N"/>
+        <result property="posmInternalMccId" column="POSM_INTERNAL_MCC_ID_N"/>
+        <result property="posmPromoterId" column="POSM_PROMOTER_ID_N"/>
+        <result property="posmAllopatryReturnGoods" column="POSM_ALLOPATRY_RETURN_GOODS_N"/>
+        <result property="posmManualAuthComplete" column="POSM_MANUAL_AUTH_COMPLETE_N"/>
+        <result property="posmCascadeAuthCancel" column="POSM_CASCADE_AUTH_CANCEL_N"/>
+        <result property="posmBankCardDeal" column="POSM_BANK_CARD_DEAL_N"/>
+        <result property="posmPpcCardDeal" column="POSM_PPC_CARD_DEAL_N"/>
+        <result property="posmExpandBitmap" column="POSM_EXPAND_BITMAP_V"/>
+        <result property="posmVersion" column="POSM_VERSION_N"/>
+        <result property="posmCreateTime" column="POSM_CREATE_TIME_T"/>
+        <result property="posmLastUpdateTime" column="POSM_LAST_UPDATE_TIME_T"/>
+        <result property="posmBackCredits" column="posm_back_credits_n"/>
+        <result property="posmBuss1Level" column="POSM_BUSS1_LEVEL_N"/>
+        <result property="posmRelyElecSignFlag" column="POSM_RELY_ELEC_SIGN_FLAG_N"/>
+        <result property="posmTelephoneNo" column="POSM_TELEPHONE_NO_V"/>
+        <result property="posmEnforceElecSignFlag" column="POSM_ENFORCE_ELEC_SIGN_FLAG_N"/>
+        <result property="posmMposSalesType" column="POSM_MPOS_SALES_TYPE_N"/>
+        <result property="posmIdNum" column="POSM_ID_NUM_V"/>
+    </resultMap>
+
+    <resultMap id="merchantResult" class="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+        <result property="posmBusinessLicense" column="POSM_BUSINESS_LICENSE_V" />
+        <result property="posmLegalPerson" column="POSM_LEGAL_PERSON_V" />
+        <result property="posmBusinessName" column="POSM_BUSINESS_NAME_V" />
+        <result property="posmProvinceId" column="POSM_PROVINCE_ID_N" />
+        <result property="posmSptReturnGoodsBs" column="POSM_SPT_RETURN_GOODS_BS_N" />
+        <result property="posmSptReturnGoods" column="POSM_SPT_RETURN_GOODS_N" />
+        <result property="posmSptPreAuth" column="POSM_SPT_PRE_AUTH_N" />
+        <result property="posmSptTermPreAuthCmplt" column="POSM_SPT_TERM_PRE_AUTH_CMPLT_N" />
+        <result property="posmSptTermPreAuthRevt" column="POSM_SPT_TERM_PRE_AUTH_REVT_N" />
+        <result property="posmCreditCardDeal" column="POSM_CREDIT_CARD_DEAL_N"/>
+        <result property="posmExternalMccName" column="POSM_EXTERNAL_MCC_NAME_V"/>
+        <result property="posmInternalMccName" column="POSM_INTERNAL_MCC_NAME_V"/>
+        <result property="posmPromoterName" column="POSM_PROMOTER_NAME_V"/>
+        <result property="posmDistrictName" column="POSM_DISTRICT_NAME_V"/>
+        <result property="posmId" column="POSM_ID_N"/>
+        <result property="posmPosMerchantNo" column="POSM_POS_MERCHANT_NO_C"/>
+        <result property="posmMerchantType" column="POSM_MERCHANT_TYPE_N"/>
+        <result property="posmMerchantLevel" column="POSM_MERCHANT_LEVEL_N"/>
+        <result property="posmSalesManager" column="POSM_SALES_MANAGER_V"/>
+        <result property="posmDistrictId" column="POSM_DISTRICT_ID_N"/>
+        <result property="posmAddress" column="POSM_ADDRESS_V"/>
+        <result property="posmExternalMccId" column="POSM_EXTERNAL_MCC_ID_N"/>
+        <result property="posmInternalMccId" column="POSM_INTERNAL_MCC_ID_N"/>
+        <result property="posmPromoterId" column="POSM_PROMOTER_ID_N"/>
+        <result property="posmAllopatryReturnGoods" column="POSM_ALLOPATRY_RETURN_GOODS_N"/>
+        <result property="posmManualAuthComplete" column="POSM_MANUAL_AUTH_COMPLETE_N"/>
+        <result property="posmCascadeAuthCancel" column="POSM_CASCADE_AUTH_CANCEL_N"/>
+        <result property="posmBankCardDeal" column="POSM_BANK_CARD_DEAL_N"/>
+        <result property="posmPpcCardDeal" column="POSM_PPC_CARD_DEAL_N"/>
+        <result property="posmExpandBitmap" column="POSM_EXPAND_BITMAP_V"/>
+        <result property="posmVersion" column="POSM_VERSION_N"/>
+        <result property="posmCreateTime" column="POSM_CREATE_TIME_T"/>
+        <result property="posmLastUpdateTime" column="POSM_LAST_UPDATE_TIME_T"/>
+        <result property="posmBackCredits" column="posm_back_credits_n"/>
+        <result property="posmBuss1Level" column="POSM_BUSS1_LEVEL_N"/>
+        <result property="posmRelyElecSignFlag" column="POSM_RELY_ELEC_SIGN_FLAG_N"/>
+        <result property="posmEnforceElecSignFlag" column="POSM_ENFORCE_ELEC_SIGN_FLAG_N"/>
+        <result property="posmMposSalesType" column="POSM_MPOS_SALES_TYPE_N"/>
+        <result property="posmIdNum" column="POSM_ID_NUM_V"/>
+    </resultMap>
+
+    <insert id="insertHasId" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+        insert into ppcpay.CM_POS_MERCHANT(POSM_ID_N,POSM_CREATE_TIME_T,POSM_LAST_UPDATE_TIME_T,POSM_VERSION_N
+        <dynamic>
+                	<isNotNull prepend="," property="posmBusinessLicense">
+                		POSM_BUSINESS_LICENSE_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmLegalPerson">
+                		POSM_LEGAL_PERSON_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmBusinessName">
+                		POSM_BUSINESS_NAME_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+            <isNotNull prepend="," property="posmProvinceId">
+                POSM_PROVINCE_ID_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoodsBs">
+                		POSM_SPT_RETURN_GOODS_BS_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoods">
+                		POSM_SPT_RETURN_GOODS_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptPreAuth">
+                		POSM_SPT_PRE_AUTH_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptTermPreAuthCmplt">
+                		POSM_SPT_TERM_PRE_AUTH_CMPLT_N
+           			 </isNotNull>
+        		</dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSptTermPreAuthRevt">
+                POSM_SPT_TERM_PRE_AUTH_REVT_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCreditCardDeal">
+                POSM_CREDIT_CARD_DEAL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccName">
+                POSM_EXTERNAL_MCC_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccName">
+                POSM_INTERNAL_MCC_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterName">
+                POSM_PROMOTER_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictName">
+                POSM_DISTRICT_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPosMerchantNo">
+                POSM_POS_MERCHANT_NO_C
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantType">
+                POSM_MERCHANT_TYPE_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantLevel">
+                POSM_MERCHANT_LEVEL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSalesManager">
+                POSM_SALES_MANAGER_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictId">
+                POSM_DISTRICT_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAddress">
+                POSM_ADDRESS_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccId">
+                POSM_EXTERNAL_MCC_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccId">
+                POSM_INTERNAL_MCC_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterId">
+                POSM_PROMOTER_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAllopatryReturnGoods">
+                POSM_ALLOPATRY_RETURN_GOODS_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmManualAuthComplete">
+                POSM_MANUAL_AUTH_COMPLETE_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCascadeAuthCancel">
+                POSM_CASCADE_AUTH_CANCEL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBankCardDeal">
+                POSM_BANK_CARD_DEAL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPpcCardDeal">
+                POSM_PPC_CARD_DEAL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExpandBitmap">
+                POSM_EXPAND_BITMAP_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBackCredits">
+            	posm_back_credits_n
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBuss1Level">
+            	POSM_BUSS1_LEVEL_N
+           	</isNotNull>
+        </dynamic>
+
+        <dynamic>
+            <isNotNull prepend="," property="posmEnforceElecSignFlag">
+            	POSM_ENFORCE_ELEC_SIGN_FLAG_N
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMposSalesType">
+            	POSM_MPOS_SALES_TYPE_N
+           	</isNotNull>
+        </dynamic>
+        )
+        values(
+        #posmId:NUMERIC#,systimestamp,systimestamp,1
+        <dynamic>
+                	<isNotNull prepend="," property="posmBusinessLicense">
+                		#posmBusinessLicense:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmLegalPerson">
+                		#posmLegalPerson:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmBusinessName">
+                		#posmBusinessName:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+            <isNotNull prepend="," property="posmProvinceId">
+                #posmProvinceId:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoodsBs">
+                		#posmSptReturnGoodsBs:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoods">
+                		#posmSptReturnGoods:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptPreAuth">
+                		#posmSptPreAuth:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptTermPreAuthCmplt">
+                		#posmSptTermPreAuthCmplt:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCreditCardDeal">
+                #posmCreditCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccName">
+                #posmExternalMccName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccName">
+                #posmInternalMccName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterName">
+                #posmPromoterName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictName">
+                #posmDistrictName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPosMerchantNo">
+                #posmPosMerchantNo:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantType">
+                #posmMerchantType:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantLevel">
+                #posmMerchantLevel:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSalesManager">
+                #posmSalesManager:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictId">
+                #posmDistrictId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAddress">
+                #posmAddress:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccId">
+                #posmExternalMccId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccId">
+                #posmInternalMccId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterId">
+                #posmPromoterId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAllopatryReturnGoods">
+                #posmAllopatryReturnGoods:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmManualAuthComplete">
+                #posmManualAuthComplete:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCascadeAuthCancel">
+                #posmCascadeAuthCancel:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBankCardDeal">
+                #posmBankCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPpcCardDeal">
+                #posmPpcCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExpandBitmap">
+                #posmExpandBitmap:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBackCredits">
+            	#posmBackCredits:NUMBERIC#
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBuss1Level">
+            	#posmBuss1Level:NUMBERIC#
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmEnforceElecSignFlag">
+            	#posmEnforceElecSignFlag#
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMposSalesType">
+            	#posmMposSalesType#
+           	</isNotNull>
+        </dynamic>
+        )
+    </insert>
+    <insert id="insert" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+        <selectKey resultClass="java.lang.Long" keyProperty="posmId">
+            select to_char(sysdate,'yyyymmdd')||SEQ_POSM_ID_N.nextval as id from DUAL
+        </selectKey>
+        insert into ppcpay.CM_POS_MERCHANT(POSM_ID_N,POSM_CREATE_TIME_T,POSM_LAST_UPDATE_TIME_T,POSM_VERSION_N
+        <dynamic>
+                	<isNotNull prepend="," property="posmBusinessLicense">
+                		POSM_BUSINESS_LICENSE_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmLegalPerson">
+                		POSM_LEGAL_PERSON_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmBusinessName">
+                		POSM_BUSINESS_NAME_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+            <isNotNull prepend="," property="posmProvinceId">
+                		POSM_PROVINCE_ID_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoodsBs">
+                		POSM_SPT_RETURN_GOODS_BS_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoods">
+                		POSM_SPT_RETURN_GOODS_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptPreAuth">
+                		POSM_SPT_PRE_AUTH_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="posmSptTermPreAuthCmplt">
+                		POSM_SPT_TERM_PRE_AUTH_CMPLT_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSptTermPreAuthRevt">
+                POSM_SPT_TERM_PRE_AUTH_REVT_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCreditCardDeal">
+                POSM_CREDIT_CARD_DEAL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccName">
+                POSM_EXTERNAL_MCC_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccName">
+                POSM_INTERNAL_MCC_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterName">
+                POSM_PROMOTER_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictName">
+                POSM_DISTRICT_NAME_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPosMerchantNo">
+                POSM_POS_MERCHANT_NO_C
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantType">
+                POSM_MERCHANT_TYPE_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantLevel">
+                POSM_MERCHANT_LEVEL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSalesManager">
+                POSM_SALES_MANAGER_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictId">
+                POSM_DISTRICT_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAddress">
+                POSM_ADDRESS_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccId">
+                POSM_EXTERNAL_MCC_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccId">
+                POSM_INTERNAL_MCC_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterId">
+                POSM_PROMOTER_ID_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAllopatryReturnGoods">
+                POSM_ALLOPATRY_RETURN_GOODS_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmManualAuthComplete">
+                POSM_MANUAL_AUTH_COMPLETE_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCascadeAuthCancel">
+                POSM_CASCADE_AUTH_CANCEL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBankCardDeal">
+                POSM_BANK_CARD_DEAL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPpcCardDeal">
+                POSM_PPC_CARD_DEAL_N
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExpandBitmap">
+                POSM_EXPAND_BITMAP_V
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBackCredits">
+            	posm_back_credits_n
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBuss1Level">
+            	POSM_BUSS1_LEVEL_N
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmEnforceElecSignFlag">
+            	POSM_ENFORCE_ELEC_SIGN_FLAG_N
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMposSalesType">
+            	POSM_MPOS_SALES_TYPE_N
+           	</isNotNull>
+        </dynamic>
+
+        )
+        values(
+        #posmId:NUMERIC#,systimestamp,systimestamp,1
+        <dynamic>
+                	<isNotNull prepend="," property="posmBusinessLicense">
+                		#posmBusinessLicense:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmLegalPerson">
+                		#posmLegalPerson:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmBusinessName">
+                		#posmBusinessName:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+            <isNotNull prepend="," property="posmProvinceId">
+                #posmProvinceId:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoodsBs">
+                		#posmSptReturnGoodsBs:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptReturnGoods">
+                		#posmSptReturnGoods:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptPreAuth">
+                		#posmSptPreAuth:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="posmSptTermPreAuthCmplt">
+                		#posmSptTermPreAuthCmplt:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCreditCardDeal">
+                #posmCreditCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccName">
+                #posmExternalMccName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccName">
+                #posmInternalMccName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterName">
+                #posmPromoterName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictName">
+                #posmDistrictName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPosMerchantNo">
+                #posmPosMerchantNo:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantType">
+                #posmMerchantType:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantLevel">
+                #posmMerchantLevel:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSalesManager">
+                #posmSalesManager:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictId">
+                #posmDistrictId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAddress">
+                #posmAddress:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccId">
+                #posmExternalMccId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccId">
+                #posmInternalMccId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterId">
+                #posmPromoterId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAllopatryReturnGoods">
+                #posmAllopatryReturnGoods:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmManualAuthComplete">
+                #posmManualAuthComplete:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCascadeAuthCancel">
+                #posmCascadeAuthCancel:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBankCardDeal">
+                #posmBankCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPpcCardDeal">
+                #posmPpcCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExpandBitmap">
+                #posmExpandBitmap:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBackCredits">
+            	#posmBackCredits:NUMBERIC#
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBuss1Level">
+            	#posmBuss1Level:NUMBERIC#
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmEnforceElecSignFlag">
+            	#posmEnforceElecSignFlag#
+           	</isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMposSalesType">
+            	#posmMposSalesType#
+           	</isNotNull>
+        </dynamic>
+        )
+    </insert>
+
+    <update id="update" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+        update ppcpay.CM_POS_MERCHANT set POSM_VERSION_N=POSM_VERSION_N+1
+            ,POSM_BUSINESS_LICENSE_V=#posmBusinessLicense:VARCHAR#
+            ,POSM_LEGAL_PERSON_V=#posmLegalPerson:VARCHAR#
+            ,POSM_BUSINESS_NAME_V=#posmBusinessName:VARCHAR#
+        ,POSM_PROVINCE_ID_N=#posmProvinceId:NUMERIC#
+            ,POSM_SPT_RETURN_GOODS_BS_N=#posmSptReturnGoodsBs:NUMERIC#
+            ,POSM_SPT_RETURN_GOODS_N=#posmSptReturnGoods:NUMERIC#
+            ,POSM_SPT_PRE_AUTH_N=#posmSptPreAuth:NUMERIC#
+            ,POSM_SPT_TERM_PRE_AUTH_CMPLT_N =#posmSptTermPreAuthCmplt:NUMERIC#
+            ,POSM_SPT_TERM_PRE_AUTH_REVT_N =#posmSptTermPreAuthRevt:NUMERIC#
+        ,POSM_CREDIT_CARD_DEAL_N=#posmCreditCardDeal:NUMERIC#
+        ,POSM_EXTERNAL_MCC_NAME_V=#posmExternalMccName:VARCHAR#
+        ,POSM_INTERNAL_MCC_NAME_V=#posmInternalMccName:VARCHAR#
+        ,POSM_PROMOTER_NAME_V=#posmPromoterName#
+        ,POSM_DISTRICT_NAME_V=#posmDistrictName:VARCHAR#
+        ,POSM_POS_MERCHANT_NO_C=#posmPosMerchantNo:VARCHAR#
+        ,POSM_MERCHANT_TYPE_N=#posmMerchantType:VARCHAR#
+        ,POSM_MERCHANT_LEVEL_N=#posmMerchantLevel:NUMERIC#
+        ,POSM_SALES_MANAGER_V=#posmSalesManager:VARCHAR#
+        ,POSM_DISTRICT_ID_N=#posmDistrictId:NUMERIC#
+        ,POSM_ADDRESS_V=#posmAddress:VARCHAR#
+        ,POSM_EXTERNAL_MCC_ID_N=#posmExternalMccId:NUMERIC#
+        ,POSM_INTERNAL_MCC_ID_N=#posmInternalMccId:NUMERIC#
+        ,POSM_PROMOTER_ID_N=#posmPromoterId#
+        ,POSM_ALLOPATRY_RETURN_GOODS_N=#posmAllopatryReturnGoods:NUMERIC#
+        ,POSM_MANUAL_AUTH_COMPLETE_N=#posmManualAuthComplete:NUMERIC#
+        ,POSM_CASCADE_AUTH_CANCEL_N=#posmCascadeAuthCancel:NUMERIC#
+        ,POSM_BANK_CARD_DEAL_N=#posmBankCardDeal:NUMERIC#
+        ,POSM_PPC_CARD_DEAL_N=#posmPpcCardDeal:NUMERIC#
+        ,POSM_EXPAND_BITMAP_V=#posmExpandBitmap:VARCHAR#
+        ,POSM_LAST_UPDATE_TIME_T=systimestamp
+        ,POSM_ID_NUM_V=#posmIdNum#
+        <isNotEmpty prepend="," property="posmBackCredits">
+    		posm_back_credits_n=#posmBackCredits:NUMBERIC#
+        </isNotEmpty>
+        <isNotEmpty prepend="," property="posmBuss1Level">
+    		 POSM_BUSS1_LEVEL_N=#posmBuss1Level:NUMBERIC#
+        </isNotEmpty>
+        <isNotEmpty prepend="," property="posmEnforceElecSignFlag">
+    		POSM_ENFORCE_ELEC_SIGN_FLAG_N=#posmEnforceElecSignFlag#
+        </isNotEmpty>
+        <isNotEmpty prepend="," property="posmMposSalesType">
+    		 POSM_MPOS_SALES_TYPE_N=#posmMposSalesType#
+        </isNotEmpty>
+        where POSM_ID_N=#posmId:NUMERIC# and POSM_VERSION_N=#posmVersion:NUMERIC#
+    </update>
+
+    <update id="updateByField" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+        update ppcpay.CM_POS_MERCHANT set POSM_VERSION_N=POSM_VERSION_N+1 ,POSM_LAST_UPDATE_TIME_T=systimestamp
+        <dynamic>
+			<isNotNull prepend="," property="posmBusinessLicense">
+             	POSM_BUSINESS_LICENSE_V=#posmBusinessLicense:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="posmLegalPerson">
+             	POSM_LEGAL_PERSON_V=#posmLegalPerson:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="posmBusinessName">
+             	POSM_BUSINESS_NAME_V=#posmBusinessName:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+            <isNotNull prepend="," property="posmProvinceId">
+                POSM_PROVINCE_ID_N=#posmProvinceId:NUMERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="posmSptReturnGoodsBs">
+             	POSM_SPT_RETURN_GOODS_BS_N=#posmSptReturnGoodsBs:NUMERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="posmSptReturnGoods">
+             	POSM_SPT_RETURN_GOODS_N=#posmSptReturnGoods:NUMERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="posmSptPreAuth">
+             	POSM_SPT_PRE_AUTH_N=#posmSptPreAuth:NUMERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="posmSptTermPreAuthCmplt">
+             	POSM_SPT_TERM_PRE_AUTH_CMPLT_N =#posmSptTermPreAuthCmplt:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+			<isNotNull prepend="," property="posmSptTermPreAuthRevt">
+             	POSM_SPT_TERM_PRE_AUTH_REVT_N =#posmSptTermPreAuthRevt:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCreditCardDeal">
+                POSM_CREDIT_CARD_DEAL_N=#posmCreditCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccName">
+                POSM_EXTERNAL_MCC_NAME_V=#posmExternalMccName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccName">
+                POSM_INTERNAL_MCC_NAME_V=#posmInternalMccName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterName">
+                POSM_PROMOTER_NAME_V=#posmPromoterName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictName">
+                POSM_DISTRICT_NAME_V=#posmDistrictName:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPosMerchantNo">
+                POSM_POS_MERCHANT_NO_C=#posmPosMerchantNo:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantType">
+                POSM_MERCHANT_TYPE_N=#posmMerchantType:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmMerchantLevel">
+                POSM_MERCHANT_LEVEL_N=#posmMerchantLevel:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmSalesManager">
+                POSM_SALES_MANAGER_V=#posmSalesManager:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmDistrictId">
+                POSM_DISTRICT_ID_N=#posmDistrictId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAddress">
+                POSM_ADDRESS_V=#posmAddress:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmExternalMccId">
+                POSM_EXTERNAL_MCC_ID_N=#posmExternalMccId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmInternalMccId">
+                POSM_INTERNAL_MCC_ID_N=#posmInternalMccId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPromoterId">
+                POSM_PROMOTER_ID_N=#posmPromoterId:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmAllopatryReturnGoods">
+                POSM_ALLOPATRY_RETURN_GOODS_N=#posmAllopatryReturnGoods:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmManualAuthComplete">
+                POSM_MANUAL_AUTH_COMPLETE_N=#posmManualAuthComplete:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmCascadeAuthCancel">
+                POSM_CASCADE_AUTH_CANCEL_N=#posmCascadeAuthCancel:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBankCardDeal">
+                POSM_BANK_CARD_DEAL_N=#posmBankCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmPpcCardDeal">
+                POSM_PPC_CARD_DEAL_N=#posmPpcCardDeal:NUMERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+            <isNotNull prepend="," property="posmBackCredits">
+                posm_back_credits_n=#posmBackCredits:NUMBERIC#
+            </isNotNull>
+        </dynamic>
+        <dynamic>
+        	<isNotEmpty prepend="," property="posmBuss1Level">
+    		 	POSM_BUSS1_LEVEL_N = #posmBuss1Level:NUMBERIC#
+        	</isNotEmpty>
+        </dynamic>
+        <dynamic>
+        	<isNotEmpty prepend="," property="posmRelyElecSignFlag">
+    		 	POSM_RELY_ELEC_SIGN_FLAG_N = #posmRelyElecSignFlag:NUMBERIC#
+        	</isNotEmpty>
+        </dynamic>
+        <dynamic>
+        	<isNotEmpty prepend="," property="posmEnforceElecSignFlag">
+    		 	POSM_ENFORCE_ELEC_SIGN_FLAG_N = #posmEnforceElecSignFlag#
+        	</isNotEmpty>
+        </dynamic>
+        <dynamic>
+        	<isNotEmpty prepend="," property="posmMposSalesType">
+    		 	POSM_MPOS_SALES_TYPE_N = #posmMposSalesType#
+        	</isNotEmpty>
+        </dynamic>
+        <dynamic>
+        	<isNotEmpty prepend="," property="posmIdNum">
+    		 	POSM_ID_NUM_V = #posmIdNum#
+        	</isNotEmpty>
+        </dynamic>
+        where POSM_ID_N=#posmId:NUMERIC# and POSM_VERSION_N=#posmVersion:NUMERIC#
+    </update>
+
+    <select id="select" parameterClass="java.util.Map" resultMap="result">
+        select *
+        from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+        where posm.posm_id_n=mc.mc_id_n
+        and POSM_ID_N=#id:NUMERIC#
+        <dynamic>
+            <isEqual property="isLock" compareValue="true">
+                for update
+            </isEqual>
+        </dynamic>
+    </select>
+
+    <select id="selectListByIdList" parameterClass="java.util.Map" resultMap="result">
+        select * from ppcpay.CM_POS_MERCHANT
+        <iterate property="idList" prepend=" where POSM_ID_N in " open="(" close=")" conjunction=",">
+            #idList[]:NUMERIC#
+        </iterate>
+        <dynamic>
+            <isEqual property="isLock" compareValue="true">
+                for update
+            </isEqual>
+        </dynamic>
+    </select>
+
+    <select id="selectEOByEO" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO"
+            resultMap="result">
+        select * from ppcpay.CM_POS_MERCHANT pm,CM_MERCHANT_CONTRACT mc where
+        pm.POSM_ID_N=mc.MC_ID_N
+        <dynamic>
+			<isNotEmpty prepend="and" property="posmBusinessLicense">
+             	POSM_BUSINESS_LICENSE_V=#posmBusinessLicense:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="posmLegalPerson">
+             	POSM_LEGAL_PERSON_V=#posmLegalPerson:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="posmBusinessName">
+             	POSM_BUSINESS_NAME_V like '%'||#posmBusinessName:VARCHAR#||'%'
+			</isNotEmpty>
+            <isNotNull prepend="and" property="posmProvinceId">
+                POSM_PROVINCE_ID_N=#posmProvinceId:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptReturnGoodsBs">
+             	POSM_SPT_RETURN_GOODS_BS_N=#posmSptReturnGoodsBs:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptReturnGoods">
+             	POSM_SPT_RETURN_GOODS_N=#posmSptReturnGoods:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptPreAuth">
+             	POSM_SPT_PRE_AUTH_N=#posmSptPreAuth:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptTermPreAuthCmplt">
+             	POSM_SPT_TERM_PRE_AUTH_CMPLT_N =#posmSptTermPreAuthCmplt:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmSptTermPreAuthRevt">
+             	POSM_SPT_TERM_PRE_AUTH_REVT_N =#posmSptTermPreAuthRevt:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmCreditCardDeal">
+                POSM_CREDIT_CARD_DEAL_N=#posmCreditCardDeal:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmExternalMccName">
+                POSM_EXTERNAL_MCC_NAME_V like '%'||#posmExternalMccName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmInternalMccName">
+                POSM_INTERNAL_MCC_NAME_V like '%'||#posmInternalMccName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmPromoterName">
+                POSM_PROMOTER_NAME_V like '%'||#posmPromoterName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmDistrictName">
+                POSM_DISTRICT_NAME_V like '%'||#posmDistrictName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmId">
+                POSM_ID_N=#posmId:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmPosMerchantNo">
+                POSM_POS_MERCHANT_NO_C=#posmPosMerchantNo:VARCHAR#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmMerchantType">
+                POSM_MERCHANT_TYPE_N=#posmMerchantType:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmMerchantLevel">
+                POSM_MERCHANT_LEVEL_N=#posmMerchantLevel:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmSalesManager">
+                POSM_SALES_MANAGER_V=#posmSalesManager:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmDistrictId">
+                POSM_DISTRICT_ID_N=#posmDistrictId:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmAddress">
+                POSM_ADDRESS_V=#posmAddress:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmExternalMccId">
+                POSM_EXTERNAL_MCC_ID_N=#posmExternalMccId:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmInternalMccId">
+                POSM_INTERNAL_MCC_ID_N=#posmInternalMccId:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmPromoterId">
+                POSM_PROMOTER_ID_N=#posmPromoterId:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmAllopatryReturnGoods">
+                POSM_ALLOPATRY_RETURN_GOODS_N=#posmAllopatryReturnGoods:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmManualAuthComplete">
+                POSM_MANUAL_AUTH_COMPLETE_N=#posmManualAuthComplete:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmCascadeAuthCancel">
+                POSM_CASCADE_AUTH_CANCEL_N=#posmCascadeAuthCancel:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmBankCardDeal">
+                POSM_BANK_CARD_DEAL_N=#posmBankCardDeal:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmPpcCardDeal">
+                POSM_PPC_CARD_DEAL_N=#posmPpcCardDeal:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmExpandBitmap">
+                POSM_EXPAND_BITMAP_V=#posmExpandBitmap:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmVersion">
+                POSM_VERSION_N=#posmVersion:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmCreateTime">
+                POSM_CREATE_TIME_T=#posmCreateTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmLastUpdateTime">
+                POSM_LAST_UPDATE_TIME_T=#posmLastUpdateTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmIdNum">
+                POSM_ID_NUM_V=#posmIdNum:VARCHAR#
+            </isNotNull>
+        </dynamic>
+    </select>
+
+    <select id="countByEO" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO"
+            resultClass="java.lang.Integer">
+        select count(POSM_ID_N) from ppcpay.CM_POS_MERCHANT pm,CM_MERCHANT_CONTRACT
+        mc where pm.POSM_ID_N=mc.MC_ID_N
+        <dynamic>
+			<isNotEmpty prepend="and" property="posmBusinessLicense">
+             	POSM_BUSINESS_LICENSE_V=#posmBusinessLicense:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="posmLegalPerson">
+             	POSM_LEGAL_PERSON_V=#posmLegalPerson:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="posmBusinessName">
+             	POSM_BUSINESS_NAME_V like '%'||#posmBusinessName:VARCHAR#||'%'
+			</isNotEmpty>
+            <isNotNull prepend="and" property="posmProvinceId">
+                POSM_PROVINCE_ID_N=#posmProvinceId:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptReturnGoodsBs">
+             	POSM_SPT_RETURN_GOODS_BS_N=#posmSptReturnGoodsBs:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptReturnGoods">
+             	POSM_SPT_RETURN_GOODS_N=#posmSptReturnGoods:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptPreAuth">
+             	POSM_SPT_PRE_AUTH_N=#posmSptPreAuth:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="posmSptTermPreAuthCmplt">
+             	POSM_SPT_TERM_PRE_AUTH_CMPLT_N =#posmSptTermPreAuthCmplt:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmSptTermPreAuthRevt">
+             	posmSptTermPreAuthRevt =#posmSptTermPreAuthRevt:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmCreditCardDeal">
+                POSM_CREDIT_CARD_DEAL_N=#posmCreditCardDeal:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmExternalMccName">
+                POSM_EXTERNAL_MCC_NAME_V like '%'||#posmExternalMccName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmInternalMccName">
+                POSM_INTERNAL_MCC_NAME_V like '%'||#posmInternalMccName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmPromoterName">
+                POSM_PROMOTER_NAME_V like '%'||#posmPromoterName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmDistrictName">
+                POSM_DISTRICT_NAME_V like '%'||#posmDistrictName:VARCHAR#||'%'
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmId">
+                POSM_ID_N=#posmId:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmPosMerchantNo">
+                POSM_POS_MERCHANT_NO_C=#posmPosMerchantNo:VARCHAR#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="posmMerchantType">
+                POSM_MERCHANT_TYPE_N=#posmMerchantType:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmMerchantLevel">
+                POSM_MERCHANT_LEVEL_N=#posmMerchantLevel:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmSalesManager">
+                POSM_SALES_MANAGER_V=#posmSalesManager:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmDistrictId">
+                POSM_DISTRICT_ID_N=#posmDistrictId:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmAddress">
+                POSM_ADDRESS_V=#posmAddress:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmExternalMccId">
+                POSM_EXTERNAL_MCC_ID_N=#posmExternalMccId:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmInternalMccId">
+                POSM_INTERNAL_MCC_ID_N=#posmInternalMccId:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmPromoterId">
+                POSM_PROMOTER_ID_N=#posmPromoterId:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmAllopatryReturnGoods">
+                POSM_ALLOPATRY_RETURN_GOODS_N=#posmAllopatryReturnGoods:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmManualAuthComplete">
+                POSM_MANUAL_AUTH_COMPLETE_N=#posmManualAuthComplete:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmCascadeAuthCancel">
+                POSM_CASCADE_AUTH_CANCEL_N=#posmCascadeAuthCancel:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmBankCardDeal">
+                POSM_BANK_CARD_DEAL_N=#posmBankCardDeal:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmPpcCardDeal">
+                POSM_PPC_CARD_DEAL_N=#posmPpcCardDeal:NUMERIC#
+            </isNotNull>
+            <isNotEmpty prepend="and" property="posmExpandBitmap">
+                POSM_EXPAND_BITMAP_V=#posmExpandBitmap:VARCHAR#
+            </isNotEmpty>
+            <isNotNull prepend="and" property="posmVersion">
+                POSM_VERSION_N=#posmVersion:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmCreateTime">
+                POSM_CREATE_TIME_T=#posmCreateTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmLastUpdateTime">
+                POSM_LAST_UPDATE_TIME_T=#posmLastUpdateTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="mcContractBeginDate">
+                MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="mcContractEndDate">
+                MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="mcContractRealEndDate">
+                MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="mcId">
+                MC_ID_N=#mcId:NUMERIC#
+            </isNotNull>
+            <isNotEmpty property="mcMerchantNo">
+                <isNotNull prepend="and" property="mcMerchantNo">
+                    MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+                </isNotNull>
+            </isNotEmpty>
+            <isNotEmpty property="mcContractNo">
+                <isNotNull prepend="and" property="mcContractNo">
+                    MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+                </isNotNull>
+            </isNotEmpty>
+            <isNotEmpty property="mcStatus">
+                <isNotNull prepend="and" property="mcStatus">
+                    MC_STATUS_C=#mcStatus:VARCHAR#
+                </isNotNull>
+            </isNotEmpty>
+            <isNotEmpty property="mcType">
+                <isNotNull prepend="and" property="mcType">
+                    MC_TYPE_C=#mcType:VARCHAR#
+                </isNotNull>
+            </isNotEmpty>
+            <isNotNull prepend="and" property="mcVersion">
+                MC_VERSION_N=#mcVersion:NUMERIC#
+            </isNotNull>
+            <isNotNull prepend="and" property="mcCreateTime">
+                MC_CREATE_TIME_T=#mcCreateTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="mcLastUpdateTime">
+                MC_LAST_UPDATE_TIME_T=#mcLastUpdateTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="and" property="posmIdNum">
+                POSM_ID_NUM_V=#posmIdNum:VARCHAR#
+            </isNotNull>
+            <isNotEmpty property="mcMerchantName">
+                <isNotNull prepend="and" property="mcMerchantName">
+                    MC_MERCHANT_NAME_V like '%'||#mcMerchantName:VARCHAR#||'%'
+                </isNotNull>
+            </isNotEmpty>
+            <isNotNull prepend="and" property="exceptMcStatusArr">
+                <iterate property="exceptMcStatusArr" prepend=" MC_STATUS_C not in "
+                         open="(" close=")" conjunction=",">
+                    #exceptMcStatusArr[]:VARCHAR#
+                </iterate>
+            </isNotNull>
+            <isNotEmpty prepend="and" property="mcBeginLastUpdateDate">
+                to_char(mc_last_update_time_t,'yyyy-mm-dd')>=#mcBeginLastUpdateDate:VARCHAR#
+            </isNotEmpty>
+            <isNotEmpty prepend="and" property="mcEndLastUpdateDate">
+                #mcEndLastUpdateDate:VARCHAR#>=to_char(mc_last_update_time_t,'yyyy-mm-dd')
+            </isNotEmpty>
+        </dynamic>
+    </select>
+
+    <delete id="delete" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+        delete from ppcpay.CM_POS_MERCHANT where POSM_ID_N=#posmId:NUMERIC# and POSM_VERSION_N=#posmVersion:NUMERIC#
+    </delete>
+
+
+</sqlMap>

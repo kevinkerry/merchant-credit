@@ -1,0 +1,44 @@
+<div class="content main_box">
+		<div class="path clearfix" style="padding-left: 130px;">
+			<div class="step1 on l">
+				<span>1</span>
+				<p>上传资料</p>
+			</div>
+			<div class="step2 on l">
+				<span>2</span>
+				<p>提交申请 等待审核</p>
+			</div>
+			<div class="step3 on l">
+				<span>3</span>
+				<p>审核通过</p>
+			</div>
+			#*<div class="step4 l">
+				<span>✔</span>
+				<p>下载授信协议，签约盖章，额度生效</p>
+			</div>*#
+		</div>
+		<div class="ban_table clearfix" style="padding-left: 130px;">
+			<table class="m_table">
+				<tr>
+					<td>授信额度：$!amountLimit  元</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>授信期限：1 年</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>借款利率：$!{fRate}%/日（按日计息，放款时一次性扣除）</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>服务费：$!{sRate}%/日（按借款金额及期限核算，放款时一次性扣除）</td>
+					<td>
+
+						##<a href="$!{merchantAgreementUrl}" target="_blank">点击下载授信协议</a>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+</div>

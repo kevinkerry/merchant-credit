@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="D:\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.mcwithfunding.dao" targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.mcwithfunding.dao.mapper"  targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.mcwithfunding.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.mcwithfunding.manager" implementationPackage="com.sdp.mc.mcwithfunding.manager.impl" generatorEnable="true"  targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="MC_WITH_CAPITAL_4PROMOTER" domainObjectName="WithCapital4PromoterDO">
+		<generatedKey column="ID" sqlStatement="select SEQ_MC_WITH_CAPITAL_4PROMOTER.nextval from dual" type="pre" />
+		<columnOverride column="ID" 						property="id" 					javaType="java.lang.Long" />
+    	<columnOverride column="MC_TYPE" 					property="mcType" 				javaType="java.lang.String"/>
+    	<columnOverride column="PROMOTER_ID" 				property="promoterId" 			javaType="java.lang.Long"/>
+    	<columnOverride column="MERCHANT_NO" 				property="merchantNo" 			javaType="java.lang.String"/>
+    	<columnOverride column="PROMOTER_NAME" 				property="promoterName" 		javaType="java.lang.String"/>
+    	<columnOverride column="APPLY_DATETIME" 			property="applyDatetime" 		jdbcType="TIMESTAMP"/>
+    	<columnOverride column="AMOUNT" 					property="amount" 				/>
+    	<columnOverride column="FEE_RATIO" 					property="feeRatio" 			javaType="java.lang.String"/>
+    	<columnOverride column="FEE" 						property="fee" 					/>
+    	<columnOverride column="CREDIT_FOS_ID" 				property="creditFosId" 			javaType="java.lang.Long"/>
+    	<columnOverride column="CREDIT_CHANGE_ID" 			property="creditChangeId" 		javaType="java.lang.Long"/>
+    	<columnOverride column="REVERSAL_FOS_ID" 			property="reversalFosId" 		javaType="java.lang.Long"/>
+    	<columnOverride column="REVERSAL_CHANGE_ID" 		property="reversalChangeId" 	javaType="java.lang.Long"/>
+    	<columnOverride column="STATUS" 					property="status" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="UPDATE_TIME" 				property="updateTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="BATCH_NO" 					property="batchNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="FEE_FOS_ID" 				property="feeFosId" 			javaType="java.lang.Long"/>
+    	<columnOverride column="RECOVERY_DATE" 				property="recoveryDate" 		jdbcType="TIMESTAMP"/>
+    	<columnOverride column="RETRY_TIMES_4MSP" 			property="retryTimes4msp" 		javaType="java.lang.Integer"/>
+    </table>
+  </context>
+</generatorConfiguration>

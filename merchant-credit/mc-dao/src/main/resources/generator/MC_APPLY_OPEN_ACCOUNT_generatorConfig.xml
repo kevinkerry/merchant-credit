@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.mcbizaccount.dao" targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.mcbizaccount.dao.mapper"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.mcbizaccount.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.mcbizaccount.manager" implementationPackage="com.sdp.mc.mcbizaccount.manager.impl" generatorEnable="true"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="MC_APPLY_OPEN_ACCOUNT" domainObjectName="BizApplyOpenAccountDO">
+		<generatedKey column="ID" sqlStatement="select SEQ_MC_APPLY_OPEN_ACCOUNT.nextval from dual" type="pre" />
+		<columnOverride column="ID" 						property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="ACCOUNT_TYPE" 					property="accountType" 			javaType="java.lang.Long" />
+    	<columnOverride column="PROMOTER_ID" 					property="promoterId" 				javaType="java.lang.Long"/>
+    	<columnOverride column="MERCHANT_NO" 					property="merchantNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="PROMOTER_NAME" 					property="promoterName" 			javaType="java.lang.String"/>
+    	<columnOverride column="ACCOUNT_ID" 					property="accountId" 				javaType="java.lang.String"/>
+    	<columnOverride column="MEMBER_ID" 						property="memberId" 				javaType="java.lang.String"/>
+    	<columnOverride column="STATUS" 						property="status" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="BIZ_ID" 						property="bizId" 					javaType="java.lang.Long"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table>
+  </context>
+</generatorConfiguration>

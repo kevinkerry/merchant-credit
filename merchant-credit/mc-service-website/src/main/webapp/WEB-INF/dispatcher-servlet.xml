@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+    <!-- scan location -->
+    <aop:aspectj-autoproxy/>
+    <context:component-scan base-package="com.sdp.mc" />
+    <context:component-scan base-package="com.sdp.emall.intra.admin.**.action" />
+    <mvc:annotation-driven />
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    <!-- velocity config -->
+    <bean id="velocityConfigurer"
+        class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath">
+            <value>/WEB-INF/view</value>
+        </property>
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <!-- <prop key="velocimacro.library">/control/macros.vm</prop> -->
+            </props>
+        </property>
+    </bean>
+
+    <!-- 处理velocity布局 -->
+    <bean id="viewResolver"
+        class="com.sdp.mc.common.web.resolver.VelocityMultipleLayoutViewResolver">
+        <property name="cache" value="true" />
+        <property name="prefix" value="" />
+        <property name="suffix" value=".vm" />
+        <property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />
+        <property name="contentType" value="text/html; charset=utf-8"></property>
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="requestContextAttribute" value="rc"/>
+        <property name="mappings">
+            <map>
+                <!-- 个性化布局扩展在此添加，需要将个性的放前面 -->
+              <entry key="*" value="layout/default.vm" />
+
+            </map>
+        </property>
+    </bean>
+
+    <!-- 处理Mutipart文件上传 -->
+<!--     <bean id="multipartResolver" -->
+<!--         class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> -->
+<!--         <property name="defaultEncoding"> -->
+<!--             <value>UTF-8</value> -->
+<!--         </property> -->
+<!--         <property name="maxUploadSize"> -->
+<!--             <value>104857600</value> -->
+<!--         </property> -->
+<!--     </bean> -->
+
+    <!-- 异常处理 -->
+    <bean id="exceptionResolver"
+        class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView">
+            <value>/error/defError</value>
+        </property>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.sql.SQLException">/error/dbError</prop>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">/error/uploadError</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
+

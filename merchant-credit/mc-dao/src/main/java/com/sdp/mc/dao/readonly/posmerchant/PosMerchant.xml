@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="PosMerchantDAO">
+    <resultMap id="result" class="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO"
+               extends="PosMerchantDAOAbstract.result">
+        <result property="terminalCount" column="terminal_count_n"/>
+        <result property="promoterMerchantNo" column="promoter_merchant_no"/>
+        <result property="mcPosmPromoterName" column="mc_posm_promoter_name_v"/>
+    </resultMap>
+    <resultMap id="fastSettleResult" class="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO"
+               extends="PosMerchantDAOAbstract.result">
+        <result property="fastSettleFlag" column="fast_settle_flag"/>
+        <result property="fastSettleLimit" column="fast_settle_limit"/>
+        <result property="promoterMerchantNo" column="promoter_merchant_no"/>
+        <result property="mcPosmPromoterName" column="mc_posm_promoter_name_v"/>
+        <result property="pmtFastSettleLimit" column="PMT_FAST_SETTLE_LIMIT"/>
+        <result property="pmtFastSettleMargin" column="PMT_FAST_SETTLE_MARGIN"/>
+        <result property="pmtFastConfigureLimit" column="PMT_FAST_CONFIGURE_LIMIT"/>
+        <result property="pmtFastSettleRatio" column="PMT_FAST_SETTLE_RATIO_N"/>
+    </resultMap>
+
+
+
+    <sql id="where_query">
+        <dynamic prepend="">
+            <isEmpty prepend="and " property="posMerchantType">
+            	<isNotNull property="posMerchantType">
+	                m.mc_type_c in( '0001', '0005', '0006' )
+            	</isNotNull>
+            </isEmpty>
+
+			<isNotNull property="posMerchantTypeList">
+            <iterate prepend=" and m.mc_type_c in " property="posMerchantTypeList" open="(" close=")"
+                     conjunction=",">
+                #posMerchantTypeList[]:VARCHAR#
+            </iterate>
+            </isNotNull>
+
+            <isNotEmpty prepend="and" property="merchantName">
+            	<isNotNull property="merchantName">
+                m.mc_merchant_name_v like '%'|| #merchantName:VARCHAR# ||'%'
+                </isNotNull>
+            </isNotEmpty>
+
+			<isNotNull property="merchantNoList">
+            <iterate prepend=" and m.mc_merchant_no_v in " property="merchantNoList" open="(" close=")" conjunction=",">
+                #merchantNoList[]:VARCHAR#
+            </iterate>
+            </isNotNull>
+
+			<isNotNull property="posMerchantNoList">
+            <iterate prepend=" and p.posm_pos_merchant_no_c in " property="posMerchantNoList" open="(" close=")"
+                     conjunction=",">
+                #posMerchantNoList[]:VARCHAR#
+            </iterate>
+            </isNotNull>
+
+            <isNotEmpty prepend="and" property="status">
+				<isNotNull property="status">
+                m.mc_status_c $status$
+	            </isNotNull>
+            </isNotEmpty>
+
+			<isNotNull property="mccList">
+            <iterate prepend=" and p.posm_internal_mcc_id_n in " property="mccList" open="(" close=")"
+                     conjunction=",">
+                #mccList[]:VARCHAR#
+            </iterate>
+            </isNotNull>
+
+            <isNotEmpty prepend="and" property="provinceId">
+            	<isNotNull property="provinceId">
+                province.dct_parent_district_id_n =#provinceId#
+                </isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="districtId">
+            	<isNotNull property="districtId">
+                p.posm_district_id_n =#districtId#
+                </isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="createTimeStart">
+            	<isNotNull property="createTimeStart">
+                <![CDATA[
+                p.posm_create_time_t >= #createTimeStart:TIMESTAMP#
+				]]>
+				</isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="createTimeEnd">
+            	<isNotNull property="createTimeEnd">
+                <![CDATA[
+            	p.posm_create_time_t < #createTimeEnd:TIMESTAMP#
+				]]>
+			</isNotNull>
+            </isNotEmpty>
+
+            <isNotNull prepend="" property="hasTerminal">
+                <isEqual prepend="and" property="hasTerminal" compareValue="true">
+                    tc.terminal_count_n > 0
+                </isEqual>
+                <isEqual prepend="and" property="hasTerminal" compareValue="false">
+                    tc.terminal_count_n is null
+                </isEqual>
+            </isNotNull>
+
+			<isNotNull property="promoterMerchantNoList">
+            <iterate prepend=" and prom.mc_merchant_no_v in " property="promoterMerchantNoList" open="(" close=")"
+                     conjunction=",">
+                #promoterMerchantNoList[]:VARCHAR#
+            </iterate>
+            </isNotNull>
+
+            <isNotEmpty prepend="and" property="promoterName">
+            	<isNotNull property="promoterName">
+                prom.mc_merchant_name_v like '%' || #promoterName:VARCHAR# || '%'
+                </isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="posmMposSalesType">
+            	<isNotNull property="posmMposSalesType">
+                p.POSM_MPOS_SALES_TYPE_N=#posmMposSalesType#
+                </isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="mcLoginAccount">
+            	<isNotNull property="mcLoginAccount">
+            	m.MC_LOGIN_ACCOUNT_V=#mcLoginAccount#
+            	</isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="settleMinValue">
+            	<isNotNull property="settleMinValue">
+                <![CDATA[
+                mset.fast_settle_limit >= #settleMinValue#
+				]]>
+				</isNotNull>
+            </isNotEmpty>
+
+            <isNotEmpty prepend="and" property="settleMaxValue">
+            	<isNotNull property="settleMaxValue">
+                <![CDATA[
+                mset.fast_settle_limit <= #settleMaxValue#
+				]]>
+				</isNotNull>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!-- 查询posMerchant -->
+    <select id="queryPosMerchantList"
+            parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantCond"
+            resultMap="PosMerchantDAO.result">
+        select m.*, p.*, tc.terminal_count_n ,prom.mc_merchant_no_v as promoter_merchant_no,prom.mc_merchant_name_v as mc_posm_promoter_name_v
+        from ppcpay.CM_POS_MERCHANT p
+        join ppcpay.CM_MERCHANT_CONTRACT m on p.posm_id_n = m.mc_id_n
+
+        left join
+        (select count(1) as terminal_count_n, t.term_posm_id_n as term_posm_id_n
+        from ppcpay.CM_TERMINAL t
+        group by t.term_posm_id_n
+        ) tc on tc.term_posm_id_n = p.posm_id_n
+
+        left join
+        (select * from ppcpay.CM_MERCHANT_CONTRACT where mc_type_c in ('0003','0007')
+        ) prom on p.posm_promoter_id_n = prom.mc_id_n
+
+        left join ppcpay.CM_DISTRICT province on p.posm_district_id_n = province.dct_id_n
+
+        where 1=1
+        <include refid="where_query"/>
+        order by m.mc_create_time_t desc
+    </select>
+
+    <select id="queryPosMerchantCount"
+            parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantCond"
+            resultClass="java.lang.Integer">
+        select count(*)
+        from ppcpay.CM_POS_MERCHANT p
+        join ppcpay.CM_MERCHANT_CONTRACT m on p.posm_id_n = m.mc_id_n
+
+        left join
+        (select count(1) as terminal_count_n, t.term_posm_id_n as term_posm_id_n
+        from ppcpay.CM_TERMINAL t
+        group by t.term_posm_id_n
+        ) tc on tc.term_posm_id_n = p.posm_id_n
+
+        left join
+        (select * from ppcpay.CM_MERCHANT_CONTRACT where mc_type_c in ('0003','0007')
+        ) prom on p.posm_promoter_id_n = prom.mc_id_n
+
+		left join ppcpay.CM_DISTRICT province on p.posm_district_id_n = province.dct_id_n
+        where 1=1
+        <include refid="where_query"/>
+    </select>
+
+    <select id="queryPosMerchantFastSettleCount"
+            parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantCond"
+            resultClass="java.lang.Integer">
+			select count(*) FROM ppcpay.CM_POS_MERCHANT P INNER JOIN ppcpay.CM_MERCHANT_CONTRACT M ON P.posm_id_n = M.mc_id_n
+			INNER JOIN ppcpay.CM_PROMOTER pmt ON pmt.pmt_id_n = p.posm_promoter_id_n
+			left join (
+				select * from ppcpay.CM_MERCHANT_CONTRACT where mc_type_c in ('0003','0007')
+			) prom on p.posm_promoter_id_n = prom.mc_id_n
+			INNER JOIN PCS.MERCHANT_SETTLE mset ON mset.merchant_no = m.MC_MERCHANT_NO_V and mset.fast_settle_flag = 1
+			<include refid="where_query"/>
+    </select>
+
+    <select id="queryPosMerchantFastSettleList"
+            parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantCond"
+            resultMap="PosMerchantDAO.fastSettleResult">
+			select m.*, p.*,mset.fast_settle_flag,mset.fast_settle_limit,prom.mc_merchant_no_v as promoter_merchant_no
+			,prom.mc_merchant_name_v as mc_posm_promoter_name_v,pmt.*
+			FROM ppcpay.CM_POS_MERCHANT P INNER JOIN ppcpay.CM_MERCHANT_CONTRACT M ON P.posm_id_n = M.mc_id_n
+			INNER JOIN ppcpay.CM_PROMOTER pmt ON pmt.pmt_id_n = p.posm_promoter_id_n
+			left join (
+				select * from ppcpay.CM_MERCHANT_CONTRACT where mc_type_c in ('0003','0007')
+			) prom on p.posm_promoter_id_n = prom.mc_id_n
+			INNER JOIN PCS.MERCHANT_SETTLE mset ON mset.merchant_no = m.MC_MERCHANT_NO_V and mset.fast_settle_flag = 1
+			<include refid="where_query"/>
+        order by m.mc_create_time_t desc
+    </select>
+
+    <!--未选择-->
+
+    <select id="queryMerchantPromoterList" parameterClass="java.util.Map" resultMap="PosMerchantDAOAbstract.result">
+        select *
+        from ppcpay.CM_POS_MERCHANT pm, ppcpay.CM_MERCHANT_CONTRACT mc where pm.posm_id_n=mc.mc_id_n
+        <iterate property="posMerchantNOList" prepend="and pm.posm_pos_merchant_no_c in " open="(" close=")"
+                 conjunction=",">
+            #posMerchantNOList[]:VARCHAR#
+        </iterate>
+    </select>
+
+    <select id="queryPosMerchantNotDeleted" parameterClass="java.util.Map" resultMap="PosMerchantDAOAbstract.result">
+        <![CDATA[
+			select *
+			from ppcpay.CM_POS_MERCHANT pm, ppcpay.CM_MERCHANT_CONTRACT mc
+			where pm.posm_id_n=mc.mc_id_n
+			and mc.mc_contract_no_v=#contractNO#
+			and mc.mc_status_c <> #status#
+		]]>
+    </select>
+
+    <select id="queryPosMerchantIdByNo" parameterClass="java.util.Map" resultClass="java.lang.Long">
+        <![CDATA[
+			select cm.mc_id_n
+			from ppcpay.CM_POS_MERCHANT pm, ppcpay.CM_MERCHANT_CONTRACT cm
+			where pm.posm_id_n=cm.mc_id_n
+			and pm.posm_pos_merchant_no_c=#posMerchantNO#
+			and cm.mc_status_c in ( $status$ )
+		]]>
+    </select>
+
+
+    <!-- mpos的代理商查所属的mpos商户 -->
+    <select id="getMerchantNoByMposPromoter" parameterClass="java.lang.String" resultClass="java.lang.String">
+        select mc.mc_merchant_no_v
+        from ppcpay.CM_MERCHANT_CONTRACT mc, ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT pmt
+        where mc.mc_id_n=posm.posm_id_n
+        and posm.posm_promoter_id_n=pmt.mc_id_n
+        and mc.mc_status_c in ( '3' )
+        and pmt.mc_type_c='0007'
+        and pmt.mc_status_c='3'
+        and pmt.mc_merchant_no_v=#pmtMerchantNo:VARCHAR#
+    </select>
+
+    <!-- 根据pos/minipos/mpos的类型查询 -->
+    <select id="queryMerchantListByType" parameterClass="java.lang.String" resultMap="PosMerchantDAOAbstract.result">
+        select mc.*, posm.*
+        from ppcpay.CM_MERCHANT_CONTRACT mc, ppcpay.CM_POS_MERCHANT posm
+        where mc.mc_id_n=posm.posm_id_n
+        and mc.mc_status_c in ( '1', '3' )
+        and mc.mc_type_c=#merchantType:VARCHAR#
+        order by mc.mc_id_n asc
+    </select>
+
+    <select id="queryPosMerchantIdByTerminalNo" parameterClass="java.lang.String"
+            resultMap="PosMerchantDAOAbstract.result">
+        select mc.*, posm.*
+        from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_TERMINAL term,ppcpay.CM_MERCHANT_CONTRACT mc
+        where posm.posm_id_n=mc.mc_id_n
+        and posm.posm_id_n=term.term_posm_id_n
+        and term.term_terminal_no_c=#terminalNO:VARCHAR#
+    </select>
+
+    <select id="queryPosMerchantByMerchantNO" parameterClass="java.util.Map"
+            resultMap="PosMerchantDAOAbstract.result">
+        select mc.*, posm.*
+        from ppcpay.CM_POS_MERCHANT posm, ppcpay.CM_MERCHANT_CONTRACT mc
+        where posm.posm_id_n=mc.mc_id_n
+        and mc.mc_merchant_no_v=#merchantNO:VARCHAR#
+        and mc.mc_status_c in ( $status$ )
+        and mc.mc_type_c in ( $mcType$ )
+    </select>
+
+    <update id="updateMccByPosmId" parameterClass="java.util.Map">
+        update ppcpay.CM_POS_MERCHANT posm
+        set posm.POSM_VERSION_N= posm.POSM_VERSION_N+1,
+        posm.POSM_LAST_UPDATE_TIME_T = systimestamp,
+        posm.POSM_INTERNAL_MCC_ID_N=#mccId:NUMERIC#,
+        posm.POSM_INTERNAL_MCC_NAME_V=#mccName:VARCHAR#
+        where posm.POSM_ID_N = #mcId:NUMERIC#
+    </update>
+
+	<update id="updatePromoter" parameterClass="java.util.Map">
+		update ppcpay.CM_POS_MERCHANT cpm
+		set cpm.posm_promoter_id_n=#newPromoterId:NUMBERIC#,
+		    cpm.posm_promoter_name_v=#newPromoterName#,
+		    cpm.posm_version_n = cpm.posm_version_n+1,
+		    cpm.posm_last_update_time_t = sysdate
+		where cpm.posm_promoter_id_n=#oldPromoterId:NUMBERIC#
+	</update>
+	<update id="updateMerchantPomoter" parameterClass="com.sdp.mc.dao.readonly.posmerchant.PosMerchantEO">
+		update ppcpay.CM_POS_MERCHANT cpm
+		set cpm.posm_promoter_id_n=#posmPromoterId#,
+		    cpm.posm_promoter_name_v=#posmPromoterName#,
+		    cpm.posm_version_n = cpm.posm_version_n+1,
+		    cpm.posm_last_update_time_t = systimestamp
+		where cpm.posm_id_n=#posmId#
+	</update>
+
+	<select id="queryPosMerchantEOByMposInfo" parameterClass="java.lang.String"
+        resultMap="PosMerchantDAOAbstract.merchantResult">
+   	  select posm.*
+      from ppcpay.CM_POS_MERCHANT posm
+      inner join (select term_posm_id_n
+                   from ppcpay.CM_TERMINAL term
+                  where term.term_seq_no_v = #value#
+                    and term.term_terminal_no_c like 'A%') t1
+        on (posm.posm_id_n = t1.term_posm_id_n)
+    </select>
+
+    <select id="getPromoterChildByMerchantNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+  	 select mc.mc_merchant_no_v
+     from (select *
+             from (select *
+                     from ppcpay.CM_MERCHANT_CONTRACT pmt
+                    where pmt.mc_merchant_no_v = #value#) t1
+             left join ppcpay.CM_POS_MERCHANT posm
+               on (t1.mc_id_n = posm.posm_id_n)) t2
+     left join ppcpay.CM_POS_MERCHANT posm
+       on (t2.posm_promoter_id_n = posm.posm_promoter_id_n)
+     left join ppcpay.CM_MERCHANT_CONTRACT mc
+       on (mc.mc_id_n = posm.posm_id_n) where mc.mc_status_c='3'
+    </select>
+
+    <select id="getPosMerchantNoByMerchantNo" parameterClass="java.lang.String" resultClass="java.lang.String">
+    	select posm.posm_pos_merchant_no_c from ppcpay.CM_MERCHANT_CONTRACT cm,ppcpay.CM_POS_MERCHANT posm where  cm.mc_merchant_no_v=#value# and cm.mc_id_n=posm.posm_id_n
+    </select>
+
+    <select id="qryMerchantByMerchantNoAdMcType" parameterClass="java.util.Map" resultMap="PosMerchantDAOAbstract.result">
+    	select * from ppcpay.CM_POS_MERCHANT cpm ,ppcpay.CM_MERCHANT_CONTRACT mc
+    	where cpm.posm_id_n=mc.mc_id_n
+    	  and mc.mc_merchant_no_v=#merchantNo:VARCHAR#
+    	  and mc.mc_type_c = #mcType:VARCHAR#
+    </select>
+
+    <select id="queryPosMerchantEOByTermId" parameterClass="java.lang.Long" resultMap="PosMerchantDAOAbstract.merchantResult">
+    	select * from ppcpay.CM_POS_MERCHANT posm where posm.posm_id_n=#value#
+    </select>
+
+    <select id="queryMccFeeByMccCode" parameterClass="java.lang.String" resultClass="java.math.BigDecimal">
+	    select
+	    pfr.pfr_fee_value_n as fee_value
+	    from cm_promoter_fee pf, cm_promoter_fee_row pfr, ppcpay.CM_MCC mcc
+		where pf.pf_id_n=pfr.pfr_pf_id_n
+		and pf.pf_internal_mcc_code_v=mcc.mcc_code_c
+		and pf.pf_card_type_c='0200'
+		and pf.pf_internal_mcc_code_v=#value#
+    </select>
+
+
+</sqlMap>

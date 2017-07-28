@@ -1,0 +1,121 @@
+#set($page_title = '测试 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/test/test')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		        <td class="lbl">merchantNo：</td>
+		        <td width="200">
+		        	<input type="text" id="merchantNo" name="merchantNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">posMerchantNo：</td>
+		        <td width="200">
+        			<input type="text" id="posMerchantNo" name="posMerchantNo" value="" class="txt130">
+		        </td>
+				<td class="lbl">txnIds(多个用","隔开)：</td>
+		        <td width="200">
+        			<input type="text" id="txnIds" name="txnIds" value="" class="txt130">
+		        </td>
+		    </tr>
+
+		    <tr>
+		        <td colspan="6" align="center">
+		            <a href="#" class="btn2" id="queryBtn1" onclick="merchantFastSettleCfg()">获取MPOS T0业务信息</a><br />
+					<a href="#" class="btn2" id="queryBtn2" onclick="applyFastSettle()">MPOS T0交易申请</a><br />
+					<a href="#" class="btn2" id="queryBtn3" onclick="queryValidOrderList()">查看申请列表信息</a><br />
+					<a href="#" class="btn2" id="queryBtn4" onclick="getMposFastSettleInfo()">商户快速结算信息</a><br />
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function applyFastSettle(){
+    	var _ids = ['merchantNo','posMerchantNo','txnIds'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/test/applyFastSettle.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	function merchantFastSettleCfg(){
+    	var _ids = ['merchantNo','posMerchantNo','txnIds'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/test/merchantFastSettleCfg.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	function getMposFastSettleInfo(){
+    	var _ids = ['merchantNo','posMerchantNo','txnIds'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/test/getMposFastSettleInfo.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	function queryValidOrderList(){
+    	var _ids = ['merchantNo','posMerchantNo','txnIds'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/test/queryValidOrderList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+</script>

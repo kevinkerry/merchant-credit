@@ -1,0 +1,137 @@
+#set($page_title = '新老T0退手续费 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title
+		<a  style="padding-left:70%;color: #007def;" href="#springUrl('/newT0/fastSettleApplyRecordIndex.do')"  target="_blank">点此查看2016-04-19以前数据</a>
+	</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/ajaxPaging/autoFastSettleMerchantQuery.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0" width="100%">
+		    <tbody>
+	    		<tr>
+			        <td width="100" class="lbl">盛付通商户号：</td>
+			        <td width="140">
+			        	<input type="text" id="merchantNo" class="txt130" name="merchantNo" value="$!query.merchantNo">
+			        </td>
+			        <td width="100" class="lbl">拓展方商户号：</td>
+			        <td width="140">
+			        	<input type="text" id="promoterNo" name="promoterNo" class="txt130" value="$!query.promoterNo">
+			        </td>
+					 <!-- <td width="100" class="lbl">拓展方商户名称：</td>
+					 <td width="140">
+			        	<input type="text" id="promoterName" name="promoterName" class="txt130" value="$!query.promoterName">
+			        </td> -->
+			        <td width="100" class="lbl">出款请求单号：</td>
+					 <td width="140">
+			        	<input type="text" id="orderNo" name="orderNo" class="txt180" value="$!query.orderNo">
+			        </td>
+			    </tr>
+
+			    <tr>
+			        <td class="lbl">退费状态：</td>
+			        <td>
+						<select id="remitStatus" name="remitStatus"  class="w130">
+			        		<option value="">全部</option>
+			        		#foreach($!param in $!{reqStatusName.keySet()})
+			                <option value="$!param">$!{param}-$!{reqStatusName.get($param)}</option>
+			                #end
+	        			</select>
+			        </td>
+					<td class="lbl">商户类型：</td>
+			        <td colspan="3">
+			            <select name="mcType" id="mcType" class="w130">
+			                <option value="">全部</option>
+			                <option value="0001" #if("$!query.mcType"=="0001")selected#end>0001-普通POS商户</option>
+			                <option value="0006" #if("$!query.mcType"=="0006")selected#end>0006-mPOS商户</option>
+			                <option value="0201" #if("$!query.mcType"=="0201")selected#end>0201-云收银商户</option>
+			            </select>
+			        </td>
+			    </tr>
+                <tr>
+				<td class="lbl">申请时间：</td>
+			        <td colspan="6">
+			            <input type="text" id="startApplyTime" name="startApplyTime" class="date txt130" onclick="xDatePicker(2);">
+			            ~
+			            <input type="text" id="endApplyTime" name="endApplyTime" class="date txt130" onclick="xDatePicker(2);">
+			            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('startApplyTime'), -1, elm('endApplyTime') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：今天">今</a>
+			        </td>
+			        <td></td>
+				</tr>
+			    <tr>
+			        <td colspan="6" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	window.onload=function(){
+		setTimeStartEnd(-29,elm("startApplyTime"),0,elm("endApplyTime"));
+	};
+	var ALL_COND_ID = ['orderNo', 'serviceType', 'merchantNo', 'startApplyTime', 'endApplyTime','remitStatus','mcType','promoterName','promoterNo'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/newT0/ajaxPaging/refoundList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+    //出款重试
+     function refound(reqId){
+	  	if(!confirm("本次T+0结算确定要退费吗？")){
+    		return;
+    	}
+     	var data = {"reqId":reqId};
+     	jQuery.ajax({
+ 			type: 'POST',
+ 		    url: "#springUrl('/newT0/refoundWithdrawFee.do')" ,
+ 		    data: data ,
+ 		    dataType: "json",
+ 		    success: function(data){
+ 		    	if(data){
+ 			    	alert(data.errorMessage);
+ 		    	}else{
+ 		    		alert(data);
+ 		    	}
+ 		    	ajaxPaging();
+ 		    }
+ 		});
+     }
+
+
+</script>

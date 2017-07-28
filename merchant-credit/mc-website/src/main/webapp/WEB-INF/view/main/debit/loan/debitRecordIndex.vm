@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="#staticResource('/My97DatePicker/skin/msp/datepicker.css')?version=1" type="text/css">
+<script type="text/javascript" src="#staticResource('/My97DatePicker/WdatePicker.js')"></script>
+<script type="text/javascript" src="#staticResource('/My97DatePicker/calendar.js')"></script>
+<form id="submitForm" name="submitForm">
+<div class="content main_box">
+	<div class="ban_table clearfix">
+		<div class="ban_left l">
+			<a href="#relativeUrl('/debit/myDebitOrders.htm')">我的借款</a>
+			<a href="#relativeUrl('/debit/debitRecordIndex.htm')" class="on">借款申请记录</a>
+			<a href="#relativeUrl('/overdue/index.htm')">逾期管理</a>
+			<a href="#relativeUrl('/credit/appStatusInfo.htm')">认证信息中心</a>
+		</div>
+		<div class="ban_right no_bor l">
+			<div class="search">
+				<p class="search_list"><span>申请时间</span>
+				<input class="input-normal date" size="20" id="startTimeStr" name="startTimeStr" value="$!{startTimeStr}" onfocus="xDatePicker(1);"/>
+				到
+				<input class="input-normal date" size="20" id="endTimeStr"  name="endTimeStr"  value="$!{endTimeStr}" onfocus="xDatePicker(1);"/>
+				<a href="javascript:ajaxPaging();">查询</a></p>
+				<div id="container"><div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<script type="text/javascript">
+	##初始化时间
+	window.onload=function(){
+		//setTimeStartEnd(-29,elm("startTimeStr"),0,elm("endTimeStr"));
+		setDateStartEndRang(-30,"startTimeStr",0,"endTimeStr");
+		ajaxPaging();
+	};
+	//分页查询
+	function ajaxPaging(){
+		var currentPage=jQuery("#currentPage_submitForm").val();
+		currentPage=currentPage?currentPage:1;
+		var data = {"currentPage":currentPage};
+		data['timestamp'] = new Date().getTime();
+		var startTimeStr = jQuery("#startTimeStr").val();
+		if(startTimeStr!=""){
+			data['startTimeStr'] = startTimeStr;
+		}
+		var endTimeStr = jQuery("#endTimeStr").val();
+		if(endTimeStr!=""){
+			data['endTimeStr'] = endTimeStr;
+		}
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/ajaxPaging/debitRecordList.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+</script>

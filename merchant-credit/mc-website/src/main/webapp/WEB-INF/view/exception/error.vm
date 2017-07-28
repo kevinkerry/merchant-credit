@@ -1,0 +1,22 @@
+#set($page_title = '系统繁忙')
+<div class="page_container">
+<div class="ccr_success">
+	<div class="result_msg">
+		<div class="result_error">
+			<div class="result_icon">
+				<h3>系统繁忙!</h3>
+				<div>
+					亲爱的用户，现在系统有些繁忙，请您返回重试一下 。如遇到资金问题等紧急情况，<br/>请您马上致电 <b class="key_num">95105222-8152</b>，让我们的彩虹客服为您排忧。</div>
+			</div>
+			 #set($e = $!request.getAttribute("javax.servlet.error.exception"))
+			 $!e.printStackTrace()
+
+			<div class="section_btn">
+				<a href="#springUrl('/index.htm')" class="key_num">返回首页</a></div>
+		</div>
+
+
+	</div>
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</div>

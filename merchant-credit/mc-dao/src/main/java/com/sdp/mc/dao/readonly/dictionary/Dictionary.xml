@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="DictionaryDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.dictionary.DictionaryEO">
+	  <result property="id" column="ID_N" />
+	  <result property="label" column="LABEL_V" />
+	  <result property="labelName" column="LABEL_NAME_V" />
+	  <result property="key" column="KEY_V" />
+	  <result property="value" column="VALUE_V" />
+	  <result property="sort" column="SORT_N" />
+	  <result property="version" column="VERSION_N" />
+	  <result property="createTime" column="CREATE_TIME_T" />
+	  <result property="lastUpdateTime" column="LAST_UPDATE_TIME_T" />
+	</resultMap>
+
+	<select id="queryAllDictionary" resultMap="result">
+		select *
+		from ppcpay.MSP_DICTIONARY
+		order by label_v asc, sort_n asc
+	</select>
+
+	<select id="queryByLabel" resultMap="result">
+		select *
+		from ppcpay.MSP_DICTIONARY
+		where label_v=#value#
+		order by label_v asc, sort_n asc
+	</select>
+</sqlMap>

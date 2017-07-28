@@ -1,0 +1,110 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/underPromoter/ajaxPaging/queryUnderPromoter/list.htm')" method="post">
+<div class="caption">下级分润配置（结算）</div>
+		<table class="qryTb" cellspacing="0" width="80%"  cellpadding="0" >
+		    <tbody>
+			    <tr>
+			        <td class="lbl">下级拓展方号：</td>
+			        <td>
+			            <input type="text" id="merchantNo" name="merchantNo" class="txt w120">
+			        </td>
+			        <td class="lbl">下级拓展方名称：</td>
+			        <td>
+			            <input type="text" id="merchantName" name="merchantName" class="txt w120">
+			        </td>
+			        <td class="lbl">拓展方状态：</td>
+			        <td>
+			            <select id="status" name="status" class="w130">
+			            	<option value="">全部</option>
+			                <option value="1">关闭</option>
+			                <option value="3">正常</option>
+			            </select>
+			        </td>
+			    </tr>
+			    <!-- <tr>
+			        <td class="lbl">创建时间：</td>
+			        <td colspan="6">
+			            <input type="text" id="startCreateTimeStr" name="startCreateTimeStr" class="txt w180 date" onclick="xDatePicker(2);">
+			            ~
+			            <input type="text" id="endCreateTimeStr" name="endCreateTimeStr" class="txt w180 date" onclick="xDatePicker(2);">
+			            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('startCreateTimeStr'), -1, elm('endCreateTimeStr') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('startCreateTimeStr'), 0, elm('endCreateTimeStr') );return false;" title="交易时间范围：今天">今</a>
+			       <span class="red">(范围限360天)</span>
+			        <input type="hidden" id="merchantNo" name="merchantNo" value="$!{merchantNo}"/>
+			        </td>
+			        <td></td>
+			    </tr> -->
+			    <tr>
+			        <td colspan="8" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<script type="text/javascript">
+// 	var ALL_COND_ID = ['merchantNo', 'merchantName', 'status', 'startCreateTimeStr', 'endCreateTimeStr'];
+	var ALL_COND_ID = ['merchantNo', 'merchantName', 'status'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+				jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	window.onload=function(){
+// 		setTimeStartEnd(0,elm("startCreateTimeStr"),0,elm("endCreateTimeStr"));
+		//ajaxPaging();
+	};
+	
+	function queryInfo(){
+		/* var dateStr1 = jQuery("#startCreateTimeStr").val();
+		var dateStr2 = jQuery("#endCreateTimeStr").val();
+		if(dateStr1 == null || dateStr1 == ""){
+			alert("请录入起始时间");
+			return false;
+		}
+		var dateEnd;
+		var dateBegin = new Date(dateStr1.replace(/-/g, "/"));
+		if(dateStr2 == null || dateStr2 == ""){
+			dateEnd = new Date();
+		}
+		dateEnd = new Date(dateStr2.replace(/-/g, "/"));
+		
+		var dateDiff = dateEnd.getTime() - dateBegin.getTime(); 
+		var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000)); 
+		if(dayDiff > 360){
+			 alert("时间大于360天");
+			return false;
+		} */
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#pageNo_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"pageNo":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/underPromoter/ajaxPaging/queryUnderPromoter/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+    
+    
+</script>

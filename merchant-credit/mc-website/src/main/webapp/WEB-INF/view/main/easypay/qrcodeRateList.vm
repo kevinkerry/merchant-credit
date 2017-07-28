@@ -1,0 +1,43 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<div>
+	<input type="button" value="全选" onclick="checkboxSwap('selectAll');"/>  
+	<input type="button" value="反选" onclick="checkboxSwap('reverseAll');"/>
+	<input type="button" value="修改费率" onclick="showDialog();"/>
+	<input type="button" value="开启" onclick="allow('Y');"/>
+	<input type="button" value="关闭" onclick="allow('N');"/> 
+</div>
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>选择</td>
+		<td>序号</td>
+		<td>二维码编号</td>
+		<td>二级代理商</td>
+		<td>商户名称</td>
+		<td>费率</td>
+		<td>状态</td>
+		<td>注册状态</td>
+	    <td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td> #if($!{o.status}=='未使用')
+			<input type="checkbox" name="qrcodes" value="$!{o.qrCode}"  >
+			#end
+		</td>
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.qrCode}</td>
+		<td>$!{o.childMerchantNo}</td>
+		<td>$!{o.childMerchantName}</td>
+		<td>$!{o.rate}</td>
+		<td>$!{o.status}</td>
+		<td>
+		#if($!{o.allowStatus}=='Y') 开启  #else 关闭 #end
+		</td>
+        <td>
+		#if($!{o.status}=='未使用') <a href="#"  onclick="upA('$!{o.qrCode}');"  > 修改</a> #end
+		</td>
+	</tr>
+	#end
+</table>
+#parse("/main/include/page_ajax.vm")

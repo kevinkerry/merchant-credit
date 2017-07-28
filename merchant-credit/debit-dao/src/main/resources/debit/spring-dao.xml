@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd" default-autowire="byName">
+
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.shengpay.debit.daointerface" />
+
+<!-- 	<bean id="debitOrderMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer"> -->
+<!-- 		<property name="basePackage" value="com.shengpay.debit.daointerface" /> -->
+<!-- 		<property name="sqlSessionFactoryBeanName" value="mcSqlSessionFactory" /> -->
+<!-- 	</bean> -->
+
+	<bean id="debitSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>classpath:debit/ibatis/sql-map-config.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="debitDataSource" />
+		</property>
+	</bean>
+
+	<bean id="debitSqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient">
+			<ref bean="debitSqlMapClient" />
+		</property>
+	</bean>
+
+	<bean id="parentDao" class="org.springframework.orm.ibatis.support.SqlMapClientDaoSupport" abstract="true">
+		<property name="sqlMapClient" ref="debitSqlMapClient"></property>
+	</bean>
+
+	<bean name="dbNormalSettingDAO" class="com.shengpay.debit.ext.daointerface.ExtDbNormalSettingDAOImpl" parent="parentDao"/>
+	<bean name="dmMerchantDebitInfoDAO" class="com.shengpay.debit.ext.daointerface.ExtDmMerchantDebitInfoDAOImpl" parent="parentDao"/>
+	<bean name="dbThreadBatchDAO" class="com.shengpay.debit.ext.daointerface.ExtDbThreadBatchDAOImpl" parent="parentDao"/>
+	<bean name="dbThreadConfigDAO" class="com.shengpay.debit.ext.daointerface.ExtDbThreadConfigDAOImpl" parent="parentDao"/>
+	<bean name="doMerchantCreditLinesApplyDAO" class="com.shengpay.debit.ext.daointerface.ExtDoMerchantCreditLinesApplyDAOImpl" parent="parentDao"/>
+	<bean name="doMeCreditLinesApplyInfoDAO" class="com.shengpay.debit.ext.daointerface.ExtDoMeCreditLinesApplyInfoDAOImpl" parent="parentDao"/>
+	<bean name="dbRiskRequestLogDAO" class="com.shengpay.debit.ext.daointerface.ExtDbRiskRequestLogDAOImpl" parent="parentDao"/>
+	<bean name="dbOrgCreditSettingDAO" class="com.shengpay.debit.ext.daointerface.ExtDbOrgCreditSettingDAOImpl" parent="parentDao"/>
+
+	<bean name="doMerchantDebitOrderDAO" class="com.shengpay.debit.daointerface.DoMerchantDebitOrderDAOImpl" parent="parentDao"/>
+	<bean name="dmMerchantDebitLogInfoDAO" class="com.shengpay.debit.daointerface.DmMerchantDebitLogInfoDAOImpl" parent="parentDao"/>
+	<bean name="extDoAgentProfitDAO" class="com.shengpay.debit.ext.daointerface.ExtDoAgentProfitDAOImpl" parent="parentDao"/>
+	<bean name="extDoTransferLogDAO" class="com.shengpay.debit.ext.daointerface.ExtDoTransferLogDAOImpl" parent="parentDao"/>
+	<bean name="extDoMerchantDebitOrderDAO" class="com.shengpay.debit.ext.daointerface.ExtDoMerchantDebitOrderDAOImpl" parent="parentDao"/>
+	<bean name="extDmMerchantCreditBaseInfoDAO" class="com.shengpay.debit.ext.daointerface.ExtDmMerchantCreditBaseInfoDAOImpl" parent="parentDao"/>
+
+	<bean name="dmMerchantDebitLogInfoDAOImpl" class="com.shengpay.debit.ext.daointerface.ExtDmMerchantDebitLogInfoDAOImpl" parent="parentDao"/>
+	<bean name="doMerchantOverDueInfoDAOImpl" class="com.shengpay.debit.ext.daointerface.ExtDoMerchantOverDueInfoDAOImpl" parent="parentDao"/>
+
+	<bean name="dmAgentMerchantSettingListDAO" class="com.shengpay.debit.ext.daointerface.ExtDmAgentMerchantSettingListDAOImpl" parent="parentDao"/>
+	<bean name="doMerchantApplyFailLogDAO" class="com.shengpay.debit.ext.daointerface.ExtDoMerchantApplyFailLogDAOImpl" parent="parentDao"/>
+
+	<bean name="tbWithholdingBrechInfoDAOImpl" class="com.shengpay.debit.ext.daointerface.ExtTbWithholdingBrechInfoDAOImpl" parent="parentDao"/>
+	<bean name="tbWithholdingFileInfoDAOImpl" class="com.shengpay.debit.ext.daointerface.ExtTbWithholdingFileInfoDAOImpl" parent="parentDao"/>
+	<bean name="tbWithholdingOrderInfoDAOImpl" class="com.shengpay.debit.ext.daointerface.ExtTbWithholdingOrderInfoDAOImpl" parent="parentDao"/>
+	<bean name="tbWithholdingTransLogDAOImpl" class="com.shengpay.debit.ext.daointerface.ExtTbWithholdingTransLogDAOImpl" parent="parentDao"/>
+
+
+</beans>

@@ -1,0 +1,5 @@
+#set($page_title = '数据库操作错误')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+    <label class="message">数据库操作异常！请联系开发工程师！</label>
+</div>

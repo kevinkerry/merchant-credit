@@ -1,0 +1,22 @@
+<script type="text/javascript" src="#staticResource('/js/mask.js')?version=1"></script>
+<div class="content main_box">
+	#**
+	<div class="top_title">
+		<a href="javascript:;" class="btn_bg_off">额度申请</a>
+	</div>
+	**#
+</div>
+<div class="mask"></div>
+<div class="mask_box" id="mask_box">
+	<h2>提示</h2>
+	<p>很抱歉,您还有完贷款未还完，请还完贷款后再次申请。若有疑问,请致电客服021-20575188-807755！</p>
+	<div class="confirm">
+		<a href="javascript:;" class="close_btn">关闭</a>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(function(){
+		//jQuery("#mask_box").show();
+		showDiv("mask_box");
+	});
+</script>

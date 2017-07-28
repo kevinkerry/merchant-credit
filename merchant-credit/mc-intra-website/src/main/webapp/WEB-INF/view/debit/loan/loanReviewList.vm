@@ -1,0 +1,69 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+<div id="container_count" style="color: red;">
+    当前页面合计金额：$!{currentPageAmount}元，所有页面合计金额：$!{totalPageAmount}元
+</div>
+    <tr class="ttl">
+        <td><input type="checkbox" id="checkboxId" onclick="selectAll(this);" />复选框</td>
+		<td>账户号</td>
+		<td>用户名</td>
+        <td>商户号</td>
+        <td>商户名称</td>
+        <td>请款时间</td>
+        <td>账期（天数）</td>
+        <td>到期日</td>
+        <td>放款金额</td>
+        <td>放款人</td>
+        <td>放款状态</td>
+        <td>详情</td>
+        <td>操作</td>
+    </tr>
+    #foreach($o in $!{dataList})
+    <tr class="contents">
+        <td>
+            #if("$!{o.status}"=="5")
+                <input type="checkbox" name="checkname" value="$!{o.id}"/>
+            #end
+        </td>
+		<td>$!{o.lendLoginName}</td>
+		<td>$!{o.realLendLoginName}</td>
+        <td><a href="javascript:void(0)" class="lk0" onclick="document.getElementById('merchantNo').value='$!{o.merchantNo}'">$!{o.merchantNo}</a></td>
+        <td>$!{o.merchantName}</td>
+        <td>#showDateTime($!{o.applyDate})</td>
+        <td>$!{o.borrowDays}</td>
+        <td>#showDateTime($!{o.endTime})</td>
+        <td class="amount">$!{o.realAmount}</td>
+        <td>$!{o.realName}</td>
+        <td>
+        #if("$!{o.status}"=="5")
+                待放款
+        #elseif("$!{o.status}"=="1")
+                还款中
+	#elseif("$!{o.status}"=="6")
+		放款中
+        #elseif("$!{o.status}"=="7")
+                放款失败
+        #elseif("$!{o.status}"=="8")
+                拒绝放款
+        #end
+        </td>
+        <td><a href="#springUrl('/debitAudit/detail.do')?id=$!{o.id}" class="look" target="_blank">详情</a></td>
+        <td>
+            #if("$!{o.status}"=="1")
+                <a href="javascript:void(0)" disabled = 'true' class="btn2loan">还款中</a>
+            #elseif("$!{o.status}"=="6")
+				<a href="javascript:void(0)" disabled = 'true' class="btn2loan">放款中</a>
+			#elseif("$!{o.status}"=="7")
+                <a href="javascript:void(0)" disabled = 'true' class="btn2loan">放款失败</a>
+            #elseif("$!{o.status}"=="8")
+                <a href="javascript:void(0)" disabled = 'true' class="btn2loan">拒绝放款</a>
+            #elseif("$!{o.status}"=="5")
+                <a href="#" class="btn2" onclick="javascript:applayOpreation('$!{o.id}','$!{o.realAmount}','0');" style="color: #fff;">放款</a>
+                <a href="#" class="btn2" onclick="javascript:applayOpreation('$!{o.id}','$!{o.realAmount}','1');" style="color: #fff;">拒绝</a>
+            #end
+        </td>
+    </tr>
+    #end
+</table>

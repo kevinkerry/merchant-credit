@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.fos.dao" targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.fos.dao.mapper"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.fos.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.fos.manager" implementationPackage="com.sdp.mc.fos.manager.impl" generatorEnable="true"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="TB_MARGIN_TRANS" domainObjectName="MarginTransDO">
+		<generatedKey column="MT_ID" sqlStatement="select SEQ_TB_MARGIN_TRANS.nextval from dual" type="pre" />
+		<columnOverride column="MT_ID" 						property="mtId" 				javaType="java.lang.Long" />
+		<columnOverride column="STATUS" 						property="status" 				javaType="java.lang.Integer" />
+    	<columnOverride column="PRODUCT_CODE" 						property="productCode" 				javaType="java.lang.String" />
+    	<columnOverride column="APP_ID" 					property="appId" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYMENT_CODE" 						property="paymentCode" 				javaType="java.lang.String"/>
+    	<columnOverride column="REMIT_VOUCHER_NO" 					property="remitVoucherNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYER_MEMBER_ID" 					property="payerMemberId" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYEE_MEMBER_ID" 					property="payeeMemberId" 				javaType="java.lang.String"/>
+    	<columnOverride column="IS_NEED_COUNT_FEE" 					property="isNeedCountFee" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYER_FEE" 					property="payerFee" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYEE_FEE" 					property="payeeFee" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYER_ACCOUNT_TYPE" 					property="payerAccountType" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYER_ACCOUNT_NO" 					property="payerAccountNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYEE_ACCOUNT_NO" 					property="payeeAccountNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="GMT_BIZ_INITIATE" 					property="gmtBizInitiate" 				javaType="java.lang.String"/>
+    	<columnOverride column="GMT_PAYMENT_INITIATE" 					property="gmtPaymentInitiate" 				javaType="java.lang.String"/>
+    	<columnOverride column="CALLBACK_ADDRESS" 					property="callbackAddress" 				javaType="java.lang.String"/>
+    	<columnOverride column="REMIT_AMOUNT" 					property="remitAmount" 				javaType="java.lang.String"/>
+    	<columnOverride column="MEMO" 					property="memo" 				javaType="java.lang.String"/>
+    	<columnOverride column="IS_PEMIT_PRICING_ERR" 					property="isPemitPricingErr" 				javaType="java.lang.String"/>
+    	<columnOverride column="CURRENCY" 					property="currency" 				javaType="java.lang.String"/>
+    	<columnOverride column="PAYMENT_SEQ_NO" 					property="paymentSeqNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="POCKET_AMOUNT" 					property="pocketAmount" 				javaType="java.lang.String"/>
+    	<columnOverride column="SETTLEMENT_TIME" 					property="settlementTime" 				javaType="java.lang.String"/>
+    	<columnOverride column="RETURN_CODE" 					property="returnCode" 				javaType="java.lang.String"/>
+    	<columnOverride column="RETURN_MSG" 					property="returnMsg" 				javaType="java.lang.String"/>
+    	<columnOverride column="EXTENTION" 					property="extention" 				javaType="java.lang.String"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    </table>
+  </context>
+</generatorConfiguration>

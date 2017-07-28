@@ -1,0 +1,48 @@
+#set($input_prefix = '_input')
+<script type="text/javascript">
+	var tableList = document.getElementById("Gv_MainList");
+	if(tableList != null){
+		var tr = tableList.getElementsByTagName("tr");
+		for (var i=0;i<tr.length;i++)
+		{
+			if (i%2==0)
+				tr[i].className="spl";
+			else
+				tr[i].className="";
+		}
+	}
+	
+	j(function() {
+	  	var inputs = document.getElementsByTagName("INPUT");
+		for(var n=0; n<inputs.length; n++){
+			var plugin = inputs[n].getAttribute("plugin");
+			if(plugin == "date"){
+				inputs[n].readOnly = true;
+				j(inputs[n]).datepick();
+	#foreach( $subject in $subjectTreeList )
+	        }else if(plugin == "$subject"){
+				var $subject$input_prefix = j(inputs[n]);
+				($subject$input_prefix).click(function(){
+				   SubjectTree.getSubjectDataByTitle("$subject", function(data){
+				       ($subject$input_prefix).popup(data);
+				   });
+				});
+   #end
+    #foreach( $bizcodeTree in $bizcodeTreeList )
+	        }else if(plugin == "$bizcodeTree"){
+                eval("$bizcodeTree"+"_input = j(inputs[n]);")
+			    eval("$bizcodeTree"+"_input").click(function(){
+ 		        eval("$bizcodeTree"+"_input").popup("$bizcodeTreeUtil.renderPostingcodeTree()");
+				});
+    #end
+    #foreach( $bizcodeTree in $bizTreeList )
+	        }else if(plugin == "$bizcodeTree"){
+                eval("$bizcodeTree"+"_input = j(inputs[n]);")
+			    eval("$bizcodeTree"+"_input").click(function(){
+			    eval("$bizcodeTree"+"_input").popup("$bizcodeTreeUtil.renderTree("$bizcodeTree")");
+				});
+    #end
+          }
+		}
+	});
+</script>

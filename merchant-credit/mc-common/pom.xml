@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>merchant-credit</artifactId>
+		<groupId>com.sdp.mc</groupId>
+		<version>1.0</version>
+	</parent>
+	<groupId>com.sdp.mc</groupId>
+	<artifactId>mc-common</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>mc-common</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+  			<groupId>com.alibaba</groupId>
+  			<artifactId>fastjson</artifactId>
+  			<version>1.1.39</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdo.mas.common</groupId>
+			<artifactId>masapi-payment</artifactId>
+			<version>1.0.20140606</version>
+		</dependency>
+		<!-- pcs api -->
+		<dependency>
+			<groupId>com.shengpay.commons</groupId>
+		  	<artifactId>commons-core</artifactId>
+		  	<version>2.1.44</version>
+		</dependency>
+		<dependency>
+			<groupId>com.shengpay.pos.pcs</groupId>
+			<artifactId>pcs_api</artifactId>
+			<version>0.1.62</version>
+		</dependency>
+		<dependency>
+			<groupId>com.shengpay.pos.pcs_t0</groupId>
+			<artifactId>pcs_t0_api</artifactId>
+			<version>0.0.23</version>
+		</dependency>
+		<dependency>
+			<groupId>com.shengpay.common</groupId>
+			<artifactId>common-config</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+	<dependency>
+  <groupId>com.shengpay.ppc.export</groupId>
+  <artifactId>export-tools</artifactId>
+  <version>0.18-SNAPSHOT</version>
+</dependency>
+	</dependencies>
+</project>

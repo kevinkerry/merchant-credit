@@ -1,0 +1,123 @@
+<input type="hidden" id="msgCode" value="$msgCode"/>
+<input type="hidden" id="fileSizeCfg" value="$fileSizeCfg"/>
+
+<form action="#relativeUrl('/adjustLimit/apply.htm')" id="applyForm" method="post" enctype="multipart/form-data">
+<input type="hidden" id="promoterType" name="promoterType" value="$!promoterType"/>
+<div class="content_box content font-s-14">
+	#if($!promoterType == "0101") <h2 class="alC">云收银申请临时调额</h2> #else <h2 class="alC">申请临时调额</h2> #end
+    ##<h2 class="alC">申请临时调额</h2>
+
+    <p  class="tip-style-01">注：您本月还可以申请$!surplusCount次调额，审核通过后，额度当天有效，次日0点恢复。</p>
+ <div class="smContent">
+    <div class="input-item">
+        <span class="input-L">今日总额度：</span>
+        <span class="input-value">$!promoterInfo.promoterInfoDTO.fastSettleLimit元</span>
+    </div>
+    <div class="input-item">
+        <span class="input-L">申请调整为：</span>
+        <input type="text"  class="input-normal ieH" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');" name="reqBean.applyLimit" style="height: 26px;"/> 元
+    </div>
+    <div class="input-item">
+        <span class="input-L">申请原因：</span>
+        <textarea class="input-normal ieH" maxlength="100"  name="reqBean.applyCause"></textarea>
+    </div>
+	 <div class="input-item">
+          <p class="tip-style-02">最大支持100个字</p>
+    </div>
+    <div class="input-item">
+        <span class="input-L">辅助材料（可选）：</span>
+        <input type="file" name="file" id="file" class="fltLeft g-button-m">
+
+    </div>
+	 <div class="input-item">
+          <p class="tip-style-02">提交辅助证明材料可提高审核通过的机率(最大支持100M)</p>
+    </div>
+
+
+    <div class="input-item">
+        <label>
+			#if($!surplusCount>0&&!$auditFlag)
+			 <input type="submit"  class="g-button-big" name="" onclick="return checkfile();" value="提交申请"/>
+			#else
+			 <a href="#" class="g-button g-button-disable">提交申请</a>
+			#end
+			<a  class="" href="#relativeUrl('/adjustLimit/query.htm')?promoterType=$!promoterType">申请记录</a>
+        </label>
+    </div>
+   </div>
+</div>
+<!-- 以下是弹出层 -->
+<div class="popup" id="pop1" style="display: none;">
+    <p class="popup-title">
+        <a href="#" class="pupup-close"></a>
+    </p>
+    <div class="popup-container">
+
+    </div>
+    <p class="popup-tlc"><a  href="#relativeUrl('/adjustLimit/query.htm')?promoterType=$!promoterType" class="popup-cancel g-button">查看申请记录</a><a href="" class="popup-confrim font-s-14" onclick="document.getElementById('pop1').style.display='none';return false;">返回</a></p>
+</div>
+<div class="popup" id="pop2" style="display:none">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc"><a href="javascript:void(0);" class="popup-cancel g-button" onclick="hidePop2();">返回</a></p>
+</div>
+</form>
+<script type="text/javascript">
+	jQuery(function(){
+		var tmp = jQuery("#msgCode").val();
+		if(tmp!=""){
+		jQuery("#pop1 .popup-container").html(tmp);
+		jQuery("#pop1").show();
+		}
+	});
+		var  browserCfg = {};
+	  	var maxsize = jQuery("#fileSizeCfg").val();//100M
+        var errMsg = "上传的附件文件不能超过100M！！！";
+        var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过100M，建议使用IE、FireFox、Chrome浏览器。";
+        var ua = window.navigator.userAgent;
+        if (ua.indexOf("MSIE")>=1){
+            browserCfg.ie = true;
+        }else if(ua.indexOf("Firefox")>=1){
+            browserCfg.firefox = true;
+        }else if(ua.indexOf("Chrome")>=1){
+            browserCfg.chrome = true;
+        }
+	function checkfile(){
+            try{
+                var obj_file = document.getElementById("file");
+				if(obj_file.files.length!=0){
+                    var filesize = 0;
+                    if(browserCfg.firefox || browserCfg.chrome ){
+                        filesize = obj_file.files[0].size;
+                    }else if(browserCfg.ie){
+                        var obj_img = document.getElementById('tempimg');
+                        obj_img.dynsrc=obj_file.value;
+                        filesize = obj_img.fileSize;
+                    }else{
+                        showPop2(tipMsg);
+                   	    return fasle;
+                    }
+    				if(filesize==-1){
+                        showPop2(tipMsg);
+                        return false;
+                    }else if(filesize>maxsize){
+                        showPop2(errMsg);
+                        return false;
+                    }
+				}
+            }catch(e){
+			   showPop2(e);
+            }
+        }
+		//返回按钮
+	function showPop2(msg){
+		jQuery("#pop2 .popup-container").html(msg);
+		jQuery("#pop2").show();
+	}
+	function hidePop2(){
+		jQuery("#pop2 .popup-container").html("");
+		jQuery("#pop2").hide();
+	}
+</script>

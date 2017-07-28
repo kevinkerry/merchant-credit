@@ -1,0 +1,59 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/settle_pager.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="listTb">
+	<tr class="ttl">
+	    <td width="50">序号</td>
+	    <td width="100">商户号</td>
+		<td width="100">商户名称</td>
+		#if($!{promoterInfo.promoterType}=='0007'||$!{promoterInfo.promoterType}=='9999')
+		<td width="80">商户类别</td>
+		<td width="80">T1开通状态</td>
+		<td width="60">T1费率</td>
+		<td width="80">D1开通状态</td>
+		<td width="60">D1费率</td>
+		#end
+		<td width="80">T0开通状态</td>
+		<td width="100">T0费率</td>
+		<td width="80">T0额度</td>
+		#if($!{promoterInfo.promoterType}=='0007' || $!{promoterInfo.promoterType}=='0003' || $!{promoterInfo.promoterType}=='0101')
+		<td width="80">操作</td>
+		#end
+	</tr>
+	#foreach($o in ${dataList})
+	<tr class="settle_ttl">
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		#if($!{promoterInfo.promoterType}=='0007' || $!{promoterInfo.promoterType}=='9999')
+		<td>
+				$!{o.mcc}
+		</td>
+		<td>
+				$!{o.t1StatusDesc}
+		</td>
+		<td>
+				#if(${o.t1Status}==1) ${o.t1WorkdayRatio} #end
+		</td>
+		<td>
+				$!{o.d1StatusDesc}
+		</td>
+		<td>
+				#if(${o.d1Status}==1) $!NumberUtils.multiply100(${o.d1HolidayRatio})% #end
+		</td>
+		#end
+		<td>$!{o.t0StatusDesc}</td>
+		<td>
+		#if($!{o.t0Status}==1)
+		    #if(${o.t0WorkdayRatio})工作日：$!NumberUtils.multiply100(${o.t0WorkdayRatio})%<br/> #end
+		    #if(${o.t0HolidayRatio})节假日：$!NumberUtils.multiply100(${o.t0HolidayRatio})% #end
+		#end
+		</td>
+		<td>$!{o.t0Limition}</td>
+		#if($!{promoterInfo.promoterType}=='0007' || $!{promoterInfo.promoterType}=='0003' || $!{promoterInfo.promoterType}=='0101')
+		<td><a class="lk1" href="#if("$!{msg}"=="")#relativeUrl('/initPosMerchantSettings.htm')?merchantId=$!{o.posMerchantId} #else javascript:promoterValidate('$!{msg}')#end" target="_blank">修改T0配置</a>
+		</td>
+		#end
+	</tr>
+	#end
+</table>

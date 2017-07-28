@@ -1,0 +1,50 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td>商户名称</td>
+		<td>商户号</td>
+		<td>代理商名称</td>
+		<td>代理商商户号</td>
+		<td>申请日期</td>
+
+		<td>是否承诺</td>
+		<td>状态</td>
+		<td>风控级别</td>
+		<td>商户材料</td>
+		<td>操作</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{temp.merchantName}</td>
+		<td>$!{temp.merchantNo}</td>
+		<td>$!{temp.promoterName}</td>
+		<td>$!{temp.promoterNo}</td>
+		<td>#showDate($!{temp.applyStartTime})</td>
+		<td>#if("$!{temp.isAgnetGuarantee}"=="1")是#else 否 #end</td>
+		<td>
+			#if("$!{temp.applyStatus}"=="2")
+				资料提交完毕，待初审
+    		#elseif("$!{temp.applyStatus}"=="3")
+    			提交风控完毕
+    		#elseif("$!{temp.applyStatus}"=="4")
+    			用户资料寄送中
+    		#elseif("$!{temp.applyStatus}"=="99")
+    			风控通知失败-未达到评级要求
+    		#else
+			   $!{temp.applyStatus}
+			#end
+		</td>
+		<td>$!{temp.riskLevel}</td>
+		<td>
+			<a href="#springUrl('/debitAudit/showWindDetailInfo.do')?applyId=$!{temp.id}" class="look" target="_blank">查看详情</a>
+		</td>
+		<td>
+			#if("$!{temp.applyStatus}"=="3")
+		    <a href="#springUrl('/debitAudit/windControl.do')?applyId=$!{temp.id}" class="look" >风控操作</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>

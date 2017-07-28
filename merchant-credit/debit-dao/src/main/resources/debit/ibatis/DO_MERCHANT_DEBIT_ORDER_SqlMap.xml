@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_MERCHANT_DEBIT_ORDER" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="DEBIT_AMOUNT" property="debitAmount" jdbcType="DECIMAL" />
+    <result column="PURPOSER" property="purposer" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NO" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="APPLY_DATE" property="applyDate" />
+    <result column="RESULT_TIME" property="resultTime" />
+    <result column="TRANSFER_TIME" property="transferTime" />
+    <result column="START_TIME" property="startTime" />
+    <result column="END_TIME" property="endTime" />
+    <result column="OVER_DUE_TIME" property="overDueTime" />
+    <result column="INTEREST_AMOUNT" property="interestAmount" jdbcType="DECIMAL" />
+    <result column="BORROW_DAYS" property="borrowDays" jdbcType="DECIMAL" />
+    <result column="SERVICE_AMOUNT" property="serviceAmount" jdbcType="DECIMAL" />
+    <result column="INTEREST_RATE_DAY" property="interestRateDay" jdbcType="DECIMAL" />
+    <result column="REAL_AMOUNT" property="realAmount" jdbcType="DECIMAL" />
+    <result column="OVER_DUE_AMOUNT" property="overDueAmount" jdbcType="DECIMAL" />
+    <result column="ORGANIZATION_CODE" property="organizationCode" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="REPAYMENT_TIME" property="repaymentTime" />
+    <result column="DUE_REPAYMENT_TIME" property="dueRepaymentTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_NO, MERCHANT_NAME, STATUS, DEBIT_AMOUNT, PURPOSER, PROMOTER_NO, PROMOTER_NAME, 
+    APPLY_DATE, RESULT_TIME, TRANSFER_TIME, START_TIME, END_TIME, OVER_DUE_TIME, INTEREST_AMOUNT, 
+    BORROW_DAYS, SERVICE_AMOUNT, INTEREST_RATE_DAY, REAL_AMOUNT, OVER_DUE_AMOUNT, ORGANIZATION_CODE, 
+    CREATE_TIME, UPDATE_TIME, REPAYMENT_TIME, DUE_REPAYMENT_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DO_MERCHANT_DEBIT_ORDER.Base_Column_List" />
+    from DO_MERCHANT_DEBIT_ORDER
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_DEBIT_ORDER.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    select 
+    <include refid="DO_MERCHANT_DEBIT_ORDER.Base_Column_List" />
+    from DO_MERCHANT_DEBIT_ORDER
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    delete from DO_MERCHANT_DEBIT_ORDER
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderExample" >
+    delete from DO_MERCHANT_DEBIT_ORDER
+    <include refid="DO_MERCHANT_DEBIT_ORDER.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_MERCHANT_DEBIT_ORDER.nextval from dual
+    </selectKey>
+    insert into DO_MERCHANT_DEBIT_ORDER (ID, MERCHANT_NO, MERCHANT_NAME, STATUS, 
+      DEBIT_AMOUNT, PURPOSER, PROMOTER_NO, PROMOTER_NAME, 
+      APPLY_DATE, RESULT_TIME, TRANSFER_TIME, START_TIME, 
+      END_TIME, OVER_DUE_TIME, INTEREST_AMOUNT, BORROW_DAYS, 
+      SERVICE_AMOUNT, INTEREST_RATE_DAY, REAL_AMOUNT, OVER_DUE_AMOUNT, 
+      ORGANIZATION_CODE, CREATE_TIME, UPDATE_TIME, REPAYMENT_TIME, 
+      DUE_REPAYMENT_TIME)
+    values (#id:DECIMAL#, #merchantNo:VARCHAR#, #merchantName:VARCHAR#, #status:VARCHAR#, 
+      #debitAmount:DECIMAL#, #purposer:VARCHAR#, #promoterNo:VARCHAR#, #promoterName:VARCHAR#, 
+      #applyDate#, #resultTime#, #transferTime#, #startTime#, 
+      #endTime#, #overDueTime#, #interestAmount:DECIMAL#, #borrowDays:DECIMAL#, 
+      #serviceAmount:DECIMAL#, #interestRateDay:DECIMAL#, #realAmount:DECIMAL#, #overDueAmount:DECIMAL#, 
+      #organizationCode:VARCHAR#, #createTime#, #updateTime#, #repaymentTime#, 
+      #dueRepaymentTime#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_MERCHANT_DEBIT_ORDER.nextval from dual
+    </selectKey>
+    insert into DO_MERCHANT_DEBIT_ORDER
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        MERCHANT_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="debitAmount" >
+        DEBIT_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="purposer" >
+        PURPOSER
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        PROMOTER_NO
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        PROMOTER_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="applyDate" >
+        APPLY_DATE
+      </isNotNull>
+      <isNotNull prepend="," property="resultTime" >
+        RESULT_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="transferTime" >
+        TRANSFER_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="startTime" >
+        START_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        END_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="overDueTime" >
+        OVER_DUE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="interestAmount" >
+        INTEREST_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="borrowDays" >
+        BORROW_DAYS
+      </isNotNull>
+      <isNotNull prepend="," property="serviceAmount" >
+        SERVICE_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="interestRateDay" >
+        INTEREST_RATE_DAY
+      </isNotNull>
+      <isNotNull prepend="," property="realAmount" >
+        REAL_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        OVER_DUE_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="repaymentTime" >
+        REPAYMENT_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="dueRepaymentTime" >
+        DUE_REPAYMENT_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        #merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="debitAmount" >
+        #debitAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="purposer" >
+        #purposer:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        #promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        #promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyDate" >
+        #applyDate#
+      </isNotNull>
+      <isNotNull prepend="," property="resultTime" >
+        #resultTime#
+      </isNotNull>
+      <isNotNull prepend="," property="transferTime" >
+        #transferTime#
+      </isNotNull>
+      <isNotNull prepend="," property="startTime" >
+        #startTime#
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        #endTime#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueTime" >
+        #overDueTime#
+      </isNotNull>
+      <isNotNull prepend="," property="interestAmount" >
+        #interestAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="borrowDays" >
+        #borrowDays:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="serviceAmount" >
+        #serviceAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="interestRateDay" >
+        #interestRateDay:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="realAmount" >
+        #realAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        #overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="repaymentTime" >
+        #repaymentTime#
+      </isNotNull>
+      <isNotNull prepend="," property="dueRepaymentTime" >
+        #dueRepaymentTime#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderExample" resultClass="java.lang.Integer" >
+    select count(*) from DO_MERCHANT_DEBIT_ORDER
+    <include refid="DO_MERCHANT_DEBIT_ORDER.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DO_MERCHANT_DEBIT_ORDER
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantName" >
+        MERCHANT_NAME = #record.merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.debitAmount" >
+        DEBIT_AMOUNT = #record.debitAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.purposer" >
+        PURPOSER = #record.purposer:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.promoterNo" >
+        PROMOTER_NO = #record.promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.promoterName" >
+        PROMOTER_NAME = #record.promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.applyDate" >
+        APPLY_DATE = #record.applyDate#
+      </isNotNull>
+      <isNotNull prepend="," property="record.resultTime" >
+        RESULT_TIME = #record.resultTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.transferTime" >
+        TRANSFER_TIME = #record.transferTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.startTime" >
+        START_TIME = #record.startTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.endTime" >
+        END_TIME = #record.endTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.overDueTime" >
+        OVER_DUE_TIME = #record.overDueTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.interestAmount" >
+        INTEREST_AMOUNT = #record.interestAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.borrowDays" >
+        BORROW_DAYS = #record.borrowDays:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.serviceAmount" >
+        SERVICE_AMOUNT = #record.serviceAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.interestRateDay" >
+        INTEREST_RATE_DAY = #record.interestRateDay:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.realAmount" >
+        REAL_AMOUNT = #record.realAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.overDueAmount" >
+        OVER_DUE_AMOUNT = #record.overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.organizationCode" >
+        ORGANIZATION_CODE = #record.organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.repaymentTime" >
+        REPAYMENT_TIME = #record.repaymentTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.dueRepaymentTime" >
+        DUE_REPAYMENT_TIME = #record.dueRepaymentTime#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_DEBIT_ORDER.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DO_MERCHANT_DEBIT_ORDER
+    set ID = #record.id:DECIMAL#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      MERCHANT_NAME = #record.merchantName:VARCHAR#,
+      STATUS = #record.status:VARCHAR#,
+      DEBIT_AMOUNT = #record.debitAmount:DECIMAL#,
+      PURPOSER = #record.purposer:VARCHAR#,
+      PROMOTER_NO = #record.promoterNo:VARCHAR#,
+      PROMOTER_NAME = #record.promoterName:VARCHAR#,
+      APPLY_DATE = #record.applyDate#,
+      RESULT_TIME = #record.resultTime#,
+      TRANSFER_TIME = #record.transferTime#,
+      START_TIME = #record.startTime#,
+      END_TIME = #record.endTime#,
+      OVER_DUE_TIME = #record.overDueTime#,
+      INTEREST_AMOUNT = #record.interestAmount:DECIMAL#,
+      BORROW_DAYS = #record.borrowDays:DECIMAL#,
+      SERVICE_AMOUNT = #record.serviceAmount:DECIMAL#,
+      INTEREST_RATE_DAY = #record.interestRateDay:DECIMAL#,
+      REAL_AMOUNT = #record.realAmount:DECIMAL#,
+      OVER_DUE_AMOUNT = #record.overDueAmount:DECIMAL#,
+      ORGANIZATION_CODE = #record.organizationCode:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      REPAYMENT_TIME = #record.repaymentTime#,
+      DUE_REPAYMENT_TIME = #record.dueRepaymentTime#
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_DEBIT_ORDER.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    update DO_MERCHANT_DEBIT_ORDER
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        MERCHANT_NAME = #merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="debitAmount" >
+        DEBIT_AMOUNT = #debitAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="purposer" >
+        PURPOSER = #purposer:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        PROMOTER_NO = #promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        PROMOTER_NAME = #promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyDate" >
+        APPLY_DATE = #applyDate#
+      </isNotNull>
+      <isNotNull prepend="," property="resultTime" >
+        RESULT_TIME = #resultTime#
+      </isNotNull>
+      <isNotNull prepend="," property="transferTime" >
+        TRANSFER_TIME = #transferTime#
+      </isNotNull>
+      <isNotNull prepend="," property="startTime" >
+        START_TIME = #startTime#
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        END_TIME = #endTime#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueTime" >
+        OVER_DUE_TIME = #overDueTime#
+      </isNotNull>
+      <isNotNull prepend="," property="interestAmount" >
+        INTEREST_AMOUNT = #interestAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="borrowDays" >
+        BORROW_DAYS = #borrowDays:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="serviceAmount" >
+        SERVICE_AMOUNT = #serviceAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="interestRateDay" >
+        INTEREST_RATE_DAY = #interestRateDay:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="realAmount" >
+        REAL_AMOUNT = #realAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        OVER_DUE_AMOUNT = #overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE = #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="repaymentTime" >
+        REPAYMENT_TIME = #repaymentTime#
+      </isNotNull>
+      <isNotNull prepend="," property="dueRepaymentTime" >
+        DUE_REPAYMENT_TIME = #dueRepaymentTime#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    update DO_MERCHANT_DEBIT_ORDER
+    set MERCHANT_NO = #merchantNo:VARCHAR#,
+      MERCHANT_NAME = #merchantName:VARCHAR#,
+      STATUS = #status:VARCHAR#,
+      DEBIT_AMOUNT = #debitAmount:DECIMAL#,
+      PURPOSER = #purposer:VARCHAR#,
+      PROMOTER_NO = #promoterNo:VARCHAR#,
+      PROMOTER_NAME = #promoterName:VARCHAR#,
+      APPLY_DATE = #applyDate#,
+      RESULT_TIME = #resultTime#,
+      TRANSFER_TIME = #transferTime#,
+      START_TIME = #startTime#,
+      END_TIME = #endTime#,
+      OVER_DUE_TIME = #overDueTime#,
+      INTEREST_AMOUNT = #interestAmount:DECIMAL#,
+      BORROW_DAYS = #borrowDays:DECIMAL#,
+      SERVICE_AMOUNT = #serviceAmount:DECIMAL#,
+      INTEREST_RATE_DAY = #interestRateDay:DECIMAL#,
+      REAL_AMOUNT = #realAmount:DECIMAL#,
+      OVER_DUE_AMOUNT = #overDueAmount:DECIMAL#,
+      ORGANIZATION_CODE = #organizationCode:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      REPAYMENT_TIME = #repaymentTime#,
+      DUE_REPAYMENT_TIME = #dueRepaymentTime#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

@@ -1,0 +1,136 @@
+#set($page_title = '快速结算额度试算 ')
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" enctype='multipart/form-data'>
+		<input type="hidden" id="ruleId" name="id" value="$!{entity.id}"/>
+		<table class="dtlTb" cellspacing="0" cellpadding="0" width="90%">
+	        <tr>
+		    	<td class="lbl" width="120">应用场景：</td>
+		        <td width="150">
+		        	<input type="text" id="ruleNameShow" readonly="readonly" maxlength="32" value="$!{entity.ruleName}" class="txt130" size="32"/>
+		        </td>
+		   		<td class="lbl" width="100">规则状态：</td>
+		        <td width="200" style="text-align: left;line-height: normal;">
+		         <input id="u19_input" type="radio" value="1" name="status" checked=""><label for="u19_input">启用</label>
+		         <input id="u11_input" type="radio" value="0" name="status">   <label for="u11_input">禁用  </label>
+		        </td>
+            </tr>
+	        <tr>
+		    	<td class="lbl" width="120">试算规则描述：</td>
+		        <td width="150" style="text-align: left;line-height: normal;" colspan="3">
+		        	<textarea id="lambdaDesc" readonly="readonly" rows="4" cols="100" value="" >$!{entity.lambdaDesc}</textarea>
+		        </td>
+            </tr>
+			<tr>
+				<td class="lbl" width="120">上传商户文件：</td>
+				<td style="text-align: left;line-height: normal;" colspan="3">
+				    <input type="file" size="40" filefilter="csv" id="file" name="file" />
+				    &nbsp;<span style="color:#aaaaaa;">请上传xls或cvs文件</span>
+					<input class="bluebtn" type="button" onclick="opExcel(0);" value="上传" style="cursor:pointer"/>
+					<input class="bluebtn" type="button" onclick="onTrial();" value="试算" style="cursor:pointer" />
+					&nbsp;&nbsp;
+					<a href="javascript:void(0)" onclick="downloadTemplet();"  style="cursor:pointer"> 下载模板</a>
+				</td>
+			</tr>
+			<tr id="trialResultTr" style='display: #if("$!{reultFileName}"=="")none;#end'>
+				<td class="lbl" width="120">试算结果：</td>
+				<td style="text-align: left;line-height: normal;" colspan="3">
+					<a href="javascript:void(0)" onclick="downloadResult();"  style="cursor:pointer" id="trialResult"> $!{reultFileName}</a>
+					<img style='display: #if("$!{reultFileName}"!="")none;#end' id="loadingimg" src="#springUrl('/htdocs/images/loading.gif')">
+				</td>
+			</tr>
+		</table>
+        </form>
+    </div>
+    <iframe name="uploadFram" id="uploadFram" hidden="true"></iframe>
+</div>
+<script type="text/javascript">
+//是否上次上传文件成功
+var isUploadSuccess=false;
+//是否可以试算
+var isTrial=true;
+
+function uploadResult(code,message){
+	if(message==null||message==''||message==undefined){
+		alert("上传完成！");
+		isUploadSuccess=true;
+	}else{
+		alert(message);
+	}
+	
+}
+
+   function opExcel(op){
+		if(op==0){
+			jQuery("#submitForm").attr("action","#springUrl('/limitrule/upload.do')");
+			jQuery("#submitForm").attr("target","uploadFram");
+		}
+		jQuery("#submitForm").submit();
+	}
+	function onTrial(){
+		if(!isUploadSuccess){
+			alert("商户信息未上传，请先上传商户信息！");
+			return false;
+		}
+		//如果已经试算过了，本页面就不在处理试算  ，防止用户多次点击
+		if(!isTrial){
+			return;
+		}
+		
+		 var data = {"id":jQuery("#ruleId").val()};
+		jQuery.ajax( {
+            url:"#springUrl('/limitrule/trial.do')?sessionId="+new Date().getTime(), // 跳转到 action
+            type:'get',
+			data: data ,
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+            	alert(data.errorMessage);
+            	isTrial=false;
+				setTimeout(ajaxTrialResult,5000)
+				jQuery("#trialResult").hide();
+        		jQuery("#trialResultTr").show();
+             },
+             error : function() {
+             }
+        });
+	}
+	
+	function ajaxTrialResult(){
+		 var data = {"id":jQuery("#ruleId").val()};
+		jQuery.ajax( {
+            url:"#springUrl('/limitrule/ajaxTrialResult.do')?sessionId="+new Date().getTime(), // 跳转到 action
+            type:'get',
+			data: data ,
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+            	if(data&&data.errorCode==1){
+            		alert("试算完成！");
+            		jQuery("#trialResult").html(data.params.reultFileName);
+            		jQuery("#trialResult").show();
+            		jQuery("#trialResultTr").show();
+            		jQuery("#loadingimg").hide();
+            	}else{
+				    setTimeout(ajaxTrialResult,10000)
+            	}
+             },
+             error : function() {
+             }
+        });
+	}
+
+	function downloadTemplet(){
+	  jQuery("#submitForm").attr("action","#springUrl('/limitrule/downloadTemplet.do')?sessionId="+new Date().getTime());
+	  jQuery("#submitForm").submit();
+	}
+	
+	function downloadResult(){
+		  jQuery("#trialResultTr").hide();
+		  jQuery("#submitForm").attr("action","#springUrl('/limitrule/download.do')?sessionId="+new Date().getTime());
+		  jQuery("#submitForm").submit();
+		}
+
+</script>

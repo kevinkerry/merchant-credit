@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MerchantSettleItemDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.merchantSettleItem.MerchantSettleItemEO" >
+		<result property="msiId" column="ID"/>
+		<result property="msiCreateTime" column="CREATE_TIME"/>
+		<result property="msiUpdateTime" column="UPDATE_TIME"/>
+		<result property="msiVersion" column="VERSION"/>
+		<result property="msiMerchantNo" column="MERCHANT_NO"/>
+		<result property="msiCardType" column="CARD_TYPE"/>
+		<result property="msiCardOrg" column="CARD_ORG"/>
+		<result property="msiCycleType" column="CYCLE_TYPE"/>
+		<result property="msiCycleValue" column="CYCLE_VALUE"/>
+		<result property="msiSettleRuleId" column="SETTLE_RULE_ID"/>
+		<result property="msiIssureId" column="ISSUER_ID"/>
+		<result property="msiHolidayFee" column="HOLIDAY_FEE"/>
+		<result property="msiWorkDayFee" column="WORKDAY_FEE"/>
+		<result property="msiBeginTime" column="BEGIN_TIME"/>
+		<result property="msiEndTime" column="END_TIME"/>
+		<result property="msiStatus" column="STATUS"/>
+		<result property="msiPriority" column="PRIORITY"/>
+
+	</resultMap>
+
+	<insert id="insert" parameterClass="com.sdp.mc.dao.readonly.merchantSettleItem.MerchantSettleItemEO">
+		<selectKey keyProperty="msiId">select seq_merchant_settle_item.nextval from dual</selectKey>
+		insert into PCS.MERCHANT_SETTLE (create_time,update_time,version
+		<isNotEmpty prepend="," property="msiId">
+			id
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiMerchantNo">
+			merchant_no
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCardType">
+			card_type
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCardOrg">
+			card_org
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCycleType">
+			cycle_type
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCycleValue">
+			cycle_value
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiSettleRuleId">
+			SETTLE_RULE_ID
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiIssureId">
+			ISSUER_ID
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiHolidayFee">
+			HOLIDAY_FEE
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiWorkDayFee">
+			WORKDAY_FEE
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiBeginTime">
+			BEGIN_TIME
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiEndTime">
+			END_TIME
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiStatus">
+			STATUS
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiPriority">
+			PRIORITY
+		</isNotEmpty>
+		)
+		values(#msiCreateTime#,#msiUpdateTime#,1
+		<isNotEmpty prepend="," property="msiId">
+			#msiId:NUMBERIC#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiMerchantNo">
+			#msiMerchantNo:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCardType">
+			#msiCardType:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCardOrg">
+			#msiCardOrg:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCycleType">
+			#msiCycleType:NUMBERIC#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiCycleValue">
+			#msiCycleValue:VARCHAR#
+		</isNotEmpty>
+
+		<isNotEmpty prepend="," property="msiSettleRuleId">
+			#msiSettleRuleId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiIssureId">
+			#msiIssureId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiHolidayFee">
+			#msiHolidayFee#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiWorkDayFee">
+			#msiWorkDayFee#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiBeginTime">
+			#msiBeginTime#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiEndTime">
+			#msiEndTime#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiStatus">
+			#msiStatus#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="msiPriority">
+			#msiPriority#
+		</isNotEmpty>
+		)
+	</insert>
+
+	<delete id="deleteByMerchantNo" parameterClass="java.util.Map">
+		delete from PCS.MERCHANT_SETTLE_ITEM msi
+		where msi.merchant_no = #merchantNo:VARCHAR#
+		  <isNotEmpty prepend="and" property="msiStatus">
+			msi.status = #msiStatus#
+		</isNotEmpty>
+	</delete>
+
+	<select id="queryEOByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select * from PCS.MERCHANT_SETTLE_ITEM msi where msi.merchant_no=#merchantNo:VARCHAR# order by msi.status desc, msi.priority asc,msi.id desc
+	</select>
+
+	<update id="invalidByMsiId" parameterClass="java.util.Map">
+		update PCS.MERCHANT_SETTLE_ITEM msi set msi.version = msi.version+1, msi.update_time=sysdate, msi.STATUS=0,msi.end_time=#msiEndTime# where msi.ID=#msiId#
+	</update>
+
+	<select id="queryListByMerchantNoAdStatus" parameterClass="java.util.Map" resultMap="result">
+		select *
+		  from PCS.MERCHANT_SETTLE_ITEM msi
+		 where msi.merchant_no = #merchantNo#
+		   and msi.status = #status#
+		 order by msi.status desc, msi.priority asc, msi.id desc
+	</select>
+
+	<update id="updateSttleItemProirity" parameterClass="java.util.Map">
+		update PCS.MERCHANT_SETTLE_ITEM msi set msi.version = msi.version+1, msi.update_time=sysdate, msi.priority=#msiPriority# where msi.id=#msiId#
+	</update>
+
+	<select id="queryFastSettleItmeByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select * from PCS.MERCHANT_SETTLE_ITEM msi
+		where msi.merchant_no = #value# and msi.settle_rule_id = 5 and msi.status = 1
+		order by msi.status desc, msi.priority asc, msi.id desc
+	</select>
+
+	<select id="queryFastSettleItmeByMerchantList" parameterClass="java.lang.String" resultMap="result">
+		select * from PCS.MERCHANT_SETTLE_ITEM msi
+		where msi.merchant_no = #value# and msi.settle_rule_id in(1,2,5) and msi.status = 1
+		order by msi.status desc, msi.priority asc, msi.id desc
+	</select>
+
+</sqlMap>

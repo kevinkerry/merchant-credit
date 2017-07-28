@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="D:\maven\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredituser"
+        password="MCredituser">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.view.dao" targetProject="..\mc-dao\src\main\java\">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+ <!--    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="..\mc-dao\src\test\java\">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator> -->
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.view.dao.mapper"  targetProject="..\mc-dao\src\main\java\">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.view.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.view.manager" implementationPackage="com.sdp.mc.view.manager.impl" generatorEnable="true"  targetProject="..\mc-dao\src\main\java\">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="VIEW_MERCHANT_INFO" domainObjectName="ViewMerchantInfoDO">
+    	<columnOverride column="MERCHANT_ID" 							property="merchantId" 						javaType="java.lang.Long" />
+    	<columnOverride column="MERCHANT_FS_FLAG" 						property="merchantFsFlag" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="PROMOTER_ID" 							property="promoterId" 						javaType="java.lang.Long" />
+    	<columnOverride column="PROMOTER_FS_FLAG" 						property="promoterFsFlag" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="AUTO_FAST_SETTLE_FLAG" 					property="autoFastSettleFlag" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="LOANING_TYPE" 						property="loaningType" 				javaType="java.lang.Integer" />
+    	<columnOverride column="MERCHANT_BIZ_ID" 						property="merchantBizId" 				javaType="java.lang.Long" />
+    	<columnOverride column="PROMOTER_BIZ_ID" 						property="promoterBizId" 				javaType="java.lang.Long" />
+    	<columnOverride column="LAST_LEVEL_PROMOTER_ID" 						property="lastLevelPromoterId" 				javaType="java.lang.Long" />
+   
+    	
+    </table>
+  </context>
+</generatorConfiguration>

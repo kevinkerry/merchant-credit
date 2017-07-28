@@ -1,0 +1,161 @@
+#set($page_title = '快速结算保证金交易管理')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/ajaxPaging/marginTransQuery.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		    	<td class="lbl" >拓展方类型：</td>
+		        <td width="200">
+		            <select id="promoterType" name="promoterType" class="w130">
+		                <option value="">全部</option>
+		                <option value="0003" #if("$!{params.promoterType}"=="0003")selected#end>POS拓展方</option>
+		                <option value="0007" #if("$!{params.promoterType}"=="0007")selected#end>MPOS拓展方</option>
+		                <option value="0101" #if("$!{params.promoterType}"=="0101")selected#end>云收银拓展方</option>
+		            </select>
+		        </td>
+		        <td class="lbl">拓展方名称：</td>
+		        <td width="200"><input type="text" id="promoterName" name="promoterName" style="width: 139px"
+		                   value="$!{params.promoterName}" class="txt130"/></td>
+		        <td class="lbl" >拓展方商户号：</td>
+		        <td width="200"><input type="text" id="promoterNo" name="promoterNo" style="width: 139px" class="txt130"
+		                               value="$!{params.promoterNo}"/></td>
+		    </tr>
+		    <tr>
+				<!-- <td class="lbl">
+		          	  拓展方状态：
+		        </td>
+		        <td>
+		            <select id="promoterStatus" name="promoterStatus" class="w130">
+						<option value="">---请选择---</option>
+						<option value="3">正常</option>
+						<option value="0,1,2,4">关闭</option>
+					</select>
+		        </td> -->
+		    	<td class="lbl" >保证金交易类型：</td>
+		        <td width="200">
+		            <select id="opType" name="opType" class="w130">
+		                <option value="">全部</option>
+		                <option value="3" #if("$!{query.opType}"=="3")selected#end>追加</option>
+		                <option value="4" #if("$!{query.opType}"=="4")selected#end>取回</option>
+		            </select>
+		        </td>
+		        <td class="lbl">保证金交易状态：</td>
+		        <td width="200" colspan="3">
+		        	<select id="status" name="status" class="w130">
+						<option value="">全部</option>
+						<option value="0">处理中</option>
+						<option value="101">追加-转账成功</option>
+						<option value="-101">追加-转账失败</option>
+						<option value="102">追加成功</option>
+						<option value="-102">追加失败</option>
+						<option value="201">取回-申请成功</option>
+						<option value="-201">取回-申请失败</option>
+						<option value="202">取回成功</option>
+						<option value="-202">取回失败</option>
+						<option value="-300">拒绝放款</option>
+						<option value="-9999">失败(已处理)</option>
+		            </select>		        		
+		        </td>
+		    </tr>
+		     <tr>
+		   		<td class="lbl">保证金交易时间：</td>
+		        <td colspan="7">
+		            <input type="text" id="createTimeStart" name="createTimeStart" class="date txt130" onclick="xDatePicker(2);"/>
+		            ~
+		            <input type="text" id="createTimeEnd" name="createTimeEnd" class="date txt130" onclick="xDatePicker(2);"/>
+		            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('createTimeStart'), -1, elm('createTimeEnd') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：今天">今</a>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td colspan="6" align="center">
+		            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging()">查询</a>
+		            <span class="gray" id="querying" style="display:none;">查询中...</span>
+		            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+		        </td>
+		    </tr>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	window.onload=function(){
+		//setTimeStartEnd(0,elm("txnTimeStartStr"),0,elm("txnTimeEndStr"));
+	};	
+	var ALL_COND_ID = ['promoterType', 'promoterName', 'promoterNo', 'status', 'opType', 'promoterStatus', 'createTimeStart', 'createTimeEnd'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/ajaxPaging/marginTransQuery.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+    function modifyRedeemMarginTime(morId){
+    	if(!confirm("确定修改保证金取回时间吗？")){
+ 			return false;
+ 		}
+    	var data = {"morId":morId};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/modifyRedeemMarginTime.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data.success){
+	    			alert("记录取回时间已经修改成功");
+	    			ajaxPaging();
+	    		}else{
+		    		alert(data.errorMessage);
+	    		}
+		    }
+		});
+    }
+    function modifyRedeemMarginStatus(morId,sourceStatus,targetStatus){
+    	if(!confirm("确定修改状态为已处理吗？")){
+ 			return false;
+ 		}
+    	var data = {"morId":morId,"sourceStatus":sourceStatus,"targetStatus":targetStatus};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/modifyRedeemMarginStatus.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data.success){
+	    			alert("记录状态为已处理修改成功");
+	    			ajaxPaging();
+	    		}else{
+		    		alert(data.errorMessage);
+	    		}
+		    }
+		});
+    }
+</script>

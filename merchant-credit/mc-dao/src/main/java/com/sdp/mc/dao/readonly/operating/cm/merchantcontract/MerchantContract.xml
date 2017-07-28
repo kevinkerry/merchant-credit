@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MerchantContractDAO">
+  <select id="countNotDeleteContract" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    <![CDATA[
+	   select count(*) from ppcpay.CM_MERCHANT_CONTRACT where mc_contract_no_v=#contractNO# and mc_status_c <> #status#
+	]]>
+  </select>
+
+  <select id="selectNotDeleteContract" parameterClass="java.util.Map" resultMap="MerchantContractDAOAbstract.result">
+    <![CDATA[
+	   select * from ppcpay.CM_MERCHANT_CONTRACT where mc_contract_no_v=#contractNO# and mc_status_c <> #status#
+	]]>
+  </select>
+
+  <select id="queryTerminalProviderIdByMerchantNO" parameterClass="java.util.Map" resultClass="java.lang.Long">
+    <![CDATA[
+		select cm.mc_id_n
+		from ppcpay.CM_MERCHANT_CONTRACT cm
+		where mc_merchant_no_v=#merchantNO#
+		and cm.mc_type_c=#merchantType#
+		and mc_status_c in ( $status$ )
+	]]>
+  </select>
+
+
+  <!-- 定时任务：更新商户合同状态: <1>. 已审核(1)且进入合同有效期，置为：已激活(3) -->
+  <update id="jobUpdateStatus1" parameterClass="java.util.Map">
+    <![CDATA[
+  		update ppcpay.CM_MERCHANT_CONTRACT set mc_status_c=#mcStatus:VARCHAR# where mc_status_c=#oldMcStatus1:VARCHAR# and mc_contract_begin_date_d <= sysdate and sysdate < mc_contract_real_end_date_d
+    ]]>
+  </update>
+
+  <!-- 定时任务：更新商户合同状态: <2>. 已审核(1)或已激活(3)且已过合同有效期，置为：预约终止(2) -->
+  <update id="jobUpdateStatus2" parameterClass="java.util.Map">
+    <![CDATA[
+    	update ppcpay.CM_MERCHANT_CONTRACT set mc_status_c=#mcStatus:VARCHAR# where ( mc_status_c=#oldMcStatus1:VARCHAR# or mc_status_c=#oldMcStatus2:VARCHAR# ) and sysdate >= mc_contract_real_end_date_d
+  	]]>
+  </update>
+
+  <!-- 查询【在合同有效期内】某些状态的合同 -->
+  <select id="queryValidContractWithStatus" parameterClass="java.util.Map" resultMap="MerchantContractDAOAbstract.result">
+    <![CDATA[
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc_status_c in ( $statuses$ )
+		and mc_contract_begin_date_d <= sysdate
+		and mc_contract_real_end_date_d > sysdate
+	]]>
+  </select>
+
+  <!-- 查询【过期的】某些状态的合同 -->
+  <select id="queryOverdueContractWithStatus" parameterClass="java.util.Map" resultMap="MerchantContractDAOAbstract.result">
+    <![CDATA[
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc_status_c in ( $statuses$ )
+		and mc_contract_real_end_date_d <= sysdate
+	]]>
+  </select>
+
+  <!-- 根据商户号查询某类型、某些状态的合同 -->
+  <select id="countValidByMerchantNoAndTypeAndStatus" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    <![CDATA[
+		select count(*)
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_merchant_no_v=#merchantNo#
+		and mc.mc_type_c in ( $types$ )
+		and mc.mc_status_c in ( $statuses$ )
+	]]>
+  </select>
+
+  <!-- 查询某商户号、某类型，创建时间在某时间之后的商户 -->
+  <select id="queryMerchantForDestory" parameterClass="java.util.Map" resultMap="MerchantContractDAOAbstract.result">
+    <![CDATA[
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_merchant_no_v=#merchantNo#
+		and mc.mc_type_c=#merchantType#
+		and mc.mc_status_c in ( $merchantStatus$ )
+		and mc.mc_create_time_t > #createTimeAt#
+		order by mc.mc_id_n desc
+	]]>
+  </select>
+
+  <select id="queryMerchantContract" parameterClass="java.util.Map" resultMap="MerchantContractDAOAbstract.result">
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_merchant_no_v=#merchantNo#
+		and mc.mc_type_c in ( $types$ )
+		<isNotNull prepend="and" property="statuses">
+			mc.mc_status_c in ( $statuses$ )
+		</isNotNull>
+  </select>
+
+  <!-- add by xiaobai start -->
+  <!-- 根据机具方商户号查询机具方信息 -->
+  <select id="queryTerminalProviderByMerchantNO" parameterClass="java.util.Map" resultMap="MerchantContractDAOAbstract.result">
+    <![CDATA[
+		select cm.*
+		from ppcpay.CM_MERCHANT_CONTRACT cm
+		where mc_merchant_no_v=#merchantNO#
+		and cm.mc_type_c=#merchantType#
+		and mc_status_c in ( $status$ )
+	]]>
+  </select>
+  <!-- add by xiaobai end -->
+  <select id="queryCountMc4CustomRuleByCond" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.Mc4CustomRuleCond" resultClass="java.lang.Integer" >
+  	 select count(mc.mc_id_n)
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where 1=1
+		<isNotEmpty prepend="and" property="mcType">
+			mc.mc_type_c in ( $mcType$ )
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="merchantNo">
+			mc_merchant_no_v in ($merchantNo$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			mc.mc_status_c in ( $status$ )
+		</isNotEmpty>
+  </select>
+  <select id="queryMc4CustomRuleByCond" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.Mc4CustomRuleCond" resultClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.Mc4CustomRuleVO" >
+  	 select mc.mc_merchant_no_v merchantNo ,mc.mc_merchant_name_v merchantName, mc.mc_type_c mcType
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where 1=1
+		<isNotEmpty prepend="and" property="mcType">
+			mc.mc_type_c in ( $mcType$ )
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="merchantNo">
+			mc_merchant_no_v in ($merchantNo$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			mc.mc_status_c in ( $status$ )
+		</isNotEmpty>
+		order by mc.mc_create_time_t desc
+  </select>
+
+  <select id="queryMerchantContractByMerchantNO" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+  	select cm.mc_merchant_name_v,cm.MC_ID_N from ppcpay.CM_MERCHANT_CONTRACT cm where cm.mc_merchant_no_v=#value# and cm.MC_TYPE_C='0007'
+  </select>
+
+</sqlMap>

@@ -1,0 +1,202 @@
+#set($page_title = '结算分润比例设置 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/splitting/index.do')">
+			<input type="hidden" name="splittingStatus" id="splittingStatus"></input>
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+	    		<tr>
+	    		    <td width="100" class="lbl">分润角色：</td>
+			        <td width="100">
+			        	<select name="splitProfitRoleType" id="splitProfitRoleType" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="0003" >POS代理商</option>
+        					<option value="0007" >MPOS代理商</option>
+                        </select>
+			        </td>
+	    		    <td width="100" class="lbl">垫资方：</td>
+			        <td width="100">
+			        	<select name="loaningType" id="loaningType" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="0" >代理商垫资</option>
+        					<option value="1" >盛付通垫资</option>
+                        </select>
+			        </td>
+					<td width="100" class="lbl">分润方商户号：</td>
+			        <td width="100">
+			        	<input type="text" value="" id="merchantNo" class="txt130" name="merchantNo">
+			        </td>
+					<td></td>
+			    </tr>
+                <tr>
+					<td width="100" class="lbl">是否有效：</td>
+			        <td width="100">
+			        	<select name="status" id="status" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="1" >有效</option>
+        					<option value="0" >无效</option>
+                        </select>
+			        </td>
+					<td width="100" class="lbl">结算类型：</td>
+			        <td width="100">
+			        	<select name="withdrawType" id="withdrawType" class="w130">
+                        	<option value="">全部</option>
+                            <option value="2" >T1</option>
+            				<option value="3" >D1</option>
+            				<option value="4" >T0</option>
+                        </select>
+			        </td>
+			        </tr>
+			        <tr>
+					<td colspan="8" align="center">
+						 &nbsp;
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+						<a href="#springUrl('/splitting/rule/add/view.do')" class="btn2" target="_blank">新增</a>
+						<a href="javascript:;" onclick="exportSplitting();return false;" class="btn2" target="_blank">导出</a>
+						<a href="javascript:;" onclick="javascript:batchCancel();return false;" class="btn2" target="_blank">批量失效</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+			        </td>
+				</tr>
+				<!--
+				<tr>
+					<td></td>
+					<td style="text-align: left;line-height: normal;" colspan="6">
+					<input type="file" size="40" filefilter="xls,cvs" id="file" name="file" />
+					 &nbsp;<span style="color:#aaa;">请上传xls或cvs文件</span>
+					&nbsp;&nbsp;
+					<a href="javascript:;" onclick="javascript:opExcel(0);return false;" class="btn2" target="_blank">批量新增</a>
+					<a href="javascript:;" onclick="javascript:batchCancel();return false;" class="btn2" target="_blank">批量失效</a>
+					&nbsp;&nbsp;
+					<a href="javascript:;" onclick="javascript:opExcel(2);return false;" class="btn2" target="_blank">下载模板</a>
+					<span style="color: red" id="messageSpan">$!{msg.errorMessage}</span>
+                    </td>
+					<td></td>
+				</tr>
+				-->
+			</tbody>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+<iframe name="uploadFram" id="uploadFram" hidden="true"></iframe>
+<script type="text/javascript">
+	var ALL_COND_ID = ['splitProfitRoleType', 'loaningType','merchantNo','withdrawType','status'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	//文件上传、下载
+	function opExcel(op){
+		if(op==0){
+			jQuery("#splittingStatus").val(0);
+			jQuery("#submitForm").attr("action","#springUrl('/splitting/rule/batchAdd.do')");
+			jQuery("#submitForm").attr("target","uploadFram");
+		}else if(op==1){
+			jQuery("#splittingStatus").val(1);
+			jQuery("#submitForm").attr("action","#springUrl('/splitting/rule/batchAdd.do')");
+			jQuery("#submitForm").attr("target","uploadFram");
+		}else if(op==2) {
+    		jQuery("#splittingStatus").val(2);
+			jQuery("#submitForm").attr("action","#springUrl('/splitting/rule/download.do')");
+		}
+		jQuery("#submitForm").submit();
+	}
+
+	//是否上次上传文件成功
+	var isUploadSuccess=false;
+
+	function uploadResult(code,message){
+		if(message==null||message==''||message==undefined){
+			isUploadSuccess=true;
+			ajaxPaging();
+			jQuery("#messageSpan").html("");
+		}else{
+            jQuery("#messageSpan").html(message);
+		}
+
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data["paramPo."+ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/splitting/ajaxPaging/splittingList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	//导出分润比例规则（导出查询结果）
+	function exportSplitting(){
+		var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data["paramPo."+ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/splitting/rule/export/data.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("导出成功，请到下载中心下载.");
+					ajaxPaging();
+				}
+		    }
+		});
+	}
+
+	//批量失效
+	function batchCancel() {
+    	var splittingRuleIds = new Array();
+    	jQuery(".listTb input[type=checkbox][name=settleSplittingSetbox]:checked").each(function(){
+    		 splittingRuleIds.push(jQuery(this).val());
+    	});
+    	if(splittingRuleIds.toString()=="" || splittingRuleIds.toString().length==0) {
+    		alert("请勾选结失效数据");
+    		return false;
+    	}
+		var totalCount = splittingRuleIds.length;
+        if(confirm('共选中'+totalCount+'条记录，确定要失效吗？')){
+    		var data={"splittingRuleIds":splittingRuleIds.toString()};
+    		jQuery.ajax({
+    			type: 'POST',
+    		    url: "#springUrl('/splitting/rule/batchCancel/data.do')" ,
+    		    data: data ,
+    		    dataType: "json",
+    		    success: function(data){
+    		    	var success = data.success;
+    				var respMsg= data.errorMessage;
+    				if (success==false){
+    					alert(respMsg);
+    				} else {
+    					alert("批量失效成功");
+    					ajaxPaging();
+    				}
+    		    }
+    		});
+        }
+	}
+</script>

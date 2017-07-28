@@ -1,0 +1,101 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>扣款订单</title>
+
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+	<META HTTP-EQUIV="Expires" CONTENT="0">
+
+	<LINK href="#springUrl('/htdocs/css/jquery.idtabs.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/jquery.nyroModal.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/Style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/supply_style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/menu.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/artDialog/skins/default.css')" type="text/css" rel="stylesheet">
+
+
+	<script src="#springUrl('/htdocs/scripts/common.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/menuHover.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+	<script type="text/javascript">
+		var rootPath = '#springUrl("")';
+		var j = jQuery.noConflict();
+		jQuery.fx.off = true;
+		var contextPath = "$rc.contextPath";
+	</script>
+
+	<script src="#springUrl('/htdocs/scripts/validator.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.bgiframe.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.nyroModal-1.5.5.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.idTabs.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.maxlength.js')" type="text/javascript"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/jquery.validate.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/artDialog/jquery.artDialog.js')"></script>
+
+	<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/js/base.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/js/baseExt.js')"></script>
+	<LINK href="#springUrl('/htdocs/msp/My97DatePicker/skin/WdatePicker.css')" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/My97DatePicker/WdatePicker.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/My97DatePicker/calendar.js')"></script>
+
+	<style>
+    .zxx_text_overflow{width:5em; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+</style>
+</head>
+
+<form id="submitForm" name="submitForm" method="post" action="#springUrl('/withhold/ajaxPaging/orderList.do')" >
+<div class="TableForm">
+	<div id="container" class="RealTb">
+	<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_OrderList">
+	<tr>
+		<td width="15%">商户订单号</td>
+		<td width="10%">订单金额</td>
+		<td width="10%">姓名</td>
+        <td width="10%">钱包账号</td>
+		<td width="5%">状态</td>
+        <td width="10%">创建时间</td>
+		<td width="5%">异常</td>
+		<td width="5%">备注</td>
+		<td width="8%">附言</td>
+		<td width="10%">计划扣款时间</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{temp.merchantOrderNo}</td>
+		<td>$!{temp.orderAmount}</td>
+		<td>$!{temp.chName}</td>
+		<td>$!{temp.walletno}</td>
+		<td>
+			#if("$!{temp.status}"=="001")初始
+    		#elseif("$!{temp.status}"=="002")待调用
+			#elseif("$!{temp.status}"=="003")接口调用失败
+			#elseif("$!{temp.status}"=="004")处理中
+    		#elseif("$!{temp.status}"=="005")成功
+			#elseif("$!{temp.status}"=="006")失败
+			#elseif("$!{temp.status}"=="007")作废
+			#elseif("$!{temp.status}"=="008")过期
+    		#end
+		</td>
+		<td>#showDateTime($!{temp.createTime})</td>
+		<td>$!{temp.errorcode}<br/>$!{temp.errormsg}</td>
+		<td>
+				$!{temp.remark}
+		</td>
+		<td>
+				$!{temp.postscript}
+		</td>
+		<td>#showDateTime($!{temp.planwithholddate})</td>
+	</tr>
+	#end
+</table>
+    </div>
+</div>
+</form>

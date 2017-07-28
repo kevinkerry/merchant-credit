@@ -1,0 +1,118 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/easypay/enterpriseAccount/list.htm')" method="post">
+<div class="caption">企业云收银进件管理</div>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+		    <tbody>
+		    <tr>
+			<td width="100" class="lbl">商户名称：</td>
+			<td width="200"><input type="text" id="merchantName" name="merchantName" class="txt w200"></td>
+			<td width="100" class="lbl">进件状态：</td>
+			<td width="200">
+				<select name="status" id="status">
+					<option value="">全部</option>
+					<option value="1">未提交</option>
+					<option value="4">注册中</option>
+					<option value="6">已开户</option>
+				</select>
+			</td>
+		</tr>
+			    <tr>
+			        <td class="lbl">创建时间：</td>
+			        <td colspan="3">
+			            <input type="text" id="startTime" name="startTime" class="txt w180 date" onclick="xDatePicker(1);">
+			            ~
+			            <input type="text" id="endTime" name="endTime" class="txt w180 date" onclick="xDatePicker(1);">
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('startTime'), 0, elm('endTime') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('startTime'), 0, elm('endTime') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('startTime'), 0, elm('endTime') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('startTime'), 0, elm('endTime') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('startTime'), -1, elm('endTime') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('startTime'), 0, elm('endTime') );return false;" title="交易时间范围：今天">今</a>
+					</td>
+			    </tr>
+			    <tr>
+			        <td colspan="4" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();return false;" title="清除所有查询条件">清</a>
+						<a href="#relativeUrl('/easypay/enterpriseAccount/add.htm')" class="btn2" title="新增">新增</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<script type="text/javascript">
+	var ALL_COND_ID = ['merchantName','merchantNo', 'status','startTime', 'endTime'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+			jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	
+	window.onload=function(){
+		setTimeStartEnd(0,elm("startTime"),0,elm("endTime"));
+		ajaxPaging();
+	};
+	
+	function setTimeStartEnd(a, c, b, d) {
+        var e = new Date,
+        f = e.getFullYear(),
+        g = e.getMonth(),
+        e = e.getDate();
+        c.value = formatDate(new Date(f, g, e + a), 'yyyy-MM-dd') ;
+        d.value = formatDate(new Date(f, g, e + b), 'yyyy-MM-dd') ;
+	}
+	
+	function queryInfo(){
+		/*
+		var dateStr1 = jQuery("#startTime").val();
+		var dateStr2 = jQuery("#endTime").val();
+		if(dateStr1 == null || dateStr1 == ""){
+			alert("请录入起始时间");
+			return false;
+		}
+		var dateEnd;
+		var dateBegin = new Date(dateStr1.replace(/-/g, "/"));
+		if(dateStr2 == null || dateStr2 == ""){
+			dateEnd = new Date();
+		}
+		dateEnd = new Date(dateStr2.replace(/-/g, "/"));
+
+		var dateDiff = dateEnd.getTime() - dateBegin.getTime();
+		var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));
+		
+		if(dayDiff > 30){
+			 alert("时间大于30天");
+			return false;
+		}*/
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":15};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/enterpriseAccount/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+      function downloadResult(){
+ 		jQuery("#submitForm").attr("action","#relativeUrl('/easypay/.htm')");
+ 		jQuery("#submitForm").submit();
+     }
+
+</script>

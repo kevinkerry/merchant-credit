@@ -1,0 +1,18 @@
+<table class="subListTb" cellspacing="0"   cellpadding="0" width="100%">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>商户类别</td>
+		<td>提现类型</td>
+		<td>提现金额</td>
+		<td>分润金额</td>
+	</tr>
+	#foreach($o in $query.queryList)
+	<tr>
+		<td>$!{velocityCount}</td>
+		<td>$!{o.mcc}</td>
+		<td>$!{o.serviceTypeDesc}</td>
+		<td>$!{o.withdrawAmount}</td>
+		<td>$!{o.totalSplitting}</td>
+	</tr>
+	#end
+</table>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMapConfig PUBLIC
+    "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+  <settings useStatementNamespaces="true" enhancementEnabled="false" lazyLoadingEnabled="false" cacheModelsEnabled="false"/>
+  <!-- basic下放固定的和自动生成的sqlmap -->
+  <sqlMap resource="debit/ibatis/DB_NORMAL_SETTING_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DB_ORG_CREDIT_SETTING_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DB_ORGANIZATION_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DB_RISK_REQUEST_LOG_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DB_THREAD_BATCH_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DB_THREAD_CONFIG_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DM_MERCHANT_CREDIT_BASE_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DM_MERCHANT_DEBIT_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DM_MERCHANT_DEBIT_LOG_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_AGENT_PROFIT_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_ME_CREDIT_LINES_APPLY_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_MERCHANT_CREDIT_LINES_APPLY_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_MERCHANT_DEBIT_ORDER_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_MERCHANT_OVER_DUE_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_TRANSFER_LOG_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DM_AGENT_MERCHANT_SETTING_LIST_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/DO_MERCHANT_APPLY_FAIL_LOG_SqlMap.xml" />
+
+   <sqlMap resource="debit/ibatis/TB_WITHHOLDING_BRECH_INFO_SqlMap.xml" />
+   <sqlMap resource="debit/ibatis/TB_WITHHOLDING_FILE_INFO_SqlMap.xml" />
+   <sqlMap resource="debit/ibatis/TB_WITHHOLDING_ORDER_INFO_SqlMap.xml" />
+   <sqlMap resource="debit/ibatis/TB_WITHHOLDING_TRANS_LOG_SqlMap.xml" />
+
+
+  <!-- extension下放手工维护的sqlmap -->
+  <sqlMap resource="debit/ibatis/extension/EX_DB_THREAD_BATCH_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DB_THREAD_CONFIG_SqlMap.xml" />
+
+  <sqlMap resource="debit/ibatis/extension/EX_DM_MERCHANT_DEBIT_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DO_AGENT_PROFIT_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DO_MERCHANT_CREDIT_LINES_APPLY_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DO_MERCHANT_DEBIT_ORDER_SqlMap.xml" />
+
+  <sqlMap resource="debit/ibatis/extension/EX_DB_NORMAL_SETTING_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DB_ORG_CREDIT_SETTING_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DO_ME_CREDIT_LINES_APPLY_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_DO_MERCHANT_APPLY_FAIL_LOG_SqlMap.xml" />
+
+  <sqlMap resource="debit/ibatis/extension/EX_TB_WITHHOLDING_BRECH_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_TB_WITHHOLDING_FILE_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_TB_WITHHOLDING_ORDER_INFO_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EX_TB_WITHHOLDING_TRANS_LOG_SqlMap.xml" />
+  <sqlMap resource="debit/ibatis/extension/EXT_TB_WITHHOLDING_INFO_SqlMap.xml" />
+  
+</sqlMapConfig>

@@ -1,0 +1,1 @@
+<p style="color: red">$result.respCode - $result.respMsg</p>

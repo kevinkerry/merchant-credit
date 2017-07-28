@@ -1,0 +1,28 @@
+#macro( staticResource $value)$MCAppVarPropsUtil.getStringProp("mc.static.file.root.path")$value#end
+#macro( showDateTime $value)
+$!dateUtil.format($value, 'yyyy-MM-dd HH:mm:ss')
+#end
+#macro( showShortDateTime $value)
+$!dateUtil.format($value, 'yyyy-MM-dd HH:mm')
+#end
+#macro( showDate $value)
+$!dateUtil.format($value, 'yyyy-MM-dd')
+#end
+#macro( showTime $value)
+$!dateUtil.format($value, 'HH:mm')
+#end
+#macro( showNewTime $value)
+$!cpUtils.format($value, 'MM-dd HH:mm')
+#end
+#macro( getTime )
+$!dateUtil.getCurrentTS().getTime()
+#end
+#macro( showDateToWebFormat $value)
+$!dateUtil.convert2WebFormat($value)
+#end
+#macro( percentFormat $value)
+return $value * 100
+#end
+
+
+#macro(relativeUrl $value)#springUrl('/')$!{mType}$value#end

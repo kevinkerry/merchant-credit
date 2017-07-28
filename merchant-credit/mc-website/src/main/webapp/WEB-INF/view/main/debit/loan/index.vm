@@ -1,0 +1,223 @@
+#parse("/main/debit/loan/passwordjs.vm")
+<script type="text/javascript" src="#staticResource('/js/mask.js')?version=1"></script>
+<input type="hidden" id="debitApplyUrl" value="#relativeUrl('/debit/apply.json')"/>
+<style>
+	.password{clear:both;overflow:hidden;}
+	.password span.pass_span{float:left; height:30px; margin-top:18px;}
+	.password #_ocx_password_str{ float:left;width:192px;margin-left:18px;}
+	.password em{float:left; margin-left:20px;margin-top:18px;}
+	.password #password{float:left;width:190px;margin-left:20px;margin-top:8px;}
+</style>
+
+<form action="#relativeUrl('/debit/apply.htm')" method="post" id="debitApplyForm">
+<input type="hidden" id="sActivexPubKey" value="$!{sActivexPubKey}">
+<input type="hidden" id="certSerialNo" name="certSerialNo" value="$!{certSerialNo}">
+<input type="hidden" id="encryptedKey" name="encryptedKey" value="">
+<input type="hidden" id="interestRateDay" name="interestRateDay" value="$!{interestRateDay}"/>
+<input type="hidden" id="canUseAmount" name="canUseAmount" value="$!{canUseAmount}"/>
+
+<div class="content main_box">
+	<div class="path clearfix" >
+		<div class="step_box l"></div>
+		<div class="state state2 l">
+			<span>1</span>
+			<p>填写借款金额、借款期限及借款用途等信息</p>
+		</div>
+		<div class="state state3 l">
+			<span>2</span>
+			<p>您的用款申请已经在处理中，请耐心等待结果。</p>
+		</div>
+		<div class="state state3 l">
+			<span>3</span>
+			<p>审核完成。</p>
+		</div>
+	</div>
+	#if (!$message)
+	<div class="form_box">
+		<p><span>借款金额：</span><input type="text" id="debitAmount" name="debitAmount" maxlength="10" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');">
+				<em class="em_color">剩余可申请额度：$!NumberUtils.formatWithComma($!{canUseAmount})元</em>
+				<i id="amountTip" style="display:none">请填写正确的借款金额</i>
+		</p>
+		<p><span>借款期限：</span><input type="text" id="borrowDays" maxlength="2" name="borrowDays" onkeyup="this.value=this.value.replace(/^(\d+).*$|^[^\d]*$/g,'$1');"/><em>天（3~30天）</em></p>
+		<p><span>借款利息：</span><input type="text" id="interestAmount" name="interestAmount" readonly ><em>$!{fRate}%/日（按日计息，放款时一次性扣除）</em></p>
+		<p><span>服务费：</span><input type="text" id="serviceAmount" name="serviceAmount" readonly ><em>$!{sRate}%/日（按借款金额及期限核算，放款时一次性扣除）</em></p>
+		<p><span>借款用途：</span>
+			<select name="purposer" id="purposer">
+				<option value="1">资金周转</option>
+				<option value="2">短期货款</option>
+			</select>
+			<em></em>
+		</p>
+		<p><span>放款钱包账户：</span>&nbsp;&nbsp;&nbsp;$!{lendLoginName}<em></em></p>
+		<div class="password">
+			<span class="pass_span">支付密码：</span>
+			<div id="_ocx_password_str"></div>
+			<input id="password" type="password" name="password" style="display:none" class="s_input"/>
+			<em>请输入放款钱包账户支付密码</em>
+		</div>
+	</div>
+	<div class="form_btn">
+		<a href="javascript:;" id="confirmApply">立即申请</a>
+	</div>
+	#end
+</div>
+</form>
+
+
+<div class="mask"></div>
+<div class="mask_box" id="mask_box">
+	<p id="mask_text"></p>
+	<div class="confirm">
+		<a href="javascript:hidediv('mask_box');" class="close_btn">关闭</a>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	function hidediv(id){
+		var oMask=getByClass(document,'mask')[0];
+		var obj=document.getElementById(id);
+
+		obj.style.display="none";
+		oMask.style.display="none";
+
+		$("#_ocx_password_str").show();
+		$("#password").hide();
+		var callback = $("#mask_box").attr("callback");
+		if(callback&&callback!=""){
+			$("#mask_box").removeAttr("callback");
+			eval(callback);
+		}
+	}
+
+	function togglePwdInput(){
+		$("#_ocx_password_str").hide();
+    	$("#password").show();
+		$("#confirmApply").attr("flag","0");
+    }
+	function exceptionRefresh(){
+		window.location.href="#relativeUrl('/debit/init.htm')?timestamp="+new Date().getTime();
+	}
+	function gotoOverdue(){
+		window.location.href="#relativeUrl('/overdue/index.htm')?timestamp="+new Date().getTime();
+	}
+	function showDiv2(funcName){
+		showDiv('mask_box');
+		$("#mask_box").attr("callback","exceptionRefresh()");
+	}
+    #if ($message !='')
+		var message = '${message}';
+		$('#mask_text').html("<p>"+message+"</p>");
+		showDiv('mask_box');
+		#if($!code=='overdue')
+			$("#mask_box").attr("callback","gotoOverdue()");
+		#end
+		///$('.mask').css({"z-index":"1000"});
+		///$('#mask_box').css({"z-index":"1000"});
+    #else
+	$(function(){
+		if(navigator.userAgent.indexOf("Window") < 0) {
+	        $("#password").show();
+	        $("#_ocx_password_str").hide();
+	        $("#_ocx_password").hide();
+	    }
+
+		$('#debitAmount').bind('keyup change',function(){
+			var debitAmount = $('#debitAmount').val();
+			var borrowDays = $('#borrowDays').val();
+
+				var fee = ((debitAmount*$!{fRate})*borrowDays/100).toFixed(2);
+				var serfee = ((debitAmount*$!{sRate})*borrowDays/100).toFixed(2);
+				$("#interestAmount").val(fee);
+				$("#serviceAmount").val(serfee);
+
+		})
+
+		$('#borrowDays').bind('keyup change',function(){
+			var debitAmount = $('#debitAmount').val();
+			var borrowDays = $('#borrowDays').val();
+
+				var fee = ((debitAmount*$!{fRate})*borrowDays/100).toFixed(2);;
+				var serfee = ((debitAmount*$!{sRate})*borrowDays/100).toFixed(2);
+				$("#interestAmount").val(fee);
+				$("#serviceAmount").val(serfee);
+
+		})
+
+		$("#confirmApply").bind('click',function(){
+			var flag = $("#confirmApply").attr("flag");
+			if(!flag||flag=="0"){
+				$("#confirmApply").attr("flag","1");
+			}else{
+				return;
+			}
+			var debitAmount = $('#debitAmount').val();
+			var borrowDays = $('#borrowDays').val();
+			var canUseAmount = $('#canUseAmount').val();
+
+			if(debitAmount == '' || debitAmount <= 0){
+				$('#mask_text').html("借款金额需大于0");
+				togglePwdInput();
+				showDiv('mask_box');
+				return;
+			}
+			if(Number(debitAmount)%1000!=0){
+				$('#mask_text').html("借款金额必须是1000的整数倍");
+				togglePwdInput();
+				showDiv('mask_box');
+				return;
+			}
+			if(parseFloat(debitAmount) > parseFloat(canUseAmount)){
+				$('#mask_text').html("借款金额需不高于剩余可申请额度");
+				togglePwdInput();
+				showDiv('mask_box');
+				return;
+			}
+
+			if(parseInt(borrowDays) < 3 || parseInt(borrowDays) > 30){
+				$('#mask_text').html("借款期限3~30天");
+				togglePwdInput();
+				showDiv('mask_box');
+				return;
+			}
+
+			if(isNaN(borrowDays)||borrowDays<=0||!(/^\d+$/.test(borrowDays))){
+				 $('#mask_text').html("借款期限只允许输入3~30天整数!");
+				 togglePwdInput();
+				 showDiv('mask_box');
+				 return;
+			}
+			//支付密码
+    		if(navigator.userAgent.indexOf("Window") < 0) {
+                $("#encryptedKey").val("");
+            } else {
+                $("#encryptedKey").val(editor.GetKey());
+                $("#password").val(editor.GetValue());
+            }
+			jQuery.ajax({
+    			type: "POST",
+    			url: $('#debitApplyUrl').val(),
+    			data: $("#debitApplyForm").serialize(),
+				dataType: "json",
+    			success: function(json) {
+					$("#confirmApply").attr("flag","0");
+    				if (json.errorCode == '0') {
+						$('#mask_text').html("<p>"+json.errorMessage+"</p>");
+						//showDiv('mask_box');
+						window.location.href="#relativeUrl('/debit/" + json.params.id +"/success.htm')?timestamp="+new Date().getTime();
+    				}else if(json.errorCode == 'R'){
+    					togglePwdInput();
+    					$('#mask_text').html("<p>"+json.errorMessage+"</p>");
+						showDiv2('mask_box');
+    				}else{
+						togglePwdInput();
+    					$('#mask_text').html("<p>"+json.errorMessage+"</p>");
+						showDiv('mask_box');
+					}
+    			}
+    		});
+
+		})
+	});
+	#end
+</SCRIPT>

@@ -1,0 +1,39 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax4msp.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="listTb">
+	<tr class="ttl">
+	    <td>商户名称</td>
+		<td>POS商户号</td>
+		<td>盛付通商户号</td>
+		<td>商户状态</td>		
+		<td>所属行业</td>
+		<td>快速结算配置额度</td>
+		<td>快速结算</td>
+		<td>(快速结算)工作日费率</td>
+		<td>(快速结算)非工作日费率</td>
+		##<td>商户地址</td>
+		<td>推广员</td>
+		<td>操作员</td>	
+		<td>操作</td>
+	</tr>
+	#foreach($o in ${query.dataList})
+	<tr>
+		<td>$!{o.merchantName}</td>
+		<td>$!{o.posMerchantNo}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.statusName}</td>
+		<td>$!{o.mcc}<br>$!{o.mccName}</td>
+		<td>$!NumberUtils.format($!{o.fastSettleLimit})</td>
+		<td>#if($!{o.fastSettleFlag})开启#else关闭#end</td>
+		<td>$!{o.workdayFee}</td>
+		<td>$!{o.holidayFee}</td>
+		##<td>$!{o.provinceName} $!{o.cityName} $!{o.address}</td>
+		<td>$!{o.pmtPromoterName}</td>
+		<td>$!{o.pmtBindOperatorName}</td>
+		<td><a class="lk1" href="#if("$!{msg}"=="")#relativeUrl('/initPosMerchantSettings.htm')?merchantId=$!{o.id}#else javascript:promoterValidate('$!{msg}')#end" target="_blank">修改</a>
+		<!-- <a class="lk1" href="#if("$!{msg}"=="")#relativeUrl('/withdrawIndex.htm')?merchantNo=$!{o.merchantNo}#else javascript:promoterValidate('$!{msg}')#end" target="_blank">对账单</a> -->
+		</td>
+	</tr>
+	#end
+</table>

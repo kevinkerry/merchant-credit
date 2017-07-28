@@ -1,0 +1,76 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+<div id="container_count" style="color: red;">
+	当前页面申请取回合计金额：$!{currentPageAmount}元，所有页面申请取回合计金额：$!{totalPageAmount}元
+</div>
+	<tr class="ttl">
+		<td><input type="checkbox" id="checkboxId" onclick="selectAll(this);" /></td>
+		<td>商户号</td>
+		<td>商户名称</td>
+		<td>类型</td>
+		<td>请款时间</td>
+		<td>预计到账时间</td>
+		<td>保证金金额</td>
+		<td>申请取回金额</td>
+		<td>放款人</td>
+		<td>放款状态</td>
+		<td>放款时间</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr class="contents">
+		<td>
+			#if("$!{o.status}"=="201")
+				<input type="checkbox" name="checkname" value="$!{o.morId}"/>
+			#end
+		</td>
+		<td><a href="javascript:void(0)" class="lk0" onclick="document.getElementById('promoterNo').value='$!{o.mcMerchantNo}'">$!{o.mcMerchantNo}</a></td>
+		<td>$!{o.mcMerchantName}</td>
+		<td>
+			#if("$!{o.mcType}"=="0003")
+				POS
+			#elseif("$!{o.mcType}"=="0007")
+				mPOS
+			#elseif("$!{o.mcType}"=="0101")
+				云收银
+			#end
+		</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.redeemedTime})</td>
+		<td>$!{o.fastSettleMargin}</td>
+		<td class="amount">$!{o.amount}</td>
+		<td>$!{o.realName}</td>
+		<td>
+		#if("$!{o.status}"=="201")
+				待放款
+		#elseif("$!{o.status}"=="202")
+				已放款
+		#elseif("$!{o.status}"=="-202")
+				放款失败
+		#elseif("$!{o.status}"=="-300")
+				拒绝放款
+		#end
+		</td>
+		<td>#showDateTime($!{o.operaTime})</td>
+		<!-- <td>
+			#if("$!{o.status}"=="201" || "$!{o.status}"=="220" || "$!{o.status}"=="-220")
+				<a href="#springUrl('/newT0/initApplyView.do')?morId=$!{o.morId}" target="_blank" title="放款">放款</a>
+			#end
+		</td> -->
+		<td>
+			#if("$!{o.status}"=="202")
+				<a href="javascript:void(0)" disabled = 'true' class="btn2loan">已放款</a>
+			#elseif("$!{o.status}"=="-202")
+				<a href="javascript:void(0)" disabled = 'true' class="btn2loan">放款失败</a>
+			#elseif("$!{o.status}"=="-300")
+				<a href="javascript:void(0)" disabled = 'true' class="btn2loan">拒绝放款</a>
+			#elseif("$!{o.status}"=="201")
+				<a href="#" class="btn2" onclick="javascript:applayOpreation('$!{o.morId}','$!{o.amount}','0');" style="color: #fff;">放款</a>
+				<a href="#" class="btn2" onclick="javascript:applayOpreation('$!{o.morId}','$!{o.amount}','1');" style="color: #fff;">拒绝</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>

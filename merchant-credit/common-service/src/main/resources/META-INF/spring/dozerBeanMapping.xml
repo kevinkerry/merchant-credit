@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<configuration>
+		<stop-on-errors>true</stop-on-errors>
+		<!-- <date-format>yyyy-MM-dd</date-format> -->
+		<wildcard>true</wildcard>
+		<custom-converters>
+			<converter type="com.shengpay.dozer.String2BigDecimalRoundUpConverter">
+				<class-a>java.lang.String</class-a>
+				<class-b>java.math.BigDecimal</class-b>
+			</converter>
+			<converter type="com.shengpay.dozer.String2BigDecimalRoundDownConverter">
+				<class-a>java.lang.String</class-a>
+				<class-b>java.math.BigDecimal</class-b>
+			</converter>
+			<converter type="com.shengpay.dozer.Map2JsonConverter">
+				<class-a>java.util.HashMap</class-a>
+				<class-b>java.lang.String</class-b>
+			</converter>
+		</custom-converters>
+	</configuration>
+
+	<mapping date-format="yyyyMMddHHmmss" >
+		<class-a>com.sdp.mc.common.dto.WithdrawCoreServiceDTO</class-a>
+		<class-b>com.sdp.withdraw.dao.WithdrawReqFosDetailDO</class-b>
+		<field custom-converter="com.shengpay.dozer.Map2JsonConverter">
+			<a>reqExtention</a>
+			<b>reqExtention</b>
+		</field>
+	</mapping>
+
+	<mapping date-format="yyyy/MM/dd hh:mm:ss">
+		<class-a>com.sdp.withdraw.dao.WithdrawRatioInfoDO</class-a>
+		<class-b>com.sdp.withdraw.vo.ratio.WithdrawRatioResult</class-b>
+		<field >
+			<a>id</a>
+			<b>ratioId</b>
+		</field>
+		<field>
+			<a>status</a>
+			<b>withDrawRatioStatus</b>
+		</field>
+		<field>
+			<a>ratioType</a>
+			<b>withDrawRatioType</b>
+		</field>
+		<field>
+			<a>workDayRatio</a>
+			<b>workDayWithDrawRatio</b>
+		</field>
+		<field>
+			<a>holidayRatio</a>
+			<b>holidayWithDrawRatio</b>
+		</field>
+	</mapping>
+
+	<mapping date-format="yyyyMMddHHmmss">
+		<class-a>com.sdp.mc.common.dto.WithdrawCoreServiceDTO</class-a>
+		<class-b>com.sdp.mc.integration.fos.dto.request.WithdrawT0RequestDTO</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>com.sdp.mc.common.bean.newt0.LoaningConfigBean</class-a>
+		<class-b>com.sdp.mc.common.bean.newt0.PmtMerchantType</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>com.sdp.withdraw.dao.ext.OpLogRecordVO</class-a>
+		<class-b>com.sdp.withdraw.dao.WithdrawInfoDO</class-b>
+	</mapping>
+
+	<mapping date-format="yyyyMMddHHmmss">
+		<class-a>com.sdp.withdraw.dao.WithdrawReqDO</class-a>
+		<class-b>com.sdp.withdraw.vo.WithdrawResult</class-b>
+	</mapping>
+	<mapping date-format="yyyyMMddHHmmss">
+		<class-a>com.sdp.withdraw.dao.WithdrawReqFosDetailDO</class-a>
+		<class-b>com.sdp.withdraw.vo.WithdrawResult</class-b>
+		<field>
+			<a>reqId</a>
+			<b>traceNo</b>
+		</field>
+		<field>
+			<a>payeeCardNo</a>
+			<b>cardNo</b>
+		</field>
+		<field>
+			<a>payeeName</a>
+			<b>name</b>
+		</field>
+		<field>
+			<a>createTime</a>
+			<b>settlementTime</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>com.sdp.withdraw.vo.WithdrawT0ServiceRequest</class-a>
+		<class-b>com.sdp.withdraw.dao.WithdrawReqDO</class-b>
+	</mapping>
+	<mapping date-format="yyyy-MM-dd">
+		<class-a>com.sdp.withdraw.dao.ext.ExtWithdrawReqVO</class-a>
+		<class-b>com.sdp.withdraw.vo.WithdrawResult</class-b>
+		<field>
+			<a>errorCode</a>
+			<b>returnCode</b>
+		</field>
+		<field>
+			<a>errorMsg</a>
+			<b>returnMsg</b>
+		</field>
+		<field>
+			<a>wrCreateTime</a>
+			<b>settlementTime</b>
+		</field>
+		<field>
+			<a>reqId</a>
+			<b>traceNo</b>
+		</field>
+		<field>
+			<a>payeeCardNo</a>
+			<b>cardNo</b>
+		</field>
+		<field>
+			<a>payeeName</a>
+			<b>name</b>
+		</field>
+	</mapping>
+
+	<mapping>
+		<class-a>com.sdp.withdraw.dao.WithdrawRatioInfoDO</class-a>
+		<class-b>com.sdp.withdraw.vo.ratio.WithdrawRatioRequest</class-b>
+		<field>
+			<a>id</a>
+			<b>ratioId</b>
+		</field>
+		<field>
+			<a>ratioType</a>
+			<b>withDrawRatioType</b>
+		</field>
+		<field>
+			<a>status</a>
+			<b>withDrawRatioStatus</b>
+		</field>
+		<field>
+			<a>workDayRatio</a>
+			<b>workDayWithDrawRatio</b>
+		</field>
+		<field>
+			<a>holidayRatio</a>
+			<b>holidayWithDrawRatio</b>
+		</field>
+	</mapping>
+
+	<mapping date-format="yyyyMMddHHmmss">
+		<class-a>com.sdp.withdraw.dao.WithdrawInfoDO</class-a>
+		<class-b>com.sdp.mc.withdraw.WithdrawOpLogRecordDO</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.mc.dataobjct.WhiteListInfoPO</class-a>
+		<class-b>com.sdp.mc.withdraw.WithdrawOpLogRecordDO</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>com.sdp.mc.newt0.dao.NewT0AuditInfoDO</class-a>
+		<class-b>com.sdp.mc.common.bean.newt0.AdjustLimitBean</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.mc.common.model.AuditInfoRequestAdustLog</class-a>
+		<class-b>com.sdp.mc.common.bean.newt0.AdjustLimitBean</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.mc.view.dao.ViewMerchantInfoDTO</class-a>
+		<class-b>com.sdp.withdraw.vo.merchant.MerchantInfo</class-b>
+		<field>
+			<a>merchantId</a>
+			<b>mcId</b>
+		</field>
+		<field>
+			<a>mcType</a>
+			<b>merchantType</b>
+		</field>
+		<field>
+			<a>merchantFsFlag</a>
+			<b>fastSettleFlag</b>
+		</field>
+		<field>
+			<a>merchantFsLimit</a>
+			<b>fastSettleLimit</b>
+		</field>
+		<field>
+			<a>merchantFsMinLimit</a>
+			<b>fastSettleMinLimit</b>
+		</field>
+		<field>
+			<a>merchantPhoneNo</a>
+			<b>phone</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.mc.view.dao.ViewPromoterInfoDTO</class-a>
+		<class-b>com.sdp.withdraw.vo.merchant.PromoterInfo</class-b>
+		<field>
+			<a>promoterId</a>
+			<b>mcId</b>
+		</field>
+		<field>
+			<a>promoterName</a>
+			<b>merchantName</b>
+		</field>
+		<field>
+			<a>promoterMerchantNo</a>
+			<b>merchantNo</b>
+		</field>
+		<field>
+			<a>promoterType</a>
+			<b>merchantType</b>
+		</field>
+		<field>
+			<a>promoterFsFlag</a>
+			<b>fastSettleFlag</b>
+		</field>
+		<field>
+			<a>promoterFsLimit</a>
+			<b>fastSettleLimit</b>
+		</field>
+		<field>
+			<a>promoterFsMargin</a>
+			<b>fastSettleMarginLimit</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.withdraw.dao.PosMerchantInfoDO</class-a>
+		<class-b>com.sdp.withdraw.vo.merchant.SynMerchantRequest</class-b>
+		<field>
+			<a>posMerchantId</a>
+			<b>mcId</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.withdraw.dao.PosMerchantInfoDO</class-a>
+		<class-b>com.sdp.withdraw.vo.merchant.SynPromoterRequest</class-b>
+		<field>
+			<a>posMerchantId</a>
+			<b>mcId</b>
+		</field>
+		<field>
+			<a>pmtLevel</a>
+			<b>level</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.sdp.withdraw.dao.PosMerchantInfoDO</class-a>
+		<class-b>com.sdp.mc.dao.readonly.promoter.PromoterEO</class-b>
+		<field>
+			<a>posMerchantId</a>
+			<b>mcId</b>
+		</field>
+		<field>
+			<a>merchantNo</a>
+			<b>mcMerchantNo</b>
+		</field>
+		<field>
+			<a>merchantName</a>
+			<b>mcMerchantName</b>
+		</field>
+		<field>
+			<a>merchantType</a>
+			<b>mcType</b>
+		</field>
+		<field>
+			<a>fastSettleFlag</a>
+			<b>pmtFastSettleFlag</b>
+		</field>
+		<field>
+			<a>status</a>
+			<b>mcStatus</b>
+		</field>
+	</mapping>
+	<mapping date-format="yyyy-MM-dd HH:mm:ss">
+		<class-a>com.sdp.withdraw.dao.PosMerchantInfoDO</class-a>
+		<class-b>com.sdp.mc.dao.readonly.msp.mspposmerchant.MspPosMerchantEO</class-b>
+		<field>
+			<a>posMerchantId</a>
+			<b>id</b>
+		</field>
+		<field>
+			<a>merchantMemberId</a>
+			<b>memberId</b>
+		</field>
+		<field>
+			<a>merchantPhone</a>
+			<b>handPhoneNo</b>
+		</field>
+		<field>
+			<a>merchantType</a>
+			<b>type</b>
+		</field>
+	</mapping>
+	<mapping date-format="yyyy-MM-dd HH:mm:ss">
+		<class-a>com.sdp.withdraw.vo.wallet.WalletWithdrawRequest</class-a>
+		<class-b>com.sdp.withdraw.dao.WalletWithdrawReqDO</class-b>
+	</mapping>
+	<mapping date-format="yyyy-MM-dd HH:mm:ss">
+		<class-a>com.sdp.withdraw.vo.WithdrawT0ServiceRequest</class-a>
+		<class-b>com.sdp.withdraw.dao.WalletWithdrawReqDO</class-b>
+		<field >
+			<a>merchantNo</a>
+			<b>memberNo</b>
+		</field>
+		<field >
+			<a>mcType</a>
+			<b>memberType</b>
+		</field>
+	</mapping>
+	<mapping date-format="yyyy-MM-dd HH:mm:ss">
+		<class-a>com.sdp.withdraw.vo.wallet.WalletWithdrawResult</class-a>
+		<class-b>com.sdp.withdraw.dao.ext.ExtWalletWithdrawReqDTO</class-b>
+	</mapping>
+	<mapping date-format="yyyy-MM-dd HH:mm:ss">
+		<class-a>com.sdp.withdraw.vo.wallet.WalletWithdrawQueryRequest</class-a>
+		<class-b>com.sdp.withdraw.dao.ext.ExtWalletWithdrawReqDTO</class-b>
+	</mapping>
+	
+	<mapping date-format="yyyyMMddHHmmss">
+		<class-a>com.sdp.mc.common.dto.WithdrawCoreServiceDTO</class-a>
+		<class-b>com.sdp.withdraw.vo.BankCardInfo</class-b>
+		<field >
+			<a>payeeName</a>
+			<b>name</b>
+		</field>
+		<field >
+			<a>payeeCardNo</a>
+			<b>cardNo</b>
+		</field>
+	</mapping>
+
+</mappings>

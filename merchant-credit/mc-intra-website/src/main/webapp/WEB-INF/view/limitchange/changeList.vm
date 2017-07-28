@@ -1,0 +1,38 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList" width="100%" >
+	<tr class="ttl">
+		<td style="text-align: left;">执行时间</td>
+		<td style="text-align: left;">执行类型</td>
+		<td style="text-align: left;">总记录数</td>
+		<td style="text-align: left;">修改成功</td>
+		<td style="text-align: left;">修改失败</td>
+		<td style="text-align: left;">状态</td>
+		<td style="text-align: left;">操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>#showDateTime($!{o.reqTime})</td>
+		<td>#if("$!{o.reqType}"=="1")月初自动
+    		#else
+				上传文件
+    		#end</td>
+		<td>$!{o.reqNum}</td>
+		<td>$!{o.successNum}</td>
+		<td>$!{o.failNum}</td>
+		<td>
+		   #if("$!{o.status}"=="0")待执行
+    		#elseif("$!{o.status}"=="1")执行中
+    		#else
+				执行完成
+    		#end
+		
+		</td>
+		<td><a class="smBtn" href="#springUrl('/limitchange/changeDetail.do')?reqId=$!{o.reqId}&reqType=$!{o.reqType}" target="_blank" title="详细">详</a>
+		 #if("$!{o.status}"=="0")&nbsp;<a href="javascript:startChange('$!{o.reqId}')"  title="明细">发起修改</a>#end
+		</td>
+	</tr>
+	#end
+</table>
+

@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="#staticResource('/css/inc.css')?version=1" type="text/css" />
+<link rel="stylesheet" href="#staticResource('/css/style.css')?version=1" type="text/css" />
+<script type="text/javascript">
+	function showFileContent(userUrl){
+		window.location.href="#relativeUrl("/file/download.htm?")"+userUrl ;
+	}
+</script>
+<div class="content main_box">
+	<div class="ban_table clearfix">
+		<div class="ban_left l">
+			#foreach($risk in $riskModel.types)
+				<a href="#h_$velocityCount" class="on">$risk.desc</a>
+			#end
+		</div>
+		<div class="ban_right l">
+			<h2>额度申请表</h2>
+			<table>
+				<tr>
+				  <td height="50">申请额度:</td>
+				  <td  height="50">$!NumberUtils.format(${applyPO.lendAmount})</td>
+				</tr>
+				<tr>
+					<td height="35">额度期限:</td>
+				  	<td height="35">
+				  		#showDate($!{applyPO.policyStartTime}) ~ #showDate($!{applyPO.policyEndTime})
+				  	</td>
+				</tr>
+			</table>
+
+			#foreach($risk in $riskModel.types)
+			<h3 id="h_$velocityCount">$risk.desc</h3>
+			<table>
+				#foreach($item in $risk.items)
+					<tr>
+				    	<td height="35">#if($item.isNeed=='true') <span>*</span> #end $item.desc</td>
+						#if($item.inputType=='Attachment')
+							<td height="35">
+								##<a id="${risk.code}_${item.code}" href="javascript:;" name="${risk.code}_${item.code}" class="upload">立即上传</a>
+								<div id="text_${risk.code}_${item.code}" name="text_${risk.code}_${item.code}"  #if($item.hasAttach =="Yes") style="display:inline" #else style="display:none" #end>
+									<span id="${risk.code}_${item.code}" name="${risk.code}_${item.code}">$!{item.userInputFileName}</span>
+    								<a href="javascript:showFileContent('$item.userInputUrl');" >查看</a>
+								</div>
+							</td>
+						#elseif($item.inputType=='EnumAttachment')
+							<td height="35">
+								#foreach($enum in $item.enums)
+									#if($item.userInputVal ==$enum.code) $!{enum.desc} #end
+								#end
+								<div id="text_${risk.code}_${item.code}" name="text_${risk.code}_${item.code}"  #if($item.hasAttach =="Yes") style="display:inline" #else style="display:none" #end>
+									<span id="file_${risk.code}_${item.code}" name="file_${risk.code}_${item.code}">$!{item.userInputFileName}</span>
+    								<a href="javascript:showFileContent('$item.userInputUrl');" >查看</a>
+									##<input id="hidden_${risk.code}_${item.code}" name="hidden_${risk.code}_${item.code}" type="hidden" value="$!{item.userInputUrl}"/>
+								</div>
+							</td>
+
+						#elseif($item.inputType=='Enum')
+							<td height="35">
+								#foreach($enum in $!item.enums)
+									#if($item.userInputVal ==$enum.code) $!{enum.desc} #end
+								#end
+							</td>
+						#elseif($item.inputType=='Text')
+							<td height="35">
+								$!{item.userInputVal}
+							</td>
+						#end
+					</tr>
+				#end
+			</table>
+			#end
+		</div>
+	</div>
+</div>

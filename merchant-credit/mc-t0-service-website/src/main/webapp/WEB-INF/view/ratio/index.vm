@@ -1,0 +1,157 @@
+#set($page_title = '测试费率接口')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/test/test')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		        <td class="lbl">merchantNo：</td>
+		        <td width="200">
+		        	<input type="text" id="merchantNo" name="merchantNo" value="" class="txt130">
+		        </td>
+		        <td class="lbl">商户类型：</td>
+		        <td width="200">
+		        <input type="text" id="merchantType" name="merchantType" value="" class="txt130">
+        			<!-- <select name="merchantType" id="merchantType">
+			          <option value="0001" selected="">POS</option>
+			          <option value="0006">MPOS</option>
+			          </select> -->
+			          <font style="color: #ccc;"> POS:0001,MPOS:0006</font>
+
+		        </td>
+		        <td class="lbl">状态：</td>
+		        <td width="200">
+		             <input type="text" id="withDrawRatioStatus" name="withDrawRatioStatus" value="" class="txt130">
+        			<!-- <select name="withDrawRatioStatus" id="withDrawRatioStatus">
+			          <option value="1" selected=""> 生效</option>
+			          <option value="0">失效</option>
+			         </select> -->
+			         <font style="color: #ccc;"> 生效:1,失效:0</font>
+		        </td>
+		     </tr>
+		     <tr>
+		    	<td class="lbl">节假日费率：</td>
+		        <td width="200">
+        			<input type="text" id="holidayWithDrawRatio" name="holidayWithDrawRatio" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">工作日费率：</td>
+		        <td width="200">
+        			<input type="text" id="workDayWithDrawRatio" name="workDayWithDrawRatio" value="" class="txt130">
+		        </td>
+
+		    	<td class="lbl">费率类型：</td>
+		        <td width="200">
+		             <input type="text" id="withDrawRatioType" name="withDrawRatioType" value="" class="txt130">
+        			<!-- <select name="withDrawRatioType" id="withDrawRatioType">
+			          <option value="10" selected="">POS/T+0结算费率</option>
+			          <option value="20">MPOS/T+0结算费率</option>
+			          <option value="21">MPOS/T+1结算费率</option>
+			          <option value="22">MPOS/D+1结算费率</option>
+			         </select> -->
+			         <br>
+			         <font style="color: #ccc;"> POS/T+0结算费率:10,MPOS/T+0结算费率:20,MPOS/T+1结算费率:21,MPOS/D+1结算费率:22</font>
+		        </td>
+		    </tr>
+		     <tr>
+		        <td class="lbl">费率ID：</td>
+		        <td width="200">
+		        	<input type="text" id="ratioId" name="ratioId" value="" class="txt130">
+		        </td>
+		        <td class="lbl">生效时间：</td>
+		        <td width="200">
+		        	<input type="text" id="effectiveTime" name="effectiveTime" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">失效时间：</td>
+		        <td width="200">
+        			<input type="text" id="expireTime" name="expireTime" value="" class="txt130">
+		        </td>
+		    </tr>
+
+		    <tr>
+		        <td colspan="6" align="center">
+		            <a href="#" class="btn2" id="queryBtn1" onclick="createOrUpdate()">修改费率</a><br />
+					<a href="#" class="btn2" id="queryBtn3" onclick="queryRatio()">查询</a><br />
+					<a href="#" class="btn2" id="queryBtn4" onclick="createD1andT1Ratio()">创建D1&T1费率</a><br />
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+var waiting='<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+    function createOrUpdate(){
+    	var _ids = ['merchantNo', 'merchantType', 'effectiveTime', 'expireTime', 'holidayWithDrawRatio', 'withDrawRatioStatus', 'withDrawRatioType', 'workDayWithDrawRatio','ratioId'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/ratio-test/createOrUpdate.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+// 		    	alert(data);
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	  function createD1andT1Ratio(){
+    	var _ids = ['merchantNo', 'merchantType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/ratio-test/createOrUpdateT1andD1Ratio.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+// 		    	alert(data);
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	function queryRatio(){
+    	var _ids = ['merchantNo','merchantType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/ratio-test/queryRatio.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+</script>

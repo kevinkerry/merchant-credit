@@ -1,0 +1,98 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/ajaxPaging/queryPosMerchant.htm')" method="post">
+<div class="caption">#if("${promoterInfo.promoterType}"=="0101") 云收银商户提现管理 #else #if("${MC_MERCHANT_USER.currentMcType}"=="0003") 商户T0配置 #else 商户提现管理 #end #end</div>
+##<div class="caption"> #if("${MC_MERCHANT_USER.currentMcType}"=="0003") 商户T0配置 #else 商户提现管理 #end </div>
+<table class="qryTb" cellspacing="0" cellpadding="0" width="80%" border="0">
+	<tbody>
+		<tr>
+			<td class="lbl">商户号：</td>
+			<td ><input type="text" id="merchantNo" name="merchantNo" class="txt w120"></td>
+			<td  class="lbl">商户名称：</td>
+			<td ><input type="text" id="merchantName" name="merchantName" class="txt w120"></td>
+			<td class="lbl">T0开通状态：</td>
+			<td>
+				<select id="t0Status" name="t0Status" class="settletxt msbg100 w100">
+					<option value="">全部</option>
+					<option value="1" >开通</option>
+					<option value="0" >关闭</option>
+                </select>
+			</td>
+			<input type="hidden" id="promoterType" name="promoterType" value="$!{promoterInfo.promoterType}"/>
+		</tr>
+		<tr>
+
+		    #if($!{promoterInfo.promoterType}=='0007'||$!{promoterInfo.promoterType}=='9999')
+			<td class="lbl">商户类别：</td>
+			<td ><input type="text" id="mcc" name="mcc" class="txt w120"></td>
+			<td class="lbl">T1开通状态：</td>
+			<td>
+				<select id="t1Status" name="t1Status" class="settletxt msbg100 w100">
+					<option value="">全部</option>
+					<option value="1" >开通</option>
+					<option value="0" >关闭</option>
+                </select>
+			</td>
+			<td class="lbl">D1开通状态：</td>
+			<td colspan="3">
+				<select id="d1Status" name="d1Status" class="settletxt msbg100 w100">
+					<option value="">全部</option>
+					<option value="1" >开通</option>
+					<option value="0" >关闭</option>
+                </select>
+			</td>
+			#end
+
+		</tr>
+		<tr>
+			<td colspan="8" align="center">
+				<a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();">查询</a>
+				<a href="#" class="btn2" id="queryBtn" onclick="downLoad();return false;">下载</a>
+				<a href="javascript:void(0)" class="smBtn mgL10" onclick="cleanAllCond( ALL_COND_ID, [] );removeMselect( 'cityId' );return false;" title="清除所有查询条件">清</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!--分页容器-->
+<div id="container"></div>
+</form>
+<script type="text/javascript">
+	var ALL_COND_ID=["merchantNo","merchantName","t0Status"#if($!{promoterInfo.promoterType}=='0007'||$!{promoterInfo.promoterType}=='9999'),"t1Status","d1Status","mcc" #end];
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#pageNum_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+		var promoterType=jQuery("#promoterType").val();
+    	var data = {"pageNum":currentPage, "promoterType":promoterType};
+    	for(i in ALL_COND_ID){
+    		if(ALL_COND_ID[i].indexOf("msh$")==-1){
+    			var val = document.getElementById(ALL_COND_ID[i]).value;
+    			if(val!=""){
+	    			data[ALL_COND_ID[i]] = val;
+	    		}
+    		}
+    	}
+    	data['timestamp'] = new Date().getTime();
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/ajaxPaging/queryPosMerchant.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+    function promoterValidate(msg){
+    	if(msg){
+    		if(confirm(msg)){
+    			window.location.href="#relativeUrl('/agentApply/index.htm')";
+    		}
+    	}
+    }
+
+	function downLoad(){
+		jQuery("#submitForm").attr("action","#relativeUrl('/settleMerchantInfo/downloads.do')");
+		jQuery("#submitForm").submit();
+	}
+</script>

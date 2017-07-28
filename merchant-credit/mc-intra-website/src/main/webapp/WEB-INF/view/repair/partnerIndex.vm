@@ -1,0 +1,88 @@
+#set($page_title = '合作方分润规则配置') #set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post"
+			action="#springUrl('/test/test')">
+			<table>
+			
+				<tr>
+					<td>T0结算分润比例：</td>
+					<td><input type="text" id="t0BaseSplittingScale" name="t0BaseSplittingScale"
+						value="" />&nbsp;</td>
+					<td>T0单笔分润：</td>
+					<td><input type="text" id="t0WdSplitting" name="t0WdSplitting"
+						value="" />&nbsp;</td>
+					<td>D1结算分润比例：</td>
+					<td><input type="text" id="d1BaseSplittingScale" name="d1BaseSplittingScale"
+						value="" />&nbsp;</td>
+					<td>状态：</td>
+					<td><select id="status" name="status"
+						value="">
+							<option value="1">有效</option>
+							<option value="0">无效</option>
+					</select></td>
+			    </tr>
+				<tr>
+				     <td>MCC：</td>
+					<td><input type="text" id="mcc" name="mcc"
+						value="" />&nbsp;</td>
+					<td>代理商ID：</td>
+					<td><input type="text" id="promoterId" name="promoterId"
+						value="" />&nbsp;</td>
+					<td>生效时间：</td>
+					<td><input type="text" id="effectiveTime" name="effectiveTime"
+						value="" />&nbsp;</td>
+					<td>失效时间：</td>
+					<td><input type="text" id="expireTime" name="expireTime"
+						value="" />&nbsp;</td>
+							
+					<td>数据标识：</td>
+					<td><input type="text" id="ruleIdentify" name="ruleIdentify"
+						value="" />&nbsp;</td>
+			    </tr>
+				
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="config();">配置</a><br />
+					</td>
+				</tr>
+			</table>
+
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	var waiting = '<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+	var flag = false;
+	
+	var ALL_COND_ID = ['t0BaseSplittingScale', 't0WdSplitting', 'd1BaseSplittingScale','promoterId','effectiveTime','expireTime','mcc','ruleIdentify','status'];
+	function config() {
+		var data = {};
+		for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+		if (flag) {
+			return;
+		}
+		flag = true;
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/partnerPromfit/config.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			data : data,
+			success : function(data) {
+				jQuery("#container").html(data);
+				flag = false;
+			}
+		});
+	}
+	
+</script>

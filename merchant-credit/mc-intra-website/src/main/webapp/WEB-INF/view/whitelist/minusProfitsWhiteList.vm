@@ -1,0 +1,37 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td width="30">id</td>
+		<td width="60">类型</td>
+		<td width="60">商户类型</td>
+		<td width="60">商户号</td>
+		<td width="110">创建时间</td>
+		<td width="80">创建人</td>
+		<td width="110">修改时间</td>
+		<td width="50">操作</td>
+	</tr>
+	#foreach($o in $!{result})
+	<tr>
+		<td>$!{o.id}</td>
+		<td>$!{o.typeName}</td>
+		<td>
+		    #if("$!{o.merchantType}"=="0001")POS商户
+    		#elseif("$!{o.merchantType}"=="0003")POS拓展方
+    		#elseif("$!{o.merchantType}"=="0006")MPOS商户
+    		#elseif("$!{o.merchantType}"=="0007")MPOS拓展方
+    		#else
+				$!{o.merchantType}
+    		#end
+		</td>
+		<td>$!{o.merchantNo}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>$!{o.createUser}</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>
+			<a  class="smBtn" href="#springUrl('/whitelist/initEdit.do')?po.id=$!{o.id}&po.type=10" target="_blank" title="修改">修</a>
+		</td>
+	</tr>
+	#end
+</table>

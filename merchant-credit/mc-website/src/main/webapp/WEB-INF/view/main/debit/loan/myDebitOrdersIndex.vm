@@ -1,0 +1,50 @@
+<form id="submitForm" name="submitForm">
+<div class="content main_box">
+	<div class="ban_table clearfix">
+		<div class="ban_left l">
+			<a href="#relativeUrl('/debit/myDebitOrders.htm')" class="on">我的借款</a>
+			<a href="#relativeUrl('/debit/debitRecordIndex.htm')">借款申请记录</a>
+			<a href="#relativeUrl('/overdue/index.htm')">逾期管理</a>
+			<a href="#relativeUrl('/credit/appStatusInfo.htm')">认证信息中心</a>
+		</div>
+		<div class="ban_right no_bor l">
+			<p class="title">待还款金额<span>￥$!NumberUtils.format($!{totalDebitAmount}) </span></p>
+			<div class="tab">
+				<div class="tab_btn">
+					<a href="javascript:switchTab(0);" tab-code="0" class="active">未到期</a>
+					<a href="javascript:switchTab(1);" tab-code="1">已到期</a>
+					<p>您最近5天内有<span> $!{debitCount} </span>笔借款须归还，待还总额<span> $!NumberUtils.format($!{debitAmount}) </span>元</p>
+				</div>
+				<div id="container"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<script type="text/javascript">
+	function switchTab(tab){
+		var aList = jQuery(".tab_btn").children("a");
+		aList.removeClass();//删除样式
+		aList.eq(tab).addClass("active");
+		ajaxPaging();
+	}
+	//分页查询
+	function ajaxPaging(){
+		var currentPage=jQuery("#currentPage_submitForm").val();
+		currentPage=currentPage?currentPage:1;
+		var data = {"currentPage":currentPage};
+		data['timestamp'] = new Date().getTime();
+		var tabCode = jQuery(".tab_btn").children(".active").attr("tab-code");
+		data['tab']=tabCode;
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/ajaxPaging/myDebitOrdersList.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	ajaxPaging();
+</script>

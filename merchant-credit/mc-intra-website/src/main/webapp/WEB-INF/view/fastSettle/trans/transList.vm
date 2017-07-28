@@ -1,0 +1,55 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax4msp.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td>交易时间</td>
+<!-- 		<td>参考号</td> -->
+		<td>交易类型</td>
+		<td>交易状态</td>
+		<td>结算状态</td>
+		<td>结算日期</td>
+		<td>交易金额</td>
+<!-- 		<td>收单手续费</td> -->
+<!-- 		<td>结算手续费</td> -->
+<!-- 		<td>结算金额</td> -->
+		<td>卡类型</td>
+		<td>缩略卡号</td>
+		<td>发卡机构</td>
+		<td>终端编号</td>
+<!-- 		<td>快速结算</td> -->
+		<td>商户号</td>
+		<td>商户名称</td>
+		<td>代理商商户号</td>
+		<td>代理商名称</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{query.dataList})
+	<tr>
+		<td>#showDateTime($!{o.tradeTime})&nbsp;</td>
+<!-- 		<td>$!{o.txnNo}</td> -->
+		<td>$!{o.tradeType}&nbsp;</td>
+		<td>$!{o.tradeStatus}&nbsp;</td>
+		<td>#if("$!{o.settleStatus}" == "1")已结算#else未结算#end</td>
+		<td>#showDate(${o.stlDate})&nbsp;</td>
+		<td>$!NumberUtils.format($!{o.tradeAmount})&nbsp;</td>
+<!-- 		<td>$!NumberUtils.format($!{o.fee})&nbsp;</td> -->
+<!-- 		<td>$!NumberUtils.format($!{o.settleFee})&nbsp;</td> -->
+<!-- 		<td>$!NumberUtils.format($!{o.stlAmt})&nbsp;</td> -->
+		<td>$!{o.cardType}&nbsp;</td>
+		<td>$!{o.shortPan}&nbsp;</td>
+		<td>$!{o.issuerId}&nbsp;</td>
+		<td>$!{o.terminalNo}&nbsp;</td>
+		<!-- <td>
+			#if("$!{o.type}" == "1")是#else否#end
+		</td> -->
+		<td>$!{o.merchantNo}&nbsp;</td>
+		<td>$!{o.merchantName}&nbsp;</td>
+		<td>$!{o.promoterNo}&nbsp;</td>
+		<td>$!{o.promoterName}&nbsp;</td>
+		<td>
+			<a class="lk1" href="#springUrl('/fastSettle/transDetail.do')?txnNo=$!{o.txnNo}" target="_blank">交易详情</a>
+		</td>
+	</tr>
+	#end
+</table>

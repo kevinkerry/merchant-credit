@@ -1,0 +1,139 @@
+#set($page_title = '批量修改商户额度') 
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" enctype='multipart/form-data' action="#springUrl('/limitchange/index.do')">
+			<table width="100%" border="0" align="center" cellpadding="0"
+				cellspacing="4">
+				
+				<tr>
+					<td style="text-align: left;line-height: normal;" colspan="6">
+					<input type="file" size="40" filefilter="xls,cvs" id="file" name="file" />
+					 &nbsp;<span style="color:#aaa;">请上传xls或cvs文件</span>
+						<span style="color: red" id="messageSpan">$!{msg.errorMessage}</span>
+						&nbsp;&nbsp;
+					<input class="bluebtn" type="button" onclick="opExcel(0);" value="批量修改" style="cursor:pointer"/>
+					&nbsp;
+					&nbsp;
+					<input class="bluebtn" type="button" onclick="opExcel(1);" value="下载" style="cursor:pointer"/>
+						<span>模板下载</span>
+                    </td>
+				</tr>
+				<tr>
+					<td class="lbl" style="text-align: left;line-height: normal;">时间段：</td>
+					<td  style="text-align: left;">
+					<input type="text" id="startTime" name="startTime" class="txt w150 date" onclick="xDatePicker(1);" readonly="readonly"/>
+					&nbsp;~&nbsp;
+					<input type="text" id="endTime" name="endTime" class="txt w150 date" onclick="xDatePicker(1);" readonly="readonly"/>
+					</td>
+					<td class="lbl" style="text-align: left;line-height: normal;">执行类型：</td>
+					<td style="text-align: left;">
+					  <select id="reqType" name="reqType" class="w130">
+		                <option value="">全部</option>
+		                <option value="0" #if("$!{query.reqType}"=="0")selected#end>文件上传</option>
+		                <option value="1" #if("$!{query.reqType}"=="1")selected#end>月初自动</option>
+		            </select>
+					</td>
+					<td class="lbl" style="text-align: left;line-height: normal;">执行状态：</td>
+					<td style="text-align: left;">
+					  <select id="status" name="status" class="w130">
+		                <option value="">全部</option>
+		                <option value="0" #if("$!{query.status}"=="0")selected#end>待执行</option>
+		                <option value="1" #if("$!{query.status}"=="1")selected#end>执行中</option>
+		                <option value="2" #if("$!{query.status}"=="2")selected#end>执行完成</option>
+		            </select>
+					</td>
+					<td align="center">
+					<input class="bluebtn" type="button" onclick="ajaxPaging();" id="queryBtn" value="查询" style="cursor:pointer"/>
+<!-- 					<a href="#" class="bluebtn" id="queryBtn" onclick="ajaxPaging()">查询</a> -->
+					 <span class="gray" id="querying" style="display:none;">查询中...</span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<div class="TableForm">
+	<h2 class="Mtit">批量修改商户额度记录</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+ <iframe name="uploadFram" id="uploadFram" hidden="true"></iframe>
+<script type="text/javascript">
+	window.onload = function() {
+		setDateStartEndRang(-1,"startTime",0,"endTime");
+	};
+	
+	//是否上次上传文件成功
+	var isUploadSuccess=false;
+	//是否可以试算
+	var isTrial=true;
+
+	function uploadResult(code,message){
+		if(message==null||message==''||message==undefined){
+// 			alert("上传完成！");
+			isUploadSuccess=true;
+			ajaxPaging();
+			jQuery("#messageSpan").html("");
+		}else{
+// 			alert(message);
+            jQuery("#messageSpan").html(message);
+		}
+		
+	}
+	
+	function opExcel(op){
+		if(op==0){
+			jQuery("#submitForm").attr("action","#springUrl('/limitchange/upload.do')");
+			jQuery("#submitForm").attr("target","uploadFram");
+		}else{
+			jQuery("#submitForm").attr("action","#springUrl('/limitchange/download.do')");
+		}
+		jQuery("#submitForm").submit();
+	}
+	var ALL_COND_ID = [ 'endTime','startTime','file'];
+	function clearAll() {
+		for (i in ALL_COND_ID) {
+			jQuery("#" + ALL_COND_ID[i]).val("");
+		}
+	}
+	function startChange(reqId) {
+		jQuery.ajax({
+			type : 'get',
+			url : "#springUrl('/limitchange/change.do')?sessionId="+new Date().getTime(),
+			data : {"reqId":reqId},
+			dataType : "json",
+			success : function(data) {
+					alert(data.errorMessage);
+					ajaxPaging();
+			}
+		});
+	}
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var startTime = jQuery("#startTime").val();
+		var endTime = jQuery("#endTime").val();
+		var status = jQuery("#status").val();
+		var reqType = jQuery("#reqType").val();
+		var data= {
+					"currentPage" : currentPage,
+					"startTimeStr":startTime,
+					"endTimeStr":endTime,
+					"reqType":reqType,
+					"status":status
+				};
+		var url="#springUrl('/limitchange/list.do')?sessionId="+new Date().getTime();
+		jQuery.ajax({
+			type : 'POST',
+			url : url,
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+</script>

@@ -1,0 +1,41 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax4msp.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+    <tr class="ttl">
+    	<td width="200">拓展方id</td>
+        <td width="200">拓展方商户号</td>
+        <td width="200">拓展方名称</td>
+        <td width="200">拓展方类型</td>
+        <td width="200">状态</td>
+        <td width="200">创建日期</td>
+		<td width="200">开通代理资格</td>
+    </tr>
+    #foreach($po in ${query.dataList})
+        <tr>
+			<td>$!{po.mcId}</td>
+			<td>
+				<a href="javascript:void(0)" class="lk0"
+                   onclick="document.getElementById('promoterNo').value='$!{po.mcMerchantNo}'">$!{po.mcMerchantNo}</a>
+			</td>
+            <td>
+				<a href="javascript:void(0)" class="lk0"
+                   onclick="document.getElementById('promoterName').value='$!{po.mcMerchantName}'">$!{po.mcMerchantName}</a>
+			</td>
+            <td>#if("$!{po.mcType}"=="0003")普通POS商户#elseif("$!{po.mcType}"=="0007")mPOS商户#end</td>
+            <td>
+            	#if("$!{po.mcStatus}"=="3")正常#end
+            	#if("$!{po.mcStatus}"=="0" || "$!{po.mcStatus}"=="1" || "$!{po.mcStatus}"=="2" || "$!{po.mcStatus}"=="4")关闭#end
+            </td>
+            <td>#showDateTime($!{po.mcCreateTime})</td>
+			<td>
+				#if("$!{po.agentPower}"=="0")
+					 <a href="javascript:openAgentPower('$!{po.mcMerchantNo}','$!{po.mcMerchantName}');" title="开通代理权限">开通代理权限</a>
+				#else
+					 <a href="javascript:closeAgentPower('$!{po.mcMerchantNo}','$!{po.mcMerchantName}');" title="关闭代理权限">关闭代理权限</a>
+				#end
+			</td>
+
+        </tr>
+    #end
+</table>

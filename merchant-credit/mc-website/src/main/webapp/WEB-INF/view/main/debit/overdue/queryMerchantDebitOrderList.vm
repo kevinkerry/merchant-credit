@@ -1,0 +1,35 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<table class="r_table">
+	<thead>
+		<tr>
+			<th>借款用途</th>
+			<th>到期还款日</th>
+			<th>逾期天数</th>
+			<th>逾期本金</th>
+			<th>逾期费用</th>##滞纳金overDueAmount
+			<th>逾期金额</th>
+			<th>待还金额</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	#foreach($o in ${dataList})
+	<tr>
+		<td>#if($!{o.purposer}==1)资金周转#elseif($!{o.purposer}==2)短期货款#end</td>
+		<td>#showDate($!{o.endTime})</td>
+		#set($days = $!MCUtil.daysBetween($!{o.endTime},$!{o.dueRepaymentTime}))
+		<td>#if($days<0||"$!{o.status}"=="4") 0 #else $days #end 天</td>
+		<td>￥$!NumberUtils.format($!{o.debitAmount})</td>
+		<td>￥$!NumberUtils.format($!{o.overDueAmount})</td>
+		#if($o.overDueAmount)
+		#set($totalAmount = $o.debitAmount.add($o.overDueAmount))
+		#else
+		#set($totalAmount = $!{o.debitAmount})
+		#end
+		<td>￥$!NumberUtils.format($!{o.debitAmount})</td>
+		<td>￥$!NumberUtils.format($!{totalAmount})</td>
+		<td><a href="javascript:popPayDiv('$!NumberUtils.format($!{totalAmount})','$!{o.id}');">立即还款</a></td>
+	</tr>
+	#end
+</table>
+#parse("/main/include/pager-ajax.vm")

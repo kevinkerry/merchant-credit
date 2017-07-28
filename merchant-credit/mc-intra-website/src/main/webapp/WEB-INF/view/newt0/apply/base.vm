@@ -1,0 +1,88 @@
+	<tr>
+		<td class="lbl" width="200">申请时间：</td>
+		<td width="300" style="font-weight:bold; ">
+		  #showDateTime($!{auditInfo.createTime})
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">申请类型：</td>
+		<td width="300" style="font-weight: bold;">
+			#if("$!{auditInfo.opType}"=="3") 代理商保证金调额
+			#elseif("$!{auditInfo.opType}"=="11") 代理商临时调额 #else
+			$!{auditInfo.opType} #end</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">申请人商户号：</td>
+		<td width="300">$!{auditInfo.promoterMerchantNo}</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">申请人名称：</td>
+		<td width="300">$!{auditInfo.promoterName}</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">申请人类型：</td>
+		<td width="300">#if("$!{auditInfo.promoterType}"=="0003") POS代理商
+			#elseif("$!{auditInfo.promoterType}"=="0007") mPOS代理商
+			#elseif("$!{auditInfo.promoterType}"=="0101")云收银代理商
+			#elseif("$!{auditInfo.promoterType}"=="0001") 普通POS商户
+			#elseif("$!{auditInfo.promoterType}"=="0006") mPOS商户 #end</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">申请原因：</td>
+		<td >
+			#if("$!{auditInfo.opType}"=="3")
+				追加保证金
+			#elseif("$!{auditInfo.opType}"=="11")
+            <p style="word-break:break-all;width:290px; ">${auditInfo.tempLimitInfo.applyCause} </p>
+			#end
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">审核状态：</td>
+		<td width="300" style="font-weight: bold;">
+			#if("$!{auditInfo.status}"=="1") 待审核
+			#elseif("$!{auditInfo.status}"=="3") 审核通过
+			#elseif("$!{auditInfo.status}"=="4") 审核未通过
+			#elseif("$!{auditInfo.status}"=="5") 申请已过期
+			#elseif("$!{auditInfo.status}"=="6") 申请已撤销
+			 #else $!{auditInfo.status}
+			#end</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">垫资方：</td>
+		<td width="300">#if($!{auditInfo.loaningType}=='0') 代理商全资
+			#elseif($!{auditInfo.loaningType}=='1') 盛付通全资 #else 无 #end</td>
+	</tr>
+
+	#if("$!{auditInfo.opType}"=="3")
+	<tr>
+		<td class="lbl" width="200">当前保证金：</td>
+		<td width="300">$!{oldFastSettleMargin}元</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">追加金额：</td>
+		<td width="300">$!{auditInfo.marginInfo.fastSettleMargin}元</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">工作日额度：</td>
+		<td width="300">$!{auditInfo.promoterFsLimit}元 ,今日额度($!{todayLimit}元)</td>
+	</tr>
+	#elseif("$!{auditInfo.opType}"=="11")
+
+	<tr>
+		<td class="lbl" width="200">辅助材料：</td>
+		<td width="300">#if("$!{auditInfo.tempLimitInfo.fileName}"=="")
+			&nbsp;&nbsp; #else <a
+			href="#springUrl('/')$!{auditInfo.attachmentPath}" target="_blank">查看附件($!{auditInfo.tempLimitInfo.fileName})</a>
+			#end
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">工作日额度：</td>
+		<td width="300">$!{auditInfo.promoterFsLimit}元 ,今日额度($!{todayLimit}元)</td>
+	</tr>
+	<tr>
+		<td class="lbl" width="200">申请今日总额度调整为：</td>
+		<td width="300">$!{auditInfo.tempLimitInfo.applyLimit}元</td>
+	</tr>
+	#end

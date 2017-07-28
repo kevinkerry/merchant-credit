@@ -1,0 +1,34 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+<div>
+	<input type="button" value="全选" onclick="checkboxSwap('selectAll');"/>  <input type="button" value="反选" onclick="checkboxSwap('reverseAll');"/>
+	<input type="button" value="开启微信支付" onclick="channelSwitch('wx,ow','VALID');"/> 
+	<input type="button" value="关闭微信支付" onclick="channelSwitch('wx,ow','IN_VALID');"/>
+	<input type="button" value="开启支付宝支付"  onclick="channelSwitch('al,oa','VALID');"/> 
+	<input type="button" value="关闭支付宝支付"  onclick="channelSwitch('al,oa','IN_VALID');"/>
+</div>
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>选择</td>
+		<td>序号</td>
+		<td>注册日期</td>
+		<td>二维码编号</td>
+		<td>商户号</td>
+		<td>商户名称</td>
+		<td>微信支付</td>
+	    <td>支付宝支付</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td><input type="checkbox" name="merchantNoArray" value="$!{o.merchantNo}"></td>
+	    <td>$!{velocityCount}</td>
+		<td>#showDateTime($!{o.createDate})</td>
+		<td>$!{o.qrCode}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		<td>#if($!{o.wxStatus}=='VALID') 已开启 #else 已关闭 #end </td>
+        <td>#if($!{o.alStatus}=='VALID') 已开启 #else 已关闭 #end </td>
+	</tr>
+	#end
+</table>
+#parse("/main/include/page_ajax.vm")

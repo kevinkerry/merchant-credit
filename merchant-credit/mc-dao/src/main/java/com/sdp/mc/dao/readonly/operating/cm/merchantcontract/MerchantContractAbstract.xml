@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MerchantContractDAOAbstract">
+  <resultMap id="result" class="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO">
+    <result property="mcLoginAccount" column="MC_LOGIN_ACCOUNT_V" />
+    <result property="mcRegType" column="MC_REG_TYPE_N" />
+    <result property="mcCertiType" column="MC_CERTI_TYPE_N" javaType="java.lang.Integer"/>
+    <result property="mcCertiValue" column="MC_CERTI_VALUE_V" />
+    <result property="mcContractBeginDate" column="MC_CONTRACT_BEGIN_DATE_D" />
+    <result property="mcContractEndDate" column="MC_CONTRACT_END_DATE_D" />
+    <result property="mcContractRealEndDate" column="MC_CONTRACT_REAL_END_DATE_D" />
+    <result property="mcId" column="MC_ID_N" />
+    <result property="mcMerchantNo" column="MC_MERCHANT_NO_V" />
+    <result property="mcContractNo" column="MC_CONTRACT_NO_V" />
+    <result property="mcStatus" column="MC_STATUS_C" />
+    <result property="mcType" column="MC_TYPE_C" />
+    <result property="mcVersion" column="MC_VERSION_N" />
+    <result property="mcCreateTime" column="MC_CREATE_TIME_T" />
+    <result property="mcLastUpdateTime" column="MC_LAST_UPDATE_TIME_T" />
+    <result property="mcMerchantName" column="MC_MERCHANT_NAME_V" />
+  </resultMap>
+
+	<insert id="insertHasId" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO">
+			   insert into ppcpay.CM_MERCHANT_CONTRACT(MC_ID_N,MC_CREATE_TIME_T,MC_LAST_UPDATE_TIME_T,MC_VERSION_N
+			    <dynamic>
+                	<isNotNull prepend="," property="mcLoginAccount">
+                		MC_LOGIN_ACCOUNT_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcRegType">
+                		MC_REG_TYPE_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcCertiType">
+                		MC_CERTI_TYPE_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcCertiValue">
+                		MC_CERTI_VALUE_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractBeginDate">
+                		MC_CONTRACT_BEGIN_DATE_D
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractEndDate">
+                		MC_CONTRACT_END_DATE_D
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractRealEndDate">
+                		MC_CONTRACT_REAL_END_DATE_D
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcMerchantNo">
+                		MC_MERCHANT_NO_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractNo">
+                		MC_CONTRACT_NO_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcStatus">
+                		MC_STATUS_C
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcType">
+                		MC_TYPE_C
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcMerchantName">
+                		MC_MERCHANT_NAME_V
+                	</isNotNull>
+                </dynamic>
+                )
+ 			  values(
+                #mcId:NUMERIC#,systimestamp,systimestamp,1
+                <dynamic>
+                	<isNotNull prepend="," property="mcLoginAccount">
+                		#mcLoginAccount:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcRegType">
+                		#mcRegType:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcCertiType">
+                		#mcCertiType:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcCertiValue">
+                		#mcCertiValue:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractBeginDate">
+                        #mcContractBeginDate:TIMESTAMP#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractEndDate">
+                        #mcContractEndDate:TIMESTAMP#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractRealEndDate">
+                        #mcContractRealEndDate:TIMESTAMP#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcMerchantNo">
+                		#mcMerchantNo:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractNo">
+                		#mcContractNo:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcStatus">
+                		#mcStatus:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcType">
+                		#mcType:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcMerchantName">
+                		#mcMerchantName:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+               )
+	</insert>
+
+	<insert id="insert" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO">
+		   <selectKey resultClass="java.lang.Long" keyProperty="mcId" >
+		       select to_char(sysdate,'yyyymmdd')||SEQ_MC_ID_N.nextval  as id  from  DUAL
+		   </selectKey>
+			   insert into ppcpay.CM_MERCHANT_CONTRACT(MC_ID_N,MC_CREATE_TIME_T,MC_LAST_UPDATE_TIME_T,MC_VERSION_N
+			    <dynamic>
+                	<isNotNull prepend="," property="mcLoginAccount">
+                		MC_LOGIN_ACCOUNT_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcRegType">
+                		MC_REG_TYPE_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcCertiType">
+                		MC_CERTI_TYPE_N
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcCertiValue">
+                		MC_CERTI_VALUE_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractBeginDate">
+                		MC_CONTRACT_BEGIN_DATE_D
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractEndDate">
+                		MC_CONTRACT_END_DATE_D
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcContractRealEndDate">
+                		MC_CONTRACT_REAL_END_DATE_D
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcMerchantNo">
+                		MC_MERCHANT_NO_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcId">
+                		MC_CONTRACT_NO_V
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcStatus">
+                		MC_STATUS_C
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcType">
+                		MC_TYPE_C
+                	</isNotNull>
+                </dynamic>
+			    <dynamic>
+                	<isNotNull prepend="," property="mcMerchantName">
+                		MC_MERCHANT_NAME_V
+                	</isNotNull>
+                </dynamic>
+                )
+ 			  values(
+                #mcId:NUMERIC#,systimestamp,systimestamp,1
+                <dynamic>
+                	<isNotNull prepend="," property="mcLoginAccount">
+                		#mcLoginAccount:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcRegType">
+                		#mcRegType:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcCertiType">
+                		#mcCertiType:NUMERIC#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcCertiValue">
+                		#mcCertiValue:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractBeginDate">
+                        #mcContractBeginDate:TIMESTAMP#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractEndDate">
+                        #mcContractEndDate:TIMESTAMP#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcContractRealEndDate">
+                        #mcContractRealEndDate:TIMESTAMP#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcMerchantNo">
+                		#mcMerchantNo:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcId">
+                		#mcId:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcStatus">
+                		#mcStatus:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcType">
+                		#mcType:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+                <dynamic>
+                	<isNotNull prepend="," property="mcMerchantName">
+                		#mcMerchantName:VARCHAR#
+                	</isNotNull>
+                </dynamic>
+               )
+	</insert>
+
+	<update id="update" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO">
+		   update ppcpay.CM_MERCHANT_CONTRACT set MC_VERSION_N=MC_VERSION_N+1
+            ,MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+            ,MC_REG_TYPE_N=#mcRegType:NUMERIC#
+            ,MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+            ,MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+            ,MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+            ,MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+            ,MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+            ,MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+            ,MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+            ,MC_STATUS_C=#mcStatus:VARCHAR#
+            ,MC_TYPE_C=#mcType:VARCHAR#
+            ,MC_LAST_UPDATE_TIME_T=systimestamp
+            ,MC_MERCHANT_NAME_V=#mcMerchantName:VARCHAR#
+		    where MC_ID_N=#mcId:NUMERIC# and MC_VERSION_N=#mcVersion:NUMERIC#
+	</update>
+
+	<update id="updateByField" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO">
+		   update ppcpay.CM_MERCHANT_CONTRACT set MC_VERSION_N=MC_VERSION_N+1 ,MC_LAST_UPDATE_TIME_T=systimestamp
+		<dynamic>
+			<isNotNull prepend="," property="mcLoginAccount">
+             	MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcRegType">
+             	MC_REG_TYPE_N=#mcRegType:NUMERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcCertiType">
+             	MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcCertiValue">
+             	MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcContractBeginDate">
+             	MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcContractEndDate">
+             	MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcContractRealEndDate">
+             	MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcMerchantNo">
+             	MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcContractNo">
+             	MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcStatus">
+             	MC_STATUS_C=#mcStatus:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcType">
+             	MC_TYPE_C=#mcType:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="mcMerchantName">
+             	MC_MERCHANT_NAME_V=#mcMerchantName:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		   where MC_ID_N=#mcId:NUMERIC# and MC_VERSION_N=#mcVersion:NUMERIC#
+	</update>
+
+  <select id="select" parameterClass="java.util.Map" resultMap="result">
+	   select * from ppcpay.CM_MERCHANT_CONTRACT where MC_ID_N=#id:NUMERIC#
+		<dynamic>
+			<isEqual property="isLock" compareValue="true">
+				for update
+			</isEqual>
+		</dynamic>
+  </select>
+
+  <select id="selectListByIdList" parameterClass="java.util.Map" resultMap="result">
+	   select * from ppcpay.CM_MERCHANT_CONTRACT
+		<iterate property="idList" prepend=" where MC_ID_N in " open="(" close=")" conjunction=",">
+			#idList[]:NUMERIC#
+		</iterate>
+		<dynamic>
+			<isEqual property="isLock" compareValue="true">
+				for update
+			</isEqual>
+		</dynamic>
+  </select>
+
+  <select id="selectEOByEO" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO" resultMap="result">
+	   select * from ppcpay.CM_MERCHANT_CONTRACT
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="mcLoginAccount">
+             	MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+			</isNotEmpty>
+			<isNotNull prepend="and" property="mcRegType">
+             	MC_REG_TYPE_N=#mcRegType:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcCertiType">
+             	MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+			</isNotNull>
+			<isNotEmpty prepend="and" property="mcCertiValue">
+             	MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+			</isNotEmpty>
+			<isNotNull prepend="and" property="mcContractBeginDate">
+             	MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcContractEndDate">
+             	MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcContractRealEndDate">
+             	MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcId">
+             	MC_ID_N=#mcId:NUMERIC#
+			</isNotNull>
+			<isNotEmpty prepend="and" property="mcMerchantNo">
+             	MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="mcContractNo">
+             	MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+			</isNotEmpty>
+
+			<isNotNull prepend="and" property="exceptMcStatusArr">
+				<iterate property="exceptMcStatusArr" prepend=" MC_STATUS_C not in " open="(" close=")" conjunction=",">
+					#exceptMcStatusArr[]:VARCHAR#
+				</iterate>
+			</isNotNull>
+
+			<isNotEmpty prepend="and" property="mcStatus">
+             	MC_STATUS_C=#mcStatus:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="mcType">
+             	MC_TYPE_C=#mcType:VARCHAR#
+			</isNotEmpty>
+			<isNotNull prepend="and" property="mcVersion">
+             	MC_VERSION_N=#mcVersion:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcCreateTime">
+             	MC_CREATE_TIME_T=#mcCreateTime:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcLastUpdateTime">
+             	MC_LAST_UPDATE_TIME_T=#mcLastUpdateTime:TIMESTAMP#
+			</isNotNull>
+			<isNotEmpty prepend="and" property="mcMerchantName">
+             	MC_MERCHANT_NAME_V like '%'||#mcMerchantName:VARCHAR#||'%'
+			</isNotEmpty>
+		</dynamic>
+  </select>
+
+  <select id="countByEO" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO" resultClass="java.lang.Integer">
+	   select count(MC_ID_N) from ppcpay.CM_MERCHANT_CONTRACT
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="mcLoginAccount">
+             	MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+			</isNotEmpty>
+			<isNotNull prepend="and" property="mcRegType">
+             	MC_REG_TYPE_N=#mcRegType:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcCertiType">
+             	MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+			</isNotNull>
+			<isNotEmpty prepend="and" property="mcCertiValue">
+             	MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+			</isNotEmpty>
+			<isNotNull prepend="and" property="mcContractBeginDate">
+             	MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcContractEndDate">
+             	MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcContractRealEndDate">
+             	MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcId">
+             	MC_ID_N=#mcId:NUMERIC#
+			</isNotNull>
+			<isNotEmpty prepend="and" property="mcMerchantNo">
+             	MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="mcContractNo">
+             	MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="mcStatus">
+             	MC_STATUS_C=#mcStatus:VARCHAR#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="mcType">
+             	MC_TYPE_C=#mcType:VARCHAR#
+			</isNotEmpty>
+			<isNotNull prepend="and" property="mcVersion">
+             	MC_VERSION_N=#mcVersion:NUMERIC#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcCreateTime">
+             	MC_CREATE_TIME_T=#mcCreateTime:TIMESTAMP#
+			</isNotNull>
+			<isNotNull prepend="and" property="mcLastUpdateTime">
+             	MC_LAST_UPDATE_TIME_T=#mcLastUpdateTime:TIMESTAMP#
+			</isNotNull>
+			<isNotEmpty prepend="and" property="mcMerchantName">
+             	MC_MERCHANT_NAME_V like '%'||#mcMerchantName:VARCHAR#||'%'
+			</isNotEmpty>
+			<isNotNull prepend="and" property="exceptMcStatusArr">
+				<iterate property="exceptMcStatusArr" prepend=" MC_STATUS_C not in " open="(" close=")" conjunction=",">
+					#exceptMcStatusArr[]:VARCHAR#
+				</iterate>
+			</isNotNull>
+		</dynamic>
+  </select>
+
+  <delete id="delete" parameterClass="com.sdp.mc.dao.readonly.operating.cm.merchantcontract.MerchantContractEO">
+      delete from ppcpay.CM_MERCHANT_CONTRACT where MC_ID_N=#mcId:NUMERIC# and MC_VERSION_N=#mcVersion:NUMERIC#
+  </delete>
+
+
+
+</sqlMap>

@@ -1,0 +1,78 @@
+<form id="topFm" name="topFm" style="display:none" method="post" >
+	<input type="hidden" name="label$" id="label$"/>
+</form>
+<table class="lblTb" cellspacing="0" cellpadding="0" border="0" >
+	<tr>
+		<td class="tmn00" nowrap>
+			<div class="logoShengpay">&nbsp;</div>
+		</td>
+		<td class="tmn01" nowrap>
+			<div class="logoMsp">&nbsp;</div>
+		</td>
+		<td class="tmn02" valign="top" style="border:0px solid green;" nowrap>
+			<div class="xInfo" style="margin-top:8px;height:70px;">
+				<div style="height:25px;color:#443388;">
+					您好，${MC_MERCHANT_USER.displayUserName}
+					<a class="sysLk0" href="$!{casURL}/merchant/logout?appId=zf910&url=$!{casURL}">注销</a>
+					| <a href="javascript:void(0)" onclick="showIndexPage()" class="sysLk0">首页</a>
+					##| <a href="javascript:void(0)" id="OnlineFAQLink" class="sysLk0">在线客服</a>
+					<div style="display: inline;" onmouseover="ctrlSuite( 'downloadManualE0', true, 'downloadManualE1' );" onmouseout="ctrlSuite( 'downloadManualE0', false );">
+						| <a href="javascript:;" class="sysLk0">用户手册</a>
+						<div id="downloadManualE1"></div>
+						<div id="downloadManualE0" style="width:140px;display:none;">
+							#if(${MC_MERCHANT_USER.isMposPartnerPromoterType})
+						     <div><a href="${MSPContextPath}/common/downloadCenter/downloadOM.do?om=mposPartnerPromoter" target="ifm0">MPOS合作方</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isPosPromoterType})
+								<div><a href="${MSPContextPath}/common/downloadCenter/downloadOM.do?om=posPmt" target="ifm0">POS代理商</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isPosMerchantType})
+								<div><a href="${MSPContextPath}/common/downloadCenter/downloadOM.do?om=posm" target="ifm0">POS商户</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isMposPromoterType})
+								<div><a href="${MSPContextPath}/common/downloadCenter/downloadOM.do?om=mposPmt" target="ifm0">MPOS代理商</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isMposSDKPromoterType})
+								<div><a href="" onclick="alert('暂无手册可供下载');return false;">MPOSSDK代理商</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isFactoryType})
+								<div><a href="" onclick="alert('暂无手册可供下载');return false;">机具厂商</a></div>
+							#end
+						</div>
+					</div>
+				</div>
+
+				<div style="height:25px;">
+					<div style="float:right;width:150px;cursor:pointer;" #if(${MC_MERCHANT_USER.merchantTypeList.size()}>1) onmouseover="ctrlSuite( 'roMchTypeE0', true, 'roMchTypeE1' );" onmouseout="ctrlSuite( 'roMchTypeE0', false );"#end>
+						<div id="roMchTypeE1" title="${MC_MERCHANT_USER.merchantNo}">
+							我是<span id="roMchTypeE1Label">POS代理商</span>
+							#if(${MC_MERCHANT_USER.merchantTypeList.size()}>1)
+								<span style="color:blue;text-decoration:underline;">切换</span>
+							#end
+						</div>
+						<div id="roMchTypeE0" style="width:140px;display:none;">
+						    #if(${MC_MERCHANT_USER.isMposPartnerPromoterType})
+								<div><a href="" onclick="window['$mnMain'].chsMcType( 'mposPartnerPromoter' );return false;">MPOS合作方</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isPosPromoterType})
+								<div><a href="" onclick="window['$mnMain'].chsMcType('posPromoter');return false;">POS代理商</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isPosMerchantType})
+								<div><a href="" onclick="window['$mnMain'].chsMcType( 'posMerchant' );return false;">POS商户</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isMposPromoterType})
+								<div><a href="" onclick="window['$mnMain'].chsMcType( 'mposPromoter' );return false;">MPOS代理商</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isMposSDKPromoterType})
+								<div><a href="" onclick="window['$mnMain'].chsMcType( 'mposSDK' );return false;">MPOS-SDK代理商</a></div>
+							#end
+							#if(${MC_MERCHANT_USER.isFactoryType})
+								<div><a href="" onclick="window['$mnMain'].chsMcType( 'factory' );return false;">机具厂商</a></div>
+							#end
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,31 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td width="3%">id</td>
+		<td width="5%">机构号</td>
+		<td width="5%">风控级别</td>
+		<td width="5%">额度</td>
+		<td width="5%">系数</td>
+		<td width="5%">日息利率</td>
+		<td width="5%">创建时间</td>
+		<td width="5%">修改时间</td>
+		<td width="1%">操作</td>
+	</tr>
+	#foreach($o in $!{query.pageList})
+	<tr>
+		<td>$!{o.id}</td>
+		<td>$!{o.orgnizationCode}</td>
+		<td>$!{o.riskLevel}</td>
+		<td>$!{o.amountLimit}</td>
+		<td>$!{o.discount}</td>
+		<td>$!{o.interestRateDay}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>
+			<a class="lk1" href="#springUrl('/creditConfig/initEdit.do')?po.id=$!{o.id}" target="_blank">修改</a>
+		</td>
+	</tr>
+	#end
+</table>

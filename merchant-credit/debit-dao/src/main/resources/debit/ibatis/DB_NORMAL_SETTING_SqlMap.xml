@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DB_NORMAL_SETTING" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="SETTING_KEY" property="settingKey" jdbcType="VARCHAR" />
+    <result column="SETTING_VALUE" property="settingValue" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="SETTING_DESC" property="settingDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, SETTING_KEY, SETTING_VALUE, CREATE_TIME, UPDATE_TIME, SETTING_DESC
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DB_NORMAL_SETTING.Base_Column_List" />
+    from DB_NORMAL_SETTING
+    <isParameterPresent >
+      <include refid="DB_NORMAL_SETTING.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    select 
+    <include refid="DB_NORMAL_SETTING.Base_Column_List" />
+    from DB_NORMAL_SETTING
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    delete from DB_NORMAL_SETTING
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingExample" >
+    delete from DB_NORMAL_SETTING
+    <include refid="DB_NORMAL_SETTING.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DB_NORMAL_SETTING.nextval from dual
+    </selectKey>
+    insert into DB_NORMAL_SETTING (ID, SETTING_KEY, SETTING_VALUE, CREATE_TIME, 
+      UPDATE_TIME, SETTING_DESC)
+    values (#id:DECIMAL#, #settingKey:VARCHAR#, #settingValue:VARCHAR#, #createTime#, 
+      #updateTime#, #settingDesc:VARCHAR#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DB_NORMAL_SETTING.nextval from dual
+    </selectKey>
+    insert into DB_NORMAL_SETTING
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="settingKey" >
+        SETTING_KEY
+      </isNotNull>
+      <isNotNull prepend="," property="settingValue" >
+        SETTING_VALUE
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="settingDesc" >
+        SETTING_DESC
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="settingKey" >
+        #settingKey:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="settingValue" >
+        #settingValue:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="settingDesc" >
+        #settingDesc:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingExample" resultClass="java.lang.Integer" >
+    select count(*) from DB_NORMAL_SETTING
+    <include refid="DB_NORMAL_SETTING.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DB_NORMAL_SETTING
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.settingKey" >
+        SETTING_KEY = #record.settingKey:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.settingValue" >
+        SETTING_VALUE = #record.settingValue:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.settingDesc" >
+        SETTING_DESC = #record.settingDesc:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DB_NORMAL_SETTING.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DB_NORMAL_SETTING
+    set ID = #record.id:DECIMAL#,
+      SETTING_KEY = #record.settingKey:VARCHAR#,
+      SETTING_VALUE = #record.settingValue:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      SETTING_DESC = #record.settingDesc:VARCHAR#
+    <isParameterPresent >
+      <include refid="DB_NORMAL_SETTING.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    update DB_NORMAL_SETTING
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="settingKey" >
+        SETTING_KEY = #settingKey:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="settingValue" >
+        SETTING_VALUE = #settingValue:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="settingDesc" >
+        SETTING_DESC = #settingDesc:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DbNormalSettingPO" >
+    update DB_NORMAL_SETTING
+    set SETTING_KEY = #settingKey:VARCHAR#,
+      SETTING_VALUE = #settingValue:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      SETTING_DESC = #settingDesc:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

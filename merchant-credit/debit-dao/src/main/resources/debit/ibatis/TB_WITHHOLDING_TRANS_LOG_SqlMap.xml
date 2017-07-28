@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TB_WITHHOLDING_TRANS_LOG" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_ORDER_NO" property="merchantOrderNo" jdbcType="VARCHAR" />
+    <result column="BATCH_NO" property="batchNo" jdbcType="VARCHAR" />
+    <result column="REQUEST_TIME" property="requestTime" />
+    <result column="REQUEST_DATA" property="requestData" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="EXT" property="ext" jdbcType="VARCHAR" />
+    <result column="RESULTTYPE" property="resulttype" jdbcType="VARCHAR" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="RESPONSEDATE" property="responsedate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_ORDER_NO, BATCH_NO, REQUEST_TIME, REQUEST_DATA, CREATE_TIME, UPDATE_TIME, 
+    EXT, RESULTTYPE, CARD_NO, RESPONSEDATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="TB_WITHHOLDING_TRANS_LOG.Base_Column_List" />
+    from TB_WITHHOLDING_TRANS_LOG
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    select 
+    <include refid="TB_WITHHOLDING_TRANS_LOG.Base_Column_List" />
+    from TB_WITHHOLDING_TRANS_LOG
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    delete from TB_WITHHOLDING_TRANS_LOG
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogExample" >
+    delete from TB_WITHHOLDING_TRANS_LOG
+    <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select mcredit.seq_withholding_trans_log.nextval from dual
+    </selectKey>
+    insert into TB_WITHHOLDING_TRANS_LOG (ID, MERCHANT_ORDER_NO, BATCH_NO, REQUEST_TIME, 
+      REQUEST_DATA, CREATE_TIME, UPDATE_TIME, EXT, 
+      RESULTTYPE, CARD_NO, RESPONSEDATE)
+    values (#id:DECIMAL#, #merchantOrderNo:VARCHAR#, #batchNo:VARCHAR#, #requestTime#, 
+      #requestData:VARCHAR#, #createTime#, #updateTime#, #ext:VARCHAR#, 
+      #resulttype:VARCHAR#, #cardNo:VARCHAR#, #responsedate:VARCHAR#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select mcredit.seq_withholding_trans_log.nextval from dual
+    </selectKey>
+    insert into TB_WITHHOLDING_TRANS_LOG
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantOrderNo" >
+        MERCHANT_ORDER_NO
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        BATCH_NO
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="requestData" >
+        REQUEST_DATA
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        EXT
+      </isNotNull>
+      <isNotNull prepend="," property="resulttype" >
+        RESULTTYPE
+      </isNotNull>
+      <isNotNull prepend="," property="cardNo" >
+        CARD_NO
+      </isNotNull>
+      <isNotNull prepend="," property="responsedate" >
+        RESPONSEDATE
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantOrderNo" >
+        #merchantOrderNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        #batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        #requestTime#
+      </isNotNull>
+      <isNotNull prepend="," property="requestData" >
+        #requestData:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resulttype" >
+        #resulttype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cardNo" >
+        #cardNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="responsedate" >
+        #responsedate:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogExample" resultClass="java.lang.Integer" >
+    select count(*) from TB_WITHHOLDING_TRANS_LOG
+    <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update TB_WITHHOLDING_TRANS_LOG
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantOrderNo" >
+        MERCHANT_ORDER_NO = #record.merchantOrderNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.batchNo" >
+        BATCH_NO = #record.batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.requestTime" >
+        REQUEST_TIME = #record.requestTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.requestData" >
+        REQUEST_DATA = #record.requestData:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.ext" >
+        EXT = #record.ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.resulttype" >
+        RESULTTYPE = #record.resulttype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.cardNo" >
+        CARD_NO = #record.cardNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.responsedate" >
+        RESPONSEDATE = #record.responsedate:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update TB_WITHHOLDING_TRANS_LOG
+    set ID = #record.id:DECIMAL#,
+      MERCHANT_ORDER_NO = #record.merchantOrderNo:VARCHAR#,
+      BATCH_NO = #record.batchNo:VARCHAR#,
+      REQUEST_TIME = #record.requestTime#,
+      REQUEST_DATA = #record.requestData:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      EXT = #record.ext:VARCHAR#,
+      RESULTTYPE = #record.resulttype:VARCHAR#,
+      CARD_NO = #record.cardNo:VARCHAR#,
+      RESPONSEDATE = #record.responsedate:VARCHAR#
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_TRANS_LOG.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    update TB_WITHHOLDING_TRANS_LOG
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="merchantOrderNo" >
+        MERCHANT_ORDER_NO = #merchantOrderNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        BATCH_NO = #batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME = #requestTime#
+      </isNotNull>
+      <isNotNull prepend="," property="requestData" >
+        REQUEST_DATA = #requestData:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        EXT = #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="resulttype" >
+        RESULTTYPE = #resulttype:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cardNo" >
+        CARD_NO = #cardNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="responsedate" >
+        RESPONSEDATE = #responsedate:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingTransLogPO" >
+    update TB_WITHHOLDING_TRANS_LOG
+    set MERCHANT_ORDER_NO = #merchantOrderNo:VARCHAR#,
+      BATCH_NO = #batchNo:VARCHAR#,
+      REQUEST_TIME = #requestTime#,
+      REQUEST_DATA = #requestData:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      EXT = #ext:VARCHAR#,
+      RESULTTYPE = #resulttype:VARCHAR#,
+      CARD_NO = #cardNo:VARCHAR#,
+      RESPONSEDATE = #responsedate:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

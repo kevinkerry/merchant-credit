@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_AGENT_PROFIT" >
+  <typeAlias alias="extDoAgentProfitExample" type="com.shengpay.debit.dal.ext.dataobject.ExtDoAgentProfitExample"/>
+  <typeAlias alias="agentProfitDTO" type="com.shengpay.debit.dal.ext.dataobject.AgentProfitDTO"/>
+
+  <sql id="page_where_clause">
+     <isNotEmpty property="promoterNo">
+	  	    <isNotNull prepend="and" property="promoterNo">
+	  			a.promoter_no = #promoterNo#
+		    </isNotNull>
+	   </isNotEmpty>
+
+	   <isNotEmpty property="merchantName">
+	  		<isNotNull prepend="and" property="merchantName">
+	  			b.merchant_name like '%$merchantName$%'
+		    </isNotNull>
+	   </isNotEmpty>
+
+	   <isNotEmpty property="merchantNo">
+		    <isNotNull prepend="and" property="merchantNo">
+		    	b.merchant_no = #merchantNo#
+		    </isNotNull>
+	   </isNotEmpty>
+	   <isNotEmpty property="profitStatus">
+		    <isNotNull prepend="and" property="profitStatus">
+		    	a.STATUS = #profitStatus#
+		    </isNotNull>
+	   </isNotEmpty>
+    	<isNotEmpty property="startTime" prepend="AND">
+	 		<![CDATA[ b.apply_date >= to_date(#startTime#,'yyyy-MM-dd') ]]>
+		</isNotEmpty>
+	 	<isNotEmpty property="endTime" prepend="AND">
+	    	<![CDATA[ b.apply_date <= to_date(#endTime#,'yyyy-MM-dd') +1 ]]>
+	 	</isNotEmpty>
+  </sql>
+  <select id="pageQueryAgentProfit" resultClass="agentProfitDTO" parameterClass="extDoAgentProfitExample" >
+  	select t.* from (select tt.*, ROWNUM rnum from (
+	    select
+		    b.apply_date       		applyDate,
+		    b.debit_amount  		debitAmount,
+		    b.borrow_days			borrowDays,
+		    b.start_time			startTime,
+		    b.end_time 				endTime,
+		    a.STATUS 				profitStatus,
+		    a.amount				profitAmount,
+		    b.MERCHANT_NAME          merchantName,
+		    b.MERCHANT_NO            merchantNo
+	    from DO_AGENT_PROFIT a,DO_MERCHANT_DEBIT_ORDER b
+		where a.borrow_order_id = b.id
+	    <include refid="page_where_clause"/>
+	    order by b.apply_date desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+
+
+  <select id="pageQueryAgentProfit_count" resultClass="java.lang.Integer" parameterClass="extDoAgentProfitExample" >
+  		select count(a.id)
+	    from DO_AGENT_PROFIT a,DO_MERCHANT_DEBIT_ORDER b
+		where a.borrow_order_id = b.id
+		<include refid="page_where_clause"/>
+  </select>
+
+</sqlMap>

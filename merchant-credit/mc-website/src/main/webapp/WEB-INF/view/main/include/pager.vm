@@ -1,0 +1,65 @@
+<div class="paging">
+	#set($previousPage=$!{query.currentPage} - 1)
+    #set($nextPage=$!{query.currentPage} + 1)
+
+    #if($!query.currentPage == 1||$!query.totalPage==0)
+		<a class="prev"><s></s>上一页</a>
+	#else
+		<a class="prev" href="javascript:gotoPage($!previousPage)"><s></s>上一页</a>
+	#end
+
+	#if($!query.totalPage <= 0)
+		<span>1</span>
+	#elseif($query.totalPage <= 5)
+			#foreach($pn in [1..$!query.totalPage])
+                #if($pn == $!query.currentPage)
+					<span>$!pn</span>
+                #else
+					<a href="javascript:gotoPage($!pn)">$!pn</a>
+                #end
+			#end
+	#else
+		#if(($!query.totalPage - $!query.currentPage >=2) && $!query.currentPage>2)
+			#set($firstPage=$!{query.currentPage} - 2)
+			#set($lastPage=$!{query.currentPage} + 2)
+			#foreach($!pn in [$!firstPage..$!lastPage])
+                #if($!pn == $!query.currentPage)
+                    <span class="current">$!pn</span>
+                #else
+					<a href="javascript:gotoPage($!pn)">$!pn</a>
+                #end
+			#end
+		#elseif($!query.totalPage - $!query.currentPage < 2)
+			#set($firstPage=$!{query.totalPage} - 4)
+			#set($lastPage=$!{query.totalPage})
+			#foreach($!pn in [$!firstPage..$!lastPage])
+                #if($!pn == $!query.currentPage)
+                    <span class="current">$!pn</span>
+                #else
+                    <a href="javascript:gotoPage($!pn)">$!pn</a>
+                #end
+			#end
+		#elseif($!query.currentPage <= 2)
+			#foreach($!pn in [1..5])
+                #if($!pn == $!query.currentPage)
+                    <span class="current">$!pn</span>
+                #else
+                    <a href="javascript:gotoPage($!pn)">$!pn</a>
+                #end
+			#end
+		#end
+
+	#end
+
+    #if($!query.currentPage==$!query.totalPage||$!query.totalPage==0)
+		<a class="next">下一页<s></s></a>
+    #else
+		<a class="next" href="javascript:gotoPage($!nextPage)">下一页<s></s></a>
+    #end
+
+	<span>共#if($!query.totalPage <= 0) 1 #else $!query.totalPage #end 页</span>
+	<span>
+		到第<input id="page_in" type="text" size="1" maxlength="9"/>页
+		<button type="button" #if($!query.totalPage>0)onclick="javascript:gotoPage(jQuery('#page_in').val());"#end>确定</button>
+	</span>
+</div>

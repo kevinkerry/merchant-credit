@@ -1,0 +1,76 @@
+<script type="text/javascript" src="#staticResource('/js/base.js')?version=1"></script>
+<script type="text/javascript" src="#staticResource('/js/baseExt.js')?version=1"></script>
+<link rel="stylesheet" href="#staticResource('My97DatePicker/skin/msp/datepicker.css')?version=1" type="text/css">
+<script type="text/javascript" src="#staticResource('My97DatePicker/WdatePicker.js')"></script>
+<script type="text/javascript" src="#staticResource('My97DatePicker/calendar.js')"></script>
+
+
+<form action="#relativeUrl('/funding/history.htm')" method="post" id="withFundingHistoryForm">
+<input type="hidden" id="currentPage" 		name="currentPage" 		value="$!query.currentPage"/>##当前页
+<input type="hidden" id="pagesize"    		name="pageSize"    		value="$!query.pageSize"/>##页大小
+
+<div class="content_box content">
+	<p class="tip-style-01">您的盛付通配资总额度为：$!NumberUtils.formatWithComma($!{fastSettleMargin})元，今日剩余可用额度为：<span class="red">$!NumberUtils.formatWithComma($!{validCredit})</span>元。</p>
+	<table width="80%" class="mgT10">
+		<tr>
+			<td width="65">选择日期：</td>
+			<td width="50%"><input class="input-normal date" size="20" id="startTimeStr" name="startTimeStr" value="$!{startTimeStr}" onfocus="xDatePicker(2);"/> 到 <input class="input-normal date" size="20" id="endTimeStr"  name="endTimeStr"  value="$!{endTimeStr}" onfocus="xDatePicker(2);"/></td>
+			<td  width="40">状态：</td>
+			<td>
+				<select id="statusStr" name="statusStr">
+					<option value="" #if($!{statusStr}=='')selected#end>全部</option>
+					<option value="success" #if($!{statusStr}=='success')selected#end>成功</option>
+					<option value="fail" #if($!{statusStr}=='fail')selected#end>失败</option>
+				</select>
+			</td>
+			<td><input type="button" value="查询" class="g-button" id="a_btn"/></td>
+		</tr>
+	</table>
+
+	<table class="table-style-01 mgT10" width="80%"  border="1">
+		<thead>
+			<tr>
+				<th>代理商名称</th>
+				<th>申请日期</th>
+				<th>申请配资金额</th>
+				<th>配资费率</th>
+				<th>配资费用</th>
+				<th>配资结果</th>
+			</tr>
+		</thead>
+		#foreach($temp in $withCapitalList)
+		<tr>
+			<td>$!{temp.promoterName}</td>
+			<td>$!dateUtil.getNewFormatDateString($!{temp.applyDatetime})</td>
+			<td>$!NumberUtils.format($!{temp.amount})</td>
+			<td>$!{temp.feeRatio}%</td>
+			<td>$!NumberUtils.format($!{temp.fee})</td>
+			<td>
+				#if($!{temp.status}==4 || $!{temp.status}==6 || $!{temp.status}==7 || $!{temp.status}==8 || $!{temp.status}==9)
+    				配资成功
+    			#elseif($!{temp.status}==3 || $!{temp.status}==5 || $!{temp.status}==10)
+    				配资失败
+				#elseif($!{temp.status}==0)
+					处理中
+    			#end
+			</td>
+		</tr>
+		#end
+	</table>
+	<div style="width:80%;" class="mgT10">
+		#parse("/main/include/pager.vm")
+    </div>
+</div>
+</form>
+
+<script type="text/javascript">
+	function gotoPage(page) {
+        $("#currentPage").val(page);
+        $("#withFundingHistoryForm").submit();
+    }
+	$(function(){
+		$('#a_btn').bind('click',function(){
+			$("#withFundingHistoryForm").submit();
+		})
+	});
+</script>

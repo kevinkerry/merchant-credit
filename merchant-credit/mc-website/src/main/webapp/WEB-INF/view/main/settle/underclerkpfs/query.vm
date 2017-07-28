@@ -1,0 +1,126 @@
+<form action="#relativeUrl('/profits/query.do')" method="post" id="submitForm" name="submitForm">
+	<div class="caption">下级分润-提现部分</div>
+	<table width="80%" class="qryTb">
+		<tr>
+			<td class="lbl">下级拓展方号：</td>
+			<td><input type="text" id="underPromoterNo" name="underPromoterNo" value="" class="txt w120"></td>
+			<td class="lbl">下级拓展方名称：</td>
+			<td><input type="text" id="underPromoterName" name="underPromoterName" value="" class="txt w120"></td>
+
+			<td class="lbl">提现类型：</td>
+			<td>
+				<select name="settleType" id="settleType">
+					<option value="" selected>全部</option>
+					#foreach($sts in $!{settleTypes})
+					<option value="$!{sts.code}">$!{sts.type}</option>
+					#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="lbl">商户号：</td>
+			<td><input type="text" id="merchantNo" name="merchantNo" value="$!page.merchantNo" class="txt w120"></td>
+			<td class="lbl">商户名称：</td>
+			<td><input type="text" id="merchantName" name="merchantName" value="$!page.merchantName" class="txt w120"></td>
+			<td class="lbl">商户类别：</td>
+			<td ><input type="text" id="mcc" name="mcc" value="$!page.mcc" class="txt w120"></td>
+		</tr>
+		<tr>
+			<td class="lbl">提现成功时间：</td>
+			<td colspan="5">
+				<input type="text" id="queryStartTime" name="queryStartTime" class="txt w180 date" onclick="xDatePicker2(2);" readonly="readonly" value="$!page.queryStartTime">
+				~
+				<input type="text" id="queryEndTime" name="queryEndTime" class="txt w180 date" onclick="xDatePicker2(2);" readonly="readonly" value="$!page.queryEndTime">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="8" align="center">
+				<a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();">查询</a>
+				##<a href="#" class="btn2" id="queryBtn" onclick="javascript:exportFile();return false;">导出</a>
+				<a href="#" class="btn2" id="queryBtn" onclick="javascript:exportFile();return false;">下载</a>
+				<a href="#" class="btn2" id="queryBtn" onclick="javascript:summary();return false;">汇总</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="8" align="left">
+				<span class="red">注：<br/>
+                                  分润产生是以提现成功时间为准，而不是以提现发起时间为准。例如：12月31日发起提现，1月1日提现成功，则可以在1月1日的分润明细中查询到。
+                </span>
+			</td>
+		</tr>
+	</table>
+	<!--分页容器-->
+	<div id="container"></div>
+</form>
+<div id="pop1" style="display:none;position:absolute; top:0;bottom:0;left:0;right:0;opacity:0.9; background:#999; z-index: 9999;">
+<div class="popup" style="margin-top:-140px;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"><font color="#ffffff" style="font-size: 16px;font-weight: bold;">下级分润汇总</font></a>
+	</p>
+	<div id="summary_div" class="popup-container">
+
+	</div>
+	<p class="popup-tlc"><a href="javascript:void(0);" class="popup-cancel g-button" onclick="hidePop1();">关闭</a></p>
+</div>
+</div>
+<script type="text/javascript">
+	var ALL_COND_ID = [ "queryStartTime", "queryEndTime", "settleType",
+			"merchantNo", "merchantName","mcc","underPromoterNo","underPromoterName" ];
+	//ajax翻页
+	function ajaxPaging() {
+		hidePop1();
+		//alert("本功能将于近期上线，现在进行下级分润配置，以后可查询从配置时间起产生的下级分润");
+		//return false;
+		loading(!0);
+		var currentPage = jQuery("#pageNum_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"pageNum" : currentPage
+		};
+		for (i in ALL_COND_ID) {
+			var val = document.getElementById(ALL_COND_ID[i]).value;
+			if (val != "") {
+				data[ALL_COND_ID[i]] = val;
+			}
+		}
+		data['timestamp'] = new Date().getTime();
+		jQuery.ajax({
+			type : 'POST',
+			url : "#relativeUrl('/underclerk/profits/query.htm')",
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+				loading(!1);
+			}
+		});
+	}
+	function exportFile() {
+		hidePop1();
+		$('#submitForm').attr('action', "#relativeUrl('/underclerk/profits/downloads/view.do')");
+		$('#submitForm').submit();
+	}
+	function summary() {
+		var data = {};
+		for (i in ALL_COND_ID) {
+			var val = document.getElementById(ALL_COND_ID[i]).value;
+			if (val != "") {
+				data[ALL_COND_ID[i]] = val;
+			}
+		}
+		data['timestamp'] = new Date().getTime();
+		jQuery.ajax({
+			type : 'POST',
+			url : "#relativeUrl('/underclerk/profits/summary.do')",
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#summary_div").html(data);
+				jQuery("#pop1").show();
+			}
+		});
+	}
+	function hidePop1(){
+		jQuery("#pop1").hide();
+	}
+</script>

@@ -1,0 +1,60 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>id</td>
+		<td>拓展方名称</td>
+		<td>拓展方类型</td>
+		<td>拓展方商户号</td>
+		<td>t+0配资申请时间</td>
+		<td>配资申请金额</td>
+		<td>配资手续费</td>
+		<td>配资申请状态</td>
+		<td>额度操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>$!{o.id}&nbsp;</td>
+		<td>$!{o.promoterName}</td>
+		<td>#if("$!{o.mcType}"=="0003")普通POS商户#elseif("$!{o.mcType}"=="0007")mPOS商户#end</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!dateUtil.getNewFormatDateString($!{o.applyDatetime})</td>
+		<td>$!NumberUtils.format($!{o.amount})</td>
+		<td>$!NumberUtils.format($!{o.fee})</td>
+		<td>
+			#if("$!{o.status}"=="0")
+				初始化
+			#elseif("$!{o.status}"=="1")
+				处理中
+			#elseif("$!{o.status}"=="2")
+				fos配资成功
+			#elseif("$!{o.status}"=="3")
+				fos配资失败
+			#elseif("$!{o.status}"=="4")
+				配资成功
+			#elseif("$!{o.status}"=="5")
+				配资失败
+			#elseif("$!{o.status}"=="6")
+				msp配资额度恢复成功
+			#elseif("$!{o.status}"=="7")
+				msp配资额度恢复失败
+			#elseif("$!{o.status}"=="8")
+				fos冲正成功
+			#elseif("$!{o.status}"=="10")
+				手续费已退款
+			#else
+				fos冲正失败
+			#end
+		</td>
+		<td>
+			#if("$!{o.status}"=="5")
+				<a href="javascript:feeRefund('$!{o.id}');" title="手续费已退款">手续费已退款</a>
+			#end
+			#if("$!{o.status}"=="7")
+				<a href="javascript:resetCreditLimit('$!{o.id}');" title="额度重置">额度重置</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>

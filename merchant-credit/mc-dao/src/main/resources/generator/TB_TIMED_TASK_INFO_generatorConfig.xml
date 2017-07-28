@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<classPathEntry location="D:\maven\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+<!--     <javaModelGenerator targetPackage="com.sdp.mc.task.dao" targetProject="..\mc-dao\src\test\java"> -->
+    <javaModelGenerator targetPackage="com.sdp.mc.task.dao" targetProject="..\mc-dao\src\main\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+<!--     <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="..\mc-dao\src\test\java"> -->
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="..\mc-dao\src\main\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.task.dao.mapper"  targetProject="..\mc-dao\src\main\java">
+<!--     <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.task.dao.mapper"  targetProject="..\mc-dao\src\test\java"> -->
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.task.dao.daointerface" />
+    </javaClientGenerator>
+
+<!--     <managerGenerator type="SPRING" targetPackage="com.sdp.mc.task.manager" implementationPackage="com.sdp.mc.task.manager.impl" generatorEnable="true"  targetProject="..\mc-dao\src\test\java"> -->
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.task.manager" implementationPackage="com.sdp.mc.task.manager.impl" generatorEnable="true"  targetProject="..\mc-dao\src\main\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	 <table tableName="TB_TIMED_TASK_INFO" domainObjectName="TimedTaskInfoDO">
+		<generatedKey column="ID"  sqlStatement="select SEQ_TB_TIMED_TASK_INFO.nextval from dual" type="pre" />
+    	<columnOverride column="ID" 							property="id" 						javaType="java.lang.Long" />
+    	<columnOverride column="LAST_EXECUTE_ID" 				property="lastExecuteId" 				javaType="java.lang.Long" />
+    	<columnOverride column="TASK_TYPE" 						property="taskType" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="TASK_STATUS" 						property="taskStatus" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="RETRY_TIMES" 						property="retryTimes" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="EXECUTE_TIMES" 						property="executeTimes" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="RETRY_TIME_INTERVAL" 						property="retryTimeInterval" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="EFFECTIVE_TIME" 					property="effectiveTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table> 
+    
+     <!-- <table tableName="TB_TIMED_TASK_EXECUTE_INFO" domainObjectName="TimedTaskExecuteInfoDO">
+		<generatedKey column="ID"  sqlStatement="select SEQ_TB_TIMED_TASK_EXECUTE_INFO.nextval from dual" type="pre" />
+    	<columnOverride column="ID" 							property="id" 						javaType="java.lang.Long" />
+    	<columnOverride column="TASK_ID" 				property="taskId" 				javaType="java.lang.Long" />
+    	<columnOverride column="USE_TIME" 						property="useTime" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 				jdbcType="TIMESTAMP"/>
+    </table>  -->
+  </context>
+</generatorConfiguration>

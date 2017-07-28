@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+    <!-- scan location -->
+    <aop:aspectj-autoproxy/>
+    <context:component-scan base-package="com.sdp.mc.intra.web" />
+    <context:component-scan base-package="com.sdp.emall.intra.admin.**.action" />
+    <mvc:annotation-driven />
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    <!-- velocity config -->
+    <bean id="velocityConfigurer"
+        class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath">
+            <value>/WEB-INF/view</value>
+        </property>
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="velocimacro.library">/control/macros.vm</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 处理velocity布局 -->
+    <bean id="viewResolver"
+        class="com.sdp.mc.common.web.resolver.VelocityMultipleLayoutViewResolver">
+        <property name="cache" value="true" />
+        <property name="prefix" value="" />
+        <property name="suffix" value=".vm" />
+        <property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />
+        <property name="contentType" value="text/html; charset=utf-8"></property>
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="requestContextAttribute" value="rc"/>
+        <property name="mappings">
+            <map>
+                <!-- 个性化布局扩展在此添加，需要将个性的放前面 -->
+                <entry key="/admin/sso/monitor" value="layout/empty.vm" />
+
+                <!--  sys-admin 权限管理模块 -->
+                <entry key="/sso/*" value="layout/noMenu.vm" />
+                <entry key="/admin/permission/permissionEdit*" value="layout/noMenu.vm" />
+                <entry key="/admin/administrator/editAdmin*" value="layout/noMenu.vm" />
+                <entry key="/ajax/*" value="layout/empty.vm" />
+                <entry key="*/ajaxPaging/*" value="layout/empty.vm" />
+                <entry key="/json_result" value="layout/empty.vm" />
+
+                <!-- t+0系统配置 -->
+                <entry key="/config/index" value="layout/default4msp.vm" />
+                <entry key="/config/configList" value="layout/empty.vm" />
+                <entry key="/config/edit" value="layout/empty.vm" />
+
+				<!-- 额度记录 -->
+                <entry key="/withdraw/opRecordLog/query" value="layout/default4msp.vm" />
+
+                <!-- t+0快速结算 -->
+                <entry key="/fastSettle/*/index" value="layout/default4msp.vm" />
+                <entry key="/fastSettle/*/*List" value="layout/empty.vm" />
+                <entry key="/fastSettle/*/*Detail" value="layout/empty.vm" />
+                <entry key="/fastSettle/promoter/margin" value="layout/empty.vm" />
+                <entry key="/fastSettle/promoter/fastSettleMgt" value="layout/empty.vm" />
+                <!-- 定制任务 -->
+                <entry key="/task/index" value="layout/default4msp.vm"/>
+                <entry key="/task/timeTaskList" value="layout/empty.vm"></entry>
+                <entry key="/task/timeTaskExecuteList" value="layout/default4msp.vm"></entry>
+                <entry key="/task/updateTimeTask" value="layout/default4msp.vm"></entry>
+                <entry key="/task/addTimeTask" value="layout/default4msp.vm"></entry>
+
+                <!-- 天天贷 -->
+                <entry key="/debit/*/index" value="layout/default4msp.vm" />
+                <entry key="/debit/loan/index1" value="layout/noMenu2.vm" />
+                <!-- 分页list布局 -->
+                <entry key="/debit/*/*List" value="layout/empty.vm" />
+                <entry key="/debit/apply/applyDetailInfo" value="layout/empty.vm" />
+                <entry key="/debit/*/*Detail" value="layout/empty.vm" />
+                <!-- 天天贷配置 -->
+                <entry key="/config/*/index" value="layout/default4msp.vm" />
+                <entry key="/config/*/*List" value="layout/empty.vm" />
+                <entry key="/config/*/edit" value="layout/empty.vm" />
+                <!-- 新t+0 -->
+                <entry key="/newt0/*/index" value="layout/default4msp.vm" />
+                <entry key="/newt0/*/*List" value="layout/empty.vm" />
+                <entry key="/newt0/loaningQuotaApply/index1" value="layout/noMenu2.vm" />
+                <entry key="/newt0/loaningQuota/index1" value="layout/noMenu2.vm" />
+
+                <entry key="/limitrule/saveEdit" value="layout/empty.vm" />
+
+                <entry key="/limitchange/list" value="layout/empty.vm" />
+                <entry key="/limitchange/changeList" value="layout/empty.vm" />
+                <entry key="/limitchange/changeDetail" value="layout/default4msp.vm" />
+                <entry key="/limitchange/index" value="layout/default4msp.vm" />
+
+               <entry key="/whitelist/index" value="layout/default4msp.vm" />
+               <entry key="/whitelist/whiteList" value="layout/empty.vm" />
+               <entry key="/whitelist/initEdit" value="layout/empty.vm" />
+               <entry key="/whitelist/minusProfitsIndex" value="layout/default4msp.vm" />
+               <entry key="/whitelist/minusProfitsWhiteList" value="layout/empty.vm" />
+
+               <entry key="/policyconfig/index" value="layout/default4msp.vm" />
+               <entry key="/policyconfig/list" value="layout/empty.vm" />
+               <entry key="/policyconfig/initEdit" value="layout/empty.vm" />
+
+                <entry key="/walletwithdraw/index" value="layout/default4msp.vm" />
+                <entry key="/walletwithdraw/list" value="layout/empty.vm" />
+
+ 				<entry key="/withhold/*index" value="layout/default4msp.vm" />
+                <entry key="/withhold/*List" value="layout/empty.vm" />
+                <entry key="/walletWithhold/*index" value="layout/default4msp.vm" />
+                <entry key="/walletWithhold/*List" value="layout/empty.vm" />
+
+
+				<!-- 分润系统 -->
+				<entry key="/settle/*index" value="layout/default4msp.vm" />
+				<entry key="/settle/*result" value="layout/empty.vm" />
+                <entry key="/settle/*/*Index" value="layout/default4msp.vm" />
+                <entry key="/settle/*/*Add" value="layout/default4msp.vm" />
+                <entry key="/settle/*/*Edit" value="layout/default4msp.vm" />
+                <entry key="/settle/*/*Result" value="layout/default4msp.vm" />
+                <entry key="/settle/*/*List" value="layout/empty.vm" />
+				<entry key="/settle/*/*list" value="layout/empty.vm" />
+				<entry key="/settle/*/*page" value="layout/default4msp.vm" />
+
+                <entry key="/temp/*index" value="layout/default4msp.vm" />
+                <entry key="/temp/*List" value="layout/empty.vm" />
+                <entry key="/temp/*List/*Detail" value="layout/empty.vm" />
+
+                <entry key="/withdrawCost/config/list" value="layout/empty.vm" />
+
+                <entry key="/repair/index" value="layout/default4msp.vm" />
+                <entry key="/repair/partnerIndex" value="layout/default4msp.vm" />
+                <entry key="/repair/posAutoOpenT0Index" value="layout/default4msp.vm" />
+                <entry key="/repair/*" value="layout/empty.vm" />
+                <!-- 云收银分润结算单管理 -->
+                <entry key="/easypay/*Index" value="layout/default4msp.vm" />
+                <entry key="/easypay/*List" value="layout/empty.vm" />
+                
+                 <entry key="/*/index" value="layout/default4msp.vm" />
+               <entry key="/*/list" value="layout/empty.vm" />
+                <!-- 默认布局 -->
+                <entry key="*" value="layout/default.vm" />
+
+            </map>
+        </property>
+    </bean>
+
+    <!-- 处理Mutipart文件上传 -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+        <property name="maxUploadSize">
+            <value>104857600</value>
+        </property>
+    </bean>
+
+    <!-- 异常处理 -->
+    <bean id="exceptionResolver"
+        class="com.sdp.mc.intra.handle.MySimpleMappingExceptionResolver">
+        <property name="defaultErrorView">
+            <value>/error/defError</value>
+        </property>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.sql.SQLException">/error/dbError</prop>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">/error/uploadError</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

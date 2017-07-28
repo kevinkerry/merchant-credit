@@ -1,0 +1,39 @@
+<style type="text/css">
+    /form_box div#_ocx_password_str{display: inline;padding:12px 0;}
+    .form_box span#_ocx_password_pge{display:inline;_margin-top:-15px;*margin-top:-15px; }
+    .ocx_style {
+        background: none repeat scroll 0 0 #fff;
+        border: 1px solid #d8d8d8;
+        color: #b3b3b3;
+        height: 35px;
+        outline: medium none;
+        width: 321px;
+        vertical-align: middle;
+        position:relative;
+        left:-3px;
+		z-index:9;
+    }
+</style>
+
+<!-- <script src="#staticResource('base/jquery-1.8.2.min.js')"></script> -->
+<script src="#staticResource('js/passGuardCtrl/PassGuardCtrl.js')"></script>
+<script src="#staticResource('js/passGuardCtrl/PassGuardCtrl.Ext.js')"></script>
+<script>
+$(function(){
+    editor = $("#_ocx_password_str").PassGuardCtrl({
+		pgePath: "#springUrl('/plugin/sdpedit/')", //控件文件目录
+        pgeId: "_ocx_password", //控件ID
+        pgeEdittype: 0, //控件类型,0星号,1明文
+        pgeEreg1: "", //输入过程中字符类型限制
+        pgeEreg2: "", //输入完毕后字符类型判断条件
+        pgeCert: $("#sActivexPubKey").val(), //RSA加密公钥
+        PGEEntype: 0, //0 cms ,1 rsa
+        pgeMaxlength: 64, //允许最大输入长度
+        pgeTabindex: 0, //tab键顺序
+        pgeClass: "ocx_style", //控件css样式
+        pgeInstallClass: "ocx_style", //针对安装或升级
+        pgeOnkeydown: "", //回车键响应函数
+        tabCallback: ""//火狐tab键回调函数,设置要跳转到的对象ID
+    });
+});
+</script>

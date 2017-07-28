@@ -1,0 +1,153 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">白名单编辑</div>
+<table class="dtlTb" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="lbl" width="200">白名单类型：</td>
+		<td width="700"><select id="type" name="type" onchange="changeType();" value="$!config.type">
+							#foreach($!param in
+							$!{whiteType.keySet()})
+							#if("$!{config.id}"!="" && "$!config.type"=="$!param")
+							 <option value="$!param" #if("$!config.type"=="$!param")selected #end >$!{param}-$!{whiteType.get($param)}</option>
+							#end
+							#if("$!{config.id}"=="")
+							 <option value="$!param" #if("$!config.type"=="$!param")selected #end >$!{param}-$!{whiteType.get($param)}</option>
+							#end
+							#end
+		</select>
+		#if("$!{config.id}"!="") 
+		    <font color="aaaaaa" >修改白名单时不能修改白名单的类型！</font>
+		#end
+		</td>
+    </tr>
+    <tr>
+   		<td class="lbl">商户类型：</td>
+        <td width="200">
+        	<select id="merchantType" name="merchantType"  
+						value="$!{config.merchantType}">
+							<option value="0001" #if("$!config.merchantType"=="0001")selected #end>POS商户</option>
+							<option value="0003" #if("$!config.merchantType"=="0003")selected #end>POS拓展方</option>
+							<option value="0006" #if("$!config.merchantType"=="0006")selected #end>MPOS商户</option>
+							<option value="0007" #if("$!config.merchantType"=="0007")selected #end>MPOS拓展方</option>
+							<option id="easypay_promoter_type" value="0101" #if("$!config.merchantType"=="0101")selected #end  #if("$!config.type"!="1") style='display: none' #end)>云收银拓展方</option>
+					</select>
+        </td>
+    </tr>
+     <tr>
+   		<td class="lbl">商户号：</td>
+        <td width="200">
+        	<input type="text" id="merchantNo" name="merchantNo" maxlength="20" value="$!{config.merchantNo}" class="txt130" size="20"/>
+        </td>
+    </tr>
+     <tr>
+   		<td class="lbl">状态：</td>
+        <td width="200">
+        	<select id="status" name="status"
+						value="$!{config.status}">
+							<option value="1">生效</option>
+							<option value="0">失效</option>
+					</select>
+        </td>
+    </tr>
+     <tr name="content_tr" style="display: none;">
+   		<td class="lbl">白名单的值：</td>
+        <td width="200">
+        	<input type="text" id="content" name="content" maxlength="1000" value="$!{config.content}" class="txt130" size="100"/>
+        </td>
+    </tr>
+    <tr name="fee_tr">
+   		<td class="lbl">工作日费率：</td>
+        <td width="200">
+        	<input type="text" id="workdayFees" name="workdayFees" maxlength="50" value="$!{config.workdayFees}" class="txt130" size="50"/>
+        	<font color="aaaaaa" >多个费率请使用英文逗号分隔。格式例如：0.0011,0.0002</font>
+        </td>
+    </tr>
+    <tr name="fee_tr">
+   		<td class="lbl">节假日费率：</td>
+        <td width="200" >
+        	<input type="text" id="holidayFees" name="holidayFees" maxlength="50" value="$!{config.holidayFees}" class="txt130" size="50" />
+        	<font color="aaaaaa" >多个费率请使用英文逗号分隔。格式例如：0.0011,0.0002</font>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6" align="center">
+           <a href="javascript:void(0);" class="btn2"
+			id="queryBtn" onclick="saveEdit()">保存</a>
+			&nbsp;&nbsp;
+			<a href="javascript:void(0);" class="btn2" onclick="window.close()">取消</a>
+        </td>
+    </tr>
+</table>
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+<script type="text/javascript">
+	function validate(){
+		var type=jQuery("#type").val();
+		var merchantNo=jQuery("#merchantNo").val();
+		var merchantType=jQuery("#merchantType").val();
+		if(type==""){
+			alert("类型不能为空");
+			return false;
+		}
+		if(merchantNo==""){
+			alert("商户号不能为空");
+			return false;
+		}
+		if(merchantType==""){
+			alert("商户类型不能为空");
+			return false;
+		}
+		return true;
+	}
+	
+	function changeType(){
+		var type=jQuery("#type").val();
+		jQuery("tr[name=content_tr]").hide();
+		jQuery("tr[name=fee_tr]").hide();
+		if(type==1){
+			jQuery("tr[name=fee_tr]").show();
+			jQuery("#easypay_promoter_type").show();
+		}else{
+			jQuery("tr[name=content_tr]").show();
+			jQuery("#easypay_promoter_type").hide();
+		}
+	}
+	
+    //保存
+    function saveEdit(){
+    	if(!validate()){
+    		return false;
+    	}
+    	var type = jQuery("#type").val();
+    	var merchantNo=jQuery("#merchantNo").val();
+    	var merchantType=jQuery("#merchantType").val();
+		var content=jQuery("#content").val();
+		var status=jQuery("#status").val();
+		var workdayFees=jQuery("#workdayFees").val();
+		var holidayFees=jQuery("#holidayFees").val();
+    	var data = {type:type,merchantNo:merchantNo,merchantType:merchantType,content:content,status:status,workdayFees:workdayFees,holidayFees:holidayFees};
+    	if("$!{config.id}"!=""){
+    		data["id"]="$!{config.id}";
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/whitelist/saveEdit.do')?sessionId="+new Date().getTime(),
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data.success){
+	    			//alert("商户信息修改成功，该商户的快速结算服务已生效，费率将在下一个自然日生效！");
+	    			alert(data.errorMessage);
+	    			window.opener.ajaxPaging();
+	    			window.close();
+	    			//window.location.reload();
+	    		}else{
+		    		alert(data.errorMessage);
+	    		}
+		    	
+		    	/* var msg = data?data.errorMessage:"系统繁忙";
+		    	alert(msg); */
+		    	
+		    }
+		});
+    }
+    changeType();
+</script>

@@ -1,0 +1,58 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td width="30">id</td>
+		<td width="60">来源应用</td>
+		<td width="110">订单号</td>
+		<td width="60">账号</td>
+		<td width="60">账号类型</td>
+		<td width="60">收单金额</td>
+		<td width="60">出款金额</td>
+		<td width="60">状态</td>
+		<td width="120">申请时间</td>
+		<td width="50">操作</td>
+	</tr>
+	#foreach($o in $!{result})
+	<tr>
+		<td>$!{o.reqId}</td>
+		<td>$!{o.appId}</td>
+		<td>$!{o.orderNo}</td>
+		<td>$!{o.memberNo}</td>
+		<td>#if("$!{o.memberType}"=="0001") POS商户
+		    #elseif("$!{o.memberType}"=="0006") mPOS商户
+		    #elseif("$!{o.memberType}"=="0201") 云收银商户
+			#else $!{o.memberType}
+			#end</td>
+		<td>$!{o.originalAmount}</td>
+		<td>
+			$!{o.withdrawAmount}
+		</td>
+		<td>#if("$!{o.status}"=="0") 出款成功
+		    #elseif("$!{o.status}"=="1") 待出款
+			#elseif("$!{o.status}"=="2") 出款中
+			#elseif("$!{o.status}"=="-99") 失败已处理
+			#else 出款失败
+			#end</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>
+		    #if("$!{o.traceNo}"=="")
+		       #if("$!{o.status}"=="1"||"$!{o.status}"=="2")
+			     <a class="smBtn" href="javascript:initiateWithdraw('$!{o.reqId}')"  title="补发出款">补</a>
+			   #end
+			#else 
+			  <a class="smBtn" href="#springUrl('/newT0/showDetailInfo.do')?reqId=$!{o.traceNo}" target="_blank" title="出款详情">详</a>
+			  #if("$!{o.status}"=="2")
+			  <a class="smBtn" href="javascript:syncStatus('$!{o.reqId}')"  title="同步回掉">回</a>
+			  #elseif("$!{o.status}"=="9")
+			   #if($MCUrlUtil.canAccessUrl("/wallet/withdraw/updateFailDealWith",$request))
+			  <a class="smBtn" href="javascript:updateFailDealWith('$!{o.reqId}')"  title="失败已处理">处</a>
+			   #end
+			  #end
+			#end
+			&nbsp;&nbsp;
+		</td>
+	</tr>
+	#end
+</table>

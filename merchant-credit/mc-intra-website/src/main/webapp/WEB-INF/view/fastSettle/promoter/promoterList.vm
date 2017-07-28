@@ -1,0 +1,56 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax4msp.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+    <tr class="ttl">
+    	<td width="80">拓展方id</td>
+        <td width="70">拓展方商户号</td>
+        <td width="100">拓展方名称</td>
+        <td width="60">拓展方类型</td>
+        <td width="50">快速结算状态</td>
+        <td width="120">创建日期</td>
+		<td width="50">垫资方</td>
+		<td width="50">保证金</td>
+		<td width="50">快速结算额度</td>
+		<td width="60">今日额度</td>
+		<td width="100">操作</td>
+    </tr>
+    #foreach($po in ${query.dataList})
+        <tr>
+        	<td>$!{po.mcId}</td>
+            <td><a href="javascript:void(0)" class="lk0"
+                   onclick="document.getElementById('promoterNo').value='$!{po.mcMerchantNo}'">$!{po.mcMerchantNo}</a></td>
+            <td><a href="javascript:void(0)" class="lk0"
+                   onclick="document.getElementById('promoterName').value='$!{po.mcMerchantName}'">$!{po.mcMerchantName}</a></td>
+            <td>#if("$!{po.mcType}"=="0003")普通POS拓展方#elseif("$!{po.mcType}"=="0007")mPOS拓展方#elseif("$!{po.mcType}"=="0101")云收银拓展方#end</td>
+            <td>#if("$!{po.pmtFastSettleFlag}"=="1") 开通 #else 关闭#end</td>
+            <td>#showDateTime($!{po.createAt})</td>
+			<td>
+            	#if($!{po.loaningType}==0) 代理商
+               	#elseif($!{po.loaningType}==1) 盛付通
+	            #end
+            </td>
+			<td>
+            	$!{po.fastSettleMargin}元
+            </td>
+			<td>
+            	$!{po.fastSettleLimit}元
+            </td>
+			<td>
+            	$!{po.todayLimit}元
+            </td>
+            <td>
+                <a href="#springUrl("/fastSettle/showMargin.do?id=")$!{po.mcId}" class="smBtn" target="_blank" title="查">查</a>
+                <a href="#springUrl("/fastSettle/initFastSettleMgt.do?id=")$!{po.mcId}" class="smBtn" target="_blank" title="修改">修</a>
+<!--             </td> -->
+<!-- 			<td> -->
+				<a class="smBtn" href="#springUrl("/withdraw/opRecordLog/query.do?id=")$!{po.mcId}" target="_blank" title="额度记录">录</a>
+				#if("$!{po.pmtFastSettleFlag}"=="1")
+					#if($MCUrlUtil.canAccessUrl("/fastSettle/newt0/fastSettleEdit",$request))
+    					<a class="smBtn" href="#springUrl("/fastSettle/newt0/fastSettleEdit.do?mcId=")$!{po.mcId}" target="_blank" title="风控修改">风</a>
+					#end
+				#end
+            </td>
+        </tr>
+    #end
+</table>

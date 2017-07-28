@@ -1,0 +1,162 @@
+#set($page_title = '钱包出款管理') 
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post"
+			action="#springUrl('/wallet/withdraw/index.do')">
+			<table cellspacing="0" cellpadding="0" border="0" class="CardWord">
+				<tr>
+					<td>数据来源ID：</td>
+					<td><input type="text" id="appId" name="appId"
+						value="$!{query.po.appId}" />&nbsp;</td>
+					<td>订单号：</td>
+					<td><input type="text" id="orderNo" name="orderNo"
+						value="$!{query.po.orderNo}" />&nbsp;</td>
+					<td>状态：</td>
+					<td><select id="status" name="status"
+						value="$!{query.po.status}">
+							<option value="">全部</option>
+							<option value="1">待出款</option>
+							<option value="2">出款中</option>
+							<option value="0">出款成功</option>
+							<option value="9">出款失败</option>
+							<option value="-99">失败已处理</option>
+					</select></td>
+			    </tr>
+				<tr>
+					<td>账号：</td>
+					<td><input type="text" id="memberNo" name="memberNo"
+						value="$!{query.po.memberNo}" />&nbsp;</td>
+					<td>账号类型：</td>
+					<td colspan="3"><select id="memberType" name="memberType"
+						value="$!{query.po.memberType}">
+							<option value="">全部</option>
+							<option value="0001">POS商户</option>
+							<option value="0006">mPOS商户</option>
+							<option value="0201">云收银商户</option>
+					</select></td>
+				</tr>
+				<tr>
+				   <td class="lbl" width="100">申请时间：</td>
+			        <td colspan="5" >
+			            <input type="text" id="startApplyTime" name="startApplyTime" class="date txt130" onclick="xDatePicker(2);">
+			            ~
+			            <input type="text" id="endApplyTime" name="endApplyTime" class="date txt130" onclick="xDatePicker(2);">
+			            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('startApplyTime'), -1, elm('endApplyTime') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('startApplyTime'), 0, elm('endApplyTime') );return false;" title="交易时间范围：今天">今</a>
+			        </td>
+			        <td></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="6"><a href="#" class="btn2"
+						onclick="ajaxPaging();">查询</a> <a href="#" class="btn2"
+						onclick="clearAll();">清空</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+window.onload=function(){
+	setTimeStartEnd(-6,elm("startApplyTime"),0,elm("endApplyTime"));
+};
+	var ALL_COND_ID = [ 'appId', 'orderNo', 'status' ,'memberNo','memberType', 'startApplyTime', 'endApplyTime'];
+	function clearAll() {
+		for (i in ALL_COND_ID) {
+			jQuery("#" + ALL_COND_ID[i]).val("");
+		}
+	}
+
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"example.currentPage" : currentPage
+		};
+
+		for (i in ALL_COND_ID) {
+			data["po." + ALL_COND_ID[i]] = jQuery("#" + ALL_COND_ID[i]).val();
+		}
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/wallet/withdraw/list.do')?sessionId="+new Date().getTime(),
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+	
+	 function initiateWithdraw(reqId){
+		   if(!confirm("确定要发起出款吗？")){
+	    		return;
+	    	}
+	    	var data = {reqId:reqId};
+	    	jQuery.ajax({
+				type: 'POST',
+			    url: "#springUrl('/wallet/withdraw/initiateWithdraw.do')?sessionId="+new Date().getTime(),
+			    data: data ,
+			    dataType: "json",
+			    success: function(data){
+			    	if(data.success){
+		    			alert("发起出款成功");
+		    			ajaxPaging();
+		    		}else{
+			    		alert(data.errorMessage);
+		    		}
+			    }
+			});
+	    }
+	 function syncStatus(reqId){
+		   if(!confirm("确定要发起同步状态吗？")){
+	    		return;
+	    	}
+	    	var data = {reqId:reqId};
+	    	jQuery.ajax({
+				type: 'POST',
+			    url: "#springUrl('/wallet/withdraw/syncStatus.do')?sessionId="+new Date().getTime(),
+			    data: data ,
+			    dataType: "json",
+			    success: function(data){
+			    	if(data.success){
+		    			alert("同步状态发起成功");
+		    			ajaxPaging();
+		    		}else{
+			    		alert(data.errorMessage);
+		    		}
+			    }
+			});
+	    }
+	 function updateFailDealWith(reqId){
+		   if(!confirm("确定处理已经处理完毕吗？")){
+	    		return;
+	    	}
+	    	var data = {reqId:reqId};
+	    	jQuery.ajax({
+				type: 'POST',
+			    url: "#springUrl('/wallet/withdraw/updateFailDealWith.do')?sessionId="+new Date().getTime(),
+			    data: data ,
+			    dataType: "json",
+			    success: function(data){
+			    	if(data.success){
+		    			alert("状态变更成功");
+		    			ajaxPaging();
+		    		}else{
+			    		alert(data.errorMessage);
+		    		}
+			    }
+			});
+	    }
+</script>

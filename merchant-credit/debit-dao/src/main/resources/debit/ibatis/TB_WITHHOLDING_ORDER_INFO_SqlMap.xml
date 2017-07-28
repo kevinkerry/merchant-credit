@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TB_WITHHOLDING_ORDER_INFO" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_ORDER_NO" property="merchantOrderNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="BATCH_NO" property="batchNo" jdbcType="VARCHAR" />
+    <result column="ORDER_AMOUNT" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="BANK_NAME" property="bankName" jdbcType="VARCHAR" />
+    <result column="CH_NAME" property="chName" jdbcType="VARCHAR" />
+    <result column="CARD_TYPE" property="cardType" jdbcType="VARCHAR" />
+    <result column="CARD_NO" property="cardNo" jdbcType="VARCHAR" />
+    <result column="PAPER_TYPE" property="paperType" jdbcType="VARCHAR" />
+    <result column="PAPER_NO" property="paperNo" jdbcType="VARCHAR" />
+    <result column="POSTSCRIPT" property="postscript" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="REQUEST_TIME" property="requestTime" />
+    <result column="SUCESS_TIME" property="sucessTime" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="EXT" property="ext" jdbcType="VARCHAR" />
+    <result column="INITORDERNO" property="initorderno" jdbcType="VARCHAR" />
+    <result column="FAILORDERNO" property="failorderno" jdbcType="VARCHAR" />
+    <result column="ERRORCODE" property="errorcode" jdbcType="VARCHAR" />
+    <result column="ERRORMSG" property="errormsg" jdbcType="VARCHAR" />
+    <result column="PAYABLEFEE" property="payablefee" jdbcType="VARCHAR" />
+    <result column="RECEIVABLEFEE" property="receivablefee" jdbcType="VARCHAR" />
+    <result column="CURRENCY" property="currency" jdbcType="VARCHAR" />
+    <result column="WALLETNO" property="walletno" jdbcType="VARCHAR" />
+    <result column="PLANWITHHOLDDATE" property="planwithholddate" />
+    <result column="MOBEL" property="mobel" jdbcType="VARCHAR" />
+    <result column="MEMBERID" property="memberid" jdbcType="VARCHAR" />
+    <result column="PT" property="pt" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_ORDER_NO, MERCHANT_NO, BATCH_NO, ORDER_AMOUNT, BANK_NAME, CH_NAME, CARD_TYPE, 
+    CARD_NO, PAPER_TYPE, PAPER_NO, POSTSCRIPT, REMARK, STATUS, CREATE_TIME, UPDATE_TIME, 
+    REQUEST_TIME, SUCESS_TIME, TYPE, EXT, INITORDERNO, FAILORDERNO, ERRORCODE, ERRORMSG, 
+    PAYABLEFEE, RECEIVABLEFEE, CURRENCY, WALLETNO, PLANWITHHOLDDATE, MOBEL, MEMBERID, 
+    PT
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Base_Column_List" />
+    from TB_WITHHOLDING_ORDER_INFO
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    select 
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Base_Column_List" />
+    from TB_WITHHOLDING_ORDER_INFO
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    delete from TB_WITHHOLDING_ORDER_INFO
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoExample" >
+    delete from TB_WITHHOLDING_ORDER_INFO
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select mcredit.seq_withholding_order_info.nextval from dual
+    </selectKey>
+    insert into TB_WITHHOLDING_ORDER_INFO (ID, MERCHANT_ORDER_NO, MERCHANT_NO, BATCH_NO, 
+      ORDER_AMOUNT, BANK_NAME, CH_NAME, CARD_TYPE, 
+      CARD_NO, PAPER_TYPE, PAPER_NO, POSTSCRIPT, 
+      REMARK, STATUS, CREATE_TIME, UPDATE_TIME, 
+      REQUEST_TIME, SUCESS_TIME, TYPE, EXT, 
+      INITORDERNO, FAILORDERNO, ERRORCODE, ERRORMSG, 
+      PAYABLEFEE, RECEIVABLEFEE, CURRENCY, WALLETNO, 
+      PLANWITHHOLDDATE, MOBEL, MEMBERID, PT
+      )
+    values (#id:DECIMAL#, #merchantOrderNo:VARCHAR#, #merchantNo:VARCHAR#, #batchNo:VARCHAR#, 
+      #orderAmount:DECIMAL#, #bankName:VARCHAR#, #chName:VARCHAR#, #cardType:VARCHAR#, 
+      #cardNo:VARCHAR#, #paperType:VARCHAR#, #paperNo:VARCHAR#, #postscript:VARCHAR#, 
+      #remark:VARCHAR#, #status:VARCHAR#, #createTime#, #updateTime#, 
+      #requestTime#, #sucessTime#, #type:VARCHAR#, #ext:VARCHAR#, 
+      #initorderno:VARCHAR#, #failorderno:VARCHAR#, #errorcode:VARCHAR#, #errormsg:VARCHAR#, 
+      #payablefee:VARCHAR#, #receivablefee:VARCHAR#, #currency:VARCHAR#, #walletno:VARCHAR#, 
+      #planwithholddate#, #mobel:VARCHAR#, #memberid:VARCHAR#, #pt:VARCHAR#
+      )
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select mcredit.seq_withholding_order_info.nextval from dual
+    </selectKey>
+    insert into TB_WITHHOLDING_ORDER_INFO
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantOrderNo" >
+        MERCHANT_ORDER_NO
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        BATCH_NO
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        ORDER_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="bankName" >
+        BANK_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="chName" >
+        CH_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="cardType" >
+        CARD_TYPE
+      </isNotNull>
+      <isNotNull prepend="," property="cardNo" >
+        CARD_NO
+      </isNotNull>
+      <isNotNull prepend="," property="paperType" >
+        PAPER_TYPE
+      </isNotNull>
+      <isNotNull prepend="," property="paperNo" >
+        PAPER_NO
+      </isNotNull>
+      <isNotNull prepend="," property="postscript" >
+        POSTSCRIPT
+      </isNotNull>
+      <isNotNull prepend="," property="remark" >
+        REMARK
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="sucessTime" >
+        SUCESS_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        TYPE
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        EXT
+      </isNotNull>
+      <isNotNull prepend="," property="initorderno" >
+        INITORDERNO
+      </isNotNull>
+      <isNotNull prepend="," property="failorderno" >
+        FAILORDERNO
+      </isNotNull>
+      <isNotNull prepend="," property="errorcode" >
+        ERRORCODE
+      </isNotNull>
+      <isNotNull prepend="," property="errormsg" >
+        ERRORMSG
+      </isNotNull>
+      <isNotNull prepend="," property="payablefee" >
+        PAYABLEFEE
+      </isNotNull>
+      <isNotNull prepend="," property="receivablefee" >
+        RECEIVABLEFEE
+      </isNotNull>
+      <isNotNull prepend="," property="currency" >
+        CURRENCY
+      </isNotNull>
+      <isNotNull prepend="," property="walletno" >
+        WALLETNO
+      </isNotNull>
+      <isNotNull prepend="," property="planwithholddate" >
+        PLANWITHHOLDDATE
+      </isNotNull>
+      <isNotNull prepend="," property="mobel" >
+        MOBEL
+      </isNotNull>
+      <isNotNull prepend="," property="memberid" >
+        MEMBERID
+      </isNotNull>
+      <isNotNull prepend="," property="pt" >
+        PT
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantOrderNo" >
+        #merchantOrderNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        #batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        #orderAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="bankName" >
+        #bankName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="chName" >
+        #chName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cardType" >
+        #cardType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cardNo" >
+        #cardNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paperType" >
+        #paperType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paperNo" >
+        #paperNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="postscript" >
+        #postscript:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="remark" >
+        #remark:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        #requestTime#
+      </isNotNull>
+      <isNotNull prepend="," property="sucessTime" >
+        #sucessTime#
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        #type:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="initorderno" >
+        #initorderno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="failorderno" >
+        #failorderno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="errorcode" >
+        #errorcode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="errormsg" >
+        #errormsg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="payablefee" >
+        #payablefee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="receivablefee" >
+        #receivablefee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="currency" >
+        #currency:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="walletno" >
+        #walletno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="planwithholddate" >
+        #planwithholddate#
+      </isNotNull>
+      <isNotNull prepend="," property="mobel" >
+        #mobel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memberid" >
+        #memberid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="pt" >
+        #pt:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoExample" resultClass="java.lang.Integer" >
+    select count(*) from TB_WITHHOLDING_ORDER_INFO
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update TB_WITHHOLDING_ORDER_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantOrderNo" >
+        MERCHANT_ORDER_NO = #record.merchantOrderNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.batchNo" >
+        BATCH_NO = #record.batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.orderAmount" >
+        ORDER_AMOUNT = #record.orderAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.bankName" >
+        BANK_NAME = #record.bankName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.chName" >
+        CH_NAME = #record.chName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.cardType" >
+        CARD_TYPE = #record.cardType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.cardNo" >
+        CARD_NO = #record.cardNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.paperType" >
+        PAPER_TYPE = #record.paperType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.paperNo" >
+        PAPER_NO = #record.paperNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.postscript" >
+        POSTSCRIPT = #record.postscript:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.remark" >
+        REMARK = #record.remark:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.requestTime" >
+        REQUEST_TIME = #record.requestTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.sucessTime" >
+        SUCESS_TIME = #record.sucessTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.type" >
+        TYPE = #record.type:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.ext" >
+        EXT = #record.ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.initorderno" >
+        INITORDERNO = #record.initorderno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.failorderno" >
+        FAILORDERNO = #record.failorderno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.errorcode" >
+        ERRORCODE = #record.errorcode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.errormsg" >
+        ERRORMSG = #record.errormsg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.payablefee" >
+        PAYABLEFEE = #record.payablefee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.receivablefee" >
+        RECEIVABLEFEE = #record.receivablefee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.currency" >
+        CURRENCY = #record.currency:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.walletno" >
+        WALLETNO = #record.walletno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.planwithholddate" >
+        PLANWITHHOLDDATE = #record.planwithholddate#
+      </isNotNull>
+      <isNotNull prepend="," property="record.mobel" >
+        MOBEL = #record.mobel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.memberid" >
+        MEMBERID = #record.memberid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.pt" >
+        PT = #record.pt:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update TB_WITHHOLDING_ORDER_INFO
+    set ID = #record.id:DECIMAL#,
+      MERCHANT_ORDER_NO = #record.merchantOrderNo:VARCHAR#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      BATCH_NO = #record.batchNo:VARCHAR#,
+      ORDER_AMOUNT = #record.orderAmount:DECIMAL#,
+      BANK_NAME = #record.bankName:VARCHAR#,
+      CH_NAME = #record.chName:VARCHAR#,
+      CARD_TYPE = #record.cardType:VARCHAR#,
+      CARD_NO = #record.cardNo:VARCHAR#,
+      PAPER_TYPE = #record.paperType:VARCHAR#,
+      PAPER_NO = #record.paperNo:VARCHAR#,
+      POSTSCRIPT = #record.postscript:VARCHAR#,
+      REMARK = #record.remark:VARCHAR#,
+      STATUS = #record.status:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      REQUEST_TIME = #record.requestTime#,
+      SUCESS_TIME = #record.sucessTime#,
+      TYPE = #record.type:VARCHAR#,
+      EXT = #record.ext:VARCHAR#,
+      INITORDERNO = #record.initorderno:VARCHAR#,
+      FAILORDERNO = #record.failorderno:VARCHAR#,
+      ERRORCODE = #record.errorcode:VARCHAR#,
+      ERRORMSG = #record.errormsg:VARCHAR#,
+      PAYABLEFEE = #record.payablefee:VARCHAR#,
+      RECEIVABLEFEE = #record.receivablefee:VARCHAR#,
+      CURRENCY = #record.currency:VARCHAR#,
+      WALLETNO = #record.walletno:VARCHAR#,
+      PLANWITHHOLDDATE = #record.planwithholddate#,
+      MOBEL = #record.mobel:VARCHAR#,
+      MEMBERID = #record.memberid:VARCHAR#,
+      PT = #record.pt:VARCHAR#
+    <isParameterPresent >
+      <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    update TB_WITHHOLDING_ORDER_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="merchantOrderNo" >
+        MERCHANT_ORDER_NO = #merchantOrderNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="batchNo" >
+        BATCH_NO = #batchNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        ORDER_AMOUNT = #orderAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="bankName" >
+        BANK_NAME = #bankName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="chName" >
+        CH_NAME = #chName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cardType" >
+        CARD_TYPE = #cardType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cardNo" >
+        CARD_NO = #cardNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paperType" >
+        PAPER_TYPE = #paperType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paperNo" >
+        PAPER_NO = #paperNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="postscript" >
+        POSTSCRIPT = #postscript:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="remark" >
+        REMARK = #remark:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="requestTime" >
+        REQUEST_TIME = #requestTime#
+      </isNotNull>
+      <isNotNull prepend="," property="sucessTime" >
+        SUCESS_TIME = #sucessTime#
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        TYPE = #type:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="ext" >
+        EXT = #ext:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="initorderno" >
+        INITORDERNO = #initorderno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="failorderno" >
+        FAILORDERNO = #failorderno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="errorcode" >
+        ERRORCODE = #errorcode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="errormsg" >
+        ERRORMSG = #errormsg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="payablefee" >
+        PAYABLEFEE = #payablefee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="receivablefee" >
+        RECEIVABLEFEE = #receivablefee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="currency" >
+        CURRENCY = #currency:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="walletno" >
+        WALLETNO = #walletno:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="planwithholddate" >
+        PLANWITHHOLDDATE = #planwithholddate#
+      </isNotNull>
+      <isNotNull prepend="," property="mobel" >
+        MOBEL = #mobel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="memberid" >
+        MEMBERID = #memberid:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="pt" >
+        PT = #pt:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoPO" >
+    update TB_WITHHOLDING_ORDER_INFO
+    set MERCHANT_ORDER_NO = #merchantOrderNo:VARCHAR#,
+      MERCHANT_NO = #merchantNo:VARCHAR#,
+      BATCH_NO = #batchNo:VARCHAR#,
+      ORDER_AMOUNT = #orderAmount:DECIMAL#,
+      BANK_NAME = #bankName:VARCHAR#,
+      CH_NAME = #chName:VARCHAR#,
+      CARD_TYPE = #cardType:VARCHAR#,
+      CARD_NO = #cardNo:VARCHAR#,
+      PAPER_TYPE = #paperType:VARCHAR#,
+      PAPER_NO = #paperNo:VARCHAR#,
+      POSTSCRIPT = #postscript:VARCHAR#,
+      REMARK = #remark:VARCHAR#,
+      STATUS = #status:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      REQUEST_TIME = #requestTime#,
+      SUCESS_TIME = #sucessTime#,
+      TYPE = #type:VARCHAR#,
+      EXT = #ext:VARCHAR#,
+      INITORDERNO = #initorderno:VARCHAR#,
+      FAILORDERNO = #failorderno:VARCHAR#,
+      ERRORCODE = #errorcode:VARCHAR#,
+      ERRORMSG = #errormsg:VARCHAR#,
+      PAYABLEFEE = #payablefee:VARCHAR#,
+      RECEIVABLEFEE = #receivablefee:VARCHAR#,
+      CURRENCY = #currency:VARCHAR#,
+      WALLETNO = #walletno:VARCHAR#,
+      PLANWITHHOLDDATE = #planwithholddate#,
+      MOBEL = #mobel:VARCHAR#,
+      MEMBERID = #memberid:VARCHAR#,
+      PT = #pt:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

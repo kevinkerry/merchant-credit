@@ -1,0 +1,53 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" >
+	<tr>
+		<td></td>
+		<td width="13%">批次号</td>
+		<td width="10%">商户号</td>
+		<td width="6%">总笔数</td>
+		<td width="6%">总金额</td>
+		<td width="7%">成功笔数</td>
+		<td width="7%">失败笔数</td>
+		<td width="10%">请求结果</td>
+		<td width="15%">创建时间</td>
+		<td width="8%">操作人</td>
+		<td width="16%">操作</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{velocityCount}</td>
+		<td>$!{temp.batchNo}</td>
+		<td>$!{temp.merchantNo}</td>
+		<td>$!{temp.totalCount}</td>
+		<td>$!{temp.totalAmount}</td>
+		<td>$!{temp.sucessCount}</td>
+		<td>$!{temp.failCount}</td>
+		 <td>
+			#if("$!{temp.status}"=="001")初始
+    		#elseif("$!{temp.status}"=="002")代扣中
+    		#elseif("$!{temp.status}"=="003")处理中
+    		#elseif("$!{temp.status}"=="004")完成
+			#end
+		</td>
+		<td>#showDateTime($!{temp.createTime})</td>
+		<td>$!{temp.opernername}</td>
+		<td>
+			<a href="#springUrl('/withhold/ajaxPaging/orderList.do')?batchNo=$!{temp.batchNo}&bizType=1" class="look" target="_blank">详情</a>
+			#if("$!{temp.status}"=="001")
+			<a href="#" onclick="javascript:deleteFile('$!{temp.batchNo}');" class="look" >删除</a>
+			#end
+           <a href="#springUrl('/withhold/download.do')?batchNo=$!{temp.batchNo}" class="look" target="_blank">下载</a>
+			#if("$!{temp.status}"=="001")
+				<a href="#" onclick="javascript:doWithhold('$!{temp.batchNo}','0');" class="look" >扣款</a>
+			#elseif("$!{temp.status}"=="004")
+				#if($!{temp.failCount}!="0")
+					<a href="#" onclick="javascript:doWithhold('$!{temp.batchNo}','1');" class="look" >扣款(成功$!{temp.sucessCount},失败$!{temp.failCount})</a>
+				#end
+			#end
+		</td>
+	</tr>
+	#end
+</table>
+

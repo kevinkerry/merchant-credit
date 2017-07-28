@@ -1,0 +1,31 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td >序号</td>
+		<td>任务ID</td>
+		<td>重算开始时间</td>
+		<td>重算完成时间</td>
+		<td width="300">任务信息</td>
+		<td>状态</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+        <td>
+			$!{velocityCount}
+		</td>
+		<td>$!{o.id}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>$!{o.descInfo}</td>
+		<td>
+		   #if ($!{o.chareResult}=='1')
+				执行完成
+			#else
+				执行中
+			#end
+		</td>
+	</tr>
+	#end
+</table>

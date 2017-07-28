@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="common/css/inc.css">
+	<link rel="stylesheet" href="common/css/style.css">
+</head>
+<body>
+	<div class="content main_box">
+		<div class="path clearfix">
+			<div class="step_box l"></div>
+			<div class="step1 on l">
+				<span>1</span>
+				<p>填写借款金额、借款期限及借款用途等信息</p>
+			</div>
+			<div class="step3 on l">
+				<span>2</span>
+				<p>提交申请，等待放款</p>
+			</div>
+			<div class="step4 on l">
+				<span>✔</span>
+				<p>申请成功，等待放款</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

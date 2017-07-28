@@ -1,0 +1,35 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/settle_pager.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="listTb">
+	<tr class="ttl">
+	    <td>序号</td>
+	    <td>日期</td>
+		<td>代理商户号</td>
+		<td>代理商户名称</td>
+		<td>成功总金额</td>
+		<td>退款金额</td>
+		<td>参与分润金额</td>
+		<td>手续费</td>
+		<td>分润金额</td>
+		<td>分润成本</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $dataList)
+		<tr>
+		    <td>$!{velocityCount}</td>
+			<td>$!{o.settlementTimes}</td>
+			<td>$!{o.promoterNo}</td>
+			<td>$!{o.promoterName}</td>
+			<td>$!{o.successAmount}</td>
+			<td>$!{o.refundAmount}</td>
+			<td>$!{o.participateProfitAmount}</td>
+			<td>$!{o.receivedFee}</td>
+			<td>$!{o.profitAmount}</td>
+			<td>$!{o.profitCost}</td>
+			<td>
+			<a href="javascript:;" onclick="javascript:easypayPfsDow('$!{o.id}');return false;" target="_blank" title="下载">下载明细</a></td>
+			##<a href="#relativeUrl('/easypay/easypayPfsExportOrderData.do')?id=$!{o.id}" target="_blank">下载明细</a>
+		</tr>
+	#end
+</table>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CmMerchantContractDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.merchantcontract.CmMerchantContractEO">
+		<result property="mcLoginAccount" column="MC_LOGIN_ACCOUNT_V" />
+		<result property="mcRegType" column="MC_REG_TYPE_N" />
+		<result property="mcCertiType" column="MC_CERTI_TYPE_N"  javaType="java.lang.Long"/>
+		<result property="mcCertiValue" column="MC_CERTI_VALUE_V" />
+		<result property="mcContractBeginDate" column="MC_CONTRACT_BEGIN_DATE_D" />
+		<result property="mcContractEndDate" column="MC_CONTRACT_END_DATE_D" />
+		<result property="mcContractRealEndDate" column="MC_CONTRACT_REAL_END_DATE_D" />
+		<result property="mcId" column="MC_ID_N" />
+		<result property="mcMerchantNo" column="MC_MERCHANT_NO_V" />
+		<result property="mcContractNo" column="MC_CONTRACT_NO_V" />
+		<result property="mcStatus" column="MC_STATUS_C" />
+		<result property="mcType" column="MC_TYPE_C" />
+		<result property="mcVersion" column="MC_VERSION_N" />
+		<result property="mcCreateTime" column="MC_CREATE_TIME_T" />
+		<result property="mcLastUpdateTime" column="MC_LAST_UPDATE_TIME_T" />
+		<result property="mcMerchantName" column="MC_MERCHANT_NAME_V" />
+	</resultMap>
+
+	<select id="selectMerchantTypesByNo" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		<![CDATA[
+			select mc.mc_type_c,mc.mc_merchant_name_v
+			from ppcpay.CM_MERCHANT_CONTRACT mc
+			where mc.mc_status_c='3'
+			and mc.mc_merchant_no_v=#merchantNo#
+			order by mc.mc_type_c desc
+		]]>
+	</select>
+
+	<select id="selectById" parameterClass="java.lang.Long" resultMap="result">
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_id_n=#id#
+	</select>
+
+	<select id="queryPosPromoterByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_status_c='3'
+		and mc.mc_type_c='0003'
+		and mc.mc_merchant_no_v=#merchantNo#
+	</select>
+
+	<select id="queryMposByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_status_c='3'
+		and mc.mc_type_c='0006'
+		and mc.mc_merchant_no_v=#merchantNo#
+	</select>
+
+	<select id="queryByLogAccountAdType" parameterClass="java.util.Map" resultMap="result">
+		select *
+		from ppcpay.CM_MERCHANT_CONTRACT mc
+		where mc.mc_status_c='3'
+		and mc.mc_type_c=#mcType#
+		and mc.mc_login_account_v=#loginAccount#
+	</select>
+</sqlMap>

@@ -1,0 +1,306 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+#set( $flag = ("$!{promoter.fastSettleFlag}"=="0"))
+<div class="caption">权限管理</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0">
+	<tr>
+		<td class="lbl">拓展方商户号：</td>
+		<td width="180" ><input type="hidden" name="promoterId" id="promoterId" value="$!{promoter.promoterId}"/><input type="hidden" name="promoterNo" id="promoterNo" value="$!{promoter.promoterNo}"/>$!{promoter.promoterNo}</td>
+		<td class="lbl">拓展方名称：</td>
+		<td width="170" ><input type="hidden" name="promoterName" id="promoterName" value="$!{promoter.name}" maxlength="64"/>$!{promoter.name}</td>
+	</tr>
+	<tr>
+		<td class="lbl">保证金账户余额：</td>
+		<td width="180" >$!NumberUtils.format($!{merchantBalance.marginAccountBalance})</td>
+		<td class="lbl">钱包余额：</td>
+		<td width="170" >$!NumberUtils.format($!{merchantBalance.publicAccountBalance})</td>
+	</tr>
+	<tr>
+		<td class="lbl">拓展方类型：</td>
+		<td width="180" >
+			<input type="hidden" name="promoterType" id="promoterType" value="$!{promoter.mcType}"/>
+			<input type="hidden" name="promoterType1" id="promoterType1" value="$!{promoter.promoterType}"/>
+			#if("$!{promoter.promoterType}"=="0003")POS拓展方
+            #elseif("$!{promoter.promoterType}"=="0007")MPOS拓展方
+            #elseif("$!{promoter.promoterType}"=="0101")云收银拓展方#end
+		</td>
+		<td class="lbl">快速结算：</td>
+		<td>
+			#if("$!{pfss.status}"=="102"||"$!{pfss.status}"=="-102"||"$!{pfss.status}"=="-103"||"$!{pfss.status}"=="201")
+				<a href="javascript:void(0)" id="accountBtn" class="btn2" onclick="openAccount();" title="立即开通">立即开通</a>
+			#elseif("$!{pfss.status}"=="-201"||"$!{pfss.status}"=="103")
+				<a href="javascript:void(0)" id="accountBtn" class="btn2" onclick="closeAccount();" title="关闭">关闭</a>
+			#elseif(!$!{pfss.pfrId})
+				<a href="javascript:void(0)" id="accountBtn" class="btn2" onclick="openAccount();" title="立即开通">立即开通</a>
+			#end
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">快速结算保证金：</td>
+		<td width="180" colspan="3">
+			$!{promoter.fastSettleMargin}
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">快速保证金操作：</td>
+		<td colspan="3">
+		#if($MCUrlUtil.canAccessUrl("/fastSettle/addMargin",$request))
+		<a href="#" class="btn2" id="addMarginBtn" onclick="addMarginToggle($flag)">追加</a> &nbsp; &nbsp;
+		#end
+		#if($!{merchantBalance.marginAccountBalance})
+		#if($MCUrlUtil.canAccessUrl("/fastSettle/takeBackMargin",$request))
+		<a href="#" class="btn2" id="takeBackMarginBtn" onclick="takeBackMarginToggle()">取回</a> &nbsp; &nbsp;
+		#end
+        #if($MCUrlUtil.canAccessUrl("/fastSettle/modifyMargin",$request))
+        <a href="javascript:void(0);" class="btn2" id="modifyMarginBtn" onclick="modifyMarginToggle()">修改</a>
+        #else
+        &nbsp;
+        #end
+         #end
+        </td>
+    </tr>
+</table>
+
+<div class="popup" style="display:none" id="pop1">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"><label>追加金额：</label><input id="addMarginAmount" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');"></div>
+	<p class="popup-tlc"><a href="" class="popup-confrim g-button" onclick="addMargin();document.getElementById('pop1').style.display='none';return false;">确认</a></p>
+</div>
+#if($MCUrlUtil.canAccessUrl("/fastSettle/modifyMargin",$request))
+<div class="popup" style="display:none" id="pop3">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"><label>修改保证金为：</label><input id="modifyMarginAmount" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');"></div>
+	<p class="popup-tlc"><a href="" class="popup-confrim g-button" onclick="modifyMargin();document.getElementById('pop3').style.display='none';return false;">确认</a></p>
+</div>
+ #end
+<div class="popup" style="display:none" id="pop2">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"><label>取回金额：</label><input id="takeBackMarginAmount" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');"></div>
+	<p class="popup-tlc"><a href="" class="popup-confrim g-button" onclick="takeBackMargin();document.getElementById('pop2').style.display='none';return false;">确认</a></p>
+</div>
+<script type="text/javascript">
+	var promoterId = "$!{promoter.promoterId}";
+	//开通快速结算账户
+	function openAccount(){
+		if(jQuery("#accountBtn").hasClass("g-button-disable")){
+			alert("正在处理中，请稍后");
+			return false;
+		}
+			jQuery("#accountBtn").addClass("g-button-disable");
+			if(confirm("确定要开通快速结算功能吗？")){
+				jQuery.ajax({
+					type: 'POST',
+				    url: "#springUrl('/fastSettle/openAccount.do')" ,
+				    data: {promoterId:promoterId} ,
+				    dataType: "json",
+				    success: function(data){
+				    	jQuery("#accountBtn").removeClass("g-button-disable");
+				    	if(data&&data.success){
+			    			alert("快速结算功能开通成功！");
+							window.location.reload();
+			    			return;
+				    	}
+				    	var msg = data&&data.errorMessage?data.errorMessage:"快速结算申请开通失败！";
+		    			alert(msg);
+				    }
+				});
+			}
+	}
+	//关闭快速结算账户
+	function closeAccount(){
+    	if(jQuery("#accountBtn").hasClass("g-button-disable")){
+    			alert("正在处理中，请稍后");
+    			return false;
+    	}
+    	var fastMargin = '$!NumberUtils.format($!{merchantBalance.marginAccountBalance})';
+			jQuery("#accountBtn").addClass("g-button-disable");
+			if(confirm("确定要关闭快速结算功能吗？")){
+				jQuery.ajax({
+					type: 'POST',
+			    	url: "#springUrl('/fastSettle/closeAccount.do')" ,
+			    	data: {promoterId:promoterId} ,
+			    	dataType: "json",
+			    	success: function(data){
+						jQuery("#accountBtn").removeClass("g-button-disable");
+		    			if(data&&data.success){
+		    				alert("快速结算功能关闭成功！");
+							window.location.reload();
+		    				return;
+		    			}
+			    		var msg = data&&data.errorMessage?data.errorMessage:"快速结算功能关闭失败！";
+	    				alert(msg);
+			    	}
+				});
+			}
+	}
+
+	function addMarginToggle(f){
+		jQuery("#addMarginAmount").val("");
+		if(f){
+			alert("代理商未开通快速结算，请先开通快速结算！");
+		}else{
+			jQuery("#pop1").show();
+		}
+	}
+	//追加保证金
+	function addMargin(){
+		var addMarginAmount = jQuery("#addMarginAmount").val();
+		if(addMarginAmount==""){
+			alert("请填写保证金追加金额！");
+			return false;
+		}
+		var promoterType = jQuery("#promoterType1").val();
+		var _addMarginAmount = Number(addMarginAmount);
+		if(_addMarginAmount){
+// 			if (promoterType=='0003') {//POS
+// 				if(_addMarginAmount%100000!=0 || _addMarginAmount<=0){
+// 					alert("输入金额错误，请重新输入追加金额，首次追加金额必须等于10万元。");
+// 					return false;
+// 				}
+// 			}else if (promoterType=='0007') {
+// 				if(_addMarginAmount%50000!=0 || _addMarginAmount<=0){
+// 					alert("输入金额错误，请重新输入追加金额，首次追加金额必须等于5万元。");
+// 					return false;
+// 				}
+// 			}
+		}else{
+			alert("保证金金额输入错误");
+			return false;
+		}
+		if("$!{merchantBalance.publicAccountBalance}"==""){
+			alert("钱包余额查询失败");
+			return false;
+		}
+		#if($!{merchantBalance.marginAccountBalance})
+		if(_addMarginAmount>$!{merchantBalance.publicAccountBalance}){
+			alert("代理商追加保证金金额不能超过盛付通钱包余额");
+			return false;
+		}
+		#end
+		if(jQuery("#addMarginBtn").hasClass("g-button-disable")){
+			alert("正在处理中，请稍后");
+			return false;
+		}
+		jQuery("#addMarginBtn").addClass("g-button-disable");
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/addMargin.do')" ,
+		    data: {promoterId:promoterId,amount:addMarginAmount} ,
+		    dataType: "json",
+		    success: function(data){
+		    	jQuery("#addMarginBtn").removeClass("g-button-disable");
+	    		if(data&&data.success){
+	    			alert(data.errorMessage);
+	    			return;
+	    		}
+		    	var msg = data&&data.errorMessage?data.errorMessage:"快速结算保证金追加失败！";
+    			alert(msg);
+		    }
+		});
+	}
+	//追加保证金
+	function modifyMargin(){
+		var modifyMarginAmount = jQuery("#modifyMarginAmount").val();
+		if(modifyMarginAmount==""){
+			alert("请填写修改的金额！");
+			return false;
+		}
+		var promoterType = jQuery("#promoterType1").val();
+		var _modifyMarginAmount = Number(modifyMarginAmount);
+		if(_modifyMarginAmount>=0){
+			
+		}else{
+			alert("保证金金额输入错误");
+			return false;
+		}
+		if(jQuery("#modifyMarginBtn").hasClass("g-button-disable")){
+			alert("正在处理中，请稍后");
+			return false;
+		}
+		jQuery("#modifyMarginBtn").addClass("g-button-disable");
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/modifyMargin.do')" ,
+		    data: {promoterId:promoterId,amount:modifyMarginAmount} ,
+		    dataType: "json",
+		    success: function(data){
+		    	jQuery("#modifyMarginBtn").removeClass("g-button-disable");
+	    		if(data&&data.success){
+	    			alert(data.errorMessage);
+	    			window.location.reload();
+	    			return;
+	    		}
+		    	var msg = data&&data.errorMessage?data.errorMessage:"快速结算保证金修改失败！";
+    			alert(msg);
+    			window.location.reload();
+		    }
+		});
+	}
+	function takeBackMarginToggle(){
+		jQuery("#takeBackMarginAmount").val("");
+		jQuery("#pop2").show();
+	}
+	function modifyMarginToggle(){
+		jQuery("#modifyMarginAmount").val("");
+		jQuery("#pop3").show();
+	}
+	//取回保证金
+	function takeBackMargin(){
+		var takeBackMarginAmount = jQuery("#takeBackMarginAmount").val();
+		if(takeBackMarginAmount==""){
+			alert("请填写保证金取回金额！");
+			return false;
+		}
+		var _takeBackMarginAmount = Number(takeBackMarginAmount);
+		if(_takeBackMarginAmount){
+			/* if(_takeBackMarginAmount%100000!=0 ||_takeBackMarginAmount<=0){
+				alert("输入金额错误，请重新输入取回金额。金额必须为10万元的整数倍");
+				return false;
+			} */
+			if(_takeBackMarginAmount.length<=0||_takeBackMarginAmount<Number(0.01)){
+				alert("输入金额错误，请重新输入取回金额，金额必须大于0.01元。");
+	    		return false;
+	    	}
+		}else{
+			alert("保证金金额输入错误");
+			return false;
+		}
+		if("$!{merchantBalance.publicAccountBalance}"==""){
+			alert("钱包余额查询失败");
+			return false;
+		}
+		#if($!{merchantBalance.marginAccountBalance})
+		if(_takeBackMarginAmount>$!{merchantBalance.marginAccountBalance}){
+			alert("代理商取回保证金金额超限");
+			return false;
+		}
+		#end
+		if(jQuery("#takeBackMarginBtn").hasClass("g-button-disable")){
+			alert("正在处理中，请稍后");
+			return false;
+		}
+		jQuery("#takeBackMarginBtn").addClass("g-button-disable");
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/takeBackMargin.do')" ,
+		    data: {promoterId:promoterId,amount:takeBackMarginAmount} ,
+		    dataType: "json",
+		    success: function(data){
+		    	jQuery("#takeBackMarginBtn").removeClass("g-button-disable");
+	    		if(data&&data.success){
+	    			alert(data.errorMessage);
+	    			return;
+	    		}
+		    	var msg = data&&data.errorMessage?data.errorMessage:"快速结算保证金申请取回失败！";
+    			alert(msg);
+		    }
+		});
+	}
+</script>
+

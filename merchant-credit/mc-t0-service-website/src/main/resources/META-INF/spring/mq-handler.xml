@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
+	default-autowire="byName">
+
+	<!-- 队列监控 -->
+	<bean class="com.snda.mq.listener.DefaultMessageListenerContainer"
+		init-method="startContainer" destroy-method="shutdown">
+		<property name="connectionFactory">
+			<bean class="org.apache.activemq.pool.PooledConnectionFactory">
+				<property name="connectionFactory">
+					<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+						<property name="brokerURL" value="${sdomq.java.naming.provider.url.mq1}" />
+						<property name="userName" value="${sdomq.java.naming.security.principal}" />
+						<property name="password" value="${sdomq.java.naming.security.credentials}" />
+					</bean>
+				</property>
+				<property name="idleTimeout" value="0" />
+			</bean>
+		</property>
+		<property name="messageHandler">
+			<bean class="com.sdp.withdraw.mq.WithdrawCoreServiceHandler">
+				<property name="destination" value="${fw.mq.withdraw.core.service.address}" />
+			</bean>
+		</property>
+		<!-- 自动启动消息监听器，默认为true，启动时如果不能连上MQ会造成阻塞（配置为false，MQ服务器没有启动或配置错误，应用程序也能启动） -->
+		<property name="autoStartup" value="false" />
+	</bean>
+</beans>

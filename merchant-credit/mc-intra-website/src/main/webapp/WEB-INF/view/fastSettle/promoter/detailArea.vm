@@ -1,0 +1,14 @@
+<table cellspacing="1" cellpadding="1" id="areaResult" class="listTb">
+	<tr class="ttl" >
+		<td width="150" ><font size="2.5px">国家</font></td>
+		<td width="150" ><font size="2.5px">省</font></td>
+		<td width="150" ><font size="2.5px">市</font></td>
+	</tr>
+	#foreach($pmtDct in ${promoter.pbDistrictROs})
+	<tr>
+		<td><input type="hidden" id="countryId" name="countryId" value="$!{pmtDct.countryId}"/><font size="2.5px">$!{pmtDct.countryName}</font></td>
+		<td><input type="hidden" id="provinceId" name="provinceId" value="$!{pmtDct.provinceId}"/><font size="2.5px">#if("$!{pmtDct.provinceName}"=="")">--------#end$!{pmtDct.provinceName}</font></td>
+		<td><input type="hidden" id="cityId" name="cityId" value="$!{pmtDct.cityId}"/><font size="2.5px">#if("$!{pmtDct.cityName}"=="")--------#end$!{pmtDct.cityName}</font></td>
+	</tr>
+	#end
+</table>

@@ -1,0 +1,42 @@
+<table class="subListTb" cellspacing="0"   cellpadding="0" width="100%">
+   #if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+    	<tr class="ttl">
+    		<td>商户数</td>
+    		<td>T0出款金额</td>
+    		<td>T0分润金额</td>
+    	</tr>
+    	#foreach($o in $queryList)
+		<tr class="ttl">
+    		<td>$!{o.merchantCnt}</td>
+    		<td>$!{o.settleAmount}</td>
+    		<td>$!{o.totalProfits}</td>
+    	</tr>
+    	#end
+    #else
+	    <tr class="ttl">
+			<td>序号</td>
+			<td>商户类别</td>
+			<td>提现类型</td>
+			<td>提现金额</td>
+			<td>分润金额</td>
+		</tr>
+		#foreach($o in $queryList)
+		<tr>
+			<td>$!{velocityCount}</td>
+			<td>$!{o.mcc}</td>
+			<td>
+			#if($!{o.settleType}==2)
+			T1
+			#elseif($!{o.settleType}==3)
+			D1
+			#else
+			T0
+			#end
+			</td>
+			<td>$!{o.settleAmount}</td>
+			<td>$!{o.totalProfits}</td>
+		</tr>
+		#end
+    #end
+
+</table>

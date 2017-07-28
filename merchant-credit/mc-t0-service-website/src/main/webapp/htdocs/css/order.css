@@ -1,0 +1,75 @@
+/*order*/
+.order{ width: 797px; }
+.order td{ padding-left: 10px; vertical-align: middle;}
+.order thead td{ height: 24px; border-bottom: solid 4px #d14503;}
+.order thead span{ color: #666;}
+.order thead.special td{ border-bottom-width: 0;}
+.order tbody td{ padding-top:10px; padding-bottom: 10px;}
+.order tbody td.space{ width: 315px; word-wrap: break-word; word-break:break-all; }
+.order tbody td.c, .order thead td.c{ text-align: center; padding-left: 5px; padding-right: 5px;}
+.order tbody tr:nth-child(odd) td{ background-color: #f6f6f6;}
+.order tbody a{ color: #666; display: block;  }
+.order tbody a.btn{ display: block; color: #333; width: 66px; height: 22px; line-height: 22px; background: url(../img/account/btnorder.png) 0 0 no-repeat; text-align: center;}
+.order tbody a.view{ display: inline-block; color: #333; height: 20px; line-height: 20px; background: url(../img/account/btnview.png) 0 0 no-repeat; padding-left: 20px; text-align: center;}
+.order tbody a.view.hover{ background-position: 0 -30px;}
+.order tfoot td{ text-align: right; height: 40px; padding-right: 20px;}
+.order tfoot a{ color: #5191e8;}
+.order p.time{ text-align: center;}
+.order p.buy{ color: #1c86c9;}
+.order p.buy a{ display: inline; color: #d00b0c;}
+.order p.vs{ width: 18px; line-height: 16px; text-align: center; margin: 0 auto;}
+.order p.vs span{ color: #666; line-height: 22px;}
+.order .space span{ margin: 0 5px;}
+.order .winner{ color: #f00;}
+.order input{ vertical-align: middle;}
+/*order*/
+.order-up, .order-down{ background:url(../img/common/order.png) no-repeat -999px -999px; padding-right: 16px;}
+.order-up span, .order-down span{ color: #666;}
+.order-up{ background-position: right 2px;}
+.order-down{ background-position: right -48px;}
+/*checkbox*/
+.checkbox{ padding-left: 10px;}
+.checkbox input{ margin-right: 4px; vertical-align: middle;}
+.checkbox label{ color: #f00; margin-right: 10px;}
+.checkbox button{ background:url(../img/common/btnlight.png) no-repeat; width: 118px; height: 22px; border:0; text-align: center; color: #333;}
+/*order-title*/
+.order-title{border-bottom: solid 3px #d14503; padding: 5px 10px; margin-top: 5px;}
+.order-title span{ float: right; font-weight: normal;}
+/*filter*/
+.filter{ margin-top: 10px; padding-left: 20px;}
+.filter-select, .filter-text, .filter-label, .filter-label input, .filter-btn{ margin-right: 16px; vertical-align: middle;}
+.filter-select, .filter-text{ border:solid 1px #c7c7c7;}
+.filter-select{ width: 80px; height: 24px;}
+.filter-text{ width: 80px; height: 20px; padding: 1px 2px;}
+.filter-textl{ width: 160px;}
+.filter-label{ cursor: pointer;}
+.filter-label input{ margin-right: 2px;}
+.filter-btn{ border:0; width: 24px; height: 24px; background:url(../img/common/filter.png) no-repeat}
+/*filtertab*/
+.filtertab{ height: 38px; border-top:#ccc solid 1px; margin-top:10px; background:#dddddd; background: -moz-linear-gradient(top, #ffffff 0%, #dddddd 100%); background: -webkit-gradient(linear, 0 0%, 0 100%, from(#ffffff), to(#dddddd)); background: -o-linear-gradient(top, #ffffff 0%, #dddddd 100%); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd'); -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd')";}
+.filtertab a{ padding: 4px 16px; margin-left: 10px; height: 21px; margin-top: 8px; display: inline-block; font-weight: bold; color: #866e38;}
+.filtertab a.selected{ background-color: #fff; border:solid 1px #d7c7a4; border-bottom-width: 0; color: #b00007;}
+/*detail*/
+.detail{ position: absolute; width: 797px; background-color: #fff;}
+.detail table{ width: 100%; }
+.detail td{ vertical-align: middle; padding-left: 10px;}
+.detail thead td{ background-color: #e8e8e8; height: 36px;}
+.detail tbody td{ padding: 10px 0 10px 10px;}
+.detail tbody tr:nth-child(even) td{ background-color: #f6f6f6; }
+.detail a.btn{text-align: center; width: 46px; display: inline-block; color: #333; height: 22px; line-height: 22px; background: url(../img/account/btndetail.png) 0 0 no-repeat; margin: 0 2px;}
+.detail span{ font-weight: bold; margin: 0 2px;}
+/*ball*/
+.ball-red, .ball-blue{ display: inline-block; width: 27px; height: 27px; background: url(../img/common/ball.png) no-repeat -999px -999px; font-size: 14px; color: #fff; text-align: center; line-height: 26px;  font-family:"Microsoft YaHei",simhei; margin-right:4px;}
+.ball-red{ background-position: center 0;}
+.ball-blue{ background-position: center -30px;}
+/*drawing*/
+.drawing{ margin-top: 10px; padding-left: 10px;}
+.drawing span{ color: #f00; font-weight: bold; margin: 0 4px;}
+/*old*/
+.order_table2{ width:100%; border:solid 1px #ddd; margin-top: 20px;}
+.order_table2 td, .order_table2 th{ height: 26px; vertical-align: middle; text-align: center; border:solid 1px #ddd;}
+.order_table2 .hd th{ background-color: #ddd;}
+.order_table2 th.time{ width: 100px;}
+.order_table2 th.vs{ width: 250px;}
+.order_table2 th.bd{ width: 600px;}
+.order_table2 span{ margin:0 10px;}

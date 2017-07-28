@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DM_MERCHANT_DEBIT_INFO" >
+
+  <update id="freezeMerchantDebit" parameterClass="java.util.Map">
+   <![CDATA[
+  	UPDATE DM_MERCHANT_DEBIT_INFO  T SET
+  	T.CAN_USE_AMOUNT = T.CAN_USE_AMOUNT - #amount#,
+  	T.FROZEN_AMOUNT = T.FROZEN_AMOUNT + #amount#,
+  	T.END_TIME = SYSDATE
+  	WHERE T.MERCHANT_NO=#merchantNo#
+  	AND T.STATUS=#status#
+	AND T.CAN_USE_AMOUNT >= #amount#
+	]]>
+  </update>
+
+  <update id="freezeMerchantDebitSuccess" parameterClass="java.util.Map">
+   <![CDATA[
+  	UPDATE DM_MERCHANT_DEBIT_INFO  T SET
+  	T.FROZEN_AMOUNT = T.FROZEN_AMOUNT - #amount#,
+  	T.USED_AMOUNT = t.USED_AMOUNT + #amount#,
+  	T.END_TIME = SYSDATE
+  	WHERE T.MERCHANT_NO=#merchantNo#
+  	AND T.STATUS=#status#
+	AND T.FROZEN_AMOUNT >= #amount#
+	]]>
+  </update>
+
+  <update id="freezeMerchantDebitFail" parameterClass="java.util.Map">
+   <![CDATA[
+  	update DM_MERCHANT_DEBIT_INFO  t set
+  	t.CAN_USE_AMOUNT = t.CAN_USE_AMOUNT + #amount#,
+  	t.FROZEN_AMOUNT = t.FROZEN_AMOUNT - #amount#,
+  	t.END_TIME = sysdate
+  	WHERE T.MERCHANT_NO=#merchantNo#
+  	AND T.STATUS=#status#
+	AND T.FROZEN_AMOUNT >= #amount#
+	]]>
+  </update>
+  <update id="recoverBorrowMoney" parameterClass="java.util.Map">
+   <![CDATA[
+  	update DM_MERCHANT_DEBIT_INFO  t set
+  	t.CAN_USE_AMOUNT = t.CAN_USE_AMOUNT + #amount#,
+  	t.USED_AMOUNT = t.USED_AMOUNT - #amount#,
+  	t.OVER_DUE_AMOUNT = t.OVER_DUE_AMOUNT - #overdueInterest#,
+  	t.STATUS = decode(t.OVER_DUE_AMOUNT - #overdueInterest#, 0, '100', '992'),
+  	t.END_TIME = sysdate
+  	WHERE T.MERCHANT_NO=#merchantNo#
+  	AND T.STATUS=#status#
+	AND T.ORGANIZATION_CODE = #orgCode#
+	AND T.USED_AMOUNT >= #amount#
+	AND T.OVER_DUE_AMOUNT >= #overdueInterest#
+	]]>
+  </update>
+
+  <update id="repaymentMoney" parameterClass="java.util.Map">
+  	 <![CDATA[
+  	update DM_MERCHANT_DEBIT_INFO  t set
+  	t.CAN_USE_AMOUNT = t.CAN_USE_AMOUNT + #amount#,
+  	t.USED_AMOUNT = t.USED_AMOUNT - #amount#,
+  	t.END_TIME = sysdate
+  	WHERE T.MERCHANT_NO=#merchantNo#
+	AND T.ORGANIZATION_CODE = #orgCode#
+	AND T.USED_AMOUNT >= #amount#
+	]]>
+  </update>
+
+  <update id="addOverdueInterest" parameterClass="java.util.Map">
+   <![CDATA[
+  	UPDATE DM_MERCHANT_DEBIT_INFO  T SET
+  	T.OVER_DUE_AMOUNT = nvl(T.OVER_DUE_AMOUNT,0) + #overdueInterest#,
+  	T.END_TIME = SYSDATE
+  	WHERE T.MERCHANT_NO=#merchantNo#
+  	AND T.STATUS='992'
+	]]>
+  </update>
+</sqlMap>

@@ -1,0 +1,157 @@
+#if($page)
+    <div class="pagenumber">
+		共有$!page.total个记录&nbsp;
+	#if($page.pageNum>1)
+		#set($previousPage=${page.pageNum} - 1)
+		 <a href="javascript:gotoPage_ajax('$formName', $previousPage);"> &lt 上一页 </a>
+	#else
+		<span class="disabled">  上一页 </span>
+	#end
+
+	#set ($temp=$page.pageNum/5)
+    #if($page.pageNum==0)
+    	#set ($n= 0)
+    #elseif($page.pageNum%5==0)
+    	#set ($n= $temp - 1)
+    #else
+    	#set ($n = $temp)
+    #end
+    #set ($leftPreviousePage=$n*5)
+    #set ($leftPage=$leftPreviousePage + 1)
+	#if($page.pageNum>5)
+    	<a href="javascript:gotoPage_ajax('$formName', $leftPreviousePage);">...</a>
+    #end
+    #set($curRightPage=$n*5+5)
+    #if($page.pages == 0)
+		#set ($rightPage=$leftPage)
+    #elseif($page.pages>$curRightPage)
+    	#set ($rightPage=$curRightPage)
+    #else
+    	#set ($rightPage=$page.pages)
+	#end
+
+	#foreach( $velocityCount in [$leftPage..$rightPage] )
+    	#if($velocityCount!=$page.pageNum)
+			<a href="javascript:gotoPage_ajax('$formName', $velocityCount);">$velocityCount</a>
+    	#else
+			<span class="current">$velocityCount</span>
+    	#end
+	#end
+
+    #if($page.pages > $rightPage)
+    	#set ($rightNextPage=$rightPage + 1)
+    	<a href="javascript:gotoPage_ajax('$formName', $rightNextPage);">...</a>
+	#end
+
+	#if($page.pageNum < $page.pages)
+		#set($nextPage=${page.pageNum} + 1)
+    	<a href="javascript:gotoPage_ajax('$formName', $nextPage);">下一页</a>
+	#else
+		<span class="disabled">下一页 &gt </span>
+    #end
+    <span class="font_gray_normal" >共$page.pages页&nbsp;&nbsp;到第&nbsp;<input type="text" id="page_input" name="page_input" onblur="inputPage('$formName',this)"  size="4" class="page_select" numberonly="请输入大于0的数字" min="1" minkey="请输入大于0的数字" value="" />&nbsp;页&nbsp;</span>
+	##<input name="" type="button" class="btn_sure" onclick="gotoPage_ajax('$formName',document.getElementById('page_input').value)" value="" />
+	<a href="javascript:gotoPage_ajax('$formName',document.getElementById('page_input').value);">跳 转</a>
+	</div>
+#end
+
+<script type ="text/javascript">
+try{reReady();}catch(e){}
+
+function checkInputPage(obj){
+	if (obj != null && obj.value != null && obj.value != "") {
+    	var pages = "$page.pages";
+		if (pages != null && pages != ""){
+			if ((pages * 1) == 0) {
+				alert("当前没有记录");
+    			obj.value="";
+    			//pageNum = (pages * 1);
+        		return false;
+			} else {
+        		var pageNum = obj.value;
+        		var pattern = /\D/;
+            	if(pattern.test(pageNum)){
+        			alert("请输入大于0的数字");
+        			obj.value="";
+        			//pageNum = 1;
+        			return false;
+        		}
+        		pageNum = pageNum * 1;
+        		if (pageNum <= 0) {
+            		alert("请输入大于0的数字");
+        			obj.value="";
+        			//pageNum = 1;
+            		return false;
+        		}
+				if (pageNum > (pages * 1)) {
+            		alert("一共有" + pages + "页,请输入正确的数字");
+        			obj.value="";
+        			//pageNum = (pages * 1);
+            		return false;
+				}
+			}
+    	}
+	}
+	return true;
+}
+
+function inputPage(formName,obj){
+	pageNum = obj.value;
+
+	if (!checkInputPage(obj)) {
+		return false;
+	}
+
+	var pageInputName = "pageNum";
+	var pageInput = null;
+	var form = document.getElementsByName(formName)[0];
+
+	if(document.getElementsByName(pageInputName).length != 0){
+		pageInput = document.getElementsByName(pageInputName)[0];
+		pageInput.value = pageNum;
+	}else{
+		pageInput = document.createElement("input");
+		pageInput.type = "hidden";
+	    pageInput.name = "pageNum";
+	    pageInput.value = pageNum;
+	    form.appendChild(pageInput);
+	}
+}
+
+function gotoPage_ajax(formName, pageNum){
+	if (!checkInputPage(pageNum)) {
+		return false;
+	}
+	#if($functionName)
+    	var functionName = "$!functionName";
+	#else
+		var functionName = '';
+	#end
+	var pageInputName = "pageNum";
+	var pageInput = null;
+	if(formName == ''){
+	    //父页面定义的全局变量
+		formName = _FORM_NAME;
+	}
+	var form = document.getElementsByName(formName)[0];
+	if(document.getElementById(pageInputName+"_"+formName) != null){
+		pageInput = document.getElementById(pageInputName+"_"+formName);
+		pageInput.value = pageNum;
+	}else{
+		pageInput = document.createElement("input");
+		pageInput.type = "hidden";
+	    pageInput.name = "pageNum";
+		pageInput.id = pageInputName+"_"+formName;
+	    pageInput.value = pageNum;
+		form.appendChild(pageInput);
+	}
+	//alert(" 111"+functionName);
+	if (functionName ==''){
+		//父页面定义的全局变量
+		functionName = _FUNCTION_NAME;
+	}
+	//alert(functionName);
+	eval(functionName);
+}
+
+</script>

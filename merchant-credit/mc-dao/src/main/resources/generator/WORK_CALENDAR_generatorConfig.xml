@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="D:\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:sndapay"
+        userId="MCreditUser"
+        password="MCreditUser">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.pcs.dao" targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.pcs.dao.mapper"  targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.pcs.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.pcs.manager" implementationPackage="com.sdp.mc.pcs.manager.impl" generatorEnable="true"  targetProject="D:\SVN\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="WORK_CALENDAR" domainObjectName="WorkCalendar">
+		<columnOverride column="ID" 					property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="CREATE_TIME" 			property="createTime" 		jdbcType="TIMESTAMP" />
+    	<columnOverride column="UPDATE_TIME" 			property="updateTime" 		jdbcType="TIMESTAMP"/>
+    	<columnOverride column="VERSION" 				property="version" 			javaType="java.lang.Long"/>
+    	<columnOverride column="DATE_STR" 				property="dateStr" 			javaType="java.lang.String"/>
+    	<columnOverride column="IS_WORK_DAY" 			property="isWorkDay" 		javaType="java.lang.String"/>
+    </table>
+  </context>
+</generatorConfiguration>

@@ -1,0 +1,18 @@
+<div id="MenuList" class="Menu">
+    <ul id="nav">
+        #set($menuList = $userHolder.getAuthUser().adminMenuList)
+        #foreach($menu in $menuList)
+        <li class="top"><a #if($stringUtil.equals('#', $menu.actionUrl)) href="javascript:function(){};" #else href="#springUrl($!menu.actionUrl)" #end class="top_link"><span #if(!$menu.childrenMenu.isEmpty()) class="down" #end>$!menu.menuName</span></a>
+            #if(!$menu.childrenMenu.isEmpty())
+            <ul class="sub">
+                #foreach($subMenu in ${menu.childrenMenu})
+                <li><a #if($stringUtil.equals('#', $subMenu.actionUrl)) href="javascript:function(){};" #else href="#springUrl($!subMenu.actionUrl)" #if($!subMenu.menuName=="T0出款业务保证金放款审核" || $!subMenu.menuName=="天天贷放款审核" || $!subMenu.menuName=="管理垫资额度") target="_blank" #end  #end #if(!$subMenu.childrenMenu.isEmpty()) class="fly" #end>$!subMenu.menuName</a>
+                 #showSubMenu($subMenu)
+                </li>
+                #end
+            </ul>
+            #end
+        </li>
+        #end
+    </ul>
+</div>

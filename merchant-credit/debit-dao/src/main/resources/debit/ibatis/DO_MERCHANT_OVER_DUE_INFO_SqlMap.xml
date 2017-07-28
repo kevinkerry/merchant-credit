@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_MERCHANT_OVER_DUE_INFO" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="BORROW_ORDER_ID" property="borrowOrderId" jdbcType="DECIMAL" />
+    <result column="CAL_DATE" property="calDate" />
+    <result column="OVER_DUE_AMOUNT" property="overDueAmount" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, BORROW_ORDER_ID, CAL_DATE, OVER_DUE_AMOUNT, CREATE_TIME, UPDATE_TIME, STATUS
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DO_MERCHANT_OVER_DUE_INFO.Base_Column_List" />
+    from DO_MERCHANT_OVER_DUE_INFO
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_OVER_DUE_INFO.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    select 
+    <include refid="DO_MERCHANT_OVER_DUE_INFO.Base_Column_List" />
+    from DO_MERCHANT_OVER_DUE_INFO
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    delete from DO_MERCHANT_OVER_DUE_INFO
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoExample" >
+    delete from DO_MERCHANT_OVER_DUE_INFO
+    <include refid="DO_MERCHANT_OVER_DUE_INFO.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_MERCHANT_OVER_DUE_INFO.nextval from dual
+    </selectKey>
+    insert into DO_MERCHANT_OVER_DUE_INFO (ID, BORROW_ORDER_ID, CAL_DATE, OVER_DUE_AMOUNT, 
+      CREATE_TIME, UPDATE_TIME, STATUS)
+    values (#id:DECIMAL#, #borrowOrderId:DECIMAL#, #calDate#, #overDueAmount:DECIMAL#, 
+      #createTime#, #updateTime#, #status:VARCHAR#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_MERCHANT_OVER_DUE_INFO.nextval from dual
+    </selectKey>
+    insert into DO_MERCHANT_OVER_DUE_INFO
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="borrowOrderId" >
+        BORROW_ORDER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="calDate" >
+        CAL_DATE
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        OVER_DUE_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="borrowOrderId" >
+        #borrowOrderId:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="calDate" >
+        #calDate#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        #overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoExample" resultClass="java.lang.Integer" >
+    select count(*) from DO_MERCHANT_OVER_DUE_INFO
+    <include refid="DO_MERCHANT_OVER_DUE_INFO.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DO_MERCHANT_OVER_DUE_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.borrowOrderId" >
+        BORROW_ORDER_ID = #record.borrowOrderId:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.calDate" >
+        CAL_DATE = #record.calDate#
+      </isNotNull>
+      <isNotNull prepend="," property="record.overDueAmount" >
+        OVER_DUE_AMOUNT = #record.overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_OVER_DUE_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DO_MERCHANT_OVER_DUE_INFO
+    set ID = #record.id:DECIMAL#,
+      BORROW_ORDER_ID = #record.borrowOrderId:DECIMAL#,
+      CAL_DATE = #record.calDate#,
+      OVER_DUE_AMOUNT = #record.overDueAmount:DECIMAL#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      STATUS = #record.status:VARCHAR#
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_OVER_DUE_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    update DO_MERCHANT_OVER_DUE_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="borrowOrderId" >
+        BORROW_ORDER_ID = #borrowOrderId:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="calDate" >
+        CAL_DATE = #calDate#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        OVER_DUE_AMOUNT = #overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantOverDueInfoPO" >
+    update DO_MERCHANT_OVER_DUE_INFO
+    set BORROW_ORDER_ID = #borrowOrderId:DECIMAL#,
+      CAL_DATE = #calDate#,
+      OVER_DUE_AMOUNT = #overDueAmount:DECIMAL#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      STATUS = #status:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

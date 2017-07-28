@@ -1,0 +1,477 @@
+#set($page_title = '测试出款服务 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/test/test')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		        <td class="lbl">merchantNo：</td>
+		        <td width="200">
+		        	<input type="text" id="merchantNo" name="merchantNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">原始金额：</td>
+		        <td width="200">
+        			<input type="text" id="originalAmount" name="originalAmount" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">出款金额：</td>
+		        <td width="200">
+        			<input type="text" id="withdrawAmount" name="withdrawAmount" value="" class="txt130">
+		        </td>
+
+		      </tr>
+		       <tr>
+		        <td class="lbl">商户类型：</td>
+		        <td colspan="2" >
+        			<input type="text" id="mcType" name="mcType" value="" class="txt130">
+        			<font style="color: #ccc;"> pos:0001,mpos:0006,云收银:0201</font>
+		        </td>
+		        <td class="lbl">出款类型：</td>
+		        <td  colspan="2">
+        			<!-- <select name="withdrawType" id="withdrawType">
+			          <option value="1" selected="">实时</option>
+			          <option value="2">普通</option>
+			          </select> -->
+			          <input type="text" id="withdrawType" name="withdrawType" value="" class="txt130">
+			          <font style="color: #ccc;"> 实时:1,普通:2</font>
+		        </td>
+		       </tr>
+
+		     <tr>
+
+		        <td class="lbl">orderNo：</td>
+		        <td width="200">
+		        	<input type="text" id="orderNo" name="orderNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">traceNo：</td>
+		        <td width="200">
+        			<input type="text" id="traceNo" name="traceNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">pageSize：</td>
+		        <td width="200">
+        			<input type="text" id="pageSize" name="pageSize" value="" class="txt130">
+		        </td>
+		      </tr>
+		     <tr>
+		        <td class="lbl">pageNo：</td>
+		        <td width="200">
+        			<input type="text" id="pageNo" name="pageNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">startTime：</td>
+		        <td width="200">
+        			<input type="text" id="startTime" name="startTime" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">endTime：</td>
+		        <td width="200" >
+        			<input type="text" id="endTime" name="endTime" value="" class="txt130">
+		        </td>
+		    </tr>
+		   <!--  bankCode bankName bankBranch    开户行 开户行名称  支行名称 -->
+		     <tr>
+		        <td class="lbl">开户行：</td>
+		        <td width="200">
+        			<input type="text" id="bankCode" name="bankCode" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">开户行名称：</td>
+		        <td width="200">
+        			<input type="text" id="bankName" name="bankName" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">支行名称：</td>
+		        <td width="200" >
+        			<input type="text" id="bankBranch" name="bankBranch" value="" class="txt130">
+		        </td>
+		    </tr>
+		   <!--  bankLineNo bankProvince bankCity 支行编码(联行号) 银行所属省份 银行所属城市 -->
+		     <tr>
+		        <td class="lbl">支行编码(联行号)：</td>
+		        <td width="200">
+        			<input type="text" id="bankLineNo" name="bankLineNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">银行所属省份：</td>
+		        <td width="200">
+        			<input type="text" id="bankProvince" name="bankProvince" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">银行所属城市 ：</td>
+		        <td width="200" >
+        			<input type="text" id="bankCity" name="bankCity" value="" class="txt130">
+		        </td>
+		    </tr>
+		   <!--  name cardNo cardType  收款人姓名 收款人卡号 卡类型 账户类型-->
+		     <tr>
+		        <td class="lbl">收款人姓名 ：</td>
+		        <td width="200">
+        			<input type="text" id="name" name="name" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">收款人卡号：</td>
+		        <td width="200">
+        			<input type="text" id="cardNo" name="cardNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">卡类型 ：</td>
+		        <td width="200" >
+        			<input type="text" id="cardType" name="cardType" value="DC" class="txt130">
+		        </td>
+		    </tr>
+			<tr>
+			    <td class="lbl">companyOrPersonal：</td>
+		        <td width="200">
+        			<input type="text" id="companyOrPersonal" name="companyOrPersonal" value="B" class="txt130">
+		        </td>
+				<td class="lbl">冻结额度：</td>
+				<td width="200" >
+        			<input type="text" id="frozenLimit" name="frozenLimit" value="" class="txt130">
+		        </td>
+
+            </tr>
+		    <tr>
+		        <td colspan="6" align="center">
+		            <a href="#" class="btn2" id="queryBtn1" onclick="applyPosWithdraw()">申请POS出款</a><br />
+					<a href="#" class="btn2" id="queryBtn2" onclick="applyMPosWithdraw()">申请MPOS出款</a><br />
+					<a href="#" class="btn2" id="queryBtn2" onclick="applyEasypayWithdraw()">申请云收银出款</a><br />
+					<a href="#" class="btn2" id="queryBtn3" onclick="queryWithdrawList()">查看出款列表信息</a><br />
+					<a href="#" class="btn2" id="queryBtn4" onclick="checkPosWithdraw()">检查是否可以发起POS出款</a><br />
+					<a href="#" class="btn2" id="queryBtn5" onclick="MPosProduct()">MPOS出款产品信息</a><br />
+					<a href="#" class="btn2" id="queryBtn6" onclick="CanUseQuato()">可用额度查询</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="TotalQuato()">结算总额度查询</a><br />
+					<a href="#" class="btn2" id="queryBtn8" onclick="getIdentityLimit()">身份额度查询</a><br />
+					<a href="#" class="btn2" id="queryBtn9" onclick="queryUsedIdentityLimit()">身份已用额度查询</a><br />
+					<a href="#" class="btn2" id="queryBtn10" onclick="getIdentityMerchantInfo()">身份对应商户查询</a><br />
+					<!-- <a href="#" class="btn2" id="queryBtn7" onclick="queryMerchantInfo()">查询商户信息</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="queryPromoterInfo()">查询代理商信息</a><br /> -->
+<!-- 					<a href="#" class="btn2" id="queryBtn7" onclick="syncMerchantInfo()">商户信息同步</a><br /> -->
+<!-- 					<a href="#" class="btn2" id="queryBtn7" onclick="FrozenLimition()">商户额度冻结</a><br /><br/>&nbsp; -->
+					<!-- <a href="#" class="btn2" id="queryBtn7" onclick="IsQuotoShare()">是否共享</a><br /><br/>&nbsp; -->
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">结果</h2>
+	<div id="container" class="RealTb" style="width: 1000px;">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+var waiting='<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+    function applyPosWithdraw(){
+    	var _ids = ['merchantNo','originalAmount','withdrawAmount','withdrawType','mcType','orderNo'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/applyPosWithdraw.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+// 		    	alert(data);
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	function applyMPosWithdraw(){
+    	var _ids = ['merchantNo','withdrawAmount','withdrawType','mcType','orderNo'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/applyMPosWithdraw.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	function applyEasypayWithdraw(){
+    	var _ids = ['merchantNo','withdrawAmount','withdrawType','mcType','orderNo','bankCode','bankName','bankBranch','bankLineNo','bankProvince','bankCity','name','cardNo','cardType','companyOrPersonal'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/applyEasypayWithdraw.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	function queryWithdrawList(){
+    	var _ids = ['merchantNo','orderNo','traceNo','startTime','endTime','withdrawType','pageSize','pageNo'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/queryWithdrawList.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+	function checkPosWithdraw(){
+    	var _ids = ['merchantNo','originalAmount','withdrawAmount','withdrawType','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/checkPosWithdraw.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+		function MPosProduct(){
+    	var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/productWithdraw.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	function CanUseQuato(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/findCanUseQuota.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function getIdentityMerchantInfo(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/getIdentityMerchantInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function getIdentityLimit(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/getIdentityLimit.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function queryUsedIdentityLimit(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/queryUsedIdentityLimit.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+
+	function TotalQuato(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/findTotalAmount.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+
+	function syncMerchantInfo(){
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/syncWithdrawMerchantInfo/syncMerchantInfo.do')?sessionId="+new Date().getTime() ,
+		    data: {"synKey":"merchantInfoZF946"} ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+
+	function FrozenLimition(){
+		var _ids = ['merchantNo','mcType','frozenLimit'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/frozenOption.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function IsQuotoShare(){
+	var _ids = ['merchantNo','mcType','startTime','endTime'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/IsQuotoShare.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function queryMerchantInfo(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/queryMerchantInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function queryPromoterInfo(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/queryPromoterInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+</script>

@@ -1,0 +1,259 @@
+#set($page_title = '测试商户同步服务 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/test/test')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		        <td class="lbl">merchantNo：</td>
+		        <td width="200">
+		        	<input type="text" id="merchantNo" name="merchantNo" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">合同ID：</td>
+		        <td width="200">
+        			<input type="text" id="mcId" name="mcId" value="" class="txt130">
+		        </td>
+		    	<td class="lbl">状态：</td>
+		        <td width="200">
+        			<input type="text" id="status" name="status" value="" class="txt130">
+		        </td>
+		         <td class="lbl">名称：</td>
+		        <td width="200">
+		        	<input type="text" id="merchantName" name="merchantName" value="" class="txt130">
+		        </td>
+		      </tr>
+		       <tr>
+		        <td class="lbl">mcc：</td>
+		        <td width="200">
+		        	<input type="text" id="mcc" name="mcc" value="" class="txt130">
+		        </td>
+		        <td class="lbl">代理商Id：</td>
+		        <td width="200">
+		        	<input type="text" id="promoterId" name="promoterId" value="" class="txt130">
+		        </td>
+		        <td class="lbl">商户类型：</td>
+		        <td colspan="5" >
+        			<input type="text" id="mcType" name="mcType" value="" class="txt130">
+        			<font style="color: #ccc;"> pos商户:0001,mpos商户:0006,pos代理商:0003,mpos代理商:0007,二级代理商：9999,云收银商户：0201</font>
+		        </td>
+		       <tr>
+		        <td class="lbl">证件类型：</td>
+		        <td width="200">
+		        	<input type="text" id="certType" name="certType" value="" class="txt130">
+		        </td>
+		        <td class="lbl">证件号码：</td>
+		        <td width="200">
+		        	<input type="text" id="certNo" name="certNo" value="" class="txt130">
+		        </td>
+		        <td class="lbl">代理商类型：</td>
+		        <td width="200">
+		        	<input type="text" id="promoterType" name="promoterType" value="0101" class="txt130">
+		        </td>
+		        <td class="lbl">代理商商户号：</td>
+		        <td width="200">
+		        	<input type="text" id="promoterNo" name="promoterNo" value="" class="txt130">
+		        </td>
+		       
+		        
+		       </tr>
+		       <tr>
+		        <td class="lbl">二级代理商商户号：</td>
+		        <td width="200">
+		        	<input type="text" id="lastLevelPromoterNo" name="lastLevelPromoterNo" value="" class="txt130">
+		        </td>
+		        <td class="lbl">二级代理商商户类型：</td>
+		        <td width="200" colspan="5">
+		        	<input type="text" id="lastLevelPromoterType" name="lastLevelPromoterType" value="" class="txt130">
+		        	<font style="color: #ccc;"> 二级代理商：9999</font>
+		        </td>
+		       </tr>
+		       <tr>
+		        <td class="lbl">代理商级别：</td>
+		        <td width="200">
+		        	<input type="text" id="pmtLevel" name="pmtLevel" value="" class="txt130">
+		        </td>
+		        <td class="lbl">父代理商商户号：</td>
+		        <td width="200">
+		        	<input type="text" id="parentMerchantNo" name="parentMerchantNo" value="" class="txt130">
+		        </td>
+		        <td class="lbl">父代理商商户类型：</td>
+		        <td width="200" colspan="3">
+		        	<input type="text" id="parentMerchantType" name="parentMerchantType" value="" class="txt130">
+		        	<font style="color: #ccc;"> pos代理商:0003,mpos代理商:0007,二级代理商：9999</font>
+		        </td>
+		       </tr>
+		     
+		    <tr>
+		        <td colspan="6" align="center">
+					<a href="#" class="btn2" id="queryBtn7" onclick="queryMerchantInfo()">查询商户信息</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="queryPromoterInfo()">查询代理商信息</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="syncMerchantInfo()">同步商户信息</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="syncPromoterInfo()">同步代理商信息</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="syncEasypayMerchantInfo()">同步云收银商户信息</a><br />
+					<a href="#" class="btn2" id="queryBtn7" onclick="modifyMerchantMcc()">修改商户MCC信息</a><br />
+<!-- 					<a href="#" class="btn2" id="queryBtn7" onclick="syncMerchantAll()">同步所有商户信息</a><br /> -->
+<!-- 					<a href="#" class="btn2" id="queryBtn7" onclick="distinctMerchant()">去重复商户信息</a><br /> -->
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">结果</h2>
+	<div id="container" class="RealTb">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+var waiting='<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+   
+
+	function syncMerchantInfo(){
+		jQuery("#container").html(waiting);
+		var _ids = ['merchantNo','mcType','merchantName','mcId','status','promoterId','mcc','lastLevelPromoterNo','lastLevelPromoterType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/syncMerchantInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function syncPromoterInfo(){
+		jQuery("#container").html(waiting);
+		var _ids = ['merchantNo','mcType','merchantName','mcId','status','pmtLevel','parentMerchantNo','parentMerchantType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/syncPromoterInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function syncEasypayMerchantInfo(){
+		jQuery("#container").html(waiting);
+		var _ids = ['merchantNo','mcType','merchantName','status','certType','certNo','promoterType','promoterNo','mcc'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/syncEasypayMerchantInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function modifyMerchantMcc(){
+		jQuery("#container").html(waiting);
+		var _ids = ['merchantNo','mcType','mcc'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/modifyMerchantMcc.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+
+
+	function queryMerchantInfo(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/queryMerchantInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function queryPromoterInfo(){
+		var _ids = ['merchantNo','mcType'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/queryPromoterInfo.do')?sessionId="+new Date().getTime() ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function syncMerchantAll(){
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/syncMerchantInfoAll.do')?sessionId="+new Date().getTime() ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	function distinctMerchant(){
+		jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/withdraw-test/distinctMerchant.do')?sessionId="+new Date().getTime() ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+</script>

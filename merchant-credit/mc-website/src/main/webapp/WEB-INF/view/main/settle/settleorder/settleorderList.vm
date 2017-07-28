@@ -1,0 +1,34 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/settle_pager.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="listTb">
+   #if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+	<tr class="ttl">
+	    <td>序号</td>
+	    <td>对账单号</td>
+		<td>分润周期</td>
+		<td>T0分润合计</td>
+		<td>生成时间</td>
+		<td>操作</td>
+	</tr>
+	#else
+	<tr class="ttl">
+	    <td>序号</td>
+	    <td>对账单号</td>
+		<td>分润周期</td>
+		<td>提现分润合计</td>
+		<td>生成时间</td>
+		<td>操作</td>
+	</tr>
+	#end
+	#foreach($temp in $query.promoterSettleOrders)
+		<tr>
+		    <td>$!{velocityCount}</td>
+			<td>$!{temp.orderNo}</td>
+			<td>$!{temp.settleOrderDate}</td>
+			<td>$!{temp.promoterTotalCost}</td>
+			<td>$!{temp.auditTime}</td>
+			<td><a href="#relativeUrl('/settle/order/tosummary.do')?id=$!{temp.id}" target="_blank">下载明细</a></td>
+		</tr>
+	#end
+</table>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure id="wac" class="org.mortbay.jetty.webapp.WebAppContext">
+	<!-- <New id="ds_mcDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<Set name="driverClass">oracle.jdbc.OracleDriver</Set> <Set name="jdbcUrl">jdbc:oracle:thin:@10.132.81.134:1521:dsdb1</Set>
+		<Set name="user">MCredit</Set> <Set name="password">MCredit</Set> <Set name="initialPoolSize">2</Set>
+		<Set name="minPoolSize">2</Set> <Set name="maxPoolSize">5</Set> </New> -->
+
+	<New id="debit_mcDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<Set name="driverClassName">oracle.jdbc.OracleDriver</Set>
+		<Set name="url">jdbc:oracle:thin:@10.132.81.134:1521:dsdb1</Set>
+		<Set name="username">MCredit</Set>
+		<Set name="password">MCredit</Set>
+	</New>
+
+	<New id="ds_mcDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<Set name="driverClassName">oracle.jdbc.OracleDriver</Set>
+		<Set name="url">jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:sndapay</Set>
+		<Set name="username">MCreditUser</Set>
+		<Set name="password">MCreditUser</Set>
+	</New>
+
+	<New id="mcDataSource" class="org.mortbay.jetty.plus.naming.EnvEntry">
+		<Arg>mcDataSource</Arg>
+		<Arg>
+			<Ref id="ds_mcDataSource"></Ref>
+		</Arg>
+	</New>
+
+	<New id="debitDataSource" class="org.mortbay.jetty.plus.naming.EnvEntry">
+		<Arg>debitDataSource</Arg>
+		<Arg>
+			<Ref id="debit_mcDataSource"></Ref>
+		</Arg>
+	</New>
+
+	<New id="ds_ppcPayDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<Set name="driverClassName">oracle.jdbc.OracleDriver</Set>
+		<Set name="url">jdbc:oracle:thin:@oracle.sdptest.shengpay.com:1521:sndapay</Set>
+		<Set name="username">MCreditUser</Set>
+		<Set name="password">MCreditUser</Set>
+	</New>
+
+	<New id="ppcPayDataSource" class="org.mortbay.jetty.plus.naming.EnvEntry">
+		<Arg>ppcPayDataSource</Arg>
+		<Arg>
+			<Ref id="ds_ppcPayDataSource"></Ref>
+		</Arg>
+	</New>
+
+
+
+</Configure>

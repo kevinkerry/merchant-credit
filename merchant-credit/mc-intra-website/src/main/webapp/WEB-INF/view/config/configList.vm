@@ -1,0 +1,29 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td width="1%">id</td>
+		<td width="5%">配置项</td>
+		<td width="8%">配置项内容</td>
+		<td width="5%">默认值</td>
+		<td width="8%">备注</td>
+		<td width="5%">创建时间</td>
+		<td width="5%">修改时间</td>
+		<td width="1%">操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>$!{o.optionId}</td>
+		<td>$!{o.optionKey}</td>
+		<td>$!{o.optionValue}</td>
+		<td>$!{o.optionDefValue}</td>
+		<td>$!{o.optionDesc}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>
+			<a class="lk1" href="#springUrl('/sysConfig/initEdit.do')?configId=$!{o.optionId}" target="_blank">修改</a>
+		</td>
+	</tr>
+	#end
+</table>

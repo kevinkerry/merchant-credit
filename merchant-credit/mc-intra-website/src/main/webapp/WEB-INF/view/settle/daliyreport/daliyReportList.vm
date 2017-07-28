@@ -1,0 +1,35 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>分润方类型</td>
+		<td>结算类型</td>
+		<td>垫资方</td>
+		<td>发起金额</td>
+		<td>发起笔数</td>
+		<td>发起收入</td>
+		<td>失败金额</td>
+		<td>失败笔数</td>
+		<td>失败收入</td>
+		<td>退费金额</td>
+		<td>退费笔数</td>
+		<td>退费收入</td>
+	</tr>
+	#foreach($o in $!{page.dailyReports})
+	<tr class="settle_ttl">
+		<td>$!{o.promoterTypeDesc}</td>
+		<td>$!{o.settleTypeDesc}</td>
+        <td>$!{o.loaningTypeDesc}</td>
+		<td>$!{o.sucTotal}</td>
+		<td>$!{o.sucCnt}</td>
+		<td>$!{o.sucCost}</td>
+		<td>$!{o.failTotal}</td>
+		<td>$!{o.failCnt}</td>
+		<td>$!{o.failCost}</td>
+		<td>$!{o.reTotal}</td>
+		<td>$!{o.reCnt}</td>
+		<td>$!{o.reCost}</td>
+	</tr>
+	#end
+</table>

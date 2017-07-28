@@ -1,0 +1,130 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<div class="TableForm">
+<h2 class="Mtit">任务详细</h2>
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td >任务类型</td>
+		<td>
+ 			#if("$!{timedTaskInfoDO.taskType}"=="1")
+ 				sql
+ 			#elseif("$!{timedTaskInfoDO.taskType}"=="2")
+ 				定制
+ 			#elseif("$!{timedTaskInfoDO.taskType}"=="3")
+ 				reset
+ 			#end
+ 		</td>
+ 		<td>重试时间间隔(S)</td>
+ 		<td>$!{timedTaskInfoDO.retryTimeInterval}</td>
+ 		</tr>
+ 		<tr>
+ 		<td>任务内容</td>
+ 		<td align="left" colspan="3">$!{timedTaskInfoDO.taskContent}</td>
+ 		</tr>
+		<tr>
+		<td >任务状态</td>
+		<td>
+			#if("$!{timedTaskInfoDO.taskStatus}"=="1")
+				待执行
+			#elseif("$!{timedTaskInfoDO.taskStatus}"=="2")
+				执行中
+			#elseif("$!{timedTaskInfoDO.taskStatus}"=="3")
+				待重试
+			#elseif("$!{timedTaskInfoDO.taskStatus}"=="4")
+				执行失败
+			#elseif("$!{timedTaskInfoDO.taskStatus}"=="0")
+				执行成功
+			#elseif("$!{timedTaskInfoDO.taskStatus}"=="5")
+				任务终止
+			#end
+		</td>
+		<td >生效时间</td>
+	    <td>#showDateTime($!{timedTaskInfoDO.effectiveTime})</td>
+		</tr>
+
+		<tr>
+		<td >最大可重试次数</td>
+		<td>$!{timedTaskInfoDO.retryTimes}</td>
+		<td >执行次数</td>
+		<td>$!{timedTaskInfoDO.executeTimes}</td>
+		</tr>
+
+	   <tr>
+	   <td>最后执行时间</td>
+	   <td>#showDateTime($!{timedTaskInfoDO.lastExecuteTime})</td>
+	   <td>创建时间</td>
+	   <td>#showDateTime($!{timedTaskInfoDO.createTime})</td>
+	   </tr>
+
+	    <tr>
+		<td>更新时间</td>
+		<td>#showDateTime($!{timedTaskInfoDO.updateTime})</td>
+		<td>通知的邮件</td>
+		<td>$!{timedTaskInfoDO.notifyEmail}</td>
+		</tr>
+
+		<tr>
+		<td>通知的手机</td>
+		<td>$!{timedTaskInfoDO.notifyPhone} </td>
+		<td>最后执行的ID</td>
+		<td>$!{timedTaskInfoDO.lastExecuteId}</td>
+		</tr>
+</table>
+
+<h2 class="Mtit">任务执行信息</h2>
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>流水编号</td>
+		<td>创建时间</td>
+		<td>更新时间</td>
+		<td>任务号</td>
+		<td>执行用时</td>
+		<td>执行结果</td>
+		<td>备注信息</td>
+	</tr>
+	#foreach($o in $!{dataExecuteList})
+	<tr>
+		<td>$!{o.id}&nbsp;</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>$!{o.taskId}</td>
+		<td>$!{o.useTime}</td>
+		<td>$!{o.result}</td>
+		<td>$!{o.remark}</td>
+	</tr>
+	#end
+</table>
+</div>
+<script type="text/javascript">
+	var ALL_COND_ID = ['groupId', 'mccValues'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"ALL_COND_ID[i]).val("");
+    	}
+	}
+   	window.onload = function(){
+		//setTimeStartEnd(0,elm("effectiveTime"),0,elm("expireTime"));
+		ajaxPaging();
+    }
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/taskinfo/queryTaskExecuteInfo.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+</script>

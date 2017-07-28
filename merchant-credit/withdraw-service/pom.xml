@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>merchant-credit</artifactId>
+		<groupId>com.sdp.mc</groupId>
+		<version>1.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sdp.withdraw</groupId>
+	<artifactId>withdraw-service</artifactId>
+	<packaging>jar</packaging>
+	<name>${project.artifactId} v${project.version}</name>
+	<build>
+		<finalName>withdraw-service</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.sdp.withdraw</groupId>
+			<artifactId>withdraw-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>common-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.withdraw</groupId>
+			<artifactId>mc-withdraw-api</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+	</dependencies>
+</project>

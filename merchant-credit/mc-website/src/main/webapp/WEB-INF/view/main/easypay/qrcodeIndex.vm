@@ -1,0 +1,88 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/easypay/qrcode/list.htm')" method="post">
+<div class="caption">云收银二维码管理</div>
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+		    <tr>
+		    <td width="160" class="lbl">下级代理商账号：</td>
+		    <td width="250"><input type="text" id="childMerchantNo" name="childMerchantNo" class="txt w120"></td>
+			<td width="160" class="lbl">下级代理商名称：</td>
+			<td width="250"><input type="text" id="childMerchantName" name="childMerchantName" class="txt w200"></td>
+		</tr>
+			    <tr>
+			        <td colspan="4" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+						<a href="#relativeUrl('/easypay/qrcode/detail.htm')" class="btn2"  target="_blank">新增</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<script type="text/javascript">
+	var ALL_COND_ID = ['childMerchantNo','childMerchantName'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+			jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	
+	window.onload=function(){
+		ajaxPaging();
+	};
+
+	function queryInfo(){
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":15};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/qrcode/list.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+    
+    //删除二级分配
+    function deleteQrcode(merchantNo,id){
+    	if(merchantNo == "" || merchantNo == undefined || merchantNo == null || id == "" || id == undefined || id == null){
+    		alert("商户信息有误!");
+    		return false;
+    	}
+    	if(confirm('确定要删除吗？')){
+		    var data = {"merchantNo":merchantNo,"id":id};
+		    jQuery.ajax({
+				type: 'POST',
+			    url: "#relativeUrl('/easypay/qrcode/delete.htm')" ,
+			    data: data ,
+			    dataType: "json",
+			    success: function(data){
+			    	var success = data.success;
+					var respMsg= data.errorMessage;
+					if (success==false){
+						alert(respMsg);
+					} else {
+						alert("已删除");
+						ajaxPaging();
+					}
+			    }
+			});
+		}
+    }
+
+</script>

@@ -1,0 +1,23 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>结算时间</td>
+		<td>结算金额</td>
+		<td>结算手续费</td>
+		<td>结算成功时间</td>
+		<td>银行卡到账金额</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>$!{o.withdrawAmount}</td>
+		<td>$!{o.withdrawCost}</td>
+		<td>#showDateTime($!{o.withdrawTime})</td>
+		<td>$!{o.bankAccountAmount}</td>
+	</tr>
+	#end
+</table>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="McUserLoginLogDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.userloginlog.McUserLoginLogEO">
+		<result property="id" column="ID_N" />
+		<result property="memberId" column="MEMBER_ID_V" />
+		<result property="operatorId" column="OPERATOR_ID_V" />
+		<result property="operatorLoginName" column="OPERATOR_LOGIN_NAME_V" />
+		<result property="adminLoginName" column="ADMIN_LOGIN_NAME_V" />
+		<result property="merchantNo" column="MERCHANT_NO_V" />
+		<result property="merchantName" column="MERCHANT_NAME_V" />
+		<result property="merchantType" column="MERCHANT_TYPE_C" />
+		<result property="groupMerchant" column="GROUP_MERCHANT_N" />
+		<result property="loginIp" column="LOGIN_IP_V" />
+		<result property="browserName" column="BROWSER_NAME_V" />
+		<result property="osName" column="OS_NAME_V" />
+		<result property="userAgent" column="USER_AGENT_V" />
+		<result property="loginTime" column="LOGIN_TIME_T" />
+	</resultMap>
+
+	<insert id="insert" parameterClass="com.sdp.mc.dao.userloginlog.McUserLoginLogEO">
+		<selectKey resultClass="java.lang.Long" keyProperty="id" >
+			select SEQ_MC_USER_LOGIN_LOG.nextval  as id  from  DUAL
+		</selectKey>
+		insert into mc_user_login_log (
+			ID_N, MEMBER_ID_V, OPERATOR_ID_V, OPERATOR_LOGIN_NAME_V, ADMIN_LOGIN_NAME_V, 
+			MERCHANT_NO_V, MERCHANT_NAME_V, MERCHANT_TYPE_C, GROUP_MERCHANT_N, LOGIN_IP_V, 
+			BROWSER_NAME_V, OS_NAME_V, USER_AGENT_V, LOGIN_TIME_T)
+		values (
+			#id#, #memberId#, #operatorId#, #operatorLoginName#, #adminLoginName#, 
+			#merchantNo#, #merchantName#, #merchantType#, #groupMerchant#, #loginIp#, 
+			#browserName#, #osName#, #userAgent#, #loginTime#)
+	</insert>
+</sqlMap>

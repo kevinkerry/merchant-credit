@@ -1,0 +1,178 @@
+#set($page_title = '商户管理 ') #set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm">
+			<table class="qryTb" cellspacing="0" cellpadding="0" >
+				<tbody>
+					<tr>
+						<td width="100" class="lbl">商户名称：</td>
+						<td width="140"><input type="text" id="merchantName"
+							name="merchantName" class="txt130" value=""></td>
+						<td width="100" class="lbl">盛付通商户号：</td>
+						<td width="140"><input type="text" value="" id="merchantNo"
+							class="txt130" name="merchantNo"></td>
+						<td width="100" class="lbl">商户类型：</td>
+						<td><select id="merchantType" name="merchantType">
+								<option value="">全部</option>
+								<option value="0001">0001-普通POS商户</option>
+								<option value="0006">0006-mPOS商户</option>
+								<option value="0201">0201-云收银商户</option>
+						</select></td>
+
+					</tr>
+					<!--  <tr>
+			        <td width="100" class="lbl">POS商户号：</td>
+			        <td width="140">
+			        	<input type="text" id="posMerchantNo" name="posMerchantNo" class="txt130" value="">
+			        </td>
+			       
+			        <td class="lbl">商户状态：</td>
+			        <td>
+			            <select name="merchantStatus" id="merchantStatus" class="w130">
+			                <option value="">--------</option>
+			                <option value="3">正常</option>
+			                <option value="2">关闭</option>
+			            </select>
+			        </td>
+			    </tr> -->
+					<tr>
+						<td width="100" class="lbl">拓展方商户号：</td>
+						<td width="140"><input type="text" id="promoterMerchantNo"
+							name="promoterMerchantNo" class="txt130" value=""></td>
+						<td width="100" class="lbl">拓展方名称：</td>
+						<td width="140"><input type="text" id="promoterName"
+							name="promoterName" class="txt130" value=""></td>
+						<td class="lbl">是否自动结算：</td>
+						<td><select name="autoFastSettle" id="autoFastSettle"
+							class="w130">
+								<option value="">--</option>
+								<option value="2">自动</option>
+								<option value="0">手动</option>
+						</select></td>
+
+					</tr>
+					<tr>
+						<td class="lbl">是否开通快速结算：</td>
+						<td><select name="merchantFastSettleFlag"
+							id="merchantFastSettleFlag" class="w130">
+								<option value="">--</option>
+								<option value="1">开通</option>
+								<option value="0">关闭</option>
+						</select></td>
+						<td class="lbl">商户当日最高额度：</td>
+						<td colspan="4"><input type="text" id="maxLimitAmountStart"
+							name="maxLimitAmountStart"
+							onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');"
+							class="txt55" maxlen="10"> ~ <input type="text"
+							id="maxLimitAmountEnd" name="maxLimitAmountEnd"
+							onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');"
+							class="txt55" maxlen="10"></td>
+					</tr>
+					<tr>
+					</tr>
+					<tr>
+						<td class="lbl">创建时间：</td>
+						<td colspan="6"><input type="text" id="createTimeStart"
+							name="createTimeStart" class="date txt130"
+							onclick="xDatePicker(2);"> ~ <input type="text"
+							id="createTimeEnd" name="createTimeEnd" class="date txt130"
+							onclick="xDatePicker(2);"> <a href="#" class="smBtn"
+							onclick="setTimeStartEnd( -29, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;"
+							title="交易时间范围：30天内">30</a> <a href="#" class="smBtn"
+							onclick="setTimeStartEnd( -14, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;"
+							title="交易时间范围：15天内">15</a> <a href="#" class="smBtn"
+							onclick="setTimeStartEnd( -6, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;"
+							title="交易时间范围：7天内">7</a> <a href="#" class="smBtn"
+							onclick="setTimeStartEnd( -2, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;"
+							title="交易时间范围：3天内">3</a> <a href="#" class="smBtn"
+							onclick="setTimeStartEnd( -1, elm('createTimeStart'), -1, elm('createTimeEnd') );return false;"
+							title="交易时间范围：昨天">昨</a> <a href="#" class="smBtn"
+							onclick="setTimeStartEnd( 0, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;"
+							title="交易时间范围：今天">今</a></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="8" align="center">
+							<a href="#"
+							class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+							<span class="gray" id="querying" style="display: none;">查询中...</span>
+							<a href="#" class="smBtn mgL10" onclick="clearAll();"
+							title="清除所有查询条件">清</a> &nbsp; <a href="#" style
+							id="downloadResult" onclick="downloadResult()">下载结果文件</a>
+							#if($MCUrlUtil.canAccessUrl("/repair/posAutoOpenT0",$request)) 
+							&nbsp;&nbsp;<a href="#springUrl('/repair/posAutoOpenT0/index.do')" class="btn2" target="_blank">批量开通T0</a> 
+							#end 
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	window.onload = function() {
+		//setTimeStartEnd(0,elm("txnTimeStartStr"),0,elm("txnTimeEndStr"));
+	};
+	var ALL_COND_ID = [ 'merchantName', 'merchantNo', 'promoterMerchantNo',
+			'promoterName', 'posMerchantNo', 'merchantType', 'merchantStatus',
+			'maxLimitAmountStart', 'maxLimitAmountEnd', 'createTimeStart',
+			'createTimeEnd', 'autoFastSettle', 'merchantFastSettleFlag' ];
+	function clearAll() {
+		for (i in ALL_COND_ID) {
+			jQuery("#" + ALL_COND_ID[i]).val("");
+		}
+	}
+
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"currentPage" : currentPage
+		};
+		for (i in ALL_COND_ID) {
+			data[ALL_COND_ID[i]] = jQuery("#" + ALL_COND_ID[i]).val();
+		}
+
+		jQuery
+				.ajax({
+					type : 'POST',
+					url : "#springUrl('/newt0Settle/ajaxPaging/autoNewt0SettleMerchantQuery.do')",
+					data : data,
+					dataType : "html",
+					success : function(data) {
+						jQuery("#container").html(data);
+					}
+				});
+	}
+	//ajax翻页
+	
+	function ajaxQeruyMposAuth(merchantNo,merchantType) {
+		  jQuery.ajax({
+					type : 'POST',
+					url : "#springUrl('/newt0Settle/ajax/queryCreditAuthentication.do')",
+					data : {"merchantNo":merchantNo,"merchantType":merchantType},
+					dataType: "json",
+					success: function(data){
+					    	if(data.success){
+					    		alert(data.errorMessage);
+				    		}else{
+					    		alert(data.errorMessage);
+				    		}
+					    }
+				});
+	}
+	//ajax翻页
+	function downloadResult() {
+		jQuery("#submitForm").attr("action",
+				"#springUrl('/newt0Settle/downloadMerchantQueryResult.do')");
+		jQuery("#submitForm").attr("target", "_blank");
+		jQuery("#submitForm").submit();
+	}
+</script>

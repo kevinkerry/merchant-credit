@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.ma.dao" targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.ma.dao.mapper"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.ma.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.ma.manager" implementationPackage="com.sdp.mc.ma.manager.impl" generatorEnable="true"  targetProject="F:\yingyongbiz\merchant-credit\trunk\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="TB_MARGIN_ACCOUNT_REQ" domainObjectName="MarginAccountRequestDO">
+		<generatedKey column="ID" sqlStatement="select SEQ_TB_MARGIN_ACCOUNT_REQ.nextval from dual" type="pre" />
+		<columnOverride column="ID" 						property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="SOURCE_ID" 						property="sourceId" 				javaType="java.lang.String" />
+    	<columnOverride column="MERCHANT_NO" 					property="merchantNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="MEMBER_ID" 						property="memberId" 				javaType="java.lang.String"/>
+    	<columnOverride column="ACCOUNT_ID" 					property="accountId" 				javaType="java.lang.String"/>
+    	<columnOverride column="REQUEST_NO" 					property="requestNo" 				javaType="java.lang.String"/>
+    	<columnOverride column="APP_IP" 						property="appIp" 					javaType="java.lang.String"/>
+    	<columnOverride column="REQUEST_OPERATOR" 				property="requestOperator" 			javaType="java.lang.String"/>
+    	<columnOverride column="USER_IP" 						property="userIp" 					javaType="java.lang.String"/>
+    	<columnOverride column="RESPONSE_CODE" 					property="responseCode" 			javaType="java.lang.String"/>
+    	<columnOverride column="RESPONSE_MESSAGE" 				property="responseMessage" 			javaType="java.lang.String"/>
+    	<columnOverride column="REQUEST_TIME" 					property="requestTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="RESPONSE_TIME" 					property="responseTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="ACCOUNT_TYPE" 					property="accountType" 				javaType="java.lang.Long" />
+    </table>
+  </context>
+</generatorConfiguration>

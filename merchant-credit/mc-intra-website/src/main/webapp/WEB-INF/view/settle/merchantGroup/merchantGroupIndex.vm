@@ -1,0 +1,101 @@
+#set($page_title = '商户分组规则 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" >
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+	    		<tr>
+					<td class="lbl" >分组：</td>
+    		        <td width="200">
+						<select name="groupId" id="groupId" class="w130">
+		                	<option value="">全部</option>
+			                #foreach($o in $groupList)
+			                	<option value="$!{o.id}" #if("$!query.groupName"=="$o.groupName")selected#end>$!{o.groupCode}-$!{o.groupName}</option>
+                			#end
+			            </select>
+
+    		        </td>
+	    		    <td width="50" class="lbl">分组值：</td>
+			        <td width="140">
+			        	<input type="text" value="" id="mccValues" class="txt130" name="mccValues">
+			        </td>
+			        </tr>
+			        <tr>
+					 <td colspan="8" align="center">
+						&nbsp;&nbsp;
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+						<a href="#" class="btn2" onclick="javascript:exportGroup();return false;">导出</a>
+						<a href="#springUrl('/settle/merchant/add/view.do')" class="btn2" target="_blank">新增</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = ['groupId', 'mccValues'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/settle/ajaxPaging/merchantGroupList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	//导出
+     function exportGroup(reqId,remitVoucherNo){
+var pageNum = jQuery("#currentPage_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/settle/merchant/export/data.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("导出成功,请到下载中心下载.");
+					ajaxPaging();
+				}
+		    }
+		});
+     }
+
+</script>

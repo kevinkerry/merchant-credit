@@ -1,0 +1,28 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<input type="hidden" id="msgCode" value="$!msg" />
+	<tr>
+		<td>短信模板编码</td>
+		<td>短信标题</td>
+		<td>内容</td>
+		<td>短信发送规则</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{temp.templateCode}</td>
+		<td>$!{temp.ext1}</td>
+		<td>$!{temp.templateInfo}</td>
+		<td><a href="#springUrl('/msgTemplate/tempDetail.do')?id=$!{temp.id}" class="look" target="_blank">详情</a></td>
+	</tr>
+	#end
+</table>
+<script type="text/javascript">
+jQuery(function() {
+		var tmp = jQuery("#msgCode").val();
+		if (tmp != '') {
+			alert(tmp);
+		}
+	});
+</script>

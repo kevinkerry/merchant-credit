@@ -1,0 +1,161 @@
+#set($page_title = '新增快速结算交易查询与操作')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/fastSettle/transQuery.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0" border="0" width="100%">
+			<tr>
+				<td class="lbl">缩略卡号：</td>
+				<td><input type="text" id="shortPan" name="shortPan" class="txt w120" value="$!{params.shortPan}"/></td>
+				<td class="lbl">交易时间：</td>
+				<td colspan="5" >
+					<input type="text" id="txnTimeStartStr" name="txnTimeStartStr" class="txt w150 date" onfocus="xDatePicker(2);" value="$!{params.txnTimeStartStr}"/> ~
+					<input type="text" id="txnTimeEndStr"  name="txnTimeEndStr" class="txt w150 date" onfocus="xDatePicker(2);" />
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('txnTimeStartStr'), 0, elm('txnTimeEndStr') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('txnTimeStartStr'), 0, elm('txnTimeEndStr') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('txnTimeStartStr'), 0, elm('txnTimeEndStr') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('txnTimeStartStr'), 0, elm('txnTimeEndStr') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('txnTimeStartStr'), -1, elm('txnTimeEndStr') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('txnTimeStartStr'), 0, elm('txnTimeEndStr') );return false;" title="交易时间范围：今天">今</a>
+					<span class="red">(范围限90天)</span>
+				</td>
+			</tr>
+			<tr>
+				<td width="80" class="lbl">交易类型：</td>
+				<td width="140">
+					<input type="hidden" id="txnType" name="txnType" value="$!{params.txnType}"/>
+					<input type="text" class="mstxt msbg100 w100" id="msh$txnType" onclick="mselect( this, 'txnType', ms$$txnType, true, 160, 'auto', 1, 1 )" readonly="readonly" />
+				</td>
+				<td class="lbl">结算时间：</td>
+				<td colspan="5" >
+					<input type="text" id="stlDateStartStr" name="stlDateStartStr" class="txt w150 date" onfocus="xDatePicker(2);" value="$!{params.stlDateStartStr}"/> ~
+					<input type="text" id="stlDateEndStr"  name="stlDateEndStr" class="txt w150 date" onfocus="xDatePicker(2);" />
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('stlDateStartStr'), 0, elm('stlDateEndStr') );return false;" title="结算时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('stlDateStartStr'), 0, elm('stlDateEndStr') );return false;" title="结算时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('stlDateStartStr'), 0, elm('stlDateEndStr') );return false;" title="结算时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('stlDateStartStr'), 0, elm('stlDateEndStr') );return false;" title="结算时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('stlDateStartStr'), -1, elm('stlDateEndStr') );return false;" title="结算时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('stlDateStartStr'), 0, elm('stlDateEndStr') );return false;" title="结算时间范围：今天">今</a>
+					<span class="red">(范围限90天)</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="lbl">卡类型：</td>
+				<td>
+					<input type="hidden" id="cardType" name="cardType" value="$!{params.cardType}"/>
+					<input type="text" class="mstxt msbg100 w100" id="msh$cardType" onclick="mselect( this, 'cardType', ms$$cardType, true, 160, 'auto', 1, 1 )" readonly="readonly" />
+				</td>
+				<td class="lbl">终端编号：</td>
+				<td><input type="text" id="terminalNo" name="terminalNo" class="txt w120" value="$!{params.terminalNo}"/></td>
+				<td class="lbl">发卡机构：</td>
+				<td colspan="3">
+					<input type="hidden" id="issuerId" name="issuerId" value="$!{params.issuerId}"/>
+					<input type="text" class="mstxt msbg200 w200" id="msh$issuerId" onclick="forCardIssuerSelect(this);" onkeyup="changeEvent('issuerId')" autocomplete="off"/>
+				</td>
+			</tr>
+			 <tr>
+				<td width="90" class="lbl">参考号：</td>
+				<td width="140"><input type="text" id="txnNo" name="txnNo"  class="txt w120" value="$!{params.txnNo}"/></td>
+				<td class="lbl">结算状态：</td>
+				<td>
+					<input type="hidden" id="stlStatus" name="stlStatus" value="$!{params.stlStatus}"/>
+					<input type="text" class="mstxt msbg100 w100" id="msh$stlStatus" onclick="mselect( this, 'stlStatus', ms$$stlStatus, false, 120, 'auto', 1, 1 )" readonly="readonly" />
+				</td>
+				<td width="80" class="lbl">交易金额：</td>
+				<td width="140"><input type="text" id="amt" name="amt" class="txt w120" value="$!{params.amt}"/></td>
+				<td width="80" class="lbl">交易状态：</td>
+				<td colspan="3">
+					<input type="hidden" id="txnStatus" name="txnStatus" value="$!{params.txnStatus}"/>
+					<input type="text" class="mstxt msbg100 w100" id="msh$txnStatus" onclick="mselect( this, 'txnStatus', ms$$txnStatus, false, 120, 'auto', 1, 1 )" readonly="readonly" />
+				</td>
+			</tr> 
+			<tr>
+				<td class="lbl">商户号：</td>
+				<td>
+					<input type="text" class="txt w120" id="merchantNo" name="merchantNo"  value="$!{params.merchantNo}"/>
+				</td>
+				<td class="lbl">商户名称：</td>
+				<td>
+					<input type="text" class="txt w120" id="merchantName" name="merchantName" value="$!{params.merchantName}"/>
+				</td>
+				<td class="lbl">代理商商户号：</td>
+				<td>
+					<input type="text" class="txt w120" id="pmtMerchantNo" name="pmtMerchantNo" value="$!{params.pmtMerchantNo}"/>
+				</td>
+				<td class="lbl">代理商名称：</td>
+				<td>
+					<input type="text" class="txt w120" id="pmtMerchantName" name="pmtMerchantName" value="$!{params.pmtMerchantNo}"/>
+				</td>
+			</tr>
+			<tr style="display:none">
+				<td class="lbl">快速结算</td>
+				<td>
+					##2是快速结算,0非
+					##<input type="hidden" id="csSettleFlag" name="csSettleFlag" value="2"/>
+					##<input type="text" class="mstxt msbg100 w100" id="msh$csSettleFlag" name="msh$csSettleFlag" onclick="mselect( this, 'csSettleFlag', ms$$csSettleFlag, false, 120, 'auto', 1, 1 )" readonly="readonly" />
+				</td>
+				<td class="lbl">&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="lbl">&nbsp;</td>
+				<td>&nbsp;</td>
+				<td class="lbl">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="8" align="center">
+					<a href="#" class="btn2" id="queryBtn" onclick="transQuery();">查询</a>
+					<a href="#" class="smBtn mgL10" onclick="cleanAllCond( ALL_COND_ID, [#if($!{aAllm})'\'pmtBindOperatorId\',\'msh$pmtBindOperatorId\','#end 'txnTimeStartStr', 'txnTimeEndStr'] );elm('msh$issuerId').value='';return false;" title="清除所有查询条件(除了交易时间)">清</a>
+					<a href="#" class="smBtn gray" onclick="cleanAllCond( ALL_COND_ID, [#if($!{aAllm})'\'pmtBindOperatorId\',\'msh$pmtBindOperatorId\''#end] );elm('msh$issuerId').value='';return false;" title="清除所有查询条件">清</a>
+				</td>
+			</tr>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript" src="#springUrl('/htdocs/msp/js/posmerchant/queryTxn.js')"></script>
+<script type="text/javascript">
+	// 检查快速结算时间是否合法
+    function checkSettFastTime() {
+        var today = new Date();
+        var h = today.getHours();
+        if (h < 8 || h >= 19) {
+            alert("请在每日早上8:00-下午19:00申请快速结算");
+            return;
+        }
+        window.open(contextPath + '/posMerchant/txn/toSettFastConfirm.do');
+    }
+    function transQuery(){
+    	if(checkBeforeQuery()){
+    		ajaxPaging();
+    	}
+    }
+    //ajax翻页
+    function ajaxPaging(){
+    	if(!checkBeforeQuery()){
+    		return false;
+    	}
+    	var pageNo=jQuery("#pageNo_submitForm").val();
+    	pageNo=pageNo?pageNo:1;
+    	var data = {"pageNo":pageNo};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	data["csSettleFlag"]="2";
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/ajaxPaging/transQuery.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+</script>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://code.alibabatech.com/schema/dubbo
+         http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="zf628" />
+
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<dubbo:registry address="${mpos.sdk.dubbo.address}" />
+
+	<!-- 20130125声明需要暴露的服务接口 接口提供人：蒋一新 -->
+	<dubbo:reference id="delegationPay2CardQueryService"
+		interface="com.shengpay.boss.service.crm.query.api.DelegationPay2CardQueryService"
+		protocol="dubbo" />
+	<dubbo:reference id="merchantQueryService"
+		interface="com.shengpay.boss.service.crm.query.api.MerchantQueryService"
+		protocol="dubbo" />
+	<dubbo:reference id="cntractQueryService"
+		interface="com.shengpay.boss.service.crm.query.api.ContractQueryService"
+		protocol="dubbo" />
+	<dubbo:reference id="merchantBankService" protocol="dubbo" check="false" interface="com.shengpay.boss.service.crm.query.api.MerchantBankService" />
+</beans>

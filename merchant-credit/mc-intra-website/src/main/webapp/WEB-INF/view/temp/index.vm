@@ -1,0 +1,58 @@
+#set($page_title = '短息模板查询 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/msgTemplate/ajaxPaging/tempList.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		        <td class="lbl">模板标题：</td>
+		        <td width="200">
+		        	<input type="text" id="ext1" name="ext1" value="$!{query.ext1}" class="txt130">
+		        </td>
+		    	<td class="lbl">短信模板编码：</td>
+		        <td width="200">
+        			<input type="text" id="templateCode" name="templateCode" value="$!{query.templateCode}" class="txt130">
+		        </td>
+		    </tr>
+		    <tr>
+		        <td colspan="4" align="center">
+		            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging()">查询</a>
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+    function ajaxPaging(){
+    	var _ids = ['ext1','templateCode'];
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+    	data['timestamp'] = new Date().getTime();
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/msgTemplate/ajaxPaging/tempList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+</script>

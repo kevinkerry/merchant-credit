@@ -1,0 +1,56 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		##<td>id</td>
+		<td>盛付通商户号</td>
+		<td>商户名称</td>
+		<td>商户类型类型</td>
+		<td>自动快速结算</td>
+		<td>是否开通快速结算</td>
+		<td>单日最高额度</td>
+		<td>商户类别</td>
+		<td>拓展方商户号</td>
+		<td>拓展方名称</td>
+		<td>拓展方保证金</td>
+		<td>拓展方额度</td>
+		<td width="75">操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		##<td>$!{o.pfcId}&nbsp;</td>
+		<td>$!{o.mcMerchantNo}</td>
+		<td>$!{o.mcMerchantName}</td>
+		<td>#if("$!{o.mcType}"=="0001")普通POS商户#elseif("$!{o.mcType}"=="0201")云收银商户#elseif("$!{o.mcType}"=="0006")mPOS商户#end</td>
+		<td>
+			#if("$!{o.autoFastSettle}"=="1")
+				是
+			#else
+				否
+			#end
+		</td>
+		<td>
+			#if("$!{o.fast_settle_flag}"=="1"&& "$!{o.pmt_fast_settle_flag}"=="1")
+				开通
+			#else
+				关闭
+			#end
+
+		</td>
+		<td>$!NumberUtils.format($!{o.limitAmount})</td>
+		<td>$!{o.mcc}</td>
+		<td>$!{o.promoterMerchantNo}</td>
+		<td>$!{o.promoterName}</td>
+		<td>$!{o.pmt_fast_settle_margin}</td>
+		<td>$!{o.pmt_fast_settle_limit}</td>
+		<td>
+			<a class="smBtn" href="#springUrl('/newt0Settle/initAutoNewt0Settle.do')?merchantId=$!{o.merchantId}&promoterId=$!{o.promoterId}&pfcId=$!{o.pfcId}" target="_blank" title="修改">修</a>
+			<a class="smBtn" href="#springUrl('/withdraw/opRecordLog/query.do')?mcMerchantNo=$!{o.mcMerchantNo}&mcType=$!{o.mcType}" target="_blank" title="额度记录">录</a>
+			#if("$!{o.mcType}"=="0006"||"$!{o.mcType}"=="0201")
+			<a class="smBtn" href="javascript:ajaxQeruyMposAuth('$!{o.mcMerchantNo}','$!{o.mcType}')"  title="查询信用认证结果">信</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>

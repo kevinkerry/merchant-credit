@@ -1,0 +1,174 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">编辑结算分润比例设置</div>
+<table class="dtlTb" cellspacing="0" cellpadding="0">
+    <input type="hidden" id="id" name="id" value="$!{configInfo.id}"></input>
+	<tr>
+		<td class="lbl">商户分组：</td>
+		<td width="100">
+			<select id="groupId" name="groupId" class="w130">
+            	#foreach($o in $groupList)
+                	<option value="$!{o.id}" #if("$!configInfo.groupId"=="$!{o.id}")selected#end>$!{o.groupName}</option>
+            	#end
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">分润角色：</td>
+		<td width="200">
+			<select id="splitProfitRoleType" name="splitProfitRoleType" class="w130">
+                <option value="">全部</option>
+                <option value="0003" #if("$!configInfo.splitProfitRoleType"=="0003")selected#end>POS代理商</option>
+                <option value="0007" #if("$!configInfo.splitProfitRoleType"=="0007")selected#end>MPOS代理商</option>
+            </select>
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">分润方：</td>
+		<td width="100">
+			<input type="text" id="merchantNo" name="merchantNo" maxlength="70" class="txt130" size="50" value="$!{configInfo.merchantNo}"/>
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl" >结算类型：</td>
+        <td width="200">
+            <select id="withdrawType" name="withdrawType" class="w130">
+                <option value="">全部</option>
+                <option value="1" #if("$!configInfo.withdrawType"=="1")selected#end>T0 POS</option>
+                <option value="2" #if("$!configInfo.withdrawType"=="2")selected#end>T1 MPOS</option>
+				<option value="3" #if("$!configInfo.withdrawType"=="3")selected#end>D1 MPOS</option>
+				<option value="4" #if("$!configInfo.withdrawType"=="4")selected#end>T0 MPOS</option>
+            </select>
+        </td>
+	</tr>
+	<tr>
+		<td class="lbl" >垫资方：</td>
+        <td width="200">
+            <select id="loaningType" name="loaningType" class="w130">
+                <option value="">全部</option>
+                <option value="1" #if("$!configInfo.loaningType"=="1")selected#end>盛付通垫资</option>
+                <option value="0" #if("$!configInfo.loaningType"=="0")selected#end>代理商垫资</option>
+            </select>
+        </td>
+	</tr>
+	<tr>
+		<td class="lbl" >奖励条件：</td>
+        <td width="200">
+            <select id="condition" name="condition" class="w130" onchange="javascript:changeConditionType();">
+                <option value="">全部</option>
+                <option value="1" #if("$!configInfo.condition"=="1")selected#end>代理商每日结算金额</option>
+                <option value="2" #if("$!configInfo.condition"=="2")selected#end>代理商激活量</option>
+            </select>
+        </td>
+	</tr>
+	<tr >
+		<td class="lbl" >奖励系数：</td>
+        <td width="600">
+           <input type="text" id="awardCoefficient" name="awardCoefficient" class="txt130" class="txt130" value="$!{configInfo.awardCoefficient}">
+		</td>
+	</tr>
+	<tr style="display:none" class="pmtTransaction">
+		<td class="lbl">交易量范围：</td>
+		<td width="100">
+			<input type="text" id="valueMin" name="valueMin" maxlength="70" class="txt130" size="20" value="$!{configInfo.valueMin}"/>
+			~
+			<input type="text" id="valueMax" name="valueMax" maxlength="70" class="txt130" size="20" value="$!{configInfo.valueMax}"/>
+		</td>
+	</tr>
+	<tr style="display:none" class="pmtActive" >
+		<td class="lbl">激活量范围：</td>
+		<td width="100">
+			<input type="text" id="valueMin" name="valueMin" maxlength="70" class="txt130" size="20" value="$!{configInfo.valueMin}" />
+			~
+			 <input type="text" id="valueMax" name="valueMax" class="txt130" class="txt130" size="20" value="$!{configInfo.valueMax}">
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl" >周期：</td>
+        <td width="200">
+            <select id="periodType" name="periodType" class="w130">
+                <option value="">全部</option>
+                <option value="1" #if("$!configInfo.periodType"=="1")selected#end>按自然日</option>
+                <option value="2" #if("$!configInfo.periodType"=="2")selected#end>按自然月</option>
+            </select>
+        </td>
+	</tr>
+	<tr>
+		<td class="lbl" >首次开通时间：</td>
+        <td width="200">
+            <input type="text" id="firstOpenTime" name="firstOpenTime" value="#showDateTime($!{configInfo.firstOpenTime})" class="date txt130" onclick="xDatePicker(2);" class="txt130" >
+        </td>
+	</tr>
+	<tr>
+		<td class="lbl">生效时间：</td>
+		<td width="600">
+            <input type="text" id="effectiveTime" name="effectiveTime" value="#showDateTime($!{configInfo.effectiveTime})" class="date txt130" onclick="xDatePicker(2);" class="txt130" >
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">失效时间：</td>
+		<td width="600">
+            <input type="text" id="expireTime" name="expireTime" value="#showDateTime($!{configInfo.expireTime})" class="date txt130" onclick="xDatePicker(2);" class="txt130" >
+		</td>
+	</tr>
+	<tr>
+		<td colspan="6" align="center"><a href="#" class="btn2" id="queryBtn" onclick="saveAdd()">保存</a></td>
+	</tr>
+</table>
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+<script type="text/javascript">
+	window.onload = function(){
+		setTimeStartEnd(0,elm("effectiveTime"),0,elm("expireTime"));
+		changeConditionType();
+    }
+
+    //保存
+    function saveAdd(){
+		var id = jQuery("#id").val();
+		var groupId=$("#groupId option:selected").val();//分组
+		var splitProfitRoleType=$("#splitProfitRoleType option:selected").val();//分润角色
+		var merchantNo = jQuery("#merchantNo").val();//分润方
+		var withdrawType = $("#withdrawType option:selected").val();//结算类型
+		var loaningType =  $("#loaningType option:selected").val();//垫资方
+		var condition = $("#condition option:selected").val();//奖励条件
+		var periodType = $("#periodType option:selected").val();//周期
+		var firstOpenTime = jQuery("#firstOpenTime").val();
+		var valueMin = jQuery("#valueMin").val();
+		var valueMax = jQuery("#valueMax").val();
+		var awardCoefficient = jQuery("#awardCoefficient").val();//奖励系数
+		var effectiveTime=jQuery("#effectiveTime").val();
+		var expireTime=jQuery("#expireTime").val();
+
+    	var data = {id:id,groupId:groupId,splitProfitRoleType:splitProfitRoleType,merchantNo:merchantNo,withdrawType:withdrawType,loaningType:loaningType,
+		condition:condition,periodType:periodType,firstOpenTime:firstOpenTime,valueMin:valueMin,valueMax:valueMax,awardCoefficient:awardCoefficient,
+		effectiveTime:effectiveTime,expireTime:expireTime};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/cycle/rewards/update/opreate.do')",
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+				var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("添加成功");
+					window.close();
+				}
+		    }
+		});
+    }
+	function changeConditionType(){
+		var condition = $("#condition option:selected").val();//奖励条件
+		if (condition=="") {
+			$(".pmtTransaction").css("display","none");
+			$(".pmtActive").css("display","none");
+		} else if(condition==1){
+			$(".pmtActive").css("display","none");
+			$(".pmtTransaction").css("display","");
+		} else {
+			$(".pmtTransaction").css("display","none");
+			$(".pmtActive").css("display","");
+		}
+	}
+</script>

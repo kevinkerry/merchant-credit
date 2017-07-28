@@ -1,0 +1,83 @@
+<div class="TableForm">
+	<h2 class="Mtit">商户当前额度</h2>
+	<div class="RealTb" id="container">
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList" width="100%">
+	<tr class="ttl">
+		<td>商户号</td>
+		<td>商户类型</td>
+		<td>总额度</td>
+		<td>冻结额度</td>
+		<td>已用额度</td>
+		#if("$!{merchantInfo.merchantType}"=="0001"||"$!{merchantInfo.merchantType}"=="0006"||"$!{merchantInfo.merchantType}"=="0201")
+		<td>身份额度</td>
+		<td width="100">已用身份额度</td>
+		#end
+		<td>开始时间</td>
+		<td>结束时间</td>
+	</tr>
+	#foreach($o in $!{newList})
+	<tr>
+		<td>$!{o.merchantNo}</td>
+		<td>
+			#if("$!{o.mcType}"=="0001")
+				POS商户
+			#elseif("$!{o.mcType}"=="0006")
+				MPOS商户
+			#elseif("$!{o.mcType}"=="0201")
+				云收银商户
+			#elseif("$!{o.mcType}"=="0003")
+				POS代理商
+			#elseif("$!{o.mcType}"=="0007")
+				MPOS代理商
+			#elseif("$!{o.mcType}"=="0101")
+				云收银代理商
+			#end
+		</td>
+		<td>$!NumberUtils.format($!{o.limitation})</td>
+		<td>$!NumberUtils.format($!{o.forzenLimitation})</td>
+		<td>$!NumberUtils.format($!{o.usedLimitation})</td>
+		#if("$!{merchantInfo.merchantType}"=="0001"||"$!{merchantInfo.merchantType}"=="0006"||"$!{merchantInfo.merchantType}"=="0201")
+		<td>$!{identityLimit}&nbsp;</td>
+		<td>$!{usedIdentityLimit} &nbsp;</td>
+		#end
+		<td>$!{o.beginTime}</td>
+		<td>$!{o.endTime}</td>
+	</tr>
+	#end
+</table>
+<h2 class="Mtit">商户额度记录(一个月内的记录)</h2>
+	<div class="RealTb" id="container">
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList" width="100%">
+	<tr class="ttl">
+	    <td>商户号</td>
+		<td>商户类型</td>
+		<td>使用额度</td>
+		<td>开始时间</td>
+		<td>结束时间</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>$!{merchantInfo.merchantNo}</td>
+		<td>
+			#if("$!{merchantInfo.merchantType}"=="0001")
+				POS商户
+			#elseif("$!{merchantInfo.merchantType}"=="0006")
+				MPOS商户
+			#elseif("$!{merchantInfo.merchantType}"=="0201")
+				云收银商户
+			#elseif("$!{merchantInfo.merchantType}"=="0003")
+				POS代理商
+			#elseif("$!{merchantInfo.merchantType}"=="0007")
+				MPOS代理商
+			#elseif("$!{merchantInfo.merchantType}"=="0101")
+				云收银代理商
+			#end
+		</td>
+		<td>$!NumberUtils.format($!{o.withdrawTotalAmount})</td>
+		<td>#showDate($!{o.time}) 00:00:00</td>
+		<td>#showDate($!{o.time}) 23:59:59</td>
+	</tr>
+	#end
+</table>
+    </div>
+</div>

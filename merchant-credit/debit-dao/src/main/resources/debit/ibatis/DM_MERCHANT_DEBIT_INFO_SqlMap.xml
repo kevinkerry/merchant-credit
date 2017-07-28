@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DM_MERCHANT_DEBIT_INFO" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NO" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="ORGANIZATION_CODE" property="organizationCode" jdbcType="VARCHAR" />
+    <result column="RISK_LEVEL" property="riskLevel" jdbcType="VARCHAR" />
+    <result column="CAN_USE_AMOUNT" property="canUseAmount" jdbcType="DECIMAL" />
+    <result column="USED_AMOUNT" property="usedAmount" jdbcType="DECIMAL" />
+    <result column="OVER_DUE_AMOUNT" property="overDueAmount" jdbcType="DECIMAL" />
+    <result column="FROZEN_AMOUNT" property="frozenAmount" jdbcType="DECIMAL" />
+    <result column="EFFECTIVE_START_TIME" property="effectiveStartTime" />
+    <result column="EFFECTIVE_END_TIME" property="effectiveEndTime" />
+    <result column="LEND_MEMBER_ID" property="lendMemberId" jdbcType="VARCHAR" />
+    <result column="LEND_WALLET_ACCOUNT" property="lendWalletAccount" jdbcType="VARCHAR" />
+    <result column="CREDIT_ACCOUNT" property="creditAccount" jdbcType="VARCHAR" />
+    <result column="INTEREST_ACCOUNT" property="interestAccount" jdbcType="VARCHAR" />
+    <result column="LEND_LOGIN_NAME" property="lendLoginName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_MEMBER_ID" property="merchantMemberId" jdbcType="VARCHAR" />
+    <result column="MERCHANT_WALLER_ACCOUNT" property="merchantWallerAccount" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="END_TIME" property="endTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_NO, MERCHANT_NAME, STATUS, PROMOTER_NO, PROMOTER_NAME, TOTAL_AMOUNT, 
+    ORGANIZATION_CODE, RISK_LEVEL, CAN_USE_AMOUNT, USED_AMOUNT, OVER_DUE_AMOUNT, FROZEN_AMOUNT, 
+    EFFECTIVE_START_TIME, EFFECTIVE_END_TIME, LEND_MEMBER_ID, LEND_WALLET_ACCOUNT, CREDIT_ACCOUNT, 
+    INTEREST_ACCOUNT, LEND_LOGIN_NAME, MERCHANT_MEMBER_ID, MERCHANT_WALLER_ACCOUNT, CREATE_TIME, 
+    END_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DM_MERCHANT_DEBIT_INFO.Base_Column_List" />
+    from DM_MERCHANT_DEBIT_INFO
+    <isParameterPresent >
+      <include refid="DM_MERCHANT_DEBIT_INFO.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    select 
+    <include refid="DM_MERCHANT_DEBIT_INFO.Base_Column_List" />
+    from DM_MERCHANT_DEBIT_INFO
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    delete from DM_MERCHANT_DEBIT_INFO
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoExample" >
+    delete from DM_MERCHANT_DEBIT_INFO
+    <include refid="DM_MERCHANT_DEBIT_INFO.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DM_MERCHANT_DEBIT_INFO.nextval from dual
+    </selectKey>
+    insert into DM_MERCHANT_DEBIT_INFO (ID, MERCHANT_NO, MERCHANT_NAME, STATUS, 
+      PROMOTER_NO, PROMOTER_NAME, TOTAL_AMOUNT, ORGANIZATION_CODE, 
+      RISK_LEVEL, CAN_USE_AMOUNT, USED_AMOUNT, OVER_DUE_AMOUNT, 
+      FROZEN_AMOUNT, EFFECTIVE_START_TIME, EFFECTIVE_END_TIME, 
+      LEND_MEMBER_ID, LEND_WALLET_ACCOUNT, CREDIT_ACCOUNT, INTEREST_ACCOUNT, 
+      LEND_LOGIN_NAME, MERCHANT_MEMBER_ID, MERCHANT_WALLER_ACCOUNT, 
+      CREATE_TIME, END_TIME)
+    values (#id:DECIMAL#, #merchantNo:VARCHAR#, #merchantName:VARCHAR#, #status:VARCHAR#, 
+      #promoterNo:VARCHAR#, #promoterName:VARCHAR#, #totalAmount:DECIMAL#, #organizationCode:VARCHAR#, 
+      #riskLevel:VARCHAR#, #canUseAmount:DECIMAL#, #usedAmount:DECIMAL#, #overDueAmount:DECIMAL#, 
+      #frozenAmount:DECIMAL#, #effectiveStartTime#, #effectiveEndTime#, 
+      #lendMemberId:VARCHAR#, #lendWalletAccount:VARCHAR#, #creditAccount:VARCHAR#, #interestAccount:VARCHAR#, 
+      #lendLoginName:VARCHAR#, #merchantMemberId:VARCHAR#, #merchantWallerAccount:VARCHAR#, 
+      #createTime#, #endTime#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DM_MERCHANT_DEBIT_INFO.nextval from dual
+    </selectKey>
+    insert into DM_MERCHANT_DEBIT_INFO
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        MERCHANT_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        PROMOTER_NO
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        PROMOTER_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount" >
+        TOTAL_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="riskLevel" >
+        RISK_LEVEL
+      </isNotNull>
+      <isNotNull prepend="," property="canUseAmount" >
+        CAN_USE_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="usedAmount" >
+        USED_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        OVER_DUE_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="frozenAmount" >
+        FROZEN_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="effectiveStartTime" >
+        EFFECTIVE_START_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="effectiveEndTime" >
+        EFFECTIVE_END_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="lendMemberId" >
+        LEND_MEMBER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="lendWalletAccount" >
+        LEND_WALLET_ACCOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="creditAccount" >
+        CREDIT_ACCOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="interestAccount" >
+        INTEREST_ACCOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="lendLoginName" >
+        LEND_LOGIN_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="merchantMemberId" >
+        MERCHANT_MEMBER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantWallerAccount" >
+        MERCHANT_WALLER_ACCOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        END_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        #merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        #promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        #promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount" >
+        #totalAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="riskLevel" >
+        #riskLevel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="canUseAmount" >
+        #canUseAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="usedAmount" >
+        #usedAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        #overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="frozenAmount" >
+        #frozenAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="effectiveStartTime" >
+        #effectiveStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="effectiveEndTime" >
+        #effectiveEndTime#
+      </isNotNull>
+      <isNotNull prepend="," property="lendMemberId" >
+        #lendMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendWalletAccount" >
+        #lendWalletAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="creditAccount" >
+        #creditAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="interestAccount" >
+        #interestAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendLoginName" >
+        #lendLoginName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantMemberId" >
+        #merchantMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantWallerAccount" >
+        #merchantWallerAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        #endTime#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoExample" resultClass="java.lang.Integer" >
+    select count(*) from DM_MERCHANT_DEBIT_INFO
+    <include refid="DM_MERCHANT_DEBIT_INFO.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DM_MERCHANT_DEBIT_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantName" >
+        MERCHANT_NAME = #record.merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.promoterNo" >
+        PROMOTER_NO = #record.promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.promoterName" >
+        PROMOTER_NAME = #record.promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.totalAmount" >
+        TOTAL_AMOUNT = #record.totalAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.organizationCode" >
+        ORGANIZATION_CODE = #record.organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.riskLevel" >
+        RISK_LEVEL = #record.riskLevel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.canUseAmount" >
+        CAN_USE_AMOUNT = #record.canUseAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.usedAmount" >
+        USED_AMOUNT = #record.usedAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.overDueAmount" >
+        OVER_DUE_AMOUNT = #record.overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.frozenAmount" >
+        FROZEN_AMOUNT = #record.frozenAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.effectiveStartTime" >
+        EFFECTIVE_START_TIME = #record.effectiveStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.effectiveEndTime" >
+        EFFECTIVE_END_TIME = #record.effectiveEndTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendMemberId" >
+        LEND_MEMBER_ID = #record.lendMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendWalletAccount" >
+        LEND_WALLET_ACCOUNT = #record.lendWalletAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.creditAccount" >
+        CREDIT_ACCOUNT = #record.creditAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.interestAccount" >
+        INTEREST_ACCOUNT = #record.interestAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendLoginName" >
+        LEND_LOGIN_NAME = #record.lendLoginName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantMemberId" >
+        MERCHANT_MEMBER_ID = #record.merchantMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantWallerAccount" >
+        MERCHANT_WALLER_ACCOUNT = #record.merchantWallerAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.endTime" >
+        END_TIME = #record.endTime#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DM_MERCHANT_DEBIT_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DM_MERCHANT_DEBIT_INFO
+    set ID = #record.id:DECIMAL#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      MERCHANT_NAME = #record.merchantName:VARCHAR#,
+      STATUS = #record.status:VARCHAR#,
+      PROMOTER_NO = #record.promoterNo:VARCHAR#,
+      PROMOTER_NAME = #record.promoterName:VARCHAR#,
+      TOTAL_AMOUNT = #record.totalAmount:DECIMAL#,
+      ORGANIZATION_CODE = #record.organizationCode:VARCHAR#,
+      RISK_LEVEL = #record.riskLevel:VARCHAR#,
+      CAN_USE_AMOUNT = #record.canUseAmount:DECIMAL#,
+      USED_AMOUNT = #record.usedAmount:DECIMAL#,
+      OVER_DUE_AMOUNT = #record.overDueAmount:DECIMAL#,
+      FROZEN_AMOUNT = #record.frozenAmount:DECIMAL#,
+      EFFECTIVE_START_TIME = #record.effectiveStartTime#,
+      EFFECTIVE_END_TIME = #record.effectiveEndTime#,
+      LEND_MEMBER_ID = #record.lendMemberId:VARCHAR#,
+      LEND_WALLET_ACCOUNT = #record.lendWalletAccount:VARCHAR#,
+      CREDIT_ACCOUNT = #record.creditAccount:VARCHAR#,
+      INTEREST_ACCOUNT = #record.interestAccount:VARCHAR#,
+      LEND_LOGIN_NAME = #record.lendLoginName:VARCHAR#,
+      MERCHANT_MEMBER_ID = #record.merchantMemberId:VARCHAR#,
+      MERCHANT_WALLER_ACCOUNT = #record.merchantWallerAccount:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      END_TIME = #record.endTime#
+    <isParameterPresent >
+      <include refid="DM_MERCHANT_DEBIT_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    update DM_MERCHANT_DEBIT_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        MERCHANT_NAME = #merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        PROMOTER_NO = #promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        PROMOTER_NAME = #promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount" >
+        TOTAL_AMOUNT = #totalAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE = #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="riskLevel" >
+        RISK_LEVEL = #riskLevel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="canUseAmount" >
+        CAN_USE_AMOUNT = #canUseAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="usedAmount" >
+        USED_AMOUNT = #usedAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="overDueAmount" >
+        OVER_DUE_AMOUNT = #overDueAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="frozenAmount" >
+        FROZEN_AMOUNT = #frozenAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="effectiveStartTime" >
+        EFFECTIVE_START_TIME = #effectiveStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="effectiveEndTime" >
+        EFFECTIVE_END_TIME = #effectiveEndTime#
+      </isNotNull>
+      <isNotNull prepend="," property="lendMemberId" >
+        LEND_MEMBER_ID = #lendMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendWalletAccount" >
+        LEND_WALLET_ACCOUNT = #lendWalletAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="creditAccount" >
+        CREDIT_ACCOUNT = #creditAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="interestAccount" >
+        INTEREST_ACCOUNT = #interestAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendLoginName" >
+        LEND_LOGIN_NAME = #lendLoginName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantMemberId" >
+        MERCHANT_MEMBER_ID = #merchantMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantWallerAccount" >
+        MERCHANT_WALLER_ACCOUNT = #merchantWallerAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        END_TIME = #endTime#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitInfoPO" >
+    update DM_MERCHANT_DEBIT_INFO
+    set MERCHANT_NO = #merchantNo:VARCHAR#,
+      MERCHANT_NAME = #merchantName:VARCHAR#,
+      STATUS = #status:VARCHAR#,
+      PROMOTER_NO = #promoterNo:VARCHAR#,
+      PROMOTER_NAME = #promoterName:VARCHAR#,
+      TOTAL_AMOUNT = #totalAmount:DECIMAL#,
+      ORGANIZATION_CODE = #organizationCode:VARCHAR#,
+      RISK_LEVEL = #riskLevel:VARCHAR#,
+      CAN_USE_AMOUNT = #canUseAmount:DECIMAL#,
+      USED_AMOUNT = #usedAmount:DECIMAL#,
+      OVER_DUE_AMOUNT = #overDueAmount:DECIMAL#,
+      FROZEN_AMOUNT = #frozenAmount:DECIMAL#,
+      EFFECTIVE_START_TIME = #effectiveStartTime#,
+      EFFECTIVE_END_TIME = #effectiveEndTime#,
+      LEND_MEMBER_ID = #lendMemberId:VARCHAR#,
+      LEND_WALLET_ACCOUNT = #lendWalletAccount:VARCHAR#,
+      CREDIT_ACCOUNT = #creditAccount:VARCHAR#,
+      INTEREST_ACCOUNT = #interestAccount:VARCHAR#,
+      LEND_LOGIN_NAME = #lendLoginName:VARCHAR#,
+      MERCHANT_MEMBER_ID = #merchantMemberId:VARCHAR#,
+      MERCHANT_WALLER_ACCOUNT = #merchantWallerAccount:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      END_TIME = #endTime#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

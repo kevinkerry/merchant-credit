@@ -1,0 +1,90 @@
+#set($page_title = '合作方数据重算 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/settle/calcProfit/calcLowerLevelPromoterWdSpliting.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+				<td class="lbl">代理商商户号：</td>
+		        <td colspan="3">
+		        	<input type="text" id="promoterNo" name="promoterNo" value="$!{query.promoterNo}" class="txt130">
+		        </td>
+				<td class="lbl">合作方商户号：</td>
+		        <td colspan="3">
+		        	<input type="text" id="partnerPromoterNo" name="partnerPromoterNo" value="$!{query.promoterNo}" class="txt130">
+		        </td>
+		   		<td class="lbl">开始时间：</td>
+		        <td >
+		            <input type="text" id="exectueStatTimeStr" name="exectueStatTimeStr" class="date txt130" onclick="xDatePicker(1);"/>
+		        </td>
+				<td class="lbl">结束时间：</td>
+		        <td >
+					<input type="text" id="exectueEndTimeStr" name="exectueEndTimeStr" class="date txt130" onclick="xDatePicker(1);"/>
+                </td>
+		    </tr>
+
+		    <tr>
+		        <td colspan="6" align="center">
+		             <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">刷新结果</a>
+		            <a href="#" class="btn2" id="queryBtn" onclick="calcLowerLevelPromoterWdSpliting()">重算</a>
+		        </td>
+		    </tr>
+		</table>
+
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+var waiting='<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+	window.onload=function(){
+		setDateStartEndRang(-30,"exectueStatTimeStr",0,"exectueEndTimeStr");
+	};
+    function calcLowerLevelPromoterWdSpliting(){
+	    if(!confirm("请确认是否需要重算数据？")){
+    		return;
+    	}
+    	var _ids = ['promoterNo',,'exectueStatTimeStr','exectueEndTimeStr','partnerPromoterNo'];
+    	var data = {};
+    	for(i in _ids){
+			var val = document.getElementById(_ids[i]).value;
+			if(val!=""){
+    			data[_ids[i]] = val;
+    		}
+    	}
+	    jQuery("#container").html(waiting);
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/settle/calcProfit/calcLowerLevelPromoterWdSpliting.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	//jQuery("#container").html(data);
+		    	ajaxPaging();
+		    }
+		});
+    }
+    
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNum = jQuery("#pageNum_submitForm").val();
+    	pageNum=pageNum?pageNum:1;
+    	var data = {"pageNum":pageNum,"computeType":5};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/splitting/order/ajaxPaging/redoList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+    ajaxPaging();
+</script>

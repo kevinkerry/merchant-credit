@@ -1,0 +1,44 @@
+	<div class="content main_box">
+		<table class="banlance_2">
+			<tr>
+				<th>产品描述</th>
+				<th colspan="4">一次授信期限内，授信额度循环使用</th>
+			</tr>
+			<tr>
+				<td>额度</td>
+				<td>5~50万</td>
+				<td>贷款利息</td>
+				<td colspan="2">日息万2~3</td>
+			</tr>
+			<tr>
+				<td>借款期限</td>
+				<td>3~60天</td>
+				<td>放款帐户</td>
+				<td colspan="2">盛付通钱包</td>
+			</tr>
+			<tr>
+				<td>审核时间</td>
+				<td>$!audit</td>
+				<td>还款方式</td>
+				<td colspan="2">按日计息（放款时一次性扣除），到期还本</td>
+			</tr>
+			<tr>
+				<td>贷款费用</td>
+				<td colspan="4">$!fee</td>
+			</tr>
+			<tr>
+				<td>申请条件</td>
+				<td>
+					$!cond
+				</td>
+				<td>必须申请资料</td>
+				<td style="border-right:none;">
+					$!material
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5">
+					$!desc
+			   </tr>
+		</table>
+	</div>

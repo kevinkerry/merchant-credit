@@ -1,0 +1,155 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>merchant-credit</artifactId>
+		<groupId>com.sdp.mc</groupId>
+		<version>1.0</version>
+	</parent>
+	<groupId>com.sdp.mc</groupId>
+	<artifactId>mc-intra-website</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<name>mc-intra-website</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+	  <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>jasper</artifactId>
+            <version>6.0.33</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>coyote</artifactId>
+            <version>6.0.33</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>dbcp</artifactId>
+            <version>6.0.33</version>
+            <scope>test</scope>
+        </dependency>
+
+		<!-- 模块依赖 -->
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-common-integration</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-dao</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>mc-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>common-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sdp.mc</groupId>
+			<artifactId>debit-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.2</version>
+		</dependency>
+			<dependency>
+			<groupId>com.sdp.withdraw</groupId>
+			<artifactId>withdraw-service</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- sdo或sdp公用jar -->
+		<dependency>
+			<groupId>com.sdp.emall</groupId>
+			<artifactId>emall-intra-admin</artifactId>
+			<version>2.0</version>
+			<exclusions>
+ 		        <exclusion>
+				 	<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+				</exclusion>
+			</exclusions>
+			<!-- 和excel操作的xmlbean有冲突,待确定影响以及注释后的影响-->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 				 	<groupId>xmlbeans</groupId> -->
+<!-- 					<artifactId>xbean</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!-- <dependency>
+		  <groupId>org.apache.commons</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>1.3.2</version>
+		  <scope>provided</scope>
+		</dependency> -->
+		<dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>2.0.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.ant</groupId>
+		  <artifactId>ant-zip</artifactId>
+		  <version>1.7.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>mc-intra-website</finalName>
+		<plugins>
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
+			</plugin>
+			 -->
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+</project>

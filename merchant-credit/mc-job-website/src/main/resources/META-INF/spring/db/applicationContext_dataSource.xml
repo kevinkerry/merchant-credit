@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean id="mcDataSource" name="mcDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/mcDataSource</value>
+		</property>
+    </bean>
+    <!-- 
+	<bean id="ppcPayDataSource" name="ppcPayDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/ppcPayDataSource</value>
+		</property>
+    </bean>
+     -->
+</beans>

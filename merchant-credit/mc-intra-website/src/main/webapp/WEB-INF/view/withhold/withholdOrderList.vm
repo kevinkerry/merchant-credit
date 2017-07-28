@@ -1,0 +1,162 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>扣款订单</title>
+
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+	<META HTTP-EQUIV="Expires" CONTENT="0">
+
+	<LINK href="#springUrl('/htdocs/css/jquery.idtabs.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/jquery.nyroModal.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/Style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/supply_style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/menu.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/artDialog/skins/default.css')" type="text/css" rel="stylesheet">
+
+
+	<script src="#springUrl('/htdocs/scripts/common.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/menuHover.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+	<script type="text/javascript">
+		var rootPath = '#springUrl("")';
+		var j = jQuery.noConflict();
+		jQuery.fx.off = true;
+		var contextPath = "$rc.contextPath";
+	</script>
+
+	<script src="#springUrl('/htdocs/scripts/validator.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.bgiframe.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.nyroModal-1.5.5.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.idTabs.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.maxlength.js')" type="text/javascript"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/jquery.validate.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/artDialog/jquery.artDialog.js')"></script>
+
+	<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/js/base.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/js/baseExt.js')"></script>
+	<LINK href="#springUrl('/htdocs/msp/My97DatePicker/skin/WdatePicker.css')" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/My97DatePicker/WdatePicker.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/My97DatePicker/calendar.js')"></script>
+</head>
+
+<form id="submitForm" name="submitForm" method="post" action="#springUrl('/withhold/ajaxPaging/orderList.do')" >
+<div class="TableForm">
+	<div id="container" class="RealTb">
+	<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_OrderList">
+	<tr>
+		<td width="10%">商户订单号</td>
+		<td width="3%">订单金额</td>
+		<td width="5%">银行名称</td>
+		<td width="5%">姓名</td>
+		<td width="5%">卡类型</td>
+		<td width="5%">卡号</td>
+        <td width="5%">证件类型</td>
+		<td width="10%">证件号</td>
+		<td width="5%">附言</td>
+		<td width="5%">应付手续费</td>
+		<td width="5%">应收手续费</td>
+		<td width="5%">状态</td>
+		<td width="5%">备注</td>
+        <td width="10%">创建时间</td>
+		<td width="5%">异常</td>
+		<td width="10%">计划扣款时间</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		<td>$!{temp.merchantOrderNo}</td>
+		<td>$!{temp.orderAmount}</td>
+		<td>
+			#if("$!{temp.bankName}"=="ICBC")
+				工商银行
+    		#elseif("$!{temp.bankName}"=="BOC")
+    			中国银行
+    		#elseif("$!{temp.bankName}"=="CCB")
+				建设银行
+    		#elseif("$!{temp.bankName}"=="CMB")
+    			招商银行
+			#elseif("$!{temp.bankName}"=="CEB")
+				光大银行
+			#elseif("$!{temp.bankName}"=="CMBC")
+				民生银行
+			#elseif("$!{temp.bankName}"=="SZPAB")
+				平安银行
+			#elseif("$!{temp.bankName}"=="PSBC")
+				中国邮储银行
+			#elseif("$!{temp.bankName}"=="ABC")
+				农业银行
+    		#else
+				$!{temp.bankName}
+    		#end
+
+		</td>
+		<td>$!{temp.chName}</td>
+		<td>
+			#if("$!{temp.cardType}"=="01")
+				借记卡
+    		#elseif("$!{temp.cardType}"=="02")
+    			贷记卡
+    		#elseif("$!{temp.cardType}"=="03")
+    			存折
+    		#elseif("$!{temp.cardType}"=="04")
+    			公司银行账户(暂不支持)
+    		#else
+				$!{temp.cardType}
+    		#end
+
+		</td>
+		<td>$!{temp.cardNo}</td>
+
+		<td>
+			#if("$!{temp.paperType}"=="IC")身份证
+			#elseif("$!{temp.paperType}"=="ITC")临时身份证
+    		#elseif("$!{temp.paperType}"=="PP")护照
+			#elseif("$!{temp.paperType}"=="SC")士兵证
+    		#elseif("$!{temp.paperType}"=="AOC")军官证
+    		#elseif("$!{temp.paperType}"=="ACC")军人文职干部证
+    		#elseif("$!{temp.paperType}"=="POC")警官证
+			#elseif("$!{temp.paperType}"=="APC")武警证
+			#elseif("$!{temp.paperType}"=="HMP")港澳居民来往内地通行证
+			#elseif("$!{temp.paperType}"=="RB")户口簿
+			#elseif("$!{temp.paperType}"=="TWP")台湾居民来往大陆通行证/台胞证
+			#elseif("$!{temp.paperType}"=="TWR")台湾回乡证
+			#elseif("$!{temp.paperType}"=="FPP")外国护照
+			#elseif("$!{temp.paperType}"=="FR")外国人永久居留证
+    		#else
+				$!{temp.paperType}
+    		#end
+
+		</td>
+		<td>$!{temp.paperNo}</td>
+		<td>$!{temp.postscript}</td>
+
+		<td>$!{temp.payablefee}</td>
+		<td>$!{temp.receivablefee}</td>
+		<td>
+			#if("$!{temp.status}"=="001")初始
+    		#elseif("$!{temp.status}"=="002")待调用
+			#elseif("$!{temp.status}"=="003")接口调用失败
+			#elseif("$!{temp.status}"=="004")处理中
+    		#elseif("$!{temp.status}"=="005")成功
+			#elseif("$!{temp.status}"=="006")失败
+			#elseif("$!{temp.status}"=="007")作废
+			#elseif("$!{temp.status}"=="008")过期
+    		#end
+		</td>
+		<td>$!{temp.remark}</td>
+		<td>#showDateTime($!{temp.createTime})</td>
+		<td>$!{temp.errorcode}<br/>$!{temp.errormsg}</td>
+		<td>#showDateTime($!{temp.planwithholddate})</td>
+	</tr>
+	#end
+</table>
+    </div>
+</div>
+</form>

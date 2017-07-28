@@ -1,0 +1,87 @@
+#set($page_title = '政策配置管理') 
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post"
+			action="#springUrl('/policyconfig/index.do')">
+			<table cellspacing="0" cellpadding="0" border="0" class="CardWord">
+				<tr>
+					<td>政策编号：</td>
+					<td><input type="text" id="policyId" name="policyId"
+						value="$!{query.po.policyId}" />&nbsp;</td>
+					<td>政策名称：</td>
+					<td><input type="text" id="policyName" name="policyName"
+						value="$!{query.po.policyName}" />&nbsp;</td>
+					<td>政策类型：</td>
+					<td><select id="policyType" name="policyType"
+						value="$!{query.po.policyType}">
+							<option value="">全部</option>
+							<option value="1">政策类</option>
+							<option value="2">MCC类</option>
+							<option value="3">云收银类</option>
+					</select></td>
+					<td>状态：</td>
+					<td><select id="status" name="status"
+						value="$!{query.po.status}">
+							<option value="">全部</option>
+							<option value="1">生效</option>
+							<option value="0">失效</option>
+					</select></td>
+					<!-- <td>状态：</td>
+					<td><select id="status" name="status"
+						value="$!{query.po.status}">
+							<option value="">全部</option>
+							<option value="1">生效</option>
+							<option value="0">失效</option>
+					</select></td> -->
+				</tr>
+				<!-- <tr>
+					<td align="left" colspan="6"> <font color="ff0000" >政策类配置商户进件是生效;MCC类政策在商户信用认证之后生效。</font></td>
+				</tr> -->
+				<tr>
+					<td align="center" colspan="6"><a href="#" class="btn2"
+						onclick="ajaxPaging();">查询</a> <a href="#" class="btn2"
+						onclick="clearAll();">清空</a> <a
+						href="#springUrl('/policyconfig/initEdit.do')" target="_blank"
+						class="btn2">新增</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = [ 'policyId', 'policyName', 'status' ,'policyType'];
+	function clearAll() {
+		for (i in ALL_COND_ID) {
+			jQuery("#" + ALL_COND_ID[i]).val("");
+		}
+	}
+
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"example.currentPage" : currentPage
+		};
+
+		for (i in ALL_COND_ID) {
+			data["po." + ALL_COND_ID[i]] = jQuery("#" + ALL_COND_ID[i]).val();
+		}
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/policyconfig/list.do')?sessionId="+new Date().getTime(),
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+</script>

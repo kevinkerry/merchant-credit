@@ -1,0 +1,96 @@
+#set($page_title = '日常报表')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" enctype='multipart/form-data' action="#springUrl('/splitting/index.do')">
+		<input type="hidden" name="splittingStatus" id="splittingStatus"></input>
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+	    		<tr>
+					<td width="100" class="lbl">日期：</td>
+					<td width="600">
+                        <input type="text" id="queryTime" name="queryTime" class="date txt130" onclick="xDatePicker(1);" value="$!{queryTime}" readonly ="readonly" class="txt130" >
+                	</td>
+	    		   <!--  <td width="100" class="lbl">分润方类型：</td>
+			        <td width="100">
+			        	<select name="splitProfitRoleType" id="splitProfitRoleType" class="w130">
+                        	<option value="">全部</option>
+                        	<option value="0003" >POS代理商</option>
+        					<option value="0007" >MPOS代理商</option>
+        					<option value="0101" >云收银代理商</option>
+                        </select>
+			        </td>
+					<td width="100" class="lbl">结算类型：</td>
+			        <td width="100">
+			        	<select name="serviceType" id="serviceType" class="w130">
+                        	<option value="">全部</option>
+                            <option value="2" >T1</option>
+            				<option value="3" >D1</option>
+            				<option value="4" >T0</option>
+                        </select>
+			        </td>
+					<td></td> -->
+			    </tr>
+                <tr>
+					<td colspan="2" align="center">
+						 &nbsp;
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+                        <a href="javascript:;" class="btn2 settle" type="button" onclick="sendDailyProfits()">补推</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+			        </td>
+				</tr>
+			</tbody>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = ['queryTime'/*,'queryEndTime','splitProfitRoleType', 'loaningType','withdrawType'*/];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var data = {};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/daily/profits/ajaxPaging/profitsList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+	function sendDailyProfits(){
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/daily/profits/sendDailyProfits.do')" ,
+		    data: {"queryTime":jQuery("#queryTime").val()} ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("补推申请成功.");
+				}
+		    }
+		});
+	}
+</script>

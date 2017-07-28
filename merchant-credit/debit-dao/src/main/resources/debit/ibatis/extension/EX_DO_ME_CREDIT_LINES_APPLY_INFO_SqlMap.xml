@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_ME_CREDIT_LINES_APPLY_INFO" >
+  <!-- 查询需要删除附件记录 -->
+  <sql id="ApplyInfo_Where_Clause">
+  	<dynamic prepend="where">
+  	 <isNotEmpty property="lineApplyOrderId">
+		 <isNotNull prepend="and" property="lineApplyOrderId">
+	    	 <![CDATA[LINE_APPLY_ORDER_ID = #lineApplyOrderId:VARCHAR#]]>
+	     </isNotNull>
+     </isNotEmpty>
+     <isNotEmpty property="merchantNo">
+		 <isNotNull prepend="and" property="merchantNo">
+	     	 <![CDATA[MERCHANT_NO = #merchantNo:VARCHAR#]]>
+	      </isNotNull>
+     </isNotEmpty>
+      <isNotEmpty property="inputKind">
+		 <isNotNull prepend="and" property="inputKind">
+    		  <![CDATA[INPUT_KIND = #inputKind:VARCHAR#]]>
+        </isNotNull>
+     </isNotEmpty>
+     <isNotEmpty property="inputCode">
+		 <isNotNull prepend="and" property="inputCode">
+    	  <![CDATA[INPUT_CODE = #inputCode:VARCHAR#]]>
+       </isNotNull>
+     </isNotEmpty>
+  	</dynamic>
+  </sql>
+
+   <select id="selectMerchantApplyInfoByMps" parameterClass="java.util.Map" resultMap="BaseResultMap">
+     select
+     <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Base_Column_List" />
+     from DO_ME_CREDIT_LINES_APPLY_INFO
+ 	<include refid="ApplyInfo_Where_Clause" />
+
+
+  </select>
+  <!-- 更新附件 -->
+ <update id="updateByPrimaryKeyById" parameterClass="java.util.Map" >
+    update DO_ME_CREDIT_LINES_APPLY_INFO
+    set
+      INPUT_TYPE = #inputType:VARCHAR#,
+      EXT_INFO = #extInfo:VARCHAR#
+    where ID = #id:VARCHAR#
+  </update>
+
+</sqlMap>

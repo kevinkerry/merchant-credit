@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_TRANSFER_LOG" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="ORDER_TYPE" property="orderType" jdbcType="VARCHAR" />
+    <result column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="FROM_USER" property="fromUser" jdbcType="VARCHAR" />
+    <result column="TO_USER" property="toUser" jdbcType="VARCHAR" />
+    <result column="REQUEST_LOG" property="requestLog" jdbcType="VARCHAR" />
+    <result column="RESPONSE_LOG" property="responseLog" jdbcType="VARCHAR" />
+    <result column="SOURCE_ID" property="sourceId" jdbcType="VARCHAR" />
+    <result column="ZF_ID" property="zfId" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, ORDER_TYPE, ORDER_ID, STATUS, FROM_USER, TO_USER, REQUEST_LOG, RESPONSE_LOG, 
+    SOURCE_ID, ZF_ID, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DO_TRANSFER_LOG.Base_Column_List" />
+    from DO_TRANSFER_LOG
+    <isParameterPresent >
+      <include refid="DO_TRANSFER_LOG.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    select 
+    <include refid="DO_TRANSFER_LOG.Base_Column_List" />
+    from DO_TRANSFER_LOG
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    delete from DO_TRANSFER_LOG
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogExample" >
+    delete from DO_TRANSFER_LOG
+    <include refid="DO_TRANSFER_LOG.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_TRANSFER_LOG.nextval from dual
+    </selectKey>
+    insert into DO_TRANSFER_LOG (ID, ORDER_TYPE, ORDER_ID, STATUS, FROM_USER, 
+      TO_USER, REQUEST_LOG, RESPONSE_LOG, SOURCE_ID, 
+      ZF_ID, CREATE_TIME, UPDATE_TIME)
+    values (#id:DECIMAL#, #orderType:VARCHAR#, #orderId:VARCHAR#, #status:VARCHAR#, #fromUser:VARCHAR#, 
+      #toUser:VARCHAR#, #requestLog:VARCHAR#, #responseLog:VARCHAR#, #sourceId:VARCHAR#, 
+      #zfId:VARCHAR#, #createTime#, #updateTime#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_TRANSFER_LOG.nextval from dual
+    </selectKey>
+    insert into DO_TRANSFER_LOG
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="orderType" >
+        ORDER_TYPE
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        ORDER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="fromUser" >
+        FROM_USER
+      </isNotNull>
+      <isNotNull prepend="," property="toUser" >
+        TO_USER
+      </isNotNull>
+      <isNotNull prepend="," property="requestLog" >
+        REQUEST_LOG
+      </isNotNull>
+      <isNotNull prepend="," property="responseLog" >
+        RESPONSE_LOG
+      </isNotNull>
+      <isNotNull prepend="," property="sourceId" >
+        SOURCE_ID
+      </isNotNull>
+      <isNotNull prepend="," property="zfId" >
+        ZF_ID
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="orderType" >
+        #orderType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        #orderId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fromUser" >
+        #fromUser:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="toUser" >
+        #toUser:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestLog" >
+        #requestLog:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="responseLog" >
+        #responseLog:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sourceId" >
+        #sourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="zfId" >
+        #zfId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogExample" resultClass="java.lang.Integer" >
+    select count(*) from DO_TRANSFER_LOG
+    <include refid="DO_TRANSFER_LOG.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DO_TRANSFER_LOG
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.orderType" >
+        ORDER_TYPE = #record.orderType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.orderId" >
+        ORDER_ID = #record.orderId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.fromUser" >
+        FROM_USER = #record.fromUser:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.toUser" >
+        TO_USER = #record.toUser:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.requestLog" >
+        REQUEST_LOG = #record.requestLog:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.responseLog" >
+        RESPONSE_LOG = #record.responseLog:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.sourceId" >
+        SOURCE_ID = #record.sourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.zfId" >
+        ZF_ID = #record.zfId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DO_TRANSFER_LOG.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DO_TRANSFER_LOG
+    set ID = #record.id:DECIMAL#,
+      ORDER_TYPE = #record.orderType:VARCHAR#,
+      ORDER_ID = #record.orderId:VARCHAR#,
+      STATUS = #record.status:VARCHAR#,
+      FROM_USER = #record.fromUser:VARCHAR#,
+      TO_USER = #record.toUser:VARCHAR#,
+      REQUEST_LOG = #record.requestLog:VARCHAR#,
+      RESPONSE_LOG = #record.responseLog:VARCHAR#,
+      SOURCE_ID = #record.sourceId:VARCHAR#,
+      ZF_ID = #record.zfId:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#
+    <isParameterPresent >
+      <include refid="DO_TRANSFER_LOG.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    update DO_TRANSFER_LOG
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="orderType" >
+        ORDER_TYPE = #orderType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        ORDER_ID = #orderId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fromUser" >
+        FROM_USER = #fromUser:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="toUser" >
+        TO_USER = #toUser:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="requestLog" >
+        REQUEST_LOG = #requestLog:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="responseLog" >
+        RESPONSE_LOG = #responseLog:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sourceId" >
+        SOURCE_ID = #sourceId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="zfId" >
+        ZF_ID = #zfId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoTransferLogPO" >
+    update DO_TRANSFER_LOG
+    set ORDER_TYPE = #orderType:VARCHAR#,
+      ORDER_ID = #orderId:VARCHAR#,
+      STATUS = #status:VARCHAR#,
+      FROM_USER = #fromUser:VARCHAR#,
+      TO_USER = #toUser:VARCHAR#,
+      REQUEST_LOG = #requestLog:VARCHAR#,
+      RESPONSE_LOG = #responseLog:VARCHAR#,
+      SOURCE_ID = #sourceId:VARCHAR#,
+      ZF_ID = #zfId:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

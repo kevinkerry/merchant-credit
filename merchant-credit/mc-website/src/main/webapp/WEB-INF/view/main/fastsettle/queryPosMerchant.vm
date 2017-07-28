@@ -1,0 +1,89 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/ajaxPaging/queryPosMerchant.htm')" method="post">
+<div class="caption">查询商户</div>
+<table class="qryTb" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+		<tr>
+			<td width="80" class="lbl">商户名称：</td>
+			<td width="140"><input type="text" id="merchantName" name="merchantName" class="txt w120"></td>
+			<td width="80" class="lbl">POS商户号：</td>
+			<td width="140"><input type="text" id="posMerchantNo" name="posMerchantNo" class="txt w120"></td>
+			<td width="90" class="lbl">盛付通商户号：</td>
+			<td width="140"><input type="text" id="merchantNo" name="merchantNo" class="txt w120"></td>
+			
+		</tr>
+		<tr>
+			<td class="lbl">商户状态：</td>
+			<td>
+				<input type="hidden" class="w100" id="status" name="status">
+				<input type="text" class="mstxt msbg100 w100" id="msh$status" onclick="mselect( this, 'status', ms$$merchStatus, false, 120, 'auto', 1, 1 )" readonly="readonly">
+			</td>
+			<td class="lbl">所属行业：</td>
+			<td>
+				<input type="hidden" id="mcc" name="mcc">
+				<input type="text" class="mstxt msbg100 w100" id="msh$mcc" onclick="mselect( this, 'mcc', ms$$mcc, false, 200, 250, 2, 2 )" readonly="readonly">
+			</td>
+			<td class="lbl">推广员：</td>
+			<td><input type="text" id="pmtPromoterName" name="pmtPromoterName" class="txt w120"></td>
+		</tr>
+		<tr>
+			<td class="lbl">快速结算：</td>
+			<td>
+				<input type="hidden" class="w100" id="fastSettleFlag" name="fastSettleFlag">
+				<input type="text" class="mstxt msbg100 w100" id="msh$fastSettleFlag" name="msh$fastSettleFlag" onclick="mselect( this, 'fastSettleFlag', ms$$fastSettleFlag, false, 120, 'auto', 1, 1 )" readonly="readonly">
+			</td>
+			<td class="lbl">商户地址：</td>
+			<td colspan="3">
+				<input type="hidden" id="provinceId" name="provinceId">
+				<input type="hidden" id="cityId" name="cityId">
+				<input type="text" class="mstxt msbg60 w60" id="msh$provinceId" onclick="mselect( this, 'provinceId', ms$$district, false, 90, 200, 1, 1, setCityList )" readonly="readonly">
+				<input type="text" class="mstxt msbg60 w60" id="msh$cityId" onclick="mselect( this, 'cityId', null, false, 90, 200, 1, 1 )" readonly="readonly">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="8" align="center">
+				<a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();">查询</a>
+				<a href="javascript:void(0)" class="smBtn mgL10" onclick="cleanAllCond( ALL_COND_ID, [] );removeMselect( 'cityId' );return false;" title="清除所有查询条件">清</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<!--分页容器-->
+<div id="container"></div>
+</form>
+<script type="text/javascript">
+	var ALL_COND_ID=["merchantName","posMerchantNo","merchantNo","status","msh$status","mcc","msh$mcc","provinceId","cityId","msh$provinceId","msh$cityId","msh$pmtBindOperatorId","pmtPromoterName","fastSettleFlag","msh$fastSettleFlag"];
+	function setCityList(a){removeMselect("cityId");if(a!="")makeMselect(elm("msh$cityId"),"cityId",getSubsOfMs(ms$$district,a),!1,90,200,1,1),elm("cityId_mselect").style.display="none"};
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#pageNo_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"pageNo":currentPage};
+    	for(i in ALL_COND_ID){
+    		if(ALL_COND_ID[i].indexOf("msh$")==-1){
+    			var val = document.getElementById(ALL_COND_ID[i]).value;
+    			if(val!=""){
+	    			data[ALL_COND_ID[i]] = val;
+	    		}
+    		}
+    	}
+    	data['timestamp'] = new Date().getTime();
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/ajaxPaging/queryPosMerchant.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+    function promoterValidate(msg){
+    	if(msg){
+    		if(confirm(msg)){
+    			window.location.href="#relativeUrl('/agentApply/index.htm')";
+    		}
+    	}
+    }
+</script>

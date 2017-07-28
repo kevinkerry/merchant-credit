@@ -1,0 +1,38 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/settle_pager.vm")
+<table class="listTb" cellspacing="0"   cellpadding="0" id="Gv_MainList">
+	#if("${MC_MERCHANT_USER.currentMcType}"=="0003")
+	<tr class="ttl">
+		<td>序号</td>
+		<td>盛付通商户号</td>
+		<td>商户名称</td>
+		<td>出款金额</td>
+		<td>出款类型</td>
+		<td>分润金额</td>
+	</tr>
+	#else
+	<tr class="ttl">
+		<td>序号</td>
+		<td>盛付通商户号</td>
+		<td>商户名称</td>
+		<td>商户类别</td>
+		<td>提现金额</td>
+		<td>提现类型</td>
+		<td>分润金额</td>
+	</tr>
+	#end
+	#foreach($o in $query.profitsInfos)
+	<tr>
+		<td>$!{velocityCount}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		#if("${MC_MERCHANT_USER.currentMcType}"=="0007")
+		<td>$!{o.mcc}</td>
+		#end
+		<td>$!{o.settleAmount}</td>
+		<td>$!{o.settleTypeDesc}</td>
+		<td>$!{o.totalProfits}</td>
+	</tr>
+	#end
+</table>

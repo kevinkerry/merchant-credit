@@ -1,0 +1,307 @@
+<div class="popup" id="pop1" style="display: none">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc">
+		<a href="javascript:void(0);" class="popup-cancel g-button"
+			onclick="document.getElementById('pop1').style.display='none';return false;">关闭</a>
+	</p>
+</div>
+<div class="popup" id="pop2" style="display: none">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc">
+		<a href="javascript:void(0);" class="popup-cancel g-button"
+			onclick="hidePop2();">返回</a>
+	</p>
+</div>
+<div id="closeTipMask"
+	style="height: 100%; width: 100%; position: fixed; _position: absolute; top: 0; z-index: 1000; display: none; opacity: 0.3; filter: alpha(opacity = 30); background-color: #000;">
+</div>
+<div class="popup" id="closeTip"
+	style="background-color: #fff; filter: alpha(opacity = 0); z-index: 1001; display: none;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<h2 style="text-align: center;">您正在关闭快速结算，真的确定吗？</h2>
+	<div class="popup-container" style="padding-top: 10px;">关闭后，您的商户将无法使用快速结算；即使再次开启，审核时间也需要1-2个工作日，审核期间也无法使用快速结算。现在反悔还来得及！</div>
+	<p class="popup-tlc">
+		<a href="javascript:void(0);" class="popup-cancel g-button"
+			onclick="applyClose();">确定关闭快速结算</a> &nbsp;&nbsp; <a
+			href="javascript:void(0);" class="popup-cancel g-button"
+			onclick="hideCloseTip();">取 消</a>
+	</p>
+</div>
+<input type="hidden" id="msgCode" value="$msgCode" />
+<input type="hidden" id="openFlag" value="$openFlag" />
+<input type="hidden" id="closeFlag" value="$closeFlag" />
+<input type="hidden" id="marginFlag" value="$marginFlag" />
+<input type="hidden" id="protocolType" value="$protocolType" />
+
+<input type="hidden" id="surplusCount" value="$surplusCount" />
+<input type="hidden" id="usedRedio" value="$usedRedio" />
+<input type="hidden" id="loaningType" value="$loaningType" />
+<input type="hidden" id="configUseRadio" value="$configUseRadio" />
+<input type="hidden" id="auditInfo" value="$auditInfo" />
+<input type="hidden" id="fastSettleLimit" value="$promoterInfo.promoterInfoDTO.fastSettleLimit" />
+<input type="hidden" id="promoterType" value="$!promoterType"/>
+
+
+
+<div class="content_box content font-s-14">
+	#if($!promoterType == '0101') <h2 class="alC">云收银快速结算服务</h2> #else <h2 class="alC">快速结算服务</h2> #end
+	##<h2 class="alC">快速结算服务</h2>
+	<div class="smContent">
+		#if(!$openFlag)
+		<div class="input-item">
+			<label> <span class="input-title">快速结算服务：</span> <span
+				class="input-value">已开通</span> <a class="input-value normal"
+				href="#" #if($closeFlag)onclick="showCloseTip();" #end>关闭快速结算</a>
+			</label>
+		</div>
+		<div class="input-item">
+			<label> <span class="input-title">快速结算保证金：</span> <span
+				class="input-value">$!fastSettleMargin元</span> <a
+				#if($marginFlag) href="#relativeUrl('/additionalMargin/index.htm')?promoterType=$!promoterType"
+				class="g-button fltLeft g-button-m" #else href="javascript:void(0);"
+				onclick="marginClick();" class="g-button g-button-disable" #end>追加保证金</a>
+			</label>
+		</div>
+		<div class="input-item">
+			<label> <span class="input-title">今日总额度：</span> <span
+				class="input-value">$!NumberUtils.formatWithComma($!promoterInfo.promoterInfoDTO.fastSettleLimit)元</span>
+				#if($!promoterInfo.auditFlag) <span class="red input-value">等待审核</span>
+				#else <a class="normal" href="#"
+				onclick="showPop1('工作日额度$!NumberUtils.formatWithComma($workDayLimit)元，节假日额度$!NumberUtils.formatWithComma($holiDayLimit)元。如果申请了临时调额，当日有效，次日恢复。');">额度说明</a>
+				#end
+			</label>
+		</div>
+		#if($!loaningType!=-1)##-1表示null垫资方类型不存在
+		<div class="input-item">
+			<label> <span class="input-title">今日已使用额度：</span> <span
+				class="input-value">$!NumberUtils.formatWithComma($!usedFastSettleLimit)
+					元（$!usedRedio%）</span>
+			</label>
+		</div>
+		<div class="input-item">
+			<label> <span class="input-title">临时调额：</span>
+				#if($adjustAuditFlag) <span class="red input-value">等待审核</span>
+				#else <a class="normal" href="javascript:void(0);"
+				onclick="checkForm('$!startTime','$!endTime');">立即申请</a> #end <a
+				class="normal" href="#relativeUrl('/adjustLimit/query.htm')?promoterType=$!promoterType">申请记录</a>
+			</label>
+		</div>
+		#end##判断垫资end
+		#else
+		<div class="input-item">
+			<label> <span class="input-title">快速结算服务：</span> <span
+				class="input-value">已关闭</span> <a href="#"
+				onclick="openImmediately($openFlag);"
+				class="g-button fltLeft g-button-m">开通快速结算</a>
+			</label>
+		</div>
+		#end##开通快速结算end
+		<div></div>
+		<div id="fastSettleAgreement" class="mid-container"
+			style="margin-top: 0px; width: 100%; overflow: hidden; line-height: 22px; text-align: center; display: none;">
+			<div class="popup-container" id="fastSettleAgreementDiv"
+				style="height: 400px; overflow: hidden;">
+				<iframe src="$!agreementHtml" height="100%" width="100%"
+					style="overflow-y: auto; overflow-x: hidden;"> </iframe>
+			</div>
+			##<div class="popup-container" id="mposFastSettleAgreementDiv"
+			##style="height: 400px; overflow: hidden; display: none;">
+			##	<iframe src="$!agreementHtml" height="100%" width="100%"
+			##		style="overflow-y: auto; overflow-x: hide;"> </iframe>
+			##</div>
+			<p class="line popup-tlc">
+				<label> <input type="checkbox" id="agreeBtn" checked>已阅读，同意
+				</label>
+			</p>
+			<p class="line popup-tlc">
+				<a href="javascript:void(0);" class="g-button"
+					onclick="applyOpen();">确定</a>
+			</p>
+		</div>
+		<script type="text/javascript">
+			jQuery(function() {
+				var tmp = jQuery("#msgCode").val();
+				if (tmp == 2) {
+					showPop2('正在处理中，请耐心等待.');
+				} else if (tmp == 1) {
+					showPop2('很抱歉,系统繁忙,请稍后再试,或致电盛付通客服电话400-720-8888');
+				}else if (tmp == 3) {
+					showPop2('当前商户不具备此功能,请致电盛付通客服电话400-720-8888');
+				}
+			});
+			function checkForm(startTime, endTime) {
+				var now = new Date();
+				var start = Date.parse(startTime.replace(/-/g, "/"));
+				var end = Date.parse(endTime.replace(/-/g, "/"));
+				var nowDate = now.getFullYear() + '-' + (now.getMonth() + 1)
+						+ '-' + now.getDate() + " " + now.getHours() + ":"
+						+ now.getMinutes();
+				var compareDate = Date.parse(nowDate.replace(/-/g, "/"));
+				if (start > compareDate || end < compareDate) {
+					showPop2("申请时间不能早于" + startTime + "点" + "," + "晚于"
+							+ endTime + "点");
+					return;
+				}
+				var loaningType = jQuery("#loaningType").val();
+				if (loaningType == 0) {
+					showPop2("您当前是代理商全资，无法申请调额，请追加快速结算保证金，系统自动调额。");
+					return;
+				}
+				if (auditInfo == 'false') {
+					showPop2("今日临时调额次数已超过上限，无法继续申请。建议您增加快速结算保证金，便可提升额度。");
+					return;
+				}
+				var surplusCount = jQuery("#surplusCount").val();
+				if (surplusCount <= 0) {
+					showPop2("本月临时调额次数已超过上限，无法继续申请。建议您增加快速结算保证金，便可提升额度。");
+					return;
+				}
+				var usedRedio = jQuery("#usedRedio").val();
+				var configUseRadio = jQuery("#configUseRadio").val();
+				var fastSettleLimit = jQuery("#fastSettleLimit").val();
+				if (usedRedio == 0 && fastSettleLimit == 0) {
+					showPop2("额度为0，额度使用率为0%，无法发起临时调额。");
+					return;
+				}
+				if (parseFloat(usedRedio) < parseFloat(configUseRadio)) {
+					showPop2("额度使用率低于" + configUseRadio + "%时不可申请调额");
+					return;
+				}
+				var promoterType = jQuery("#promoterType").val();
+				window.location.href = "#relativeUrl('/adjustLimit/index.htm')?promoterType="+promoterType;
+			}
+			function marginClick() {
+				var tmp = jQuery("#marginFlag").val();
+				if (tmp == "false") {
+					showPop2('很抱歉,你还没有开通快速结算服务,请先开通！');
+				}
+			}
+			//展示弹层
+			function showPop1(msg) {
+				jQuery("#pop1 .popup-container").html(msg);
+				jQuery("#pop1").show();
+			}
+			//隐藏
+			function hidePop1() {
+				jQuery("#pop1 .popup-container").html("");
+				jQuery("#pop1").hide();
+			}
+			//返回按钮
+			function showPop2(msg) {
+				jQuery("#pop2 .popup-container").html(msg);
+				jQuery("#pop2").show();
+			}
+			function hidePop2() {
+				jQuery("#pop2 .popup-container").html("");
+				jQuery("#pop2").hide();
+				window.location.reload();
+			}
+			//返回按钮
+			function showCloseTip() {
+				jQuery("#closeTipMask").show();
+				jQuery("#closeTip").show();
+			}
+			function hideCloseTip() {
+				jQuery("#closeTipMask").hide();
+				jQuery("#closeTip").hide();
+			}
+			//立即开通按钮事件
+			function openImmediately(flag) {
+				if (!flag) {
+					//alert("您已开通快速结算服务");
+					return false;
+				}
+				jQuery("#fastSettleAgreement").show();
+				var protocolType = jQuery("#protocolType").val();
+				if (protocolType == 'pos' || protocolType == 'mpos' || protocolType == 'easypay') {
+					jQuery("#fastSettleAgreementDiv").show();
+				}
+			}
+			//申请开通
+			function applyOpen() {
+				if (jQuery("input:checked").length == 0) {
+					showPop1("请勾选快速结算电子协议");
+					return false;
+				}
+				var promoterType = jQuery("#promoterType").val();
+				var obj = jQuery(this);
+				obj.addClass("g-button-disable");
+				obj.attr("disabled", true);
+				var url = "#relativeUrl('/applyOpen.json')";
+				var data = {"promoterType":promoterType};
+				jQuery.ajax({
+					type : 'POST',
+					url : url,
+					data : data,
+					dataType : "json",
+					beforeSend : function() {
+						showPop1("处理中，请稍候。");
+					},
+					success : function(data) {
+						obj.removeClass("g-button-disable");
+						obj.removeAttr("disabled");
+						hidePop1();
+						if (data && data.success) {
+							showPop2("恭喜您审核通过，快速结算已开通，请尽快完成保证金追加");
+						} else if (data && data.errorCode == "nologin") {
+							window.location.reload();
+						} else {
+							showPop1(data.errorMessage);
+						}
+					},
+					error : function(xhr, status, error) {
+						hidePop1();
+						showPop2('很抱歉,系统繁忙,请稍后再试,或致电盛付通客服电话400-720-8888');
+					}
+				});
+			}
+			//关闭
+			function applyClose() {
+				var obj = jQuery(this);
+				obj.addClass("g-button-disable");
+				obj.attr("disabled", true);
+				var promoterType = jQuery("#promoterType").val();
+				var url = "#relativeUrl('/applyClose.json')";
+				var _id = "$!{pfss.pfrId}";
+				if (_id == "") {
+					return false;
+				}
+				jQuery.ajax({
+					type : 'POST',
+					url : url,
+					data : {
+						pfrId : _id, "promoterType":promoterType
+					},
+					async : false,
+					dataType : "json",
+					beforeSend : function() {
+						hideCloseTip();
+						showPop1("处理中，请稍候。");
+					},
+					success : function(data) {
+						obj.removeClass("g-button-disable");
+						obj.removeAttr("disabled");
+						hidePop1();
+						if (data && data.success) {
+							showPop2("快速结算服务已关闭");
+						} else if (data && data.errorCode == "nologin") {
+							window.location.reload();
+						} else {
+							showPop1(data.errorMessage);
+						}
+					},
+					error : function(xhr, status, error) {
+						hidePop1();
+						showPop2('很抱歉,系统繁忙,请稍后再试,或致电盛付通客服电话400-720-8888');
+					}
+				});
+			}
+		</SCRIPT>

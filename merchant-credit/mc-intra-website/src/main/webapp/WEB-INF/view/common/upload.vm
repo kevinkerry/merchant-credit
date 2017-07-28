@@ -1,0 +1,26 @@
+#set($page_title = '上传图片')
+#if(!$picUrl)
+#message($errorMsg $returnMsg 2)
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="uploadForm" name="uploadForm" method="post" enctype='multipart/form-data' action="picUpload.htm">
+		<input type="hidden" name="moduleId" value="$!moduleId" />
+		<table width="80%" border="0" align="center" cellpadding="0" cellspacing="5">
+			<tr>
+        		<td>
+        			<input type="file" size="40" filefilter="jpeg|jpg|gif|png" id="fileName" name="fileName"/>&nbsp;&nbsp;<input class="bluebtn" type="submit" value="上传" /> <span class="_tip"></span><p>请上传JPG、JPEG或者GIF文件</p>
+        		</td>
+			</tr>
+        </table>
+        </form>
+    </div>
+</div>
+#else
+<script type="text/javascript">
+	try {
+		window.opener.uploadCallBack("$!{picUrl}");
+		window.close();
+	} catch(e){}
+</script>
+#end

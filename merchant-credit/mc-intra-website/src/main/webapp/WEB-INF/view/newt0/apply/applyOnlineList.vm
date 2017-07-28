@@ -1,0 +1,70 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+	  <td>申请时间</td>
+		<td>申请人名称</td>
+		<td>申请人商户号</td>
+		<td>申请人类型</td>
+		<td>申请类型</td>
+		
+		<td>审核状态</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>#showDateTime($!{o.createTime})</td>
+		<td>$!{o.promoterName}</td>
+		<td>$!{o.promoterMerchantNo}</td>
+		<td>
+			#if("$!{o.promoterType}"=="0003")
+			     POS代理商
+			#elseif("$!{o.promoterType}"=="0007")
+			    mPOS代理商
+			#elseif("$!{o.promoterType}"=="0101")
+			    云收银代理商
+			#elseif("$!{o.promoterType}"=="0001")
+			         普通POS商户
+			#elseif("$!{o.promoterType}"=="0006")
+			   mPOS商户
+			#end
+		</td>
+		<td>
+			#if("$!{o.opType}"=="3")
+				代理商保证金调额
+			#elseif("$!{o.opType}"=="11")
+				代理商临时调额
+			#else
+				$!{o.opType}
+			#end
+		</td>
+		<td >
+		  #if("$!{o.status}"=="1")
+				待审核
+			#elseif("$!{o.status}"=="3")
+				审核通过
+			#elseif("$!{o.status}"=="4")
+				审核未通过
+		    #elseif("$!{o.status}"=="5")
+				申请已过期
+		    #elseif("$!{o.status}"=="6")
+				申请已撤销
+			#else
+				$!{o.status}
+			#end
+		</td>
+		<td>
+		    #if("$!{o.status}"=="1")
+		    <a class="smBtn" href="#springUrl("/fastSettle/newt0/applyOnlineInitEdit.do?mcId=")$!{o.promoterId}&id=$!{o.id}" target="_blank" title="审核">审</a>
+		    #end
+			<a class="smBtn" href="#springUrl("/fastSettle/newt0/applyOnlineDetail.do?mcId=")$!{o.promoterId}&id=$!{o.id}" target="_blank" title="查看详细">详</a>
+			#if("$!{o.opType}"=="11" && "$!{o.status}"=="3")
+				#if($!{o.effectivity})
+				<a class="smBtn" href="#springUrl("/fastSettle/newt0/applyUndoInit.do?mcId=")$!{o.promoterId}&id=$!{o.id}" target="_blank" title="撤销申请">撤</a>
+				#end
+			#end
+		</td>
+	</tr>
+	#end
+</table>

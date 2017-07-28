@@ -1,0 +1,47 @@
+#set($page_title = '线程配置')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/threadConfig/index.do')">
+		<table cellspacing="0" cellpadding="0" border="0" class="CardWord">
+			<tr>
+				<td>批处理编号：</td>
+				<td><input type="text" id="batchCode" name="po.batchCode" value="$!{query.po.batchCode}"/>&nbsp;</td>
+				<td align="center">
+					<a href="#" class="btn2" onclick="ajaxPaging();">查询</a>
+					<a href="#" class="btn2" onclick="jQuery('#batchCode').val('');">清空</a>
+					<a href="#springUrl('/threadConfig/initEdit.do')" target="_blank" class="btn2" >新增</a>
+				</td>
+			</tr>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+    //ajax翻页
+    function ajaxPaging(){
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	var batchCode = jQuery("#batchCode").val();
+    	if(batchCode!=""){
+    		data["po.batchCode"]=batchCode;
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/threadConfig/ajaxPaging/configList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+</script>

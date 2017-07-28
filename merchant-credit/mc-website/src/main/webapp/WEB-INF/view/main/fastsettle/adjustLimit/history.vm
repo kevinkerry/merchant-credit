@@ -1,0 +1,76 @@
+<script type="text/javascript" src="#staticResource('/js/base.js')?version=1"></script>
+<script type="text/javascript" src="#staticResource('/js/baseExt.js')?version=1"></script>
+<link rel="stylesheet" href="#staticResource('My97DatePicker/skin/msp/datepicker.css')?version=1" type="text/css">
+<script type="text/javascript" src="#staticResource('My97DatePicker/WdatePicker.js')"></script>
+<script type="text/javascript" src="#staticResource('My97DatePicker/calendar.js')"></script>
+
+
+<form action="#relativeUrl('/adjustLimit/query.htm')" method="post" id="adjustHistoryForm">
+<input type="hidden" id="currentPage" 		name="currentPage" 		value="$!query.currentPage"/>##当前页
+<input type="hidden" id="pagesize"    		name="pageSize"    		value="$!query.pageSize"/>##页大小
+<input type="hidden" id="promoterType" name="promoterType" value="$!promoterType"/>
+<div class="content_box content">
+	#if($!promoterType == "0101") <h2 class="alC">云收银临时调额申请记录</h2> #else <h2 class="alC">临时调额申请记录</h2> #end
+	##<h2 class="alC">临时调额申请记录</h2>
+	<table class="table-style-01 mgT10 mAuto" width="80%"  border="1">
+		<thead>
+			<tr>
+			<th>申请时间</th>
+            <th>申请额度</th>
+            <th style="width:100px;">申请原因</th>
+            <th>是否有辅助材料</th>
+            <th>审核结果</th>
+			<th>辅助材料</th>
+
+			</tr>
+		</thead>
+		#foreach($temp in $dataList)
+		<tr>
+            <td>$temp.applyTimeStr</td>
+            <td>$temp.reqBean.applyLimit</td>
+            <td style="word-break:break-all;width:200px;text-align:left ">$temp.reqBean.applyCause</td>
+            <td>
+			 #if($!temp.reqBean.attachment=="")
+				否
+			 #else
+				是
+			 #end
+			</td>
+            <td style="word-wrap:break-all;width:200px;text-align:left ">
+				#if($temp.status==1)
+					等待审核
+				#elseif($temp.status==3)
+					审核通过，额度为：$!NumberUtils.formatWithComma($temp.reqBean.auditLimit)元
+				#elseif($temp.status==4)
+					审核未通过,原因：$temp.reqBean.auditDesc
+				#elseif($temp.status==5)
+					申请已过期
+				#elseif($temp.status==6)
+					申请已撤销，原因：$temp.reqBean.undoCause
+				#end
+			</td>
+			<td>
+				#if($temp.reqBean.attachment!="")
+				<a href="#" class="input-value normal" onclick="showFileContent('$temp.reqBean.attachment','$temp.reqBean.fileName','$temp.reqBean.contentType');" >查看</a>
+				#end
+			</td>
+
+        </tr>
+		#end
+	</table>
+	<div style="width:80%;" class="mgT10">
+		#parse("/main/include/pager.vm")
+    </div>
+</div>
+</form>
+
+<script type="text/javascript">
+	function gotoPage(page) {
+        $("#currentPage").val(page);
+        $("#adjustHistoryForm").submit();
+    }
+
+	function showFileContent(key,fileName,contentType){
+		window.open("../file/download.htm?key=" + key+"&fileName="+fileName+"&contentType="+contentType);
+	}
+</script>

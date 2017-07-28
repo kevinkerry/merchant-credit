@@ -1,0 +1,91 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">交易详情</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0">
+	<tr>
+		<td class="heading" colspan="4">交易信息</td>
+	</tr>
+	<tr>
+		<td width="100" class="lbl">参考号：</td>
+		<td width="300">$!{o.txnNo}</td>
+		<td width="100" class="lbl">原参考号：</td>
+		<td width="300">$!{o.origTxnNo}&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="lbl">交易类型：</td>
+		<td>${o.txnTypeName}</td>
+		<td class="lbl">交易时间:</td>
+		<td>#showDateTime($!{o.txnTime})</td>
+	</tr>
+	<tr>
+		<td class="lbl">交易金额：</td>
+		<td>$!NumberUtils.format($!{o.amt})</td>
+		<td class="lbl">交易状态：</td>
+		<td>$!{o.txnStatusName}</td>
+	</tr>
+	
+	<tr>
+		<td class="lbl">交易商户号：</td>
+		<td>$!{o.merchantNo}</td>
+		<td class="lbl">授权码：</td>
+		<td>$!{o.authCode}</td>
+	</tr>
+	
+	<tr>
+		<td class="lbl">输入模式：</td>
+		<td>$!{o.srvEntryModeName}</td>
+		<td class="lbl">缩略卡号：</td>
+		<td>$!{o.shortPanAsterisk}</td>
+	</tr>
+	<tr>
+		<td class="lbl">卡类型：</td>
+		<td>$!{o.cardTypeName}</td>
+		<td class="lbl">发卡机构：</td>
+		<td>$!{o.issuerName}</td>
+	</tr>
+	<tr>
+		<td class="lbl">币别：</td>
+		<td>$!{o.curName}&nbsp;</td>
+		<td class="lbl">交易应答：</td>
+		<td>$!{o.respCode} - $!{o.respCodeName}</td>
+	</tr>	
+</table>
+
+<table class="dtlTb" cellspacing="1" cellpadding="0">
+	<tr>
+		<td class="heading" colspan="4">终端信息</td>
+	</tr>
+	<tr>
+		<td width="100" class="lbl">终端编号：</td>
+		<td width="300">$!{o.terminalNo}</td>
+		<td width="100" class="lbl">终端名称:</td>
+		<td width="300"><input type="text" class="txtBtL w99p" value="$!{o.terminalName}" readonly="readonly"/></td>
+	</tr>
+	<tr>
+		<td class="lbl">终端批次号：</td>
+		<td>$!{o.terminalBatchNo}</td>
+		<td class="lbl">终端流水号:</td>
+		<td>$!{o.terminalTraceNo}</td>
+	</tr>
+	<tr>
+		<td class="lbl">终端地址：</td>
+		<td colspan="3"><input type="text" class="txtBtL w99p" value="$!{o.provinceName},$!{o.cityName},$!{o.address}" readonly="readonly"/></td>
+	</tr>
+</table>
+
+<table class="dtlTb" cellspacing="1" cellpadding="0" style="margin-bottom:20px;">
+	<tr>
+		<td class="heading" colspan="4">清结算信息</td>
+	</tr>
+	<tr>
+		<td width="100" class="lbl">手续费：</td>
+		<td width="300">$!NumberUtils.format($!{o.fee})</td>
+		<td width="100" class="lbl">结算金额:</td>
+		<td width="300">$!NumberUtils.format(${o.stlAmt})</td>
+	</tr>
+	<tr>
+		<td width="100" class="lbl">结算状态：</td>
+		<td width="300">$!{o.stlStatusName}</td>
+		<td width="100" class="lbl">结算日期:</td>
+		<td width="300">#showDate($!{o.stlDate})</td>
+	</tr>
+</table>

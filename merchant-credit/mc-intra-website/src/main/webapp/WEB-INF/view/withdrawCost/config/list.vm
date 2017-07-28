@@ -1,0 +1,41 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td width="30">id</td>
+		<td width="40">提现费用</td>
+		<td width="40">代理商分润比例</td>
+		<td width="60">策略类型</td>
+		<td width="60">策略值</td>
+		<td width="110">创建时间</td>
+		<td width="80">操作人</td>
+		<td width="110">修改时间</td>
+		<td width="50">操作</td>
+	</tr>
+	#foreach($o in $!{result})
+	<tr>
+		<td>$!{o.id}</td>
+		<td>$!{o.wdCost}</td>
+		<td>$!{o.wdPromoterSplittingScale}</td>
+		<td>
+		#if("$!{o.merchantType}"=="0001")POS商户
+    		#elseif("$!{o.merchantType}"=="0003")POS拓展方
+    		#elseif("$!{o.merchantType}"=="0006")MPOS商户
+    		#elseif("$!{o.merchantType}"=="0007")MPOS拓展方
+    		#elseif("$!{o.merchantType}"=="1001")MCC
+    		#else
+				$!{o.merchantType} &nbsp;
+    		#end
+    		
+		</td>
+		<td>$!{o.merchantNo} &nbsp;</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>$!{o.operatorName}</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>
+			<a  class="smBtn" href="#springUrl('/withdrawCost/config/initEdit.do')?po.id=$!{o.id}" target="_blank" title="修改">修</a>
+		</td>
+	</tr>
+	#end
+</table>

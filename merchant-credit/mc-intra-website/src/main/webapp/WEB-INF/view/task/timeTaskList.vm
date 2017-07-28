@@ -1,0 +1,61 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td></td>
+		<td>任务类型</td>
+		<td width="350">任务内容</td>
+		<td>任务状态</td>
+		<td>执行次数</td>
+		<td>生效时间</td>
+		<td>最后执行时间</td>
+		##<td>重试次数</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>$!{velocityCount}</td>
+		<td>
+			#if("$!{o.taskType}"=="1")
+				sql
+			#elseif("$!{o.taskType}"=="2")
+				定制
+			#elseif("$!{o.taskType}"=="3")
+				reset
+			#end
+		</td>
+		<td>$!{o.taskContent}</td>
+		<td>
+			#if("$!{o.taskStatus}"=="1")
+				待执行
+			#elseif("$!{o.taskStatus}"=="2")
+				执行中
+			#elseif("$!{o.taskStatus}"=="3")
+				待重试
+			#elseif("$!{o.taskStatus}"=="4")
+				执行失败
+		   #elseif("$!{o.taskStatus}"=="5")
+				 停止
+			#elseif("$!{o.taskStatus}"=="0")
+				执行成功
+			#end
+		</td>
+
+		<td>$!{o.executeTimes}</td>
+		<td>#showDateTime($!{o.effectiveTime})</td>
+		<td>#showDateTime($!{o.lastExecuteTime})</td>
+		##<td>$!{o.retryTimes}</td>
+
+		<td>
+		    #if($!{o.taskStatus}==1)
+			<a class="smBtn" href="javascript:void(0);" onclick="startTask($!{o.id})" class="look" title="启动">启</a>
+			<a class="smBtn" href="#springUrl('/taskinfo/updateTimedTaskInfoPage.do')?id=$!{o.id}" class="look" target="_blank" title="修改">修</a>
+			#elseif($!{o.taskStatus}==3)
+			<a class="smBtn" href="javascript:void(0);" onclick="stopTask(${o.id})"class="look" title="停止">停</a>
+			#end
+			<a class="smBtn" href="#springUrl('/taskinfo/queryTaskExecuteInfo.do')?id=$!{o.id}" target="_blank" title="明细">明</a>
+		</td>
+	</tr>
+	#end
+</table>

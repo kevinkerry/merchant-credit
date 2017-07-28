@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+ <classPathEntry location="D:\maven\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.msp.dao" targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+     <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator> 
+
+   <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.msp.dao.mapper"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.msp.dao.daointerface" />
+    </javaClientGenerator> 
+
+   <managerGenerator type="SPRING" targetPackage="com.sdp.mc.msp.manager" implementationPackage="com.sdp.mc.msp.manager.impl" generatorEnable="true"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator> 
+
+	<table tableName="TB_FS_CONFIG_CHANGE" domainObjectName="FsConfigChangeDO">
+		<generatedKey column="FCM_ID" sqlStatement="select SEQ_TB_FS_CONFIG_CHANGE.nextval from dual" type="pre" />
+		<columnOverride column="FCM_ID" 						property="fcmId" 				javaType="java.lang.Long" />
+    	<columnOverride column="TYPE" 						property="type" 				javaType="java.lang.Integer" />
+    	<columnOverride column="OBJ_ID" 					property="objId" 				javaType="java.lang.Long"/>
+    	<columnOverride column="OP_TYPE" 						property="opType" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="VERSION" 						property="version" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="STATUS" 						property="status" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="FAST_SETTLE_FLAG" 						property="fastSettleFlag" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="FAST_SETTLE_MARGIN" 					property="fastSettleMargin" 			/>
+    	<columnOverride column="FAST_SETTLE_LIMIT" 					property="fastSettleLimit" 				/>
+    	<columnOverride column="FAST_CONFIGURE_LIMIT" 					property="fastConfigureLimit" 				/>
+    	<columnOverride column="FAST_SETTLE_RATIO" 					property="fastSettleRatio" 				/>
+    	<columnOverride column="FAST_SETTLE_WORKDAY_FEE" 					property="fastSettleWorkdayFee" 				/>
+    	<columnOverride column="FAST_SETTLE_HOLIDAY_FEE" 					property="fastSettleHolidayFee" 				/>
+    	<columnOverride column="BEFORE_FAST_SETTLE_FLAG" 						property="beforeFastSettleFlag" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="BEFORE_FAST_SETTLE_MARGIN" 					property="beforeFastSettleMargin" 			/>
+    	<columnOverride column="BEFORE_FAST_SETTLE_LIMIT" 					property="beforeFastSettleLimit" 				/>
+    	<columnOverride column="BEFORE_FAST_CONFIGURE_LIMIT" 					property="beforeFastConfigureLimit" 				/>
+    	<columnOverride column="BEFORE_FAST_SETTLE_RATIO" 					property="beforeFastSettleRatio" 				/>
+    	<columnOverride column="BEFOREFAST_SETTLE_WORKDAY_FEE" 					property="beforeFastSettleWorkdayFee" 				/>
+    	<columnOverride column="BEFOREFAST_SETTLE_HOLIDAY_FEE" 					property="beforeFastSettleHolidayFee" 				/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="LOANING_TYPE" 					property="loaningType" 			javaType="java.lang.Integer"/>
+    	<columnOverride column="FAST_SETTLE_MIN_LIMIT" 					property="fastSettleMinLimit" 				/>
+    	<columnOverride column="BEFORE_FAST_SETTLE_MIN_LIMIT" 					property="beforeFastSettleMinLimit" 				/>
+    	<columnOverride column="AUTO_FAST_SETTLE" 						property="autoFastSettle" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="BEFORE_AUTO_FAST_SETTLE" 						property="beforeAutoFastSettle" 				javaType="java.lang.Integer"/>
+    </table>
+  </context>
+</generatorConfiguration>

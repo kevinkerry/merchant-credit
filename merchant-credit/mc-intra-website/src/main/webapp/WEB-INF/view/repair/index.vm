@@ -1,0 +1,356 @@
+#set($page_title = '数据管理 ') #set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post"
+			action="#springUrl('/test/test')">
+			<table>
+				<tr>
+					<td align="center" style="vertical-align: middle;">参数：<textarea
+							rows="3" cols="100" id="paramInfo" name="paramInfo" value=""
+							class="txt130"></textarea>
+					</td>
+				</tr>
+				#if($MCUrlUtil.canAccessUrl("/repair/syncMerchantInfoAll",$request))
+				<tr>
+					<td align="center"><a href="javascript:void(0);" class="btn2"
+						onclick="syncMerchantAll()">同步所有商户</a><br /></td>
+				</tr>
+				#end #if($MCUrlUtil.canAccessUrl("/repair/syncPromoterInfo",$request))
+				<tr>
+					<td align="center"><a href="javascript:void(0);" class="btn2"
+						onclick="onRequest('syncPromoterInfo')">同步指定代理商</a><br /></td>
+				</tr>
+				#end #if($MCUrlUtil.canAccessUrl("/repair/mposOpenT0All",$request))
+				<tr>
+					<td align="center"><a href="javascript:void(0);" class="btn2"
+						onclick="mposOpenT0All()">MPOS开通T0</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/distinctMerchant",$request))
+				<tr>
+					<td align="center"><a href="javascript:void(0);" class="btn2"
+						onclick="distinctMerchant()">删除重复商户</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/repairWithdrawData",$request))
+				<tr>
+					<td align="center"><a href="javascript:void(0);" class="btn2"
+						onclick="repairWithdrawData()">修复出款数据</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/repairFirstOpenDate",$request))
+				<tr>
+					<td align="center"><a href="javascript:void(0);" class="btn2"
+						onclick="repairFirstOpenDate()">修复开通时间</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/sc/computeSpitting",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="javascript:computeSpitting();">计算出款分润</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/sc/computeStairAward",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="javascript:computeStairAward();">计算阶梯奖惩</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/sc/buildSettleOrder",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"<a
+							href="#" class="btn2" onclick="javascript:buildSettleOrder();">生成结算单</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/sc/redoSettleOrder",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="javascript:redoSettleOrder();">重算结算数据</a><br /></td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/sc/redoCurrentSettleOrder",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="javascript:redoCurrentSettleOrder();">重算当月结算数据</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/mposBatchUpdateFee",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('mposBatchUpdateFee');">MPOS更新费率</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/syncMerchantOperator",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('syncMerchantOperator');">同步商户操作员不一致</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/autoBatchChangeMerchantLimit",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="javascript:autoBatchChangeMerchantLimit();">自动批量修改额度</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/syncWithdrawStatus",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('syncWithdrawStatus');">同步出款中状态</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/syncOpenAccountTime",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('syncOpenAccountTime');">同步开户时间</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/executeUpdate",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('executeUpdate');">更新</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/executeInsert",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('executeInsert');">创建</a><br />
+					</td>
+				</tr>
+				#end
+				#if($MCUrlUtil.canAccessUrl("/repair/mposOpen217Account",$request))
+				<tr>
+					<td align="center"><a href="#" class="btn2"
+						onclick="onRequest('mposOpen217Account');">开217户</a><br />
+					</td>
+				</tr>
+				#end
+			</table>
+
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	var waiting = '<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+	var flag = false;
+
+	function syncMerchantAll() {
+		var paramInfo = jQuery("#paramInfo").val();
+		var data = {
+			merchantNos : paramInfo
+		};
+		if (flag) {
+			return;
+		}
+		flag = true;
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/syncMerchantInfoAll.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			data : data,
+			success : function(data) {
+				jQuery("#container").html(data);
+				flag = false;
+			}
+		});
+	}
+	function repairWithdrawData() {
+		if (flag) {
+			return;
+		}
+		flag = true;
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/repairWithdrawData.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+				flag = false;
+			}
+		});
+	}
+	function repairFirstOpenDate() {
+		if (flag) {
+			return;
+		}
+		flag = true;
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/repairFirstOpenDate.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+				flag = false;
+			}
+		});
+	}
+	function mposOpenT0All() {
+		if (flag) {
+			return;
+		}
+		flag = true;
+		var paramInfo = jQuery("#paramInfo").val();
+		var data = {
+			merchantNos : paramInfo
+		};
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/mposOpenT0All.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			data : data,
+			success : function(data) {
+				jQuery("#container").html(data);
+				flag = false;
+			}
+		});
+	}
+	function distinctMerchant() {
+		if (flag) {
+			return;
+		}
+		flag = true;
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/withdraw-test/distinctMerchant.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+				flag = false;
+			}
+		});
+	}
+
+	function computeSpitting() {
+		var paramInfo = jQuery("#paramInfo").val();
+		var data = {
+			reqId : paramInfo
+		};
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/sc/computeSpitting.do')?sessionId="
+					+ new Date().getTime(),
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+	function computeStairAward() {
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/sc/computeStairAward.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+	function buildSettleOrder() {
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/sc/buildSettleOrder.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+	function redoSettleOrder() {
+		if(!confirm("请确认是否需要重算结算数据？")){
+    		return;
+    	}
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/sc/redoSettleOrder.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+	function autoBatchChangeMerchantLimit() {
+		jQuery("#container").html(waiting);
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/repair/autoBatchChangeMerchantLimit.do')?sessionId="
+					+ new Date().getTime(),
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+	function redoCurrentSettleOrder() {
+		if(!confirm("请确认是否需要重算当月结算数据？")){
+    		return;
+    	}
+		var paramInfo = jQuery("#paramInfo").val();
+		var data = {
+			month : paramInfo
+		};
+		jQuery("#container").html(waiting);
+		jQuery
+				.ajax({
+					type : 'POST',
+					url : "#springUrl('/repair/sc/redoCurrentSettleOrder.do')?sessionId="
+							+ new Date().getTime(),
+					dataType : "html",
+					data : data,
+					success : function(data) {
+						jQuery("#container").html(data);
+					}
+				});
+	}
+	
+	function onRequest(requestMethod) {
+		if(!confirm("请确认？")){
+    		return;
+    	}
+		var paramInfo = jQuery("#paramInfo").val();
+		var data = {
+				merchantNos : paramInfo
+		};
+		jQuery("#container").html(waiting);
+		jQuery
+				.ajax({
+					type : 'POST',
+					url : "#springUrl('/repair')/"+requestMethod+".do?sessionId="
+							+ new Date().getTime(),
+					dataType : "html",
+					data : data,
+					success : function(data) {
+						jQuery("#container").html(data);
+					}
+				});
+	}
+</script>

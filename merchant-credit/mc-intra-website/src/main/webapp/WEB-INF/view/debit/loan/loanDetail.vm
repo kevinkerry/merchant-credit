@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="#springUrl('/htdocs/debit/css/inc.css')">
+    <link rel="stylesheet" href="#springUrl('/htdocs/debit/css/style.css')">
+</head>
+<body>
+    <div class="content main_box">
+        <div class="ban_table clearfix">
+            <div class="ban_right ban_data">
+                <h2>借款详情</h2>
+    <table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+    <tr>
+        <td height="35">订单号</td>
+        <td>$!{data.id}</td>
+        <td height="35">商户名称</td>
+        <td>$!{data.merchantName}</td>
+    </tr>
+    <tr>
+        <td height="35">商户号</td>
+        <td>$!{data.merchantNo}</td>
+        <td height="35">代理商名称</td>
+        <td>$!{data.promoterName}</td>
+    </tr>
+
+    <tr>
+        <td height="35">借款本金</td>
+        <td>$!{data.debitAmount}</td>
+        <td height="35">借款用途</td>
+		<td>#if("$!{data.purposer}"=="1")资金周转#elseif("$!{data.purposer}"=="2")短期货款#end</td>
+    </tr>
+    <tr>
+        <td height="35">申请借款日期</td>
+        <td>#showDate($!{data.applyDate})</td>
+        <td height="35">放款成功日期</td>
+        <td>#showDate($!{data.transferTime})</td>
+    </tr>
+    <tr>
+        <td height="35">起息日</td>
+        <td>#showDate($!{data.startTime})</td>
+        <td height="35">到期日</td>
+        <td>#showDate($!{data.endTime})</td>
+    </tr>
+
+    <tr>
+        <td height="35">最后还款日</td>
+        <td>#showDate($!{data.endTime})</td>
+        <td height="35">借款利息</td>
+        <td>$!{data.interestAmount}</td>
+    </tr>
+    <tr>
+        <td height="35">借款期限</td>
+        <td>$!{data.borrowDays}</td>
+        <td height="35">代扣服务费金额</td>
+        <td>$!{data.serviceAmount}</td>
+    </tr>
+    <tr>
+        <td height="35">日息利率</td>
+        <td>$!{fRate}</td>
+        <td height="35">服务费率</td>
+        <td>$!{serverRate}</td>
+        </tr>
+		<tr>
+		<td height="35">实际放款金额</td>
+        <td>$!{data.realAmount}</td>
+        
+        <td height="35">借款状态</td>
+        <td>
+            #if("$!{data.status}"=="5")
+                待放款
+            #elseif("$!{data.status}"=="1")
+                还款中
+			#elseif("$!{data.status}"=="6")
+                放款中
+            #elseif("$!{data.status}"=="7")
+                放款失败
+            #elseif("$!{data.status}"=="8")
+                拒绝放款
+            #end
+        </td>
+    </tr>
+
+</table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

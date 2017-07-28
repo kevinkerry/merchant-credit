@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.lottery.common.sys.dao.model" targetProject="F:\caipiao-v2\lottery-common\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="F:\caipiao-v2\lottery-common\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.lottery.common.sys.dao.mapper"  targetProject="F:\caipiao-v2\lottery-common\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.lottery.common.sys.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.lottery.common.sys.manager" implementationPackage="com.sdp.lottery.common.sys.manager.impl" generatorEnable="true"  targetProject="F:\caipiao-v2\lottery-common\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="MSP_ROLE" domainObjectName="SysDomainConfigDO">
+		<generatedKey column="ID"  sqlStatement="JDBC" identity="true"/>
+    	<columnOverride column="ID" 							property="id" 						javaType="java.lang.Integer" />
+    	<columnOverride column="STATUS" 						property="status" 					javaType="java.lang.Integer"/>
+    	<columnOverride column="CREATE_DATE" 					property="createDate" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="TYPE" 							property="type" 					javaType="java.lang.Integer"/>
+    </table>
+  </context>
+</generatorConfiguration>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_MERCHANT_APPLY_FAIL_LOG">
+  <sql id="Base_Column_List_With_Prefix" >
+    t.ID, t.APPLY_ID, t.FAIL_REASON, t.CREATE_TIME, t.UPDATE_TIME
+  </sql>
+	<select id="getLastFailLog" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+		select * from (
+			select <include refid="DO_MERCHANT_APPLY_FAIL_LOG.Base_Column_List" /> 
+			from DO_MERCHANT_APPLY_FAIL_LOG 
+			where apply_id=#applyId# order by create_time desc) 
+		where <![CDATA[rownum<=1]]>
+	</select>
+</sqlMap>

@@ -1,0 +1,129 @@
+#set($page_title = '定时任务管理 ')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm">
+			<table class="qryTb" cellspacing="0" cellpadding="0" width="100%">
+				<tbody>
+					<tr>
+					<td width="100" class="lbl">任务类别：
+						<select id="taskType" name="taskType">
+								<option value="">全部</option>
+								<option value="1">SQL</option>
+								<option value="2">定制任务</option>
+<!-- 								<option value="3">reset</option> -->
+						</select>
+						</td>
+						<td width="100" class="lbl">执行状态：
+						<select id="taskStatus" name="taskStatus">
+								<option value="">全部</option>
+								<option value="1">待执行</option>
+								<option value="2">执行中</option>
+								<option value="3">待重试</option>
+								<option value="5">停止</option>
+								<option value="4">执行失败</option>
+								<option value="0">执行成功</option>
+						</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="8" align="center">
+							<a href="javascript:void(0)"
+							class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+							<a href="#springUrl('/taskinfo/addPageIndex.do')" class="btn2" target="_blank">新增</a>
+							<span class="gray" id="querying" style="display: none;">查询中...</span>
+     		            <a href="javascript:void(0)" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	var ALL_COND_ID = ['taskType', 'taskStatus'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+ 	}
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var data = {
+			"currentPage" : currentPage
+		};
+		for (i in ALL_COND_ID) {
+			data[ALL_COND_ID[i]] = jQuery("#" + ALL_COND_ID[i]).val();
+		}
+
+		jQuery
+				.ajax({
+					type : 'POST',
+					url : "#springUrl('/taskinfo/queryTaskList.do')",
+					data : data,
+					dataType : "html",
+					success : function(data) {
+						jQuery("#container").html(data);
+					}
+				});
+	}
+	
+	  //启动任务
+    function startTask(id){
+       // var id = $("#id").val();
+    	var data = {id:id};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/taskinfo/startTimedTaskJob.do')" ,
+		    data: data ,
+		    dataType: "json",
+            success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("修改成功");
+					ajaxPaging();
+				}
+		    }
+		});
+    }
+ //停止任务
+     function stopTask(id){
+       // var id = $("#id").val();
+    	var data = {id:id};
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/taskinfo/stopTimeTaskJob.do')" ,
+		    data: data ,
+		    dataType: "json",
+		    success: function(data){
+		    	var success = data.success;
+				var respMsg= data.errorMessage;
+				if (success==false){
+					alert(respMsg);
+				} else {
+					alert("修改成功");
+					ajaxPaging();
+					//window.close();
+				}
+		    }
+		});
+    }
+	//ajax翻页
+	//function downloadResult() {
+		//jQuery("#submitForm").attr("action",
+			//	"#springUrl('/newt0Settle/downloadMerchantQueryResult.do')");
+		//jQuery("#submitForm").attr("target", "_blank");
+		//jQuery("#submitForm").submit();
+//	}
+</script>

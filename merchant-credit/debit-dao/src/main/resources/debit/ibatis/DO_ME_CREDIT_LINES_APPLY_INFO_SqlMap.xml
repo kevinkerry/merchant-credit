@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_ME_CREDIT_LINES_APPLY_INFO" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="LINE_APPLY_ORDER_ID" property="lineApplyOrderId" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="ORGNIZATION_CODE" property="orgnizationCode" jdbcType="VARCHAR" />
+    <result column="INPUT_KIND" property="inputKind" jdbcType="VARCHAR" />
+    <result column="INPUT_CODE" property="inputCode" jdbcType="VARCHAR" />
+    <result column="INPUT_VALUE" property="inputValue" jdbcType="VARCHAR" />
+    <result column="INPUT_TYPE" property="inputType" jdbcType="VARCHAR" />
+    <result column="EXT_INFO" property="extInfo" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, LINE_APPLY_ORDER_ID, MERCHANT_NO, ORGNIZATION_CODE, INPUT_KIND, INPUT_CODE, INPUT_VALUE,
+    INPUT_TYPE, EXT_INFO, CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Base_Column_List" />
+    from DO_ME_CREDIT_LINES_APPLY_INFO
+    <isParameterPresent >
+      <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    select
+    <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Base_Column_List" />
+    from DO_ME_CREDIT_LINES_APPLY_INFO
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    delete from DO_ME_CREDIT_LINES_APPLY_INFO
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoExample" >
+    delete from DO_ME_CREDIT_LINES_APPLY_INFO
+    <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_LINES_APPLY_INFO.nextval from dual
+    </selectKey>
+    insert into DO_ME_CREDIT_LINES_APPLY_INFO (ID, LINE_APPLY_ORDER_ID, MERCHANT_NO, ORGNIZATION_CODE,
+      INPUT_KIND, INPUT_CODE, INPUT_VALUE, INPUT_TYPE,
+      EXT_INFO, CREATE_TIME, UPDATE_TIME)
+    values (#id:DECIMAL#, #lineApplyOrderId:DECIMAL#, #merchantNo:VARCHAR#, #orgnizationCode:VARCHAR#,
+      #inputKind:VARCHAR#, #inputCode:VARCHAR#, #inputValue:VARCHAR#, #inputType:VARCHAR#,
+      #extInfo:VARCHAR#, #createTime#, #updateTime#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_LINES_APPLY_INFO.nextval from dual
+    </selectKey>
+    insert into DO_ME_CREDIT_LINES_APPLY_INFO
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="lineApplyOrderId" >
+        LINE_APPLY_ORDER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="orgnizationCode" >
+        ORGNIZATION_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="inputKind" >
+        INPUT_KIND
+      </isNotNull>
+      <isNotNull prepend="," property="inputCode" >
+        INPUT_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="inputValue" >
+        INPUT_VALUE
+      </isNotNull>
+      <isNotNull prepend="," property="inputType" >
+        INPUT_TYPE
+      </isNotNull>
+      <isNotNull prepend="," property="extInfo" >
+        EXT_INFO
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="lineApplyOrderId" >
+        #lineApplyOrderId:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orgnizationCode" >
+        #orgnizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputKind" >
+        #inputKind:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputCode" >
+        #inputCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputValue" >
+        #inputValue:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputType" >
+        #inputType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="extInfo" >
+        #extInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoExample" resultClass="java.lang.Integer" >
+    select count(*) from DO_ME_CREDIT_LINES_APPLY_INFO
+    <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DO_ME_CREDIT_LINES_APPLY_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lineApplyOrderId" >
+        LINE_APPLY_ORDER_ID = #record.lineApplyOrderId:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.orgnizationCode" >
+        ORGNIZATION_CODE = #record.orgnizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.inputKind" >
+        INPUT_KIND = #record.inputKind:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.inputCode" >
+        INPUT_CODE = #record.inputCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.inputValue" >
+        INPUT_VALUE = #record.inputValue:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.inputType" >
+        INPUT_TYPE = #record.inputType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.extInfo" >
+        EXT_INFO = #record.extInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DO_ME_CREDIT_LINES_APPLY_INFO
+    set ID = #record.id:DECIMAL#,
+      LINE_APPLY_ORDER_ID = #record.lineApplyOrderId:DECIMAL#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      ORGNIZATION_CODE = #record.orgnizationCode:VARCHAR#,
+      INPUT_KIND = #record.inputKind:VARCHAR#,
+      INPUT_CODE = #record.inputCode:VARCHAR#,
+      INPUT_VALUE = #record.inputValue:VARCHAR#,
+      INPUT_TYPE = #record.inputType:VARCHAR#,
+      EXT_INFO = #record.extInfo:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#
+    <isParameterPresent >
+      <include refid="DO_ME_CREDIT_LINES_APPLY_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    update DO_ME_CREDIT_LINES_APPLY_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="lineApplyOrderId" >
+        LINE_APPLY_ORDER_ID = #lineApplyOrderId:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orgnizationCode" >
+        ORGNIZATION_CODE = #orgnizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputKind" >
+        INPUT_KIND = #inputKind:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputCode" >
+        INPUT_CODE = #inputCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputValue" >
+        INPUT_VALUE = #inputValue:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="inputType" >
+        INPUT_TYPE = #inputType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="extInfo" >
+        EXT_INFO = #extInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMeCreditLinesApplyInfoPO" >
+    update DO_ME_CREDIT_LINES_APPLY_INFO
+    set LINE_APPLY_ORDER_ID = #lineApplyOrderId:DECIMAL#,
+      MERCHANT_NO = #merchantNo:VARCHAR#,
+      ORGNIZATION_CODE = #orgnizationCode:VARCHAR#,
+      INPUT_KIND = #inputKind:VARCHAR#,
+      INPUT_CODE = #inputCode:VARCHAR#,
+      INPUT_VALUE = #inputValue:VARCHAR#,
+      INPUT_TYPE = #inputType:VARCHAR#,
+      EXT_INFO = #extInfo:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

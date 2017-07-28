@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<!--   <property name="default_pattern" value="%date %-5level %logger{30} - %msg%n" /> -->
+  <property name="default_pattern" value="%d %-5level [%t - %X{traceNo}] %c{1} - %m%n" />
+  <property name="log.basedir" value="/logs" />
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoding>UTF-8</encoding>
+    <encoder class="com.shengpay.logback.mdc.trace.encoder.TraceNoPatternLayoutEncoder">    
+	    <charset>UTF-8</charset>    
+	    <pattern>${default_pattern}</pattern> 
+    </encoder> 
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoding>UTF-8</encoding>
+    <file>${log.basedir}/merchant-credit/mc-t0-service.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log.basedir}/merchant-credit/mc-t0-service.log.%d{yyyy-MM-dd}</fileNamePattern>
+    </rollingPolicy>
+     <encoder class="com.shengpay.logback.mdc.trace.encoder.TraceNoPatternLayoutEncoder">    
+	    <charset>UTF-8</charset>    
+	    <pattern>${default_pattern}</pattern> 
+    </encoder> 
+  </appender>
+  
+<!--   <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoding>UTF-8</encoding>
+    <file>${log.basedir}/merchant-credit/error/mc-intra-error.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log.basedir}/merchant-credit/error/mc-intra-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+    </rollingPolicy>
+    <layout class="com.shengpay.logback.mdc.trace.encoder.TraceNoPatternLayoutEncoder">
+      <pattern>${default_pattern}</pattern>
+    </layout>
+  </appender> -->
+
+ <root>
+    <level value="info" />
+    <appender-ref ref="FILE" />
+    <!--     发布时注释掉 -->
+    <appender-ref ref="console" />
+  </root> 
+</configuration>

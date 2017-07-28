@@ -1,0 +1,8 @@
+for /r . %%a in (.) do @if exist  "%%a\target"  rd /s /q "%%a\target"
+for /r . %%a in (.) do @if exist  "%%a\.classpath"  del /s /q "%%a\.classpath"
+for /r . %%a in (.) do @if exist  "%%a\.project"  del /s /q "%%a\.project"
+for /r . %%a in (.) do @if exist  "%%a\.settings"  rd /s /q "%%a\.settings"
+for /r . %%a in (.) do @if exist  "%%a\.springBeans"  del /s /q "%%a\.springBeans"
+for /r . %%a in (.) do @if exist  "%%a\bin"  rd /s /q "%%a\bin"
+for /r . %%a in (.) do @if exist  "%%a\maven-eclipse.xml"  del /s /q "%%a\maven-eclipse.xml"
+for /r . %%a in (.) do @if exist  "%%a\.externalToolBuilders"  rd /s /q "%%a\.externalToolBuilders"

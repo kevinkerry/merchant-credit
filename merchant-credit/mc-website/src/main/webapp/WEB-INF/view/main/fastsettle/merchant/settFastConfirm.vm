@@ -1,0 +1,178 @@
+<script src="#staticResource('js/posMerchant/txn/settFastConfirm.js')"></script>
+<br/>
+<br/>
+<input type="hidden" id="msg" value="$!{msg}" />
+<form id="myForm" name="myForm" action="#springUrl('/posMerchant/saveSetFastConfirm.htm')" method="post" enctype="multipart/form-data" target="ifm0">
+<div class="detailCaption">提交快速结算交易</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0" width="950px">
+	<tr>
+		#if($!{loaningType}=="1")
+		<input type="hidden" id="txnAmtTotalSpan"/>##待提交交易金额
+		<input type="hidden" id="txnNumTotalSpan"/>##待提交交易笔数
+		<input type="hidden" id="fastSettFeeSpan"/>##快速结算手续费(预估)
+		#end
+		<input type="hidden" id="validCredit" name="validCredit" value="$!{validCredit}"/>##今日可用额度
+		<td width="150" class="lbl">
+			今日总额度：##今日可用额度：
+		</td>
+		<td width="200">
+			$!{totalCredit}元
+		</td>
+		#if($!{loaningType}=="0")
+		<td width="150" class="lbl">待提交交易金额：</td>
+		<td width="200"><span id="txnAmtTotalSpan"></span></td>
+		#elseif($!{loaningType}=="1")
+			##txnAmtTotalSpan 为了不影响原有提交流程
+		<td width="150" class="lbl">今日可用额度：</td>
+    		#if($!{straightFlag}==true)
+    			<td width="200">$!{validCredit}元</td>
+    		#else
+    			<td width="200"></td>
+			#end
+		#else
+			<td width="150" class="lbl">今日可用额度：</td>
+			<td width="200">$!{validCredit}元</td>
+		#end
+		<td width="150" class="lbl">快速结算手续费率：</td>
+		<td width="200"><input type="hidden" id="feeRate" name="feeRate" value="$!{feeRate}"/>$!{feeRateStr}%</td>
+	</tr>
+	#if($!{loaningType}=="0")
+	<tr>
+		<td class="lbl">今日可用额度：
+		</td>
+		<td>
+			${validCredit}元
+		</td>
+		<td class="lbl">待提交交易笔数：</td>
+		<td><span id="txnNumTotalSpan"></span></td>
+		<td class="lbl">快速结算手续费：</td>
+		<td><span id="fastSettFeeSpan"></span>(预估)</td>
+	</tr>
+	#end
+	<tr><td>&nbsp;</td></tr>
+	<tr>
+		<td colspan="6" >
+			<p style="color:red;font-size: 15px;display:inline;">
+			注：如遇周末或节假日，假期内所有日期共享工作日一天的额度。##，此时“今日总额度”和“今日已用额度”表示当前假期内的总额度和已用总额度。
+			</p>
+        </td>
+	</tr>
+</table>
+#if($!{autoFlag}=="1")
+	<table  cellspacing="1" cellpadding="0" width="100%">
+	<tr>
+		<td colspan="6" align="center" >
+        	<p  style="color:black;font-size: 19px;display:inline;text-align:center">
+        		代理商已为您开通逐笔实时结算，无需手动提交。
+            </p>
+		</td>
+	</tr>
+</table>
+#end
+#if($!{autoFlag}=="3"||$!{autoFlag}=="2")
+<table class="dtlTb" cellspacing="1" cellpadding="0" width="950px">
+	<tr>
+		<td class="heading" colspan="12">交易明细</td>
+	</tr>
+	<tr>
+		<td width="180" class="lbl2">交易时间</td>
+		<td width="100" class="lbl2">参考号</td>
+		<td width="100" class="lbl2">交易类型</td>
+		<td width="100" class="lbl2">交易状态</td>
+		<td width="100" class="lbl2">交易金额</td>
+		<td width="100" class="lbl2">收单手续费</td>
+		<td width="100" class="lbl2">结算金额</td>
+		<td width="100" class="lbl2">卡类型</td>
+		<td width="100" class="lbl2">缩略卡号</td>
+		<td width="100" class="lbl2">发卡机构</td>
+		<td width="100" class="lbl2">终端编号</td>
+		<td width="100" class="lbl2">操作</td>
+	</tr>
+	#foreach($o in $roList)
+	<tr class="">
+		<td>#showDateTime($!{o.txnTime})</td>
+		<td>$!{o.txnNo}</td>
+		<td>$!{o.txnTypeName}</td>
+		<td>$!{o.txnStatusName}</td>
+		<td>
+			<input type="hidden" id="$!{o.txnOrderNo}" name="$!{o.txnOrderNo}" value="$!{o.amt}"/>
+			$!{o.amt}
+		</td>
+		<td>$!{o.fee}</td>
+		<td>$!{o.stlAmt}</td>
+		<td>$!{o.cardTypeName}</td>
+		<td>$!{o.shortPanAsterisk}</td>
+		<td>$!{o.issuerName}</td>
+		<td>$!{o.terminalNo}</td>
+		<td>
+			#set($temp=$velocityCount)
+			#set($temp=$temp-1)
+			#if($!{loaningType}=="0")
+			 <input id="$temp" type="checkbox" name="txnOrderNo" value="$!{o.txnOrderNo}"
+                       onclick="txnOrderNoSelect(this);"/>
+			#else
+			<input id="$temp" type="checkbox" name="txnOrderNo" value="$!{o.txnOrderNo}"
+					  onclick="txnOrderNoSelectShengPay(this);"/>
+			#end
+		</td>
+	</tr>
+	#end
+
+</table>
+#end
+
+<!--
+<iframe id="ifm0" name="ifm0" style="display:none;"></iframe>
+--->
+<div class="popup" id="pop1" style="display:none">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc">
+		<a href="javascript:void(0);" class="popup-cancel g-button" onclick="setAutoFastSettle('#springUrl('/posMerchant/saveAutoSettle.htm')');">确定</a>
+		<a href="javascript:void(0);" class="popup-confrim g-button" onclick="document.getElementById('pop1').style.display='none';return false;">返回</a>
+	</p>
+</div>
+<div class="popup" id="pop2" style="display:none">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container"></div>
+	<p class="popup-tlc">
+		<a href="javascript:void(0);" class="popup-cancel g-button" onclick="javascrit:window.location.reload();">确定</a>
+	</p>
+</div>
+<div class="popup" id="pop3" style="display:none">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container">处理中...</div>
+	<p class="popup-tlc">
+	</p>
+</div>
+
+<div class="alC" style="margin:20px auto 20px auto;" id="btnDiv">
+	<input type="hidden" id="posMerchantNo" name="posMerchantNo" value="$!{posMerchantNo}"/>
+	<input type="hidden" id="txnOrderNos" name="txnOrderNos" />
+	<input type="hidden" id="floorAmt" value="$!{floorAmt}"/>
+	#if (${straightFlag})
+		#if ($!{autoFlag}=="3"||$!{autoFlag}=="2")
+		<a id="submitBtn" href="javascript:void(0);" class="g-button" onclick="saveSettFastConfirm();return false;">提交</a>
+		#end
+    	#if (${loaningType}==0)
+    	<a href="javascript:void(0);" class="g-button" onclick="showPop1('确认#if($!{autoFlag}==0)关闭#else开通#end自动快速结算?');">#if($!{autoFlag}==0)关闭#else开通#end自动快速结算</a>
+    	#end
+	#end
+</div>
+</form>
+<script>
+	function showPop1(msg){
+		jQuery("#pop1 .popup-container").html(msg);
+		jQuery("#pop1").show();
+	}
+	function showPop2(msg){
+		jQuery("#pop2 .popup-container").html(msg);
+		jQuery("#pop2").show();
+	}
+</script>

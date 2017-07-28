@@ -1,0 +1,37 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<style>
+	table{ table-layout: fixed; }
+    td{
+     　  white-space: nowrap;
+    　　overflow: hidden;
+    　　text-overflow: ellipsis;
+    }
+</style>
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td width="6%">垫资类型</td>
+		<td width="50%">配置项内容</td>
+		<td width="10%">创建时间</td>
+		<td width="10%">修改时间</td>
+		<td width="5%">操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>
+		#if("$!{o.loaningType}"==1)
+			盛付通垫资
+	    #else
+	               代理商垫资
+		#end
+        </td>
+		<td>$!{o.content}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>
+			<a class="lk1" href="#springUrl('/loaningConfig/initEdit.do')?configId=$!{o.id}" target="_blank">修改</a>
+		</td>
+	</tr>
+	#end
+</table>

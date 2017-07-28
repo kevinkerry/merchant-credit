@@ -1,0 +1,49 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>提现时间</td>
+		<td>盛付通商户号</td>
+		<td>商户名称</td>
+		<td>商户类别</td>
+		<td>提现类型</td>
+		<td>提现金额</td>
+		<td>总手续费</td>
+		<td>提现费(x%部分)</td>
+		<td>提现费(x元部分)</td>
+		<td>银行卡到账金额</td>
+		<td>提现状态</td>
+		<td>提现成功时间</td>
+		<td>操作员</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		<td>$!{o.mcc}</td>
+		#if($!{o.withdrawType} == "1")
+			<td>快速提现</td>
+		#elseif($!{o.withdrawType} == "2")
+			<td>普通提现</td>
+		#end
+		<td>$!{o.withdrawAmount}</td>
+		<td>$!{o.totalCost}</td>
+		<td>$!{o.withdrawCost}</td>
+		<td>$!{o.wdCost}</td>
+		<td>$!{o.bankAccountAmount}</td>
+		#if($!{o.status} == "0")
+		<td>成功</td>
+		#elseif($!{o.status} == "9")
+		<td>失败</td>
+		#elseif($!{o.status} == "2")
+		<td>处理中</td>
+		#end
+		<td>#showDateTime($!{o.withdrawTime})</td>
+		<td>$!{o.pmtBindOperatorName}</td>
+	</tr>
+	#end
+</table>

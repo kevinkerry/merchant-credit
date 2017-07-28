@@ -1,0 +1,219 @@
+#set($page_title = '保证金放款 ') #set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/newT0/loanDownload.do')">
+			<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tbody>
+	    		<tr>
+			    	<td width="100" class="lbl">商户名称：</td>
+			        <td width="140">
+			        	<input type="text" id="promoterName" name="promoterName" class="txt w120" value="">
+			        </td>
+			        <td width="100" class="lbl">商户号：</td>
+			        <td width="140">
+			        	<input type="text" value="" id="promoterNo" class="txt w120" name="promoterNo">
+			        </td>
+			        <td class="lbl">放款状态：</td>
+			        <td><select name="status" id="status" class="mstxt msbg100 w100">
+								<option value="">全部</option>
+								<option value="202">已放款</option>
+								<option value="201" selected="selected">待放款</option>
+								<option value="-202">放款失败</option>
+								<option value="-300">拒绝放款</option>
+						</select>
+					</td>
+			    </tr>
+			    <tr>
+			        <td class="lbl">请款时间：</td>
+			        <td colspan="6">
+			           <input type="text" id="redeemedTimeStr" name="redeemedTimeStr" class="txt w150 date" onfocus="xDatePicker(2);" readonly="readonly">
+			            ~
+			            <input type="text" id="redeemedTimeEnd" name="redeemedTimeEnd" class="txt w150 date" onfocus="xDatePicker(2);" readonly="readonly">
+			        <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('redeemedTimeStr'), 0, elm('redeemedTimeEnd') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('redeemedTimeStr'), 0, elm('redeemedTimeEnd') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('redeemedTimeStr'), 0, elm('redeemedTimeEnd') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('redeemedTimeStr'), 0, elm('redeemedTimeEnd') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('redeemedTimeStr'), -1, elm('redeemedTimeEnd') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('redeemedTimeStr'), 0, elm('redeemedTimeEnd') );return false;" title="交易时间范围：今天">今</a>
+					<span class="red">(范围限365天)</span>
+			        </td>
+			        <td></td>
+			    </tr>
+			    <tr>
+			        <td colspan="8" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging();return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			           <!--  <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a> -->
+			            <a href="#" class="btn2" id="queryBtn" onclick="downloadExcel();return false;">下载</a>
+			            <a href="#" class="btn2" id="queryBtn" onclick="batchApplayOp('0');return false;">批量放款</a>
+			            <a href="#" class="btn2" id="queryBtn" onclick="batchApplayOp('1');return false;">批量拒绝</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTbLoan"></div>
+</div>
+
+<script type="text/javascript">
+	window.onload=function(){
+		setTimeStartEnd(-181,elm("redeemedTimeStr"),0,elm("redeemedTimeEnd"));
+	};
+	var ALL_COND_ID = ['promoterNo', 'promoterName','redeemedTimeStr','redeemedTimeEnd','status'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	//ajax翻页
+	function ajaxPaging() {
+		var redeemedTimeEnd = jQuery("#redeemedTimeEnd").val();
+		var currentDay = '$!{currentDay}';
+		if(compareTime(currentDay, redeemedTimeEnd)){
+			alert("请款结束时间不能大于"+currentDay);
+			return false;
+		}
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+    	var data = {"currentPage":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/newT0/ajaxPaging/redeemedMarginQuery.do')",
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+
+	//单个 放款/拒绝放款
+	function applayOpreation(morId,amount,status){
+		var titleContent = '';
+		var data = {"morId":morId};
+		if(status==0){
+			titleContent = "申请放款金额："+amount+" 待放款笔数 1 笔。请确认是否需要放款？";
+			data["status"]=0;
+		}else if(status==1){
+			titleContent = "拒绝放款金额："+amount+" 待拒绝放款笔数 1 笔。请确认是否需要拒绝放款？";
+			data["status"]=1;
+		}
+		if(confirm(titleContent)){
+	    	jQuery.ajax({
+				type: 'POST',
+			    url: "#springUrl('/newT0/singleLoanOprea.do')" ,
+			    data: data ,
+			    dataType: "json",
+			    success: function(data){
+			    	if(data){
+			    		alert(data.errorMessage);
+			    		ajaxPaging();
+			    	}
+			    }
+			});
+		}
+	}
+	//全选
+	function selectAll(checkbox) {
+		if(jQuery('#checkboxId').is(':checked')){
+			jQuery('input[type=checkbox]').attr('checked', true);
+		}else{
+			jQuery('input[type=checkbox]').attr('checked', false);
+		}
+	}
+
+	//批量放款操作
+	function batchApplayOp(status){
+		if(!jQuery('input[type=checkbox').is(':checked') || !jQuery("input:checkbox[name=checkname]'").is(':checked')){
+			alert("请至少选择一条记录!");
+			return;
+		}
+		var morIds = "";
+		var totalLoan = Number(0.00);
+    	jQuery("input:checkbox[name=checkname]:checked'").each(function(i){
+            if(0==i){
+            	morIds = jQuery(this).val();
+            }else{
+            	morIds += (","+jQuery(this).val());
+            }
+            if(jQuery(".amount:eq("+i+")").html()!=''){
+	            totalLoan = totalLoan+Number(jQuery(".amount:eq("+i+")").html());
+            }
+        });
+    	//console.log(Number.MAX_VALUE);//1.7976931348623157e+308
+    	var data = {morIds:morIds};
+    	var num = morIds.split(",").length;
+    	var titleContent = '';
+    	if(status==0){
+    		data["status"]=0;
+    		titleContent = "申请放款金额："+totalLoan+"  待放款笔数 "+num+"笔。请确认是否需要放款？";
+    	}else if(status==1){
+    		data["status"]=1;
+    		titleContent = "拒绝放款金额："+totalLoan+"  待拒绝放款笔数 "+num+"笔。请确认是否需要拒绝放款？";
+    	}
+    	if(confirm(titleContent)){
+	    	jQuery.ajax({
+				type: 'POST',
+			    url: "#springUrl('/newT0/batchLoanOprea.do')" ,
+			    data: data ,
+			    dataType: "json",
+			    success: function(data){
+			    	if(data){
+			    		alert(data.errorMessage);
+			    		ajaxPaging();
+			    	}
+			    }
+			});
+		}
+
+	}
+
+	//下载
+	function downloadExcel(){
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+    	var data = {"currentPage":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	var redeemedTimeEnd = jQuery("#redeemedTimeEnd").val();
+		var currentDay = '$!{currentDay}';
+		if(compareTime(currentDay, redeemedTimeEnd)){
+			alert("请款结束时间不能大于"+currentDay);
+			return false;
+		}
+    	jQuery("#submitForm").submit();
+		//var url = "#springUrl('/newT0/loanDownload.do?para="+data+"')";
+		//window.open(url);
+	}
+
+	//比较日前大小
+	//currentDay, redeemedTimeEnd
+	function compareTime(startDate, endDate) {
+	 	if (startDate.length > 0 && endDate.length > 0) {
+		    var startDateTemp = startDate.split(" ");
+		    var endDateTemp = endDate.split(" ");
+
+		    var arrStartDate = startDateTemp[0].split("-");
+		    var arrEndDate = endDateTemp[0].split("-");
+
+		    var arrStartTime = startDateTemp[1].split(":");
+		    var arrEndTime = endDateTemp[1].split(":");
+
+			var allStartDate = new Date(arrStartDate[0], arrStartDate[1], arrStartDate[2], arrStartTime[0], arrStartTime[1], arrStartTime[2]);
+			var allEndDate = new Date(arrEndDate[0], arrEndDate[1], arrEndDate[2], arrEndTime[0], arrEndTime[1], arrEndTime[2]);
+			if (allStartDate.getTime() <= allEndDate.getTime()) {
+		    	return true;
+			}
+			return false;
+		}
+	}
+</script>

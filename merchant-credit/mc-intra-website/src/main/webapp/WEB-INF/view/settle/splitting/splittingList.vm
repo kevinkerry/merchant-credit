@@ -1,0 +1,59 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td ><input type="checkbox" id="J_Sel_All"/> </td>
+		<td>分润角色</td>
+		<td>分润方</td>
+		<td>结算类型</td>
+		<td>商户分组</td>
+		<td>首次开通时间</td>
+		<td>是否按天</td>
+		<td>垫资方</td>
+		<td>成本费率</td>
+		<td>分润比例</td>
+		<td>提现手续费分润底价</td>
+		<td>生效日期</td>
+		<td>失效日期</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{page.queryList})
+	<tr class="settle_ttl">
+		<td>
+			#if($!{po.status}==1)
+				<input name="settleSplittingSetbox" type="checkbox" value="$!{o.id}"></input>
+			#elseif($!{po.status}==-1)
+				#if($!{o.status}==1)
+					<input name="settleSplittingSetbox" type="checkbox" value="$!{o.id}"></input>
+				#end
+			#end
+		</td>
+		<td>$!{o.splitProfitRoleTypeStr}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.withdrawTypeStr}</td>
+		<td>#if('$!{o.groupName}'=='-9999') 无 #else $!{o.groupName} #end</td>
+		<td>#showDate($!{o.firstOpenTime})</td>
+		<td>$!{o.loaningDayFlagStr}</td>
+		<td>#if('$!{o.loaningTypeStr}'=='-9999') 无 #else $!{o.loaningTypeStr}#end</td>
+		<td>$!{o.costingRate}</td>
+		<td>$!{o.splittingScale}</td>
+		<td>$!{o.wdSplittingScale}</td>
+		<td>#showDate($!{o.effectiveTime})</td>
+		<td>#showDate($!{o.expireTime})</td>
+		<td>
+			<a  class="smBtn" href="#springUrl('/splitting/rule/update/view.do')?id=$!{o.id}" target="_blank" title="修改">修</a>
+		</td>
+	</tr>
+	#end
+</table>
+<script type="text/javascript">
+		jQuery("#J_Sel_All").bind("click",function(){
+    		if(jQuery(this).attr("checked")){
+    			jQuery(".listTb input[name=settleSplittingSetbox]").attr("checked","checked");
+    		}else{
+    			jQuery(".listTb input[name=settleSplittingSetbox]").removeAttr("checked");
+    		}
+		});
+
+</script>

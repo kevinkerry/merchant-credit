@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MspPosMerchantDAO">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.msp.mspposmerchant.MspPosMerchantEO">
+		<result property="id" column="ID_N" />
+		<result property="merchantNo" column="MERCHANT_NO_V" />
+		<result property="merchantName" column="MERCHANT_NAME_V" />
+		<result property="posMerchantNo" column="POS_MERCHANT_NO_V" />
+		<result property="type" column="TYPE_V" />
+		<result property="status" column="STATUS_V" />
+		<result property="memberId" column="MEMBER_ID_V" />
+		<result property="mcc" column="MCC_V" />
+		<result property="mccName" column="MCC_NAME_V" />
+		<result property="provinceId" column="PROVINCE_ID_N" />
+		<result property="provinceName" column="PROVINCE_NAME_V" />
+		<result property="cityId" column="CITY_ID_N" />
+		<result property="cityName" column="CITY_NAME_V" />
+		<result property="address" column="ADDRESS_V" />
+		<result property="pmtMerchantNo" column="PMT_MERCHANT_NO_V" />
+		<result property="pmtMerchantName" column="PMT_MERCHANT_NAME_V" />
+		<result property="pmtType" column="PMT_TYPE_V" />
+		<result property="pmtMemberId" column="PMT_MEMBER_ID_V" />
+		<result property="pmtBindOperatorId" column="PMT_BIND_OPERATOR_ID_V" />
+		<result property="pmtBindOperatorName" column="PMT_BIND_OPERATOR_NAME_V" />
+		<result property="version" column="VERSION_N" />
+		<result property="createTime" column="CREATE_TIME_T" />
+		<result property="lastUpdateTime" column="LAST_UPDATE_TIME_T" />
+		<result property="pmtPromoterName" column="PMT_PROMOTER_NAME" />
+		<result property="fastSettleFlag" column="FAST_SETTLE_FLAG_N" />
+		<result property="fastSettleLimit" column="FAST_SETTLE_LIMIT_N" />
+		<result property="groupTag" column="GROUP_TAG_V" />
+		<result property="aliasName" column="ALIAS_NAME_V" />
+	</resultMap>
+
+	<resultMap id="resultFee" class="com.sdp.mc.dao.readonly.msp.mspposmerchant.MspPosMerchantEO">
+		<result property="id" column="ID_N" />
+		<result property="merchantNo" column="MERCHANT_NO_V" />
+		<result property="merchantName" column="MERCHANT_NAME_V" />
+		<result property="posMerchantNo" column="POS_MERCHANT_NO_V" />
+		<result property="type" column="TYPE_V" />
+		<result property="status" column="STATUS_V" />
+		<result property="memberId" column="MEMBER_ID_V" />
+		<result property="mcc" column="MCC_V" />
+		<result property="mccName" column="MCC_NAME_V" />
+		<result property="provinceId" column="PROVINCE_ID_N" />
+		<result property="provinceName" column="PROVINCE_NAME_V" />
+		<result property="cityId" column="CITY_ID_N" />
+		<result property="cityName" column="CITY_NAME_V" />
+		<result property="address" column="ADDRESS_V" />
+		<result property="pmtMerchantNo" column="PMT_MERCHANT_NO_V" />
+		<result property="pmtMerchantName" column="PMT_MERCHANT_NAME_V" />
+		<result property="pmtType" column="PMT_TYPE_V" />
+		<result property="pmtMemberId" column="PMT_MEMBER_ID_V" />
+		<result property="pmtBindOperatorId" column="PMT_BIND_OPERATOR_ID_V" />
+		<result property="pmtBindOperatorName" column="PMT_BIND_OPERATOR_NAME_V" />
+		<result property="version" column="VERSION_N" />
+		<result property="createTime" column="CREATE_TIME_T" />
+		<result property="lastUpdateTime" column="LAST_UPDATE_TIME_T" />
+		<result property="pmtPromoterName" column="PMT_PROMOTER_NAME" />
+		<result property="fastSettleFlag" column="FAST_SETTLE_FLAG_N" />
+		<result property="fastSettleLimit" column="FAST_SETTLE_LIMIT_N" />
+		<result property="groupTag" column="GROUP_TAG_V" />
+		<result property="aliasName" column="ALIAS_NAME_V" />
+		<result property="handPhoneNo" column="HAND_POHNE_NO" />
+		<result property="autoFastSettleFlag" column="AUTO_FAST_SETTLE_FLG" />
+
+		<result property="workdayFee" column="WORKDAY_FEE" />
+		<result property="holidayFee" column="HOLIDAY_FEE" />
+	</resultMap>
+	
+	<resultMap id="resultSync" class="com.sdp.mc.dao.readonly.msp.mspposmerchant.MspPosMerchantEO" extends="MspPosMerchantDAO.resultFee">
+	   <result property="lastLevelPromoterNo" column="last_level_paomoter_no" />
+		
+	</resultMap>
+	<resultMap id="SyncPosMerchantInfo" class="com.sdp.mc.dao.readonly.msp.mspposmerchant.MspPosMerchantEO" extends="MspPosMerchantDAO.resultFee">
+	   <result property="certType" column="CERT_TYPE" />
+	   <result property="certNo" column="CERT_NO" />
+		
+	</resultMap>
+
+	<resultMap id="resultOnlyBaseInfo" class="com.sdp.mc.dao.readonly.msp.mspposmerchant.MspPosMerchantEO">
+		<result property="newFastSettleFlag" column="FAST_SETTLE_FLAG" />
+		<result property="fastSettleLimit" column="FAST_SETTLE_LIMIT" />
+		<result property="autoFastSettleFlag" column="AUTO_FAST_SETTLE_FLG" />
+		<result property="fastSettleMinLimit" column="FAST_SETTLE_MIN_LIMIT" />
+		<result property="handPhoneNo" column="HAND_POHNE_NO" />
+	</resultMap>
+
+	<!-- 代理商查询POS商户条件 -->
+	<sql id="where_pmtQueryPosMerchant">
+		<isNotEmpty prepend="and" property="pmtBindOperatorId">
+			posm.pmt_bind_operator_id_v=#pmtBindOperatorId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="merchantName">
+			posm.merchant_name_v like '%' || #merchantName# || '%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="posMerchantNo">
+			posm.pos_merchant_no_v=#posMerchantNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="merchantNo">
+			posm.merchant_no_v=#merchantNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="type">
+			posm.type_v=#type#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="status">
+			posm.status_v=#status#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcc">
+			posm.mcc_v=#mcc#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="provinceId">
+			posm.province_id_n=#provinceId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="cityId">
+			posm.city_id_n=#cityId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="pmtPromoterName">
+			posm.pmt_promoter_name like '%' || #pmtPromoterName# || '%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="pmtMerchantNo">
+			posm.pmt_merchant_no_v = #pmtMerchantNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="pmtType">
+			posm.pmt_type_v = #pmtType# 
+		</isNotEmpty>
+	</sql>
+
+	<select id="pmtQueryPosMerchantCount" parameterClass="com.sdp.mc.dao.readonly.msp.mspposmerchant.PmtQueryPosMerchantCond" resultClass="java.lang.Integer">
+		SELECT count(posm.ID_N)
+			FROM ppcpay.MSP_POS_MERCHANT posm
+		  LEFT JOIN PCS.MERCHANT_SETTLE ms on posm.MERCHANT_NO_V = ms.MERCHANT_NO
+		  LEFT JOIN PCS.MERCHANT_SETTLE_ITEM msi on msi.MERCHANT_NO = ms.MERCHANT_NO AND msi.SETTLE_RULE_ID = 5 AND msi.STATUS = 1
+		 WHERE posm.PMT_MERCHANT_NO_V=#pmtMerchantNo#
+		 <isNotEmpty prepend="and" property="fastSettleFlag">
+		 	<isNotNull property="fastSettleFlag">
+			ms.FAST_SETTLE_FLAG=#fastSettleFlag#
+			</isNotNull>
+		</isNotEmpty>
+		<include refid="where_pmtQueryPosMerchant"/>
+	</select>
+
+	<select id="pmtQueryPosMerchant" parameterClass="com.sdp.mc.dao.readonly.msp.mspposmerchant.PmtQueryPosMerchantCond" resultMap="resultFee">
+		SELECT  posm.id_n,
+				posm.merchant_no_v,
+				posm.merchant_name_v,
+				posm.pos_merchant_no_v,
+				posm.type_v,
+				posm.status_v,
+				posm.member_id_v,
+				posm.mcc_v,
+				posm.mcc_name_v,
+				posm.province_id_n,
+				posm.province_name_v,
+				posm.city_id_n,
+				posm.city_name_v,
+				posm.address_v,
+				posm.pmt_merchant_no_v,
+				posm.pmt_merchant_name_v,
+				posm.pmt_type_v,
+				posm.pmt_member_id_v,
+				posm.pmt_bind_operator_id_v,
+				posm.pmt_bind_operator_name_v,
+				posm.version_n,
+				posm.create_time_t,
+				posm.last_update_time_t,
+				posm.pmt_promoter_name,
+				posm.group_tag_v,
+				posm.alias_name_v,
+				ms.FAST_SETTLE_LIMIT FAST_SETTLE_LIMIT_N,
+				ms.FAST_SETTLE_FLAG FAST_SETTLE_FLAG_N,
+				ms.FAST_SETTLE_MIN_LIMIT,
+				MS.HAND_POHNE_NO,
+				msi.WORKDAY_FEE,
+				msi.HOLIDAY_FEE,
+				MS.AUTO_FAST_SETTLE_FLG
+			FROM ppcpay.MSP_POS_MERCHANT posm
+		  LEFT JOIN PCS.MERCHANT_SETTLE ms on posm.MERCHANT_NO_V = ms.MERCHANT_NO
+		  LEFT JOIN PCS.MERCHANT_SETTLE_ITEM msi on msi.MERCHANT_NO = ms.MERCHANT_NO AND msi.SETTLE_RULE_ID = 5 AND msi.STATUS = 1
+		 WHERE posm.PMT_MERCHANT_NO_V=#pmtMerchantNo#
+		 <isNotEmpty prepend="and" property="fastSettleFlag">
+		 	<isNotNull property="fastSettleFlag">
+			ms.FAST_SETTLE_FLAG=#fastSettleFlag#
+			</isNotNull>
+		</isNotEmpty>
+		<include refid="where_pmtQueryPosMerchant"/>
+		order by id_n desc
+	</select>
+	<select id="querySyncPosMerchantInfo" parameterClass="com.sdp.mc.dao.readonly.msp.mspposmerchant.PmtQueryPosMerchantCond" resultMap="SyncPosMerchantInfo">
+		SELECT  posm.id_n,
+				posm.merchant_no_v,
+				posm.merchant_name_v,
+				posm.pos_merchant_no_v,
+				posm.type_v,
+				posm.status_v,
+				posm.member_id_v,
+				posm.mcc_v,
+				posm.mcc_name_v,
+				posm.province_id_n,
+				posm.province_name_v,
+				posm.city_id_n,
+				posm.city_name_v,
+				posm.address_v,
+				posm.pmt_merchant_no_v,
+				posm.pmt_merchant_name_v,
+				posm.pmt_type_v,
+				posm.pmt_member_id_v,
+				posm.pmt_bind_operator_id_v,
+				posm.pmt_bind_operator_name_v,
+				posm.version_n,
+				posm.create_time_t,
+				posm.last_update_time_t,
+				posm.pmt_promoter_name,
+				posm.group_tag_v,
+				posm.alias_name_v,
+				ms.FAST_SETTLE_LIMIT FAST_SETTLE_LIMIT_N,
+				ms.FAST_SETTLE_FLAG FAST_SETTLE_FLAG_N,
+				ms.FAST_SETTLE_MIN_LIMIT,
+				MS.HAND_POHNE_NO,
+				0 WORKDAY_FEE,
+				0 HOLIDAY_FEE,
+				MS.AUTO_FAST_SETTLE_FLG,
+				CMC.MC_CERTI_TYPE_N cert_type,
+				CMC.MC_CERTI_VALUE_V cert_no
+			FROM ppcpay.MSP_POS_MERCHANT posm
+			 LEFT JOIN PPCPAY.CM_MERCHANT_CONTRACT cmc on POSM.ID_N=CMC.MC_ID_N
+		     LEFT JOIN PCS.MERCHANT_SETTLE ms on posm.MERCHANT_NO_V = ms.MERCHANT_NO
+		 WHERE posm.PMT_MERCHANT_NO_V=#pmtMerchantNo#
+		 <isNotEmpty prepend="and" property="fastSettleFlag">
+		 	<isNotNull property="fastSettleFlag">
+			ms.FAST_SETTLE_FLAG=#fastSettleFlag#
+			</isNotNull>
+		</isNotEmpty>
+		<include refid="where_pmtQueryPosMerchant"/>
+		order by id_n asc
+	</select>
+
+	<select id="selectById" parameterClass="java.lang.Long" resultMap="result">
+		select *
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.id_n=#id#
+	</select>
+	<select id="selectByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select *
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.MERCHANT_NO_V=#merchantNo#
+		and type_v='0001'
+		and status_v='3'
+	</select>
+	<select id="selectByMPOSMerchantNo" parameterClass="java.util.Map" resultMap="result">
+		<!-- select posm.*
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.MERCHANT_NO_V='#merchantNo#'
+		and posm.type_v='#mcType#'
+		and posm.status_v='3' -->
+
+		select *
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.MERCHANT_NO_V=#posMerchantNo#
+		and posm.type_v=#merchantType#
+		and posm.status_v='3'
+
+	</select>
+
+	<select id="selectMcByMerchantNo" parameterClass="java.lang.String" resultMap="result">
+		select *
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.MERCHANT_NO_V=#merchantNo#
+		and posm.type_v in('0001','0006')
+		and posm.status_v='3'
+	</select>
+
+	
+
+	<select id="queryByPosmNoTypePmtNo" parameterClass="java.util.Map" resultMap="result">
+		select *
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.pos_merchant_no_v=#posMerchantNo#
+		and posm.type_v=#merchantType#
+		and posm.pmt_merchant_no_v=#pmtMerchantNo#
+	</select>
+
+
+    <select id="queryPmtUsedFastSettleLimit" parameterClass="java.util.Map" resultClass="java.math.BigDecimal">
+		select NVL(sum(posm.fast_settle_limit_n),0)
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.pmt_merchant_no_v = #pmtMerchantNo#
+		      and posm.type_v = #merchantType#
+		      and posm.fast_settle_flag_n = 1
+		      and posm.status_v = '3'
+		      <isNotEmpty prepend="and" property="currMerchantNo">
+		      posm.merchant_no_v != #currMerchantNo#
+		      </isNotEmpty>
+	</select>
+
+		<select id="selectPosMerchantInfoByMerchantNo" parameterClass="java.lang.String"  resultMap="resultOnlyBaseInfo">
+		select 
+                ms.AUTO_FAST_SETTLE_FLG,
+                ms.FAST_SETTLE_FLAG,
+				ms.FAST_SETTLE_LIMIT,
+				ms.FAST_SETTLE_MIN_LIMIT,
+				MS.HAND_POHNE_NO
+		from PCS.MERCHANT_SETTLE ms
+		where  ms.MERCHANT_NO =#merchantNo#
+		 and ms.FAST_SETTLE_FLAG =1
+	</select>
+
+	<select id="selectByMerchantNoAndType" parameterClass="java.util.Map" resultMap="result">
+		<!-- select *
+		from ppcpay.MSP_POS_MERCHANT posm
+		where posm.MERCHANT_NO_V=#merchantNo#
+		and posm.type_v =#mcType#
+		and posm.status_v='3'
+		order by LAST_UPDATE_TIME_T desc -->
+
+		select posm.*
+		from ppcpay.MSP_POS_MERCHANT posm
+		INNER JOIN ppcpay.CM_MERCHANT_CONTRACT cmc on posm.ID_N = cmc.mc_id_n
+		and cmc.mc_status_c='3'
+		where posm.MERCHANT_NO_V=#merchantNo#
+		and posm.type_v =#mcType#
+		and posm.status_v='3'
+	</select>
+	<select id="selectPromoterOrMerchantInfoByMerchantNoAndType" parameterClass="java.util.Map" resultMap="result">
+		select posm.*
+        from ppcpay.MSP_POS_MERCHANT posm
+        INNER JOIN ppcpay.CM_MERCHANT_CONTRACT cmc on posm.ID_N = cmc.mc_id_n
+        where ((posm.MERCHANT_NO_V=#merchantNo# and posm.type_v =#mcType#)
+            or (POSM.PMT_MERCHANT_NO_V=#merchantNo# and POSM.PMT_TYPE_V =#mcType#))
+        and posm.status_v='3'
+        and cmc.mc_status_c='3'
+	</select>
+
+	<select id="queryAllMspMerchant" resultMap="result">
+		<!-- select * from ppcpay.MSP_POS_MERCHANT posm
+		where posm.type_v in ('0001','0006')
+		and posm.status_v='3'
+		and (posm.FAST_SETTLE_FLAG_N = 1 or posm.type_v='0006')
+		order by LAST_UPDATE_TIME_T desc -->
+
+		select posm.* from PPCPAY.MSP_POS_MERCHANT posm
+				INNER JOIN ppcpay.CM_MERCHANT_CONTRACT cmc on posm.ID_N = cmc.mc_id_n
+				and cmc.mc_status_c='3'
+				where POSM.STATUS_V=3 and POSM.TYPE_V in ('0001','0006')
+			  and (posm.FAST_SETTLE_FLAG_N = 1 or posm.type_v='0006')
+
+	</select>
+
+</sqlMap>

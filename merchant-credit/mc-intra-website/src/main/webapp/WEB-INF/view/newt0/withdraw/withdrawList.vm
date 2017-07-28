@@ -1,0 +1,83 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td width="100">支付订单号</td>
+		<td width="50">商户号</td>
+		<td width="50">商户类型</td>
+		<td width="65">出款类型</td>
+		<td width="50">出款金额</td>
+<!-- 		<td width="60">总手续费</td> -->
+		<td width="35">结算费</td>
+		<td width="35">提现费</td>
+<!-- 		<td width="60">到账金额</td> -->
+		<td width="120">申请时间</td>
+		##<td width="120">发起时间</td>
+<!-- 		<td>请求订单号</td> -->
+		<td width="60">出款订单状态</td>
+		##<td width="60">调用FOS状态</td>
+		<td width="70">开户行</td>
+		<td width="70">是否扫码</td>
+		<td width="130">失败原因</td>
+		
+		<td width="60">操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{o.remitVoucherNo}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>#if($!{o.mcType}=='0001') POS 
+		   #elseif($!{o.mcType}=='0006') MPOS 
+		   #elseif($!{o.mcType}=='0201') 云收银 
+		   #else $!{o.mcType}
+		   #end  </td>
+		<td>
+			$!{o.serviceTypeMsg}
+		</td>
+
+		<td>$!{o.withdrawAmount}</td>
+<!-- 		<td>$!{o.totalCost}</td> -->
+		<td>$!{o.withdrawCost}</td>
+		<td>$!{o.wdCost}</td>
+<!-- 		<td>$!{o.bankAccountAmount}</td> -->
+		<td>#showDateTime($!{o.wrCreateTime})</td>
+		##<td>#showDateTime($!{o.gmtPaymentInitiate})</td>
+		##<td>$!{o.orderNo}</td>
+			<td>
+			$!{o.statusMsg}
+			</td>
+		##<td>#if($!{o.withdrawStatus}=='0') 出款成功
+		  ## #elseif($!{o.withdrawStatus}=='2') 处理中 
+		   ###elseif($!{o.withdrawStatus}=='9') 出款失败
+		   ###else $!{o.withdrawStatus}
+		   ###end  </td>
+			<td>$!{o.bankName}</td>
+			<td>
+			#if("$!{o.hasOaTxn}"=="1") 是
+			#else 否
+			#end
+			</td>
+		<td>
+			#if("$!{o.status}"=="9")
+			$!{o.errorCode}<br/>
+			<div style="width: 150px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;" title="$!{o.returnMsg}">$!{o.errorMsg}</div>
+			#end
+		</td>
+		
+		<td>
+			<a class="smBtn" href="#springUrl('/newT0/showDetailInfo.do')?reqId=$!{o.reqId}&detailId=$!{o.detailId}" class="look" target="_blank" title="详情">详</a>
+			#if("$!{o.status}"=="9")
+				#if($MCUrlUtil.canAccessUrl("/newT0/retryWithdraw",$request))
+				<a class="smBtn" href="javascript:retry('$!{o.reqId}','$!{o.remitVoucherNo}');" title="重试">重</a>
+				#end	
+			#end
+			#if("$!{o.status}"=="2"&&!${o.bankName})
+				#if($MCUrlUtil.canAccessUrl("/newT0/updateWithdrawFail",$request))
+				<a class="smBtn" href="javascript:updateWithdrawFail('$!{o.reqId}');" title="设置失败">失</a>
+				#end	
+			#end
+			</td>
+	</tr>
+	#end
+</table>

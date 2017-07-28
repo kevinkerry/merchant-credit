@@ -1,0 +1,85 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>id</td>
+		<td>拓展方名称</td>
+		<td>拓展方商户号</td>
+		<td>拓展方类型</td>
+		<td>交易金额</td>
+		<td>保证金交易类型</td>
+		<td>保证金交易时间</td>
+		<td>保证金交易状态</td>
+		<td>快速结算状态</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>$!{o.morId}&nbsp;</td>
+		<td>$!{o.mcMerchantName}</td>
+		<td>$!{o.mcMerchantNo}</td>
+		<td>#if("$!{o.mcType}"=="0003")POS拓展方#elseif("$!{o.mcType}"=="0007")mPOS拓展方#elseif("$!{o.mcType}"=="0101")云收银拓展方#end</td>
+		<td>$!NumberUtils.format($!{o.amount})&nbsp;</td>
+		<td>#if("$!{o.opType}"=="3")追加#elseif("$!{o.opType}"=="4")取回#end&nbsp;</td>
+		<td>#showDateTime($!{o.createTime})&nbsp;</td>
+		<td>
+			#if("$!{o.opType}"=="3"&&"$!{o.status}"=="0")
+				申请追加，处理中
+			#elseif("$!{o.status}"=="101")
+				追加-转账成功
+			#elseif("$!{o.status}"=="-101")
+				追加-转账失败
+			#elseif("$!{o.status}"=="102")
+				追加成功
+			#elseif("$!{o.status}"=="-102")
+				追加失败
+			#elseif("$!{o.opType}"=="4"&&"$!{o.status}"=="0")
+				申请取回，处理中
+			#elseif("$!{o.status}"=="201")
+				取回-申请成功
+			#elseif("$!{o.status}"=="-201")
+				取回-申请失败
+			#elseif("$!{o.status}"=="202")
+				取回成功
+			#elseif("$!{o.status}"=="-202")
+				取回失败
+			#elseif("$!{o.status}"=="-9999")
+				失败（已处理）
+			#elseif("$!{o.status}"=="-300")
+				拒绝放款
+			#else
+				$!{o.status}
+			#end
+		</td>
+		<td>
+			#if("$!{o.pStatus}"=="103")
+				已开通
+			#elseif("$!{o.pStatus}"=="-103")
+				开通失败
+			#elseif("$!{o.pStatus}"=="201")
+				已关闭
+			#elseif("$!{o.pStatus}"=="-201")
+				关闭失败
+			#elseif("$!{o.status}"=="-9999")
+				失败（已处理）
+			#else
+				$!{o.status}
+			#end
+		</td>
+		<td>
+			#if("$!{o.status}"=="201")
+				#if($MCUrlUtil.canAccessUrl("/fastSettle/modifyRedeemMarginTime",$request))
+    					<a class="smBtn" href="javascript:modifyRedeemMarginTime('$!{o.morId}')" title="修改取回时间">修</a>
+				#end
+			#elseif("$!{o.status}"=="-202"||"$!{o.status}"=="-300")
+			    #if($MCUrlUtil.canAccessUrl("/fastSettle/modifyRedeemMarginStatus",$request))
+    					<a class="smBtn" href="javascript:modifyRedeemMarginStatus('$!{o.morId}','$!{o.status}','-9999')" title="失败已处理">处</a>
+				#end
+			#end
+			
+			&nbsp;
+		</td>
+	</tr>
+	#end
+</table>

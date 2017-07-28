@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="TB_WITHHOLDING_ORDER_INFO" >
+<sql id="page_where_clause">
+    <dynamic prepend="where">
+        <isNotEmpty property="batchNo">
+            <isNotNull prepend="and" property="batchNo">
+            BATCH_NO = #batchNo:VARCHAR#
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="merchantNo">
+            <isNotNull prepend="and" property="merchantNo">
+            merchant_no= #merchantNo:VARCHAR#
+            </isNotNull>
+        </isNotEmpty>
+ 		<isNotEmpty property="status">
+            <isNotNull prepend="and" property="status">
+            STATUS= #status:VARCHAR#
+            </isNotNull>
+        </isNotEmpty>
+
+    </dynamic>
+  </sql>
+  <select id="countWithholdingCount" resultClass="java.lang.Integer" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtTbWithholdingOrderInfoExample" >
+    select count(id) from TB_WITHHOLDING_ORDER_INFO
+   <include refid="TB_WITHHOLDING_ORDER_INFO.page_where_clause" />
+  </select>
+   <select id="creditWithholdOrderNo" resultClass="java.lang.String" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoExample" >
+    select to_char(sysdate,'yyyyMMddHH24mmss')||mcredit.seq_withholding_order_info.nextval from dual
+  </select>
+
+  <!-- new S 根据订单号查询批次号信息 -->
+   <select id="orderInfoByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoExample" >
+    select
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Base_Column_List" />
+    from TB_WITHHOLDING_ORDER_INFO
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+   </select>
+
+	<!-- 查询status=003 status=004订单 -->
+ 	<select id="findOrderByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.TbWithholdingOrderInfoExample" >
+     select
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Base_Column_List" />
+    from TB_WITHHOLDING_ORDER_INFO
+    <include refid="TB_WITHHOLDING_ORDER_INFO.Example_Where_Clause" />
+   </select>
+  <!-- new E 根据订单号查询批次号信息 -->
+
+  <select id="pageQueryWithholdingList" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtTbWithholdingOrderInfoExample" >
+    select t.* from (select tt.*, ROWNUM rnum from (
+        select
+        <include refid="TB_WITHHOLDING_ORDER_INFO.Base_Column_List" />
+        from TB_WITHHOLDING_ORDER_INFO
+        <include refid="TB_WITHHOLDING_ORDER_INFO.page_where_clause" />
+        order by CREATE_TIME desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+</sqlMap>

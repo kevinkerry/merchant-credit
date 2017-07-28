@@ -1,0 +1,35 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td width="3%">id</td>
+		<td width="5%">批处理编号</td>
+		<td width="5%">批次号</td>
+		<td width="2%">线程运行状态</td>
+		<td width="5%">开始时间</td>
+		<td width="5%">结束时间</td>
+		<td width="1%">重试次数</td>
+		<td width="1%">影响数量</td>
+		<td width="1%">执行结果</td>
+		<td width="2%">备注</td>
+		<td width="5%">创建时间</td>
+		<td width="5%">修改时间</td>
+	</tr>
+	#foreach($o in $!{query.pageList})
+	<tr>
+		<td>$!{o.id}</td>
+		<td>$!{o.batchCode}</td>
+		<td>$!{o.serilizeCode}</td>
+		<td>$!{o.runningStatus}</td>
+		<td>#showDateTime($!{o.startTime})</td>
+		<td>#showDateTime($!{o.endTime})</td>
+		<td>$!{o.retryCount}</td>
+		<td>$!{o.recordCount}</td>
+		<td>$!{o.executeResult}</td>
+		<td>$!{o.memo}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+	</tr>
+	#end
+</table>

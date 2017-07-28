@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.ffconfig.dao" targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.ffconfig.dao.mapper"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.ffconfig.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.ffconfig.manager" implementationPackage="com.sdp.mc.ffconfig.manager.impl" generatorEnable="true"  targetProject="../mc-dao/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="TB_FAST_SETTLE_CONFIG" domainObjectName="FastSettleConfigDO">
+		<generatedKey column="PFC_ID" sqlStatement="select SEQ_TB_FAST_SETTLE_CONFIG.nextval from dual" type="pre" />
+		<columnOverride column="PFC_ID" 						property="pfcId" 				javaType="java.lang.Long" />
+    	<columnOverride column="OBJ_ID" 						property="objId" 				javaType="java.lang.Long" />
+    	<columnOverride column="OBJ_TYPE" 						property="objType" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="AUTO_FAST_SETTLE" 				property="autoFastSettle" 		javaType="java.lang.Integer"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    </table>
+  </context>
+</generatorConfiguration>

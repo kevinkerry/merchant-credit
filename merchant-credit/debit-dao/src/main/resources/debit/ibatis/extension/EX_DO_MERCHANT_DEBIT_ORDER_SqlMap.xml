@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_MERCHANT_DEBIT_ORDER" >
+  <typeAlias alias="loanDebitOrderDTO" type="com.shengpay.debit.dal.ext.dataobject.LoanDebitOrderDTO"/>
+
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoMerchantDebitOrderPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="DEBIT_AMOUNT" property="debitAmount" jdbcType="DECIMAL" />
+    <result column="PURPOSER" property="purposer" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NO" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="APPLY_DATE" property="applyDate" />
+    <result column="RESULT_TIME" property="resultTime" />
+    <result column="TRANSFER_TIME" property="transferTime" />
+    <result column="START_TIME" property="startTime" />
+    <result column="END_TIME" property="endTime" />
+    <result column="OVER_DUE_TIME" property="overDueTime" />
+    <result column="INTEREST_AMOUNT" property="interestAmount" jdbcType="DECIMAL" />
+    <result column="BORROW_DAYS" property="borrowDays" jdbcType="DECIMAL" />
+    <result column="SERVICE_AMOUNT" property="serviceAmount" jdbcType="DECIMAL" />
+    <result column="INTEREST_RATE_DAY" property="interestRateDay" jdbcType="DECIMAL" />
+    <result column="REAL_AMOUNT" property="realAmount" jdbcType="DECIMAL" />
+    <result column="OVER_DUE_AMOUNT" property="overDueAmount" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="REPAYMENT_TIME" property="repaymentTime" />
+    <result column="DUE_REPAYMENT_TIME" property="dueRepaymentTime" />
+  </resultMap>
+<!-- 借款查询结果 -->
+  <resultMap id="BaseBorrowResultMap" class="com.shengpay.debit.dal.dataobject.DoBorrowMoneyPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="DEBIT_AMOUNT" property="debitAmount" jdbcType="DECIMAL" />
+    <result column="PURPOSER" property="purposer" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NO" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="APPLY_DATE" property="applyDate" />
+    <result column="RESULT_TIME" property="resultTime" />
+    <result column="TRANSFER_TIME" property="transferTime" />
+    <result column="START_TIME" property="startTime" />
+    <result column="END_TIME" property="endTime" />
+    <result column="OVER_DUE_TIME" property="overDueTime" />
+    <result column="INTEREST_AMOUNT" property="interestAmount" jdbcType="DECIMAL" />
+    <result column="BORROW_DAYS" property="borrowDays" jdbcType="DECIMAL" />
+    <result column="SERVICE_AMOUNT" property="serviceAmount" jdbcType="DECIMAL" />
+    <result column="INTEREST_RATE_DAY" property="interestRateDay" jdbcType="DECIMAL" />
+    <result column="REAL_AMOUNT" property="realAmount" jdbcType="DECIMAL" />
+    <result column="OVER_DUE_AMOUNT" property="overDueAmount" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="REPAYMENT_TIME" property="repaymentTime" />
+    <result column="DUE_REPAYMENT_TIME" property="dueRepaymentTime" />
+
+    <!-- 补充字段 -->
+    <result column="TOTAL_AMOUNT" property="totalAmount" />
+    <result column="USED_AMOUNT" property="usedAmount" />
+    <result column="EFFECTIVE_START_TIME" property="effectiveStartTime" />
+    <result column="EFFECTIVE_END_TIME" property="effectiveEndTime" />
+    <result column="IS_AGNET_GUARANTEE" property="isAgnetGuarantee" />
+  </resultMap>
+<resultMap id="BaseBorrowLIsttMap" class="com.shengpay.debit.dal.dataobject.DoBorrowMoneyPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="DEBIT_AMOUNT" property="debitAmount" jdbcType="DECIMAL" />
+    <result column="PURPOSER" property="purposer" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NO" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="APPLY_DATE" property="applyDate" />
+    <result column="RESULT_TIME" property="resultTime" />
+    <result column="TRANSFER_TIME" property="transferTime" />
+    <result column="START_TIME" property="startTime" />
+    <result column="END_TIME" property="endTime" />
+    <result column="OVER_DUE_TIME" property="overDueTime" />
+    <result column="INTEREST_AMOUNT" property="interestAmount" jdbcType="DECIMAL" />
+    <result column="BORROW_DAYS" property="borrowDays" jdbcType="DECIMAL" />
+    <result column="SERVICE_AMOUNT" property="serviceAmount" jdbcType="DECIMAL" />
+    <result column="INTEREST_RATE_DAY" property="interestRateDay" jdbcType="DECIMAL" />
+    <result column="REAL_AMOUNT" property="realAmount" jdbcType="DECIMAL" />
+    <result column="OVER_DUE_AMOUNT" property="overDueAmount" jdbcType="DECIMAL" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="REPAYMENT_TIME" property="repaymentTime" />
+    <result column="DUE_REPAYMENT_TIME" property="dueRepaymentTime" />
+  </resultMap>
+  <sql id="Page_Query_Example_Where_Clause">
+    <dynamic prepend="where">
+        <isNotEmpty property="promoterNo">
+            <isNotNull prepend="and" property="promoterNo">
+            PROMOTER_NO = #promoterNo:VARCHAR#
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="promoterName">
+            <isNotNull prepend="and" property="promoterName">
+            PROMOTER_NAME like '%$promoterName$%'
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="merchantNo">
+            <isNotNull prepend="and" property="merchantNo">
+                MERCHANT_NO = #merchantNo:VARCHAR#
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="merchantName">
+            <isNotNull prepend="and" property="merchantName">
+                MERCHANT_NAME like '%$merchantName$%'
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="status">
+            <isNotNull prepend="and" property="status">
+                STATUS = #status:VARCHAR#
+            </isNotNull>
+        </isNotEmpty>
+        <isPropertyAvailable property="statusList">
+            <isNotNull property="statusList" prepend="AND">
+                1=1
+            </isNotNull>
+            <isNotNull property="statusList" prepend=" AND STATUS IN ">
+                <iterate property="statusList"  open="(" close=")" conjunction=",">
+                    #statusList[]#
+                </iterate>
+            </isNotNull>
+        </isPropertyAvailable>
+        <isNotEmpty property="startTimeStr">
+            <isNotNull prepend="and" property="startTimeStr">
+            <![CDATA[
+                trunc(APPLY_DATE) >= trunc(to_date( #startTimeStr#, 'yyyy-mm-dd hh24:mi:ss' ))
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="endTimeStr">
+            <isNotNull prepend="and" property="endTimeStr">
+            <![CDATA[
+                trunc(APPLY_DATE) < trunc(to_date( #endTimeStr#, 'yyyy-mm-dd hh24:mi:ss' )) + 1
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+         <!-- 借款日期 -->
+         <isNotEmpty property="borrowStartTimeStr">
+            <isNotNull prepend="and" property="borrowStartTimeStr">
+            <![CDATA[
+                trunc(TRANSFER_TIME) >= to_date(#borrowStartTimeStr#, 'yyyy-mm-dd' )
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="borrowEndTimeStr">
+            <isNotNull prepend="and" property="borrowEndTimeStr">
+            <![CDATA[
+                trunc(TRANSFER_TIME) < to_date(#borrowEndTimeStr#, 'yyyy-mm-dd' ) + 1
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+        <!-- 还款日期 -->
+         <isNotEmpty property="repaymentStartTimeStr">
+            <isNotNull prepend="and" property="repaymentStartTimeStr">
+            <![CDATA[
+                trunc(END_TIME) >= to_date(#repaymentStartTimeStr#, 'yyyy-mm-dd' )
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+        <isNotEmpty property="repaymentEndTimeStr">
+            <isNotNull prepend="and" property="repaymentEndTimeStr">
+            <![CDATA[
+                trunc(END_TIME) < to_date(#repaymentEndTimeStr#, 'yyyy-mm-dd' ) + 1
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+        <!-- 过期标志 -->
+        <isNotEmpty property="queryExpiredFlag">
+            <isNotNull prepend="and" property="queryExpiredFlag">
+            <![CDATA[
+                trunc(END_TIME) <= sysdate
+            ]]>
+            </isNotNull>
+        </isNotEmpty>
+    </dynamic>
+  </sql>
+
+
+  <sql id="page_where_clause">
+     <isNotEmpty property="merchantNo">
+            <isNotNull prepend="and" property="merchantNo">
+                a.merchant_no = #merchantNo#
+            </isNotNull>
+       </isNotEmpty>
+
+       <isNotEmpty property="merchantName">
+            <isNotNull prepend="and" property="merchantName">
+                a.merchant_name like '%$merchantName$%'
+            </isNotNull>
+       </isNotEmpty>
+
+       <isNotEmpty property="status">
+            <isNotNull prepend="and" property="status">
+                a.STATUS = #status#
+            </isNotNull>
+       </isNotEmpty>
+        <isNotEmpty property="applyTimeStr" prepend="AND">
+            <![CDATA[ a.apply_date >= to_date(#applyTimeStr#,'yyyy-mm-dd hh24:mi:ss') ]]>
+        </isNotEmpty>
+        <isNotEmpty property="applyTimeEnd" prepend="AND">
+            <![CDATA[ a.apply_date <= to_date(#applyTimeEnd#,'yyyy-mm-dd hh24:mi:ss') ]]>
+        </isNotEmpty>
+
+        <isNotEmpty property="expireTimeStr" prepend="AND">
+            <![CDATA[ a.end_time >= to_date(#expireTimeStr#,'yyyy-mm-dd hh24:mi:ss') ]]>
+        </isNotEmpty>
+        <isNotEmpty property="expireTimeEnd" prepend="AND">
+            <![CDATA[ a.end_time <= to_date(#expireTimeEnd#,'yyyy-mm-dd hh24:mi:ss') ]]>
+        </isNotEmpty>
+  </sql>
+
+
+
+  <select id="countMerchantDebitOrder" resultClass="java.lang.Integer" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantDebitOrderExample" >
+    select count(id) from DO_MERCHANT_DEBIT_ORDER
+    <include refid="DO_MERCHANT_DEBIT_ORDER.Page_Query_Example_Where_Clause" />
+  </select>
+  <select id="pageQueryMerchantDebitOrder" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantDebitOrderExample" >
+    select t.* from (select tt.*, ROWNUM rnum from (
+        select
+        <include refid="DO_MERCHANT_DEBIT_ORDER.Base_Column_List" />
+        from DO_MERCHANT_DEBIT_ORDER
+        <include refid="DO_MERCHANT_DEBIT_ORDER.Page_Query_Example_Where_Clause" />
+        order by CREATE_TIME desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+
+  <!-- 统计未还款总额 -->
+  <select id="sumDebitAmount" resultClass="java.math.BigDecimal" parameterClass="java.lang.String" >
+  <![CDATA[
+    SELECT  NVL(sum(NVL(DEBIT_AMOUNT,0) + nvl(OVER_DUE_AMOUNT,0)),0) from DO_MERCHANT_DEBIT_ORDER
+    WHERE MERCHANT_NO = #value#
+    and STATUS in ('1','2')
+    ]]>
+  </select>
+  <!-- 统计最近5天的借款总额 -->
+  <select id="sumDebitAmountInLast5Days" resultClass="java.math.BigDecimal" parameterClass="java.lang.String" >
+  <![CDATA[
+    SELECT  NVL(sum(NVL(DEBIT_AMOUNT,0) + nvl(OVER_DUE_AMOUNT,0)),0) from DO_MERCHANT_DEBIT_ORDER
+    WHERE trunc(END_TIME) between trunc(sysdate) and trunc(sysdate) + 4
+    and MERCHANT_NO = #value#
+    and STATUS in ('1','2')
+    ]]>
+  </select>
+  <!-- 统计最近5天的借款笔数 -->
+  <select id="countDebitAmountInLast5Days" resultClass="java.lang.Integer" parameterClass="java.lang.String" >
+  <![CDATA[
+    select count(id) from DO_MERCHANT_DEBIT_ORDER
+    WHERE trunc(END_TIME) between trunc(sysdate) and trunc(sysdate) + 4
+    and MERCHANT_NO = #value#
+    and STATUS in ('1','2')
+    ]]>
+  </select>
+
+  <!-- 借款查询sql -->
+ <select id="pageQueryborrow" resultMap="BaseBorrowLIsttMap" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantDebitOrderExample" >
+    select t.* from (select tt.*, ROWNUM rnum from (
+        select
+        <include refid="DO_MERCHANT_DEBIT_ORDER.Base_Column_List" />
+        from DO_MERCHANT_DEBIT_ORDER
+        <include refid="DO_MERCHANT_DEBIT_ORDER.Page_Query_Example_Where_Clause" />
+        order by CREATE_TIME desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+
+<!-- 根据商户号查询借款详情 -->
+<select id="borrowMoneyDetail" resultMap="BaseBorrowResultMap" parameterClass="java.util.Map">
+    select debit.*,
+       info.TOTAL_AMOUNT,
+       info.USED_AMOUNT,
+       info.EFFECTIVE_START_TIME,
+       info.EFFECTIVE_END_TIME,
+       lines.IS_AGNET_GUARANTEE
+  from do_MERCHANT_DEBIT_ORDER        debit,
+       DM_MERCHANT_DEBIT_INFO         info,
+       DO_MERCHANT_CREDIT_LINES_APPLY lines
+  where   debit.merchant_no = info.merchant_no
+         and info.merchant_no = lines.merchant_no
+         and debit.merchant_no = #merchantNo#
+         and debit.id = #id#
+         order by lines.id desc
+
+</select>
+
+  <!-- 借款放款订单查询sql -->
+ <select id="pageQueryLoanDebitOrder" resultClass="loanDebitOrderDTO" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantDebitOrderExample" >
+    select t.* from (select tt.*, ROWNUM rnum from (
+        select
+            a.id                    id,
+            c.lend_login_name       lendLoginName,
+            c.lend_member_id		lendMemberId,
+            a.merchant_no           merchantNo,
+            a.merchant_name         merchantName,
+            a.apply_date            applyDate,
+            a.borrow_days           borrowDays,
+            a.end_time              endTime,
+            a.real_amount           realAmount,
+            b.realname              realName,
+            a.status                status
+        from Do_MERCHANT_DEBIT_ORDER a left join NEWT0_USEROPERA_RECORD b on a.id = b.biz_id and b.biz_type='5'
+        left join dm_merchant_debit_info c on a.merchant_no = c.merchant_no 
+        where a.status in ('5','6','7','8','1') 
+        <include refid="page_where_clause"/>
+        order by a.apply_date desc
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+
+
+  <select id="pageQueryLoanDebitOrderCount" resultClass="java.lang.Integer" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantDebitOrderExample" >
+        select count(a.id)
+       from Do_MERCHANT_DEBIT_ORDER a left join NEWT0_USEROPERA_RECORD b on a.id = b.biz_id and b.biz_type='5' 
+       left join dm_merchant_debit_info c on a.merchant_no = c.merchant_no 
+        where a.status in ('5','6','7','8','1') 
+        <include refid="page_where_clause"/>
+  </select>
+
+ <select id="loanDebitOrderRealAmount" resultClass="java.math.BigDecimal" parameterClass="com.shengpay.debit.dal.ext.dataobject.ExtDoMerchantDebitOrderExample" >
+        select sum(a.real_amount)
+        from Do_MERCHANT_DEBIT_ORDER a left join NEWT0_USEROPERA_RECORD b on a.id = b.biz_id and b.biz_type='5'
+        where a.status in ('5','6','7','8','1') 
+        <include refid="page_where_clause"/>
+  </select>
+
+</sqlMap>

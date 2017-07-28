@@ -1,0 +1,140 @@
+#parse("/control/passwordjs.vm")
+<input type="hidden" id="applyUrl" value="#relativeUrl('/funding/apply.json')"/>
+<input type="hidden" id="indexUrl" value="#relativeUrl('/funding/index.htm')"/>
+
+<form action="#relativeUrl('/funding/apply.htm')" method="post" id="applyFundingForm">
+<input type="hidden" id="sActivexPubKey" value="$!{sActivexPubKey}">
+<input type="hidden" id="certSerialNo" name="certSerialNo" value="$!{certSerialNo}">
+<input type="hidden" id="encryptedKey" name="encryptedKey" value="">
+
+<input type="hidden" id="withFundingFeeRate" name="withFundingFeeRate" value="$!{withFundingFeeRate}"/>
+<input type="hidden" id="validCredit" name="validCredit" value="$!{validCredit}"/>
+<input type="hidden" id="fundingFee" name="fundingFee" value="$!fundingFee"/>
+
+<div class="content_box content font-s-14">
+	<p class="tip-style-01">您的盛付通配资总额度为：$!NumberUtils.formatWithComma($!{fastSettleMargin})元，今日剩余可用额度为：<span class="red">$!NumberUtils.formatWithComma($!{validCredit})</span>元。<a href="#relativeUrl('/funding/history.htm')" class="fltRight">查看配资使用明细</a></p>
+	<div class="input-item">
+		<label>
+			<span class="input-title">本次配资额度：</span>
+			<input type="text" class="input-normal" id="fundingAmount" name="fundingAmount"  maxlength="10" onkeyup="this.value=this.value.replace(/^(\d+\.?\d{0,2}).*$|^[^\d]*$/g,'$1');" autocomplete="off"/> 元 <span class="input-tip">请输入1000元的整数倍，且不超过今日剩余可用额度。</span>
+		</label>
+	</div>
+	<div class="input-item">
+		<label>
+			<span class="input-title">手续费：</span>
+			<span class="red" id="withFundingFee">0.00</span> <span class="input-tip">(费率$!{withFundingFeeRate}%)</span>
+			<a href="#" class="font-s-12" id="readme">查看配资费用表及配资额度简要说明</a>
+		</label>
+	</div>
+	<div class="input-item">
+		<label>
+			<span class="input-title">盛付通支付密码：</span>
+			<div id="_ocx_password_str"></div><input id="password" type="password" name="password" style="display:none" class="s_input">
+			<div class="input-tip-br">
+				<input type="checkbox" id="confirmCheck" checked />我已阅读并同意<a href="#relativeUrl('/funding/agree.htm')" class="font-s-12">《盛付通快速结算配资协议》</a>
+			</div>
+		</label>
+	</div>
+	<div class="input-item">
+		<label style="padding: 0;margin-left: 125px;width: 114px;">
+			<input type="button" class="g-button-big" id="confirmPay" value="确认支付" />
+		</label>
+	</div>
+</div>
+</form>
+
+<div class="popup" id="pop1" style="display:none;">
+	<p class="popup-title">
+		<a href="#" class="pupup-close"></a>
+	</p>
+	<div class="popup-container">
+		<p>1.配资额度填写金额需大于0</p>
+		<p>2.配资额度金额需为1000元整数倍；（可人工调整）</p>
+		<p>3.配资额度金额需不高于当日剩余可用额度；</p>
+	</div>
+	<p class="popup-tlc"><a href="#" id="confrim" class="popup-confrim g-button" onclick="document.getElementById('pop1').style.display='none';return false;">确认</a></p>
+</div>
+
+<script type="text/javascript">
+    #if ($message !='')
+    	var message = '${message}';
+    	$('.popup-container').html("<p>"+message+"</p>");
+    	$("#pop1").show();
+		$("#confirmPay").unbind("click");
+    #else
+	$(function(){
+		if(navigator.userAgent.indexOf("Window") < 0) {
+	        $("#password").show();
+	        $("#_ocx_password_str").hide();
+	        $("#_ocx_password").hide();
+	    }
+
+		$('#fundingAmount').bind('keyup change',function(){
+			var fundingAmount = $('#fundingAmount').val();
+			var withFundingFeeRate = $('#withFundingFeeRate').val();
+			if(withFundingFeeRate > 0){
+				var withFundingFee = ((fundingAmount*withFundingFeeRate)/100).toFixed(2);
+				$("#fundingFee").val(withFundingFee);
+				$("#withFundingFee").text(withFundingFee  +"元");
+			}
+		})
+
+		$('#readme').bind('click',function(){
+			$('.popup-container').html("<p>分为工作日和节假日。</p><p>工作日的费用标准为，按照配资额度*0.1%计算收取；</p><p>节假日的费用标准为，按照配资额度*0.15%计算收取；</p>");
+			$("#pop1").show();
+		})
+
+		$("#confirmPay").bind('click',function(){
+			var fundingAmount = $('#fundingAmount').val();
+			var validCredit = $('#validCredit').val();
+			if(fundingAmount == '' || fundingAmount <= 0){
+				$('.popup-container').html("<p>配资额度填写金额需大于0</p>");
+				$("#pop1").show();
+				return;
+			}
+			if((parseFloat(fundingAmount) % 1000) != 0){
+				$('.popup-container').html("<p>配资额度金额需为1000元整数倍</p>");
+				$("#pop1").show();
+				return;
+			}
+			if(parseFloat(fundingAmount) > parseFloat(validCredit)){
+				$('.popup-container').html("<p>配资额度金额需不高于当日剩余可用额度</p>");
+				$("#pop1").show();
+				return;
+			}
+			if(!$("#confirmCheck").attr("checked")){
+				$('.popup-container').html("<p>必须勾选同意协议</p>");
+				$("#pop1").show();
+				return;
+			}
+			//支付密码
+    		if(navigator.userAgent.indexOf("Window") < 0) {
+                $("#encryptedKey").val("");
+            } else {
+                $("#encryptedKey").val(editor.GetKey());
+                $("#password").val(editor.GetValue());
+            }
+			jQuery.ajax({
+    			type: "POST",
+    			url: $('#applyUrl').val(),
+    			data: $("#applyFundingForm").serialize(),
+    			success: function(json) {
+    				if (json.code == '666') {
+						$("#confirmPay").unbind("click");
+    					$('.popup-container').html("<p>恭喜您完成本次配资操作，本次配资额度有效期截止今日24时，请及时完成配资使用</p>");
+						$("#confrim").bind('click',function(){
+							location.href = $('#indexUrl').val();
+						})
+    				}else if(json.code == '-1'){
+    					$('.popup-container').html("<p>"+json.result.message+"</p>");
+    				}else{
+						$('.popup-container').html("<p>系统异常，您可联系客服电话021-0989-99反馈问题，我们将第一时间为您处理。</p>");
+					}
+					$("#pop1").show();
+    			}
+    		});
+
+		})
+	});
+	#end
+</SCRIPT>

@@ -1,0 +1,166 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="detailCaption">出款详情</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0" >
+	<tr>
+		<td class="heading" colspan="4">出款请求信息</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl">请求类型：</td>
+		<td width="300">
+		 #if("${reqInfo.reqType}"=="1")POS发起出款
+         #elseif("${reqInfo.reqType}"=="2")余额发起出款
+         #end
+		</td>
+		<td width="120" class="lbl">出款订单号：</td>
+		<td width="300">$!{reqInfo.orderNo}&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="lbl">商户信息：</td>
+		<td>#if("${reqInfo.mcType}"=="0001")POS商户
+         #elseif("${reqInfo.mcType}"=="0006")mPos商户
+         #else云收银商户
+         #end ：${reqInfo.merchantNo}</td>
+		<td class="lbl">代理商商户号：</td>
+		<td>${reqInfo.pmtMerchantNo}</td>
+	</tr>
+	<tr>
+		<td class="lbl">出款类型:</td>
+		<td>
+		#if("${reqInfo.withdrawType}"=="1")实时出款#end
+            #if("${reqInfo.withdrawType}"=="2")普通出款#end
+		</td>
+		<td class="lbl">请求出款类型：</td>
+		<td>
+		 #if("${reqInfo.serviceType}"=="2")T1
+         #elseif("${reqInfo.serviceType}"=="3")D1
+         #elseif("${reqInfo.serviceType}"=="4")T0
+         #else ${reqInfo.serviceType}
+         #end
+		</td>
+	</tr>
+
+	<tr>
+		<td class="lbl">出款金额：</td>
+		<td>$!NumberUtils.format($!{reqInfo.withdrawAmount})</td>
+		<td class="lbl">原始额度：</td>
+		<td>$!NumberUtils.format($!{reqInfo.originalAmount})</td>
+	</tr>
+	<tr>
+		<td class="lbl">出款费率：</td>
+		<td>$!{reqInfo.withdrawFee}</td>
+		<td class="lbl">手续费：</td>
+		<td>结算费：$!NumberUtils.format($!{reqInfo.withdrawCost})+提现费：$!NumberUtils.format($!{reqInfo.wdCost})</td>
+	</tr>
+	<tr>
+		<td class="lbl">出款状态：</td>
+		<td>
+		#if("${reqInfo.status}"=="0")出款成功
+         #elseif("${reqInfo.status}"=="1")初始状态
+         #elseif("${reqInfo.status}"=="2")出款中
+         #elseif("${reqInfo.status}"=="9")出款失败
+         #else ${reqInfo.status}
+         #end
+		</td>
+		<td class="lbl">请求失败原因：</td>
+		<td>#if("${reqInfo.status}"=="9")
+		    $!{reqInfo.errorCode} - $!{reqInfo.errorMsg}
+		    #end
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">是否包含扫码：</td>
+		<td>
+		 #if("${reqInfo.hasOaTxn}"=="1")是
+         #else 否
+         #end
+		</td>
+		<td class="lbl">请求扩展信息：</td>
+		 <td style="word-break: break-all; word-wrap:break-word;width:100px;">
+		   $!{reqInfo.reqExtention}
+		  </td>
+		
+	</tr>
+
+	<tr>
+		<td class="lbl">申请时间：</td>
+		<td>#showDateTime($!{reqInfo.applyTime})</td>
+		<td class="lbl">出款时间：</td>
+		<td>#showDateTime($!{reqInfo.withdrawTime})</td>
+	</tr>
+
+</table>
+
+<table class="dtlTb" cellspacing="1" cellpadding="0">
+    <tr>
+		<td class="heading" colspan="4">出款详细信息</td>
+	</tr>
+	#foreach($detailInfo in $!{detailInfos})
+	 <tr>
+		<td  colspan="4" style="font-weight: bold;font-size: 16px;background-color: #F0EEFF;height: 30px;text-align: center;">
+	               第$!{velocityCount}次调用FOS出款服务，发起时间：#showDateTime($!{detailInfo.gmtPaymentInitiate})
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl">产品编码：</td>
+		<td width="300">$!{detailInfo.productCode}</td>
+		<td width="120" class="lbl">支付编码：</td>
+		<td width="300">$!{detailInfo.paymentCode}</td>
+	</tr>
+	
+		<tr>
+		<td class="lbl">请求的业务订单号：</td>
+		<td>$!{detailInfo.remitVoucherNo}</td>
+		<td class="lbl">收款人费用：</td>
+		<td>$!NumberUtils.format($!{detailInfo.payeeFee})</td>
+	</tr>
+		<tr>
+		<td class="lbl">开户行：</td>
+		<td>$!{detailInfo.bankCode}-$!{detailInfo.bankName}</td>
+		<td class="lbl">支行：</td>
+		<td>$!{detailInfo.bankLineno} - $!{detailInfo.bankBranch}</td>
+	</tr>
+		<tr>
+		<td class="lbl">银行所属省份：</td>
+		<td>$!{detailInfo.bankProvince}</td>
+		<td class="lbl">银行所属城市：</td>
+		<td>$!{detailInfo.bankCity}</td>
+	</tr>
+   <tr>
+		<td class="lbl">收款人姓名：</td>
+		<td>$!{detailInfo.payeeName}</td>
+		<td class="lbl">收款人卡号：</td>
+		<td>$!{detailInfo.payeeCardNo}</td>
+	</tr>
+
+	<tr>
+		<td class="lbl">卡类型：</td>
+		<td>$!{detailInfo.payeeCardType}</td>
+		<td class="lbl">业务发起时间：</td>
+		<td>#showDateTime($!{detailInfo.gmtBizInitiate})</td>
+	</tr>
+	<tr>
+		<td class="lbl">请求扩展信息：</td>
+		<td>$!{detailInfo.reqExtention}</td>
+		<td class="lbl">币种：</td>
+		<td>$!{detailInfo.currency}</td>
+	</tr>
+
+		<tr>
+		<td class="lbl">支付发起时间：</td>
+		<td>#showDateTime($!{detailInfo.gmtPaymentInitiate})</td>
+		<td class="lbl">收款金额：</td>
+		<td>$!NumberUtils.format($!{detailInfo.remitAmount})</td>
+	</tr>
+       <tr>
+		<td  width="120" class="lbl">调用响应信息：</td>
+		<td colspan="3">$!{detailInfo.returnCode} - $!{detailInfo.returnMsg}</td>
+	</tr>
+
+	<tr>
+		<td class="lbl"  width="120">回调扩展信息：</td>
+		<td colspan="3" style="word-break: break-all; word-wrap:break-word;width:300px;">
+		$!{detailInfo.extention}</td>
+	</tr>
+   #end
+</table>
+

@@ -1,0 +1,63 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		##<td>id</td>
+		<td>盛付通商户号</td>
+		<td>商户类型</td>
+		<td>出款请求单号</td>
+		<td>申请时间</td>
+		<td>出款时间</td>
+		<td>申请金额</td>
+		<td>总手续费</td>
+		<td>结算费</td>
+		<td>提现费</td>
+		<td>退费状态</td>
+		##<td>出款状态</td>
+		<td>退费成功时间</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		##<td>$!{o.reqId}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>
+		#if("$!{o.mcType}"=="0001")
+		普通POS商户
+		#elseif("$!{o.mcType}"=="0006")
+		 mPOS商户
+		#elseif("$!{o.mcType}"=="0201")
+		   云收银商户
+		#else $!{o.mcType}#end
+		</td>
+		<td>$!{o.orderNo}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.withdrawTime})</td>
+		<td>$!{o.withdrawAmount}</td>
+		<td>$!{o.totalCost}</td>
+		<td>$!{o.withdrawCost}</td>
+		<td>$!{o.wdCost}</td>
+		##<td>$!{o.status}</td>
+		<td>
+			#if("$!{o.remitStatus}"=="0"||"$!{o.remitStatus}"=="")
+			待退费
+			#elseif("$!{o.remitStatus}"=="1")
+			退费中
+			#elseif("$!{o.remitStatus}"=="2")
+			退费失败
+			#elseif("$!{o.remitStatus}"=="3")
+			退费成功
+			#else
+				$!{o.remitStatus}
+			#end
+		</td>
+		<td>#showDateTime($!{o.remitTime})</td>
+		<td>
+		    <a href="#springUrl('/newT0/showDetailInfo.do')?reqId=$!{o.reqId}" class="smBtn" target="_blank" title="查看详情">详</a>
+			#if("$!{o.remitStatus}"=="2"||"$!{o.remitStatus}"==""||"$!{o.remitStatus}"=="0")
+			<a class="smBtn" href="javascript:refound('$!{o.reqId}');" title="退费">退</a>#end
+		</td>
+	</tr>
+	#end
+</table>

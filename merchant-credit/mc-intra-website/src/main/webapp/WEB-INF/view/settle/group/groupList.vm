@@ -1,0 +1,31 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>分组号</td>
+		<td>分组名称</td>
+		<td>分组状态</td>
+		<td>创建时间</td>
+		<td>修改时间</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr class="settle_ttl">
+		<td>$!{o.groupCode}</td>
+		<td>$!{o.groupName}</td>
+		<td>
+			#if ($!{o.status}=='1')
+				有效
+			#elseif($!{o.status}=='0')
+				无效
+			#end
+		</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>
+			<a  class="smBtn" href="#springUrl('/settle/group/init/update.do')?id=$!{o.id}" target="_blank" title="修改">修</a>
+		</td>
+	</tr>
+	#end
+</table>

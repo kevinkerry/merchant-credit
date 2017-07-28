@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="#springUrl('/htdocs/debit/css/inc.css')">
+	<link rel="stylesheet" href="#springUrl('/htdocs/debit/css/style.css')">
+</head>
+<body>
+	<div class="content main_box">
+		<div class="ban_table clearfix">
+			<div class="ban_right ban_data">
+				<h2>借款详情</h2>
+	<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr>
+		<td height="35">订单号</td>
+		<td>$!{data.id}</td>
+		<td height="35">商户名称</td>
+		<td>$!{data.merchantName}</td>
+	</tr>
+	<tr>
+		<td height="35">商户号</td>
+		<td>$!{data.merchantNo}</td>
+		<td height="35">代理商名称</td>
+		<td>$!{data.promoterName}</td>
+	</tr>
+	<tr>
+		<td height="35">代理商商户号</td>
+		<td>$!{data.promoterNo}</td>
+		<td height="35">代理商承诺</td>
+		<td>
+			#if($!{data.isAgnetGuarantee}=="1")
+				<span >是</span>
+			#elseif($!{data.isAgnetGuarantee}=="0")
+				<span >否</span>
+			#end
+		</td>
+		</tr>
+	<tr>
+		<td height="35">授信额度</td>
+		<td>$!{data.totalAmount}</td>
+		<td height="35">已用额度</td>
+		<td>$!{data.usedAmount}</td>
+	</tr>
+	<tr>
+		<td height="35">额度生效开始日期</td>
+		<td>#showDate($!{data.effectiveStartTime})</td>
+		<td height="35">额度生效结束日期</td>
+		<td>#showDate($!{data.effectiveEndTime})</td>
+	</tr>
+	<tr>
+		<td height="35">借款申请日期</td>
+		<td>#showDate($!{data.applyDate})</td>
+		<td height="35">借款本金</td>
+		<td>$!{data.debitAmount}</td>
+	</tr>
+	<tr>
+		<td height="35">借款期限</td>
+		<td>$!{data.borrowDays}</td>
+		<td height="35">借款利息</td>
+		<td>$!{data.interestAmount}</td>
+	</tr>
+	<tr>
+		<td height="35">借款手续费</td>
+		<td>$!{data.serviceAmount}</td>
+		<td height="35">借款日期</td>
+		<td>#showDate($!{data.transferTime})</td>
+		</tr>
+	<tr>
+		<td height="35">到期时期</td>
+		<td>#showDate($!{data.endTime})</td>
+		<td height="35">是否逾期</td>
+        <td>
+			#if("$!{data.status}"=="0")
+
+    		#elseif("$!{data.status}"=="2"||"$!{data.status}"=="3")
+    			<span style="color:red">是</span>
+    		#elseif("$!{data.status}"=="1"||"$!{data.status}"=="4")
+				<span style="color:red">否</span>
+    		#end
+		</td>
+		</tr>
+	<tr>
+		<td height="35">逾期天数</td>
+		#set($days = $!MCUtil.daysBetween($!{data.endTime},$!{data.dueRepaymentTime}))
+        <td>
+			<span style="color:red">#if($days<0||"$!{data.status}"=="4") 0 #else $days #end</span>
+		</td>
+		<td height="35">逾期费用</td>
+        <td><span style="color:red">
+				$!{data.overDueAmount}
+			</span>
+		</td>
+		</tr>
+	<tr>
+		<td height="35">借款状态</td>
+		<td>
+			#if("$!{data.status}"=="0")
+				初始(放款中)
+    		#elseif("$!{data.status}"=="1"&&$days<0)
+    			还款中(未到期)
+    		#elseif("$!{data.status}"=="1"&&$days==0)
+    			还款中(已到期)
+    		#elseif("$!{data.status}"=="2")
+    			逾期中(已到期)
+    		#elseif("$!{data.status}"=="3"||"$!{data.status}"=="4")
+    			#if("$!{data.status}"=="3")逾期还款成功 #elseif("$!{data.status}"=="4") 正常还款成功#end  (已还清)
+    		#end
+		</td>
+    </tr>
+
+</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

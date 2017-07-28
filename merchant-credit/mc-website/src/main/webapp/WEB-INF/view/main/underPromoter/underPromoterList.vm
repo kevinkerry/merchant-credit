@@ -1,0 +1,23 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax4msp.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>下级拓展方号</td>
+		<td>下级拓展方名称</td>
+		<td>拓展方状态</td>
+		<td>创建时间</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{query.dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.merchantNo}</td>
+		<td>$!{o.merchantName}</td>
+		<td>#if("$!{o.status}"=="3") 正常 #else 关闭 #end</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td><a class="lk1" href="#relativeUrl('/underPromoter/config/index.htm')?bizId=$!{o.id}" target="_blank">配置</a></td>
+	</tr>
+	#end
+</table>

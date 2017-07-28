@@ -1,0 +1,1008 @@
+<script type="text/javascript" src="#staticResource('/lib/jquery/jquery-1.8.2.min.js')?version=1"></script>
+<script type="text/javascript" src="#staticResource('/js/jquery.uploadify.min.js')?version=1"></script>
+<link rel="stylesheet" href="#staticResource('/css/uploadify.css')?version=1" type="text/css" />
+<link rel="stylesheet" href="#staticResource('/css/style.css')?version=1" type="text/css" />
+<link rel="stylesheet" href="#staticResource('/css/inc.css')?version=1" type="text/css" />
+<meta name="renderer" content="webkit">
+<script type="text/javascript" src="#staticResource('/js/ajaxupload.js')?version=1"></script>
+<script type="text/javascript" src="#staticResource('/js/credit/mask.js')?version=1"></script>
+<style >
+	 .detail{border-right:1px solid #000000;border-bottom:1px solid #000000;margin:auto;}
+	 .detail td{border-left:1px solid #000000;border-top:1px solid #000000;padding-left: 10px; }
+</style>
+#parse("/control/provinceCity.vm")
+<div class="caption">云收银企业账户资料填写</div>
+<form id="date_form" name="date_form">
+<table class="dtlTb" cellspacing="2" cellpadding="2" id="registerBaseInfo_div">
+	<tr>
+		<td colspan="4" class="heading">注册基本信息</td>
+		<td>
+		<input type="hidden" id="baseInfo_id" name="baseInfo_id" value="$!{baseInfo.id}"/>
+		<input type="hidden" id="merchantStatus" name="merchantStatus" value="1"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>商户名称:</td>
+		<td width="300">
+			<input type="text" id="merchantName" name="merchantName" value="$!{baseInfo.merchantName}" class="txt w180"/>
+			&nbsp;<label class="small-orange">(营业执照注册名)</label>
+		</td>
+		<td width="150" class="lbl"><span class="red">*</span>店铺名称:</td>
+		<td width="300"><input type="text" id="shopName" name="shopName" value="$!{baseInfo.shopName}" class="txt w180"/></td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>发证机关:</td>
+		<td width="300">
+			<select id="certifyAuthOrg" name="certifyAuthOrg">
+				<option #if("$!{authInfo.certifyAuthOrg}"=="0") selected  #end value="0">工商行政管理局</option>
+				<option #if("$!{authInfo.certifyAuthOrg}"=="99") selected  #end value="99">其他</option>
+			</select>
+		</td>
+		<td width="150" class="lbl"><span class="red">*</span>营业执照编码:</td>
+		<td width="300"><input type="text" id="certifyCode" name="certifyCode" value="$!{authInfo.certifyCode}" class="txt w180"/></td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>组织机构代码:</td>
+		<td width="300" colspan="3"><input type="text" id="orgCode" name="orgCode" value="$!{authInfo.orgCode}" class="txt w180"/></td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>营业执照有效时间:</td>
+		<td width="300" colspan="2"><input type="text" id="certifyStartTime" name="certifyStartTime" value="$!{authInfo.certifyStartTime}" class="txt w180 date" onclick="xDatePicker(1);"/>
+		~ <input type="text" id="certifyEndTime" name="certifyEndTime" value="$!{authInfo.certifyEndTime}" class="txt w180 date" onclick="xDatePicker(1);"/>
+		</td>
+		<td>有效期是否永久:
+			<input type="radio" id="isPermanent" name="isPermanent" #if("$!{authInfo.certifyEndTime}"=="9999-12-31") checked #end value="2" onclick='checkIsPermanent(this)'/>
+		</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>主营类型:</td>
+		<td width="300">
+		<div id="div_bussinessType"></div>
+		<input type="hidden" id="bussinessType" name="bussinessType" value="$!{baseInfo.bussinessType}" class="txt w180"/>
+		</td>
+		<td width="150" class="lbl"><span class="red">*</span>费率:</td>
+		<td width="300">
+			<!-- <input type="text" id="fee" name="fee" value="$!{baseInfo.fee}" class="txt w180" onkeyup="value=value.replace(/[^\d\.]/g,'')"/> -->
+			<input type="radio" id="fee" name="fee" #if("$!{baseInfo.fee}"=="0.0038") checked  #end value="0.0038"/>&nbsp;0.38%&nbsp;
+			<input type="radio" id="fee" name="fee" #if("$!{baseInfo.fee}"=="0.0049") checked  #end value="0.0049"/>&nbsp;0.49%&nbsp;
+			<input type="radio" id="fee" name="fee" #if("$!{baseInfo.fee}"=="0.0055") checked  #end value="0.0055"/>&nbsp;0.55%&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>省市地区:</td>
+		<td width="300" colspan="3">
+		<div id="div_provinceCode_A" style="float:left"></div><div style="float:left">&nbsp;<input type="text" id="address" name="address" value="$!{baseInfo.address}" class="txt w180"/><label class="small-orange">(在此输入详细地址)</label></div>
+		<input type="hidden" id="provinceCode" name="provinceCode_baseInfo" value="$!{baseInfo.provinceCode}" class="txt w180"/>
+		<input type="hidden" id="cityCode" name="cityCode_baseInfo" value="$!{baseInfo.cityCode}" class="txt w180"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>安装地址:</td>
+		<td width="300">
+			<textarea id="bussinessAddr" name="bussinessAddr" rows="5" cols="39" maxlength="128" onchange="this.value=this.value.substring(0, 128)">$!{baseInfo.bussinessAddr}</textarea>
+			&nbsp;<label class="small-orange">(多个安装地址请用|分隔,例如: 安装地址一|安装地址二|安装地址三……)</label>
+		</td>
+	</tr>
+</table>
+<table class="dtlTb" cellspacing="2" cellpadding="2" id="registerAuthInfo_div">
+	<tr>
+		<td colspan="4" class="heading">注册认证信息</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>法人/负责人姓名:</td>
+		<td width="300"><input type="text" id="linkMan" name="linkMan" value="$!{baseInfo.linkMan}" class="txt w180"/></td>
+		<td width="150" class="lbl"><span class="red">*</span>法人/负责人身份证号:</td>
+		<td width="300">
+			<input type="text" id="idcard_hidden" name="idcard_hidden" value="$!{idcard_hidden}" class="txt w180"/>
+			<input type="hidden" id="idcard" name="idcard" value="$!{authInfo.idcard}" class="txt w180"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>法人/负责人手机号:</td>
+		<td width="300">
+			<input type="text" id="phoneNo" name="phoneNo" value="$!{baseInfo.phoneNo}" class="txt w180" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"
+				onafterpaste="this.value=this.value.replace(/\D/g,'')"/>&nbsp;<label class="small-orange">手机号为注册账号</label>
+		</td>
+		<td width="150" class="lbl"><span class="red">*</span>法人/负责人电话:</td>
+		<td width="300"><input type="text" id="linkTel" name="linkTel" value="$!{baseInfo.linkTel}" class="txt w180"/></td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>联系邮箱:</td>
+		<td width="300"><input type="text" id="email" name="email" value="$!{baseInfo.email}" class="txt w180"/></td>
+		<td width="120" class="lbl"><span class="red">*</span>经办人类型:</td>
+		<td width="300">
+			<select id="operatorType" name="operatorType">
+				<option #if("$!{authInfo.operatorType}"=="1") selected  #end value="1">法人</option>
+				<option #if("$!{authInfo.operatorType}"=="2") selected  #end value="2">委托人</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>身份证有效时间:</td>
+		<td width="300" colspan="3"><input type="text" id="idcardStartTime" name="idcardStartTime" value="$!{authInfo.idcardStartTime}" class="txt w180 date" onclick="xDatePicker(1);"/>
+		~ <input type="text" id="idcardEndTime" name="idcardEndTime" value="$!{authInfo.idcardEndTime}" class="txt w180 date" onclick="xDatePicker(1);"/>
+		</td>
+	</tr>
+</table>
+<table id="img_table" class="dtlTb" cellspacing="2" cellpadding="2" >
+	<tr>
+		<td colspan="4" class="heading">照片信息</td>
+		<td>
+		<input type="hidden" id="baseInfo_id" name="baseInfo_id" value="$!{baseInfo.id}"/>
+		<input type="hidden" id="merchantStatus" name="merchantStatus" value="1"/>
+		</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>身份证正面照:</td>
+		<td width="300">
+		<!-- <input type="file" id="idcardFrontImg" name="idcardFrontImg" value="$!{idcardFrontImg}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_idcardFrontImg_storeKey' name="idcardFrontImg" value="$!{authInfo.idcardFrontImg}">
+		#if(!("$!{authInfo.idcardFrontImg}"==""))
+		<div id="div_idcardFrontImg">
+		<img id ='img_idcardFrontImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.idcardFrontImg}&d=Math.random()" style="width:180px;height:80px;" title="身份证正面照"/>
+			<a id="idcardFrontImg_del" href="javascript:deleteFile('idcardFrontImg');">删除</a>
+		</div>
+		<div id = "div_idcardFrontImg_upload" style="display:none">
+			<a id="idcardFrontImg" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持5M</label>
+		</div>
+		#else
+		<div id = "div_idcardFrontImg" style="display:none">
+		<img id ='img_idcardFrontImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.idcardFrontImg}&d=Math.random()" style="width:180px;height:80px;" title="身份证正面照"/>
+			<a id="idcardFrontImg_del1" href="javascript:deleteFile('idcardFrontImg');">删除</a>
+		</div>
+		<div id="div_idcardFrontImg_upload">
+			<a id="idcardFrontImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a>&nbsp;<label class="small-orange">上传文件最大支持5M</label>
+		</div>
+		#end
+		</td>
+		<td width="150" class="lbl"><span class="red">*</span>身份证反面照:</td>
+		<td width="300">
+		<!-- <input type="file" id="idcardReverseImg" name="idcardReverseImg" value="$!{idcardReverseImg}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_idcardReverseImg_storeKey' name="idcardReverseImg" value="$!{authInfo.idcardReverseImg}">
+		#if(!("$!{authInfo.idcardReverseImg}"==""))
+		<div id="div_idcardReverseImg">
+		<img id ='img_idcardReverseImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.idcardReverseImg}" style="width:180px;height:80px;" title="身份证反面照"/>
+			<a href="javascript:deleteFile('idcardReverseImg');">删除</a>
+		</div>
+		<div id = "div_idcardReverseImg_upload" style="display:none">
+			<a id="idcardReverseImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_idcardReverseImg" style="display:none">
+		<img id ='img_idcardReverseImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.idcardReverseImg}" style="width:180px;height:80px;" title="身份证反面照"/>
+			<a href="javascript:deleteFile('idcardReverseImg');">删除</a>
+		</div>
+		<div id="div_idcardReverseImg_upload">
+			<a id="idcardReverseImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>营业执照证件照:</td>
+		<td width="300">
+		<input type="hidden" id ='hidden_certifyImg_storeKey' name="certifyImg" value="$!{authInfo.certifyImg}">
+		<!-- <input type="file" id="certifyImg" name="certifyImg" value="$!{certifyImg}" class="txt w180"/> -->
+		#if(!("$!{authInfo.certifyImg}"==""))
+		<div id="div_certifyImg">
+		<img id ='img_certifyImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.certifyImg}" style="width:180px;height:80px;" title="营业执照证件照"/>
+			<a id="certifyImg_del" href="javascript:deleteFile('certifyImg');">删除</a>
+		</div>
+		<div id = "div_certifyImg_upload" style="display:none">
+			<a id="certifyImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_certifyImg" style="display:none">
+		<img id ='img_certifyImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.certifyImg}" style="width:180px;height:80px;" title="营业执照证件照"/>
+			<a id="certifyImg_del1" href="javascript:deleteFile('certifyImg');">删除</a>
+		</div>
+		<div id="div_certifyImg_upload">
+			<a id="certifyImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+		<td width="120" class="lbl"><span class="red">*</span>委托书图片:</td>
+		<td width="300">
+		<!-- <input type="file" id="authorizeImg" name="authorizeImg" value="$!{authorizeImg}" class="txt w180"/><span class="gray">当经办人为委托人时，此处必选</span> -->
+		<input type="hidden" id ='hidden_authorizeImg_storeKey' name="authorizeImg" value="$!{authInfo.authorizeImg}">
+		#if(!("$!{authInfo.authorizeImg}"==""))
+		<div id="div_authorizeImg">
+		<img id ='img_authorizeImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.authorizeImg}" style="width:180px;height:80px;" title="委托书图片"/>
+			<a href="javascript:deleteFile('authorizeImg');">删除</a>
+		</div>
+		<div id = "div_authorizeImg_upload" style="display:none">
+			<a id="authorizeImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>&nbsp;<span class="gray">当经办人为委托人时，此处必选</span>
+		</div>
+		#else
+		<div id = "div_authorizeImg" style="display:none">
+		<img id ='img_authorizeImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.authorizeImg}" style="width:180px;height:80px;" title="委托书图片"/>
+			<a href="javascript:deleteFile('authorizeImg');">删除</a>
+		</div>
+		<div id="div_authorizeImg_upload">
+			<a id="authorizeImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>&nbsp;<span class="gray">当经办人为委托人时，此处必选</span>
+		</div>
+		#end
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>税务登记证:</td>
+		<td width="300">
+		<!-- <input type="file" id="taxRegistImg" name="taxRegistImg" value="$!{taxRegistImg}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_taxRegistImg_storeKey' name="taxRegistImg" value="$!{authInfo.taxRegistImg}">
+		#if(!("$!{authInfo.taxRegistImg}"==""))
+		<div id="div_taxRegistImg">
+		<img id ='img_taxRegistImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.taxRegistImg}" style="width:180px;height:80px;" title="税务登记证"/>
+			<a href="javascript:deleteFile('taxRegistImg');">删除</a>
+		</div>
+		<div id = "div_taxRegistImg_upload" style="display:none">
+			<a id="taxRegistImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_taxRegistImg" style="display:none">
+		<img id ='img_taxRegistImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.taxRegistImg}" style="width:180px;height:80px;" title="税务登记证"/>
+			<a href="javascript:deleteFile('taxRegistImg');">删除</a>
+		</div>
+		<div id="div_taxRegistImg_upload">
+			<a id="taxRegistImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+		<td width="120" class="lbl"><span class="red">*</span>合同影印件:</td>
+		<td width="300">
+		<!-- <input type="file" id="contractImg" name="contractImg" value="$!{contractImg}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_contractImg_storeKey' name="contractImg" value="$!{authInfo.contractImg}">
+		#if(!("$!{authInfo.contractImg}"==""))
+		<div id="div_contractImg">
+		<img id ='img_contractImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.contractImg}" style="width:180px;height:80px;" title="合同影印件"/>
+			<a href="javascript:deleteFile('contractImg');">删除</a>
+		</div>
+		<div id = "div_contractImg_upload" style="display:none">
+			<a id="contractImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_contractImg" style="display:none">
+		<img id ='img_contractImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.contractImg}" style="width:180px;height:80px;" title="合同影印件"/>
+			<a href="javascript:deleteFile('contractImg');">删除</a>
+		</div>
+		<div id="div_contractImg_upload">
+			<a id="contractImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>组织机构代码证:</td>
+		<td width="300">
+		<!-- <input type="file" id="orgCodeImg" name="orgCodeImg" value="$!{orgCodeImg}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_orgCodeImg_storeKey' name="orgCodeImg" value="$!{authInfo.orgCodeImg}">
+		#if(!("$!{authInfo.orgCodeImg}"==""))
+		<div id="div_orgCodeImg">
+		<img id ='img_orgCodeImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.orgCodeImg}" style="width:180px;height:80px;" title="组织机构代码证"/>
+			<a href="javascript:deleteFile('orgCodeImg');">删除</a>
+		</div>
+		<div id = "div_orgCodeImg_upload" style="display:none">
+			<a id="orgCodeImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_orgCodeImg" style="display:none">
+		<img id ='img_orgCodeImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.orgCodeImg}" style="width:180px;height:80px;" title="组织机构代码证"/>
+			<a href="javascript:deleteFile('orgCodeImg');">删除</a>
+		</div>
+		<div id="div_orgCodeImg_upload">
+			<a id="orgCodeImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+		<td width="120" class="lbl"><span class="red">*</span>银行开户证明:</td>
+		<td width="300">
+		<!-- <input type="file" id="bankAccountImg" name="bankAccountImg" value="$!{bankAccountImg}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_bankAccountImg_storeKey' name="bankAccountImg" value="$!{authInfo.bankAccountImg}">
+		#if(!("$!{authInfo.bankAccountImg}"==""))
+		<div id="div_bankAccountImg">
+		<img id ='img_bankAccountImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.bankAccountImg}" style="width:180px;height:80px;" title="银行开户证明"/>
+			<a href="javascript:deleteFile('bankAccountImg');">删除</a>
+		</div>
+		<div id = "div_bankAccountImg_upload" style="display:none">
+			<a id="bankAccountImg" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_bankAccountImg" style="display:none">
+		<img id ='img_bankAccountImg_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.bankAccountImg}" style="width:180px;height:80px;" title="银行开户证明"/>
+			<a href="javascript:deleteFile('bankAccountImg');">删除</a>
+		</div>
+		<div id="div_bankAccountImg_upload">
+			<a id="bankAccountImg" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl">场地照片(门牌):</td>
+		<td width="300">
+		<!-- <input type="file" id="siteImg1" name="siteImg1" value="$!{siteImg1}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_siteImg1_storeKey' name="siteImg1" value="$!{authInfo.siteImg1}">
+		#if(!("$!{authInfo.siteImg1}"==""))
+		<div id="div_siteImg1">
+		<img id ='img_siteImg1_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg1}" style="width:180px;height:80px;" title="场地照片(门牌)"/>
+			<a href="javascript:deleteFile('siteImg1');">删除</a>
+		</div>
+		<div id = "div_siteImg1_upload" style="display:none">
+			<a id="siteImg1" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_siteImg1" style="display:none">
+		<img id ='img_siteImg1_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg1}" style="width:180px;height:80px;" title="场地照片(门牌)"/>
+			<a href="javascript:deleteFile('siteImg1');">删除</a>
+		</div>
+		<div id="div_siteImg1_upload">
+			<a id="siteImg1" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+		<td width="120" class="lbl"><span class="red">*</span>场地照片(前台):</td>
+		<td width="300">
+		<!-- <input type="file" id="siteImg2" name="siteImg2" value="$!{siteImg2}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_siteImg2_storeKey' name="siteImg2" value="$!{authInfo.siteImg2}">
+		#if(!("$!{authInfo.siteImg2}"==""))
+		<div id="div_siteImg2">
+		<img id ='img_siteImg2_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg2}" style="width:180px;height:80px;" title="场地照片(前台)"/>
+			<a href="javascript:deleteFile('siteImg2');">删除</a>
+		</div>
+		<div id = "div_siteImg2_upload" style="display:none">
+			<a id="siteImg2" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_siteImg2" style="display:none">
+		<img id ='img_siteImg2_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg2}" style="width:180px;height:80px;" title="场地照片(前台)"/>
+			<a href="javascript:deleteFile('siteImg2');">删除</a>
+		</div>
+		<div id="div_siteImg2_upload">
+			<a id="siteImg2" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl">场地照片(营业区域):</td>
+		<td width="300">
+		<!-- <input type="file" id="siteImg3" name="siteImg3" value="$!{siteImg3}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_siteImg3_storeKey' name="siteImg3" value="$!{authInfo.siteImg3}">
+		#if(!("$!{authInfo.siteImg3}"==""))
+		<div id="div_siteImg3">
+		<img id ='img_siteImg3_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg3}" style="width:180px;height:80px;" title="场地照片(营业区域)"/>
+			<a href="javascript:deleteFile('siteImg3');">删除</a>
+		</div>
+		<div id = "div_siteImg3_upload" style="display:none">
+			<a id="siteImg3" href="javascript:;" class="upload">立刻上传<input type="file"></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_siteImg3" style="display:none">
+		<img id ='img_siteImg3_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg3}" style="width:180px;height:80px;" title="场地照片(营业区域)"/>
+			<a href="javascript:deleteFile('siteImg3');">删除</a>
+		</div>
+		<div id="div_siteImg3_upload">
+			<a id="siteImg3" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a><div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+		<td width="120" class="lbl"><span class="red">*</span>场地图片(写字楼外观):</td>
+		<td width="300">
+		<!-- <input type="file" id="siteImg4" name="siteImg4" value="$!{siteImg4}" class="txt w180"/> -->
+		<input type="hidden" id ='hidden_siteImg4_storeKey' name="siteImg4" value="$!{authInfo.siteImg4}">
+		#if(!("$!{authInfo.siteImg4}"==""))
+		<div id="div_siteImg4">
+		<img id ='img_siteImg4_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg4}" style="width:180px;height:80px;" title="场地图片(写字楼外观)"/>
+			<a href="javascript:deleteFile('siteImg4');">删除</a>
+		</div>
+		<div id = "div_siteImg4_upload" style="display:none">
+			<a id="siteImg4" href="javascript:;" class="upload">立刻上传<input type="file"></a>
+			<div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#else
+		<div id = "div_siteImg4" style="display:none">
+		<img id ='img_siteImg4_storeKey' src="#relativeUrl('/file/easypayDownload.htm')?storeKey=$!{authInfo.siteImg4}" style="width:180px;height:80px;" title="场地图片(写字楼外观)"/>
+			<a href="javascript:deleteFile('siteImg4');">删除</a>
+		</div>
+		<div id="div_siteImg4_upload">
+			<a id="siteImg4" href="javascript:void(0);" class="upload">立刻上传<input type="file" /></a>
+			<div>&nbsp;<label class="small-orange">上传文件最大支持5M</label></div>
+		</div>
+		#end
+		</td>
+	</tr>
+</table>
+
+<table class="dtlTb" cellspacing="2" cellpadding="2" id="bankCardInfo_div">
+	<tr>
+		<td colspan="4" class="heading">对公账户信息</td>
+	</tr>
+	<tr>
+		<td width="150" class="lbl"><span class="red">*</span>对公账号:</td>
+		<td width="300">
+			<input type="text" id="bankCard_hidden" name="bankCard_hidden" value="$!{bankCard_hidden}" class="txt w180"/>
+			<input type="hidden" id="bankCard" name="bankCard" value="$!{bankCardInfo.bankCard}" class="txt w180"/>
+		</td>
+		<td width="150" class="lbl"><span class="red">*</span>对公开户名称:</td>
+		<td width="300"><input type="text" id="accountName" name="accountName" value="$!{bankCardInfo.accountName}" class="txt w180"/></td>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>对公开户行:</td>
+		<td width="300">
+			<select id="bankCode" name="bankCode">
+				#if(!("$!{bankCardInfo.bankCode}"==""))<option value="$!{bankCardInfo.bankCode}|$!{bankCardInfo.bankName}" >$!{bankCardInfo.bankName}</option> #end
+				#foreach($bank in $!{bankROList})
+    			<option value="$!{bank.k}|$!{bank.v}" >$!{bank.v}</option>
+    			#end
+			</select>
+			<!-- <input type="text" id="" name="" value="" class="txt w180"/> -->
+		</td>
+		<td width="120" class="lbl"><span class="red">*</span>对公开户行支行:</td>
+		<td width="300">
+			<input type="text" id="branchName" name="branchName" value="$!{bankCardInfo.branchName}" class="txt w180"/>
+		</td>
+	</tr>
+	<tr>
+	</tr>
+	<tr>
+		<td width="120" class="lbl"><span class="red">*</span>省市地区:</td>
+		<td width="300" colspan="3">
+		<div id="div_provinceCode_B"></div>
+		<input type="hidden" id="provinceCode1" name="provinceCode_bankCardInfo" value="$!{baseInfo.provinceCode}" class="txt w180"/>
+		<input type="hidden" id="cityCode1" name="cityCode_bankCardInfo" value="$!{baseInfo.cityCode}" class="txt w180"/>
+		</td>
+	</tr>
+	
+</table>
+	<div id="saveOrUpdateButton" class="alC" style="margin:10px auto 20px auto;">
+		<a id="saveOrbtn1" name="saveOrbtn1" class="btn2" href="javascript:SaveOrUpdate(0);">保存待提交</a>
+		<a id="saveOrbtn2" name="saveOrbtn2" class="btn2" href="javascript:SaveOrUpdate(1);">提交注册</a>
+	</div>
+</form>
+<div id="load_div" style="display:none"></div>
+<script type="text/javascript">
+	window.onload=function(){
+		var cityList = provinceCity;
+		provincesA(cityList);
+		provincesB(cityList);
+		if("$!{realNameStatus}"=="openAccount"){
+        	jQuery("#registerBaseInfo_div").hide();
+        	jQuery("#bankCardInfo_div").hide();
+        	jQuery("#registerAuthInfo_div").hide();
+        }
+		if("$!{baseInfo.id}"==""){
+			setTimeStartEnd(0,elm("certifyStartTime"),0,elm("certifyEndTime"));
+			setTimeStartEnd(0,elm("idcardStartTime"),0,elm("idcardEndTime"));
+		}
+		var bussinessTypeList = $!{bussinessTypeList};
+        var oDiv = document.getElementById("div_bussinessType");
+        var sheng = document.createElement("select");
+        var shi = document.createElement("select");
+        var qu = document.createElement("select");
+        oDiv.appendChild(sheng);
+        oDiv.appendChild(shi);
+        oDiv.appendChild(qu);
+        if(!"$!{bussinessTypeName}" == "" || !"$!{bussinessTypeName}" == undefined){
+	        sheng.options[0] = new Option("$!{bussinessTypeName.firstColumn}", "-1");
+	        shi.options[0] = new Option("$!{bussinessTypeName.secondColumn}", "-1");
+	        qu.options[0] = new Option("$!{bussinessTypeName.thirdColumn}", "-1");
+        }else{
+	        sheng.options[0] = new Option("请选择", "-1");
+	        shi.options[0] = new Option("请选择", "-1");
+	        qu.options[0] = new Option("请选择", "-1");
+        }
+        //循环第一步
+        for (var i = 0; i < bussinessTypeList.length; i++) {
+          sheng.options[sheng.length] = new Option(bussinessTypeList[i].industryName, i);
+          sheng.onchange = function() {
+            //恢复默认选项
+            //shi.options[0].selected = true;
+            //qu.options[0].selected = true;
+            //清空选项
+            shi.options.length = 0;
+            shi.options[shi.length] = new Option("请选择", "-1");
+            qu.options.length = 0;
+            qu.options[qu.length] = new Option("请选择", "-1");
+            for (var j = 0; j < bussinessTypeList[sheng.selectedIndex - 1].childrens.length; j++) {
+				var industryNamej = bussinessTypeList[sheng.selectedIndex - 1].childrens[j].industryName;
+				if(typeof(industryNamej) == "undefined" || typeof(industryNamej) == ""){
+					industryNamej = bussinessTypeList[sheng.selectedIndex - 1].industryName;
+				}
+				shi.options[shi.length] = new Option(industryNamej, j);
+				shi.onchange = function() {
+                //恢复默认选项
+                //qu.options[0].selected = true;
+                //清空选项
+                qu.options.length = 0;
+                qu.options[qu.length] = new Option("请选择", "-1");
+                for (var k = 0; k < bussinessTypeList[sheng.selectedIndex - 1].childrens[shi.selectedIndex - 1].childrens.length; k++) {
+                  var industryNamek = bussinessTypeList[sheng.selectedIndex - 1].childrens[shi.selectedIndex - 1].childrens[k].industryName;
+				  var industryKeyk = bussinessTypeList[sheng.selectedIndex - 1].childrens[shi.selectedIndex - 1].childrens[k].industryKey;
+				  if(typeof(industryNamek) == "undefined" || typeof(industryNamek) == ""){
+					industryNamek = bussinessTypeList[sheng.selectedIndex - 1].childrens[shi.selectedIndex - 1].industryName;
+					if(typeof(industryNamek) == "undefined" || typeof(industryNamek) == ""){
+						industryNamek = bussinessTypeList[sheng.selectedIndex - 1].industryName;
+					}
+				  }
+				  qu.options[qu.length] = new Option(industryNamek, k);
+				  qu.onchange = function(){
+					document.getElementById("bussinessType").value = industryKeyk;
+				  }
+                }
+              }
+            }
+          }
+        }
+        //form只读
+        if("$!{readonlyStatus}"=="0"){
+        	$('input,select,textarea',$('form[name="date_form"]')).attr('readonly',true);
+        	$('a',$('form[name="date_form"]')).removeAttr("href");
+        	$('input',$('form[name="date_form"]')).removeAttr("onclick");
+        	$("#saveOrUpdateButton").hide();
+        }
+        
+	};
+	
+	function provincesA(sheng){
+		var jsonObject = JSON.parse(sheng);
+		var provinceCodeDiv = document.getElementById("div_provinceCode_A");
+        var shengA = document.createElement("select");
+        var shiA = document.createElement("select");
+        provinceCodeDiv.appendChild(shengA);
+        provinceCodeDiv.appendChild(shiA);
+        if(!"$!{baseInfo.provinceCode}" == "" || !"$!{baseInfo.provinceCode}" == undefined){
+        	for(var p in jsonObject){
+        		if(jsonObject[p].id=="$!{baseInfo.provinceCode}"){
+			        shengA.options[0] = new Option(jsonObject[p].name, "-1");
+			        for(var b in jsonObject[p].subs){
+			        	if(jsonObject[p].subs[b].id=="$!{baseInfo.cityCode}"){
+			        		shiA.options[0] = new Option(jsonObject[p].subs[b].name, "-1");
+			        		document.getElementById("provinceCode").value = "$!{baseInfo.provinceCode}";
+							document.getElementById("cityCode").value = "$!{baseInfo.cityCode}";
+			        	}
+			        }
+        		}
+        	}
+        }else{
+	        shengA.options[0] = new Option("请选择", "-1");
+	        shiA.options[0] = new Option("请选择", "-1");
+        }
+        var proId;
+		for(var o in jsonObject){
+			//console.log(jsonObject[o].name + "id:"+jsonObject[o].id);
+			//console.log(jsonObject[o].subs);
+			shengA.options[shengA.length] = new Option(jsonObject[o].name, o);
+			shengA.onchange = function(){
+				proId=jsonObject[this.value].id;
+				shiA.options.length = 0;
+	            shiA.options[shiA.length] = new Option("请选择", "-1");
+				for(var j in jsonObject[this.value].subs){
+					shiA.options[shiA.length] = new Option(jsonObject[this.value].subs[j].name, jsonObject[this.value].subs[j].id);
+					shiA.onchange = function(){
+						document.getElementById("provinceCode").value = proId;
+						document.getElementById("cityCode").value = shiA.value;
+					}
+					//console.log(jsonObject[this.value].subs[j].name);
+				}
+			}
+		}
+	}
+	
+	function provincesB(sheng){
+		var jsonObject = JSON.parse(sheng);
+		var provinceCodeDivB = document.getElementById("div_provinceCode_B");
+        var shengB = document.createElement("select");
+        var shiB = document.createElement("select");
+        provinceCodeDivB.appendChild(shengB);
+        provinceCodeDivB.appendChild(shiB);
+        if(!"$!{bankCardInfo.provinceCode}" == "" || !"$!{bankCardInfo.provinceCode}" == undefined){
+        	for(var p in jsonObject){
+        		if(jsonObject[p].id=="$!{bankCardInfo.provinceCode}"){
+			        shengB.options[0] = new Option(jsonObject[p].name, "-1");
+			        for(var b in jsonObject[p].subs){
+			        	if(jsonObject[p].subs[b].id=="$!{bankCardInfo.cityCode}"){
+			        		shiB.options[0] = new Option(jsonObject[p].subs[b].name, "-1");
+			        		document.getElementById("provinceCode1").value = "$!{bankCardInfo.provinceCode}";
+							document.getElementById("cityCode1").value = "$!{bankCardInfo.cityCode}";
+			        	}
+			        }
+        		}
+        	}
+        }else{
+	        shengB.options[0] = new Option("请选择", "-1");
+	        shiB.options[0] = new Option("请选择", "-1");
+        }
+        var proId;
+		for(var o in jsonObject){
+			shengB.options[shengB.length] = new Option(jsonObject[o].name, o);
+			shengB.onchange = function(){
+				proId=jsonObject[this.value].id;
+				shiB.options.length = 0;
+	            shiB.options[shiB.length] = new Option("请选择", "-1");
+				for(var j in jsonObject[this.value].subs){
+					shiB.options[shiB.length] = new Option(jsonObject[this.value].subs[j].name, jsonObject[this.value].subs[j].id);
+					shiB.onchange = function(){
+						document.getElementById("provinceCode1").value = proId;
+						document.getElementById("cityCode1").value = shiB.value;
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	function setTimeStartEnd(a, c, b, d) {
+        var e = new Date,
+        f = e.getFullYear(),
+        g = e.getMonth(),
+        e = e.getDate();
+        c.value = formatDate(new Date(f, g, e + a), 'yyyy-MM-dd') ;
+        d.value = formatDate(new Date(f, g, e + b), 'yyyy-MM-dd') ;
+	}
+	$(function(){
+		$(".upload").each
+        (function () {
+        var button = $(this), interval;
+        new AjaxUpload(button, {
+            action: "#relativeUrl('/file/easypayUpload.htm')",
+            name: 'uploadfield',
+			responseType:'json',
+            onSubmit: function (file, ext) {
+				 if (!(ext && /^(jpg|jpeg|JPG|JPEG|PNG|png|gif|GIF|bmp|BMP|avi|AVI|MP4|mp4|WMA|wma|zip|ZIP|rar|RAR|wmv|WMV|rm|RM|rmvb|RMVB|3gp|3GP|mpeg|MPEG)$/.test(ext))) {
+                    alert("文件格式不正确,请选择 正确的格式的文件!");
+                    return false;
+                }
+                button.text('上传中');
+                interval = window.setInterval(function () {
+                    var text = button.text();
+                    if (text.length < 10) {
+                        button.text(text + '|');
+                    } else {
+                        button.text('上传中');
+                    }
+                }, 200);
+            },
+            onComplete: function (file, response) {
+                window.clearInterval(interval);
+                // enable upload button
+                // this.enable();
+				if(response.uploadSuccess ==true){
+					alert('上传成功');
+					button.hide();
+					$("#file_" + button.attr("id")+"_oriFileName").text(response.oriFileName);
+					button.text('立刻上传');
+					$("#div_" + button.attr("id")).css("display","");
+					$("#hidden_" + button.attr("id") +"_storeKey").val(response.storeKey);
+					$("#img_" + button.attr("id") +"_storeKey").attr("src", "#relativeUrl('/file/easypayDownload.htm')?storeKey="+response.storeKey);
+				}else{
+					  if(response.uploadSuccess=='overMax'){
+						showDiv('mask_box',response.errorMessage);
+						return false;
+					}
+
+				}
+            }
+        });
+    	});
+    });
+	
+	function deleteFile(id){
+		var storeKey=$('#hidden_'+id+'_storeKey').val();
+		jQuery.ajax( {
+            url:"#relativeUrl('/file/easypayDelete.htm')?storeKey="+ storeKey,// 跳转到 action
+            type:'post',
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				$('#div_'+id).css('display','none');
+				$('#div_'+id +'_upload').css('display','');
+				$('#'+id).css('display','');
+				$("#file_" + id +"_oriFileName").text("");
+				$("#hidden_" + id+"_storeKey").val("");
+				alert('删除成功');
+             },
+             error : function() {
+             }
+        });
+	}
+	
+	var tempradio= null;
+	function checkIsPermanent(checkedRadio){
+		if(tempradio== checkedRadio){
+	    	tempradio.checked=false;
+	    	tempradio=null;
+	    }else{
+	    	tempradio= checkedRadio;
+	    }
+	}
+	
+	
+	function SaveOrUpdate(s){
+		if(!verification()){
+			return ;
+		}
+		var s=s;
+		var query = $("#date_form").serialize();//序列化表格内容为字符串
+		if(s==0){
+			$("#saveOrbtn1").attr({"disabled":true});
+			$("#saveOrbtn2").attr({"disabled":true});
+			jQuery.ajax( {
+	            url:"#relativeUrl('/easypay/enterpriseAccount/temporarySave.htm')",
+				data:query,
+	            type:'post',
+	            cache:false,
+	            success:function(data) {
+	            	$("#saveOrbtn1").removeAttr("disabled");
+	            	$("#saveOrbtn2").removeAttr("disabled");
+					if (!data.success){
+						if(data.errorMessage==null){
+							alert("保存失败！");
+						}else{
+							alert(data.errorMessage);
+						}
+					} else{
+						alert("保存信息成功!");
+						window.location.href="#relativeUrl('/easypay/enterpriseAccount/index.htm')";
+					}
+	             },
+	             error : function() {
+	             }
+	      });
+		}else if(s==1){
+			$("#saveOrbtn1").attr({"disabled":true});
+			$("#saveOrbtn2").attr({"disabled":true});
+			jQuery.ajax( {
+	            url:"#relativeUrl('/easypay/enterpriseAccount/saveSubmit.htm')",
+				data:query,
+	            type:'post',
+	            cache:false,
+	            success:function(data) {
+	            	$("#saveOrbtn1").removeAttr("disabled");
+	            	$("#saveOrbtn2").removeAttr("disabled");
+					if (!data.success){
+						if(data.errorMessage==null){
+							alert("保存失败！");
+						}else{
+							alert(data.errorMessage);
+						}
+					} else{
+						alert("注册成功!");
+						window.location.href="#relativeUrl('/easypay/enterpriseAccount/index.htm')";
+					}
+	             },
+	             error : function() {
+	             }
+	      });
+		}
+	}
+	//校验数据
+	function verification(){
+		var merchantName=$("#merchantName").val();
+		if(validate(merchantName)){
+			alert("商户名称为空！");
+			return false;
+		}
+		var shopName=$("#shopName").val();
+		if(validate(shopName)){
+			alert("店铺名称为空！");
+			return false;
+		}
+		var certifyAuthOrg=$("#certifyAuthOrg").val();
+		if(validate(certifyAuthOrg)){
+			alert("请选择营业执照发证机关！");
+			return false;
+		}
+		var certifyCode=$("#certifyCode").val();
+		if(validate(certifyCode)){
+			alert("营业执照编码为空！");
+			return false;
+		}
+		var phoneNo=$("#phoneNo").val();
+		if(validate(phoneNo)){
+			alert("法人/负责人手机号为空！");
+			return false;
+		}
+		var linkMan=$("#linkMan").val();
+		if(validate(linkMan)){
+			alert("法人/负责人姓名为空！");
+			return false;
+		}
+		var linkTel=$("#linkTel").val();
+		if(validate(linkTel)){
+			alert("法人/负责人电话为空！");
+			return false;
+		}
+		var provinceCode=$("#provinceCode").val();
+		if(validate(provinceCode)){
+			alert("请选择商铺所在省市！");
+			return false;
+		}
+		var cityCode=$("#cityCode").val();
+		if(validate(cityCode)){
+			alert("请选择商铺所在市区！");
+			return false;
+		}
+		var address=$("#address").val();
+		if(validate(address)){
+			alert("详细地址为空！");
+			return false;
+		}
+		var bussinessAddr=$("#bussinessAddr").val();
+		if(validate(bussinessAddr)){
+			alert("安装地址为空！");
+			return false;
+		}
+		var email=$("#email").val();
+		if(validate(email)){
+			alert("联系邮箱为空！");
+			return false;
+		}
+		if(valiEmail(email)){
+			alert("邮箱格式不合法！");
+			return false;
+		}
+		var fee=$('input:radio[name="fee"]:checked').val();
+		//var fee=$("#fee").val();
+		if(validate(fee)){
+			alert("请选择费率！");
+			return false;
+		}
+		var bussinessType=$("#bussinessType").val();
+		if(validate(bussinessType)){
+			alert("请选择主营类型！");
+			return false;
+		}
+		//注册认证信息
+		var idcard_hidden=$("#idcard_hidden").val();
+		if(validate(idcard_hidden)){
+			alert("法人/负责人身份证号为空！");
+			return false;
+		}
+		var operatorType=$("#operatorType").val();
+		if(validate(operatorType)){
+			alert("请选择经办人类型！");
+			return false;
+		}
+		var certifyStartTime=$("#certifyStartTime").val();
+		if(validate(certifyStartTime)){
+			alert("营业执照有效起始时间为空！");
+			return false;
+		}
+		var isPermanent=$("#isPermanent option:selected").val();
+		if(!isPermanent=="2"){
+			var certifyEndTime=$("#certifyEndTime").val();
+			if(validate(certifyEndTime)){
+				alert("营业执照有效结束时间为空！");
+				return false;
+			}
+		}
+		var idcardStartTime=$("#idcardStartTime").val();
+		if(validate(idcardStartTime)){
+			alert("身份证有效起始时间为空！");
+			return false;
+		}
+		var idcardEndTime=$("#idcardEndTime").val();
+		if(validate(idcardEndTime)){
+			alert("身份证有效结束时间为空！");
+			return false;
+		}
+		var idcardFrontImg=$("#hidden_idcardFrontImg_storeKey").val();
+		if(validate(idcardFrontImg)){
+			alert("请确认是否成功上传身份证正面照！");
+			return false;
+		}
+		var idcardReverseImg=$("#hidden_idcardReverseImg_storeKey").val();
+		if(validate(idcardReverseImg)){
+			alert("请确认是否成功上传身份证反面照！");
+			return false;
+		}
+		var certifyImg=$("#hidden_certifyImg_storeKey").val();
+		if(validate(certifyImg)){
+			alert("请确认是否成功上传营业执照证件照！");
+			return false;
+		}
+		if(operatorType=="2"){
+			var authorizeImg=$("#hidden_authorizeImg_storeKey").val();
+			if(validate(authorizeImg)){
+				alert("经办人为委托人,请确认是否成功上传委托书照片!");
+				return false;
+			}
+		}
+		var taxRegistImg=$("#hidden_taxRegistImg_storeKey").val();
+		if(validate(taxRegistImg)){
+			alert("请确认是否成功上传税务登记证照片！");
+			return false;
+		}
+		var contractImg=$("#hidden_contractImg_storeKey").val();
+		if(validate(contractImg)){
+			alert("请确认是否成功上传合同影印件照片！");
+			return false;
+		}
+		var orgCodeImg=$("#hidden_orgCodeImg_storeKey").val();
+		if(validate(orgCodeImg)){
+			alert("请确认是否成功上传组织机构代码证照片！");
+			return false;
+		}
+		var bankAccountImg=$("#hidden_bankAccountImg_storeKey").val();
+		if(validate(bankAccountImg)){
+			alert("请确认是否成功上传银行开户证明照片！");
+			return false;
+		}
+		var siteImg1=$("#hidden_siteImg1_storeKey").val();
+		if(validate(siteImg1)){
+			alert("请确认是否成功上传场地照片(门牌)照片！");
+			return false;
+		}
+		var siteImg2=$("#hidden_siteImg2_storeKey").val();
+		if(validate(siteImg2)){
+			alert("请确认是否成功上传场地照片(前台)照片！");
+			return false;
+		}
+		var siteImg3=$("#hidden_siteImg3_storeKey").val();
+		if(validate(siteImg3)){
+			alert("请确认是否成功上传场地照片(营业区域)照片！");
+			return false;
+		}
+		var siteImg4=$("#hidden_siteImg4_storeKey").val();
+		if(validate(siteImg4)){
+			alert("请确认是否成功上传场地照片(写字楼外观)照片！");
+			return false;
+		}
+		//银行卡信息
+		var bankCard_hidden=$("#bankCard_hidden").val();
+		if(validate(bankCard_hidden)){
+			alert("对公账号为空！");
+			return false;
+		}
+		var accountName=$("#accountName").val();
+		if(validate(accountName)){
+			alert("对公开户名称为空！");
+			return false;
+		}
+		var bankCode=$("#bankCode").val();
+		if(validate(bankCode)){
+			alert("请选择开户行！");
+			return false;
+		}
+		var branchName=$("#branchName").val();
+		if(validate(branchName)){
+			alert("支行名称为空！");
+			return false;
+		}
+		var provinceCode1=$("#provinceCode1").val();
+		if(validate(provinceCode1)){
+			alert("请选择开户行省市！");
+			return false;
+		}
+		var cityCode1=$("#cityCode1").val();
+		if(validate(cityCode1)){
+			alert("请选择开户行市区！");
+			return false;
+		}
+		return true;
+	}
+	
+	function validate(id){
+		if(id == "" || id == undefined){
+			return true;
+		}
+		return false;
+	}
+	
+	function valiEmail(v){
+		var reg=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{1,9})+$/;
+		if(!reg.test(v)){
+			return true;
+		}
+		return false;
+	}
+	
+	function valiNubmer(v){
+		reg=/^[-\+]?\d+(\.\d+)?$/;
+		if(!reg.test(v)){
+			return true;
+		}
+		return false;
+	}
+	
+</script>

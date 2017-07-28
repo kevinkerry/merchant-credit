@@ -1,0 +1,219 @@
+<link rel="stylesheet" href="#springUrl('/htdocs/debit/css/inc.css')?version=1" type="text/css" />
+<link rel="stylesheet" href="#springUrl('/htdocs/debit/css/style.css')?version=1" type="text/css" />
+<script type="text/javascript" src="#staticResource('/js/ajaxupload.js')?version=1"></script>
+<script type="text/javascript" src="#staticResource('/js/credit/mask.js')?version=1"></script>
+<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+
+</script>
+
+<script type="text/javascript">
+
+	$(function(){
+		$(".upload").each
+        (function () {
+        var button = $(this), interval;
+        new AjaxUpload(button, {
+            action: '../common/file/uploadCreditFile.htm',
+            name: 'uploadfield',
+			responseType:'json',
+            onSubmit: function (file, ext) {
+				 if (!(ext && /^(jpg|jpeg|JPG|JPEG|PNG|png|gif|GIF|bmp|BMP|avi|AVI|MP4|mp4|WMA|wma|zip|ZIP|rar|RAR|wmv|WMV|rm|RM|rmvb|RMVB|3gp|3GP|mpeg|MPEG)$/.test(ext))) {
+                    showDiv('mask_box','文件格式不正确,请选择 正确的格式的文件!');
+                    return false;
+                }
+                button.text('上传中');
+                interval = window.setInterval(function () {
+                    var text = button.text();
+                    if (text.length < 10) {
+                        button.text(text + '|');
+                    } else {
+                        button.text('上传中');
+                    }
+                }, 200);
+            },
+            onComplete: function (file, response) {
+                window.clearInterval(interval);
+                // enable upload button
+                // this.enable();
+				if(response.uploadSuccess ==true){
+					// alert('上传成功');
+					button.hide();
+					$("#file_" + button.attr("id")).text(response.oriFileName);
+					$("#text_" + button.attr("id")).css("display","inline");
+					$("#info_" + button.attr("id")).css("display","none");
+					$("#hidden_" + button.attr("id")).val("key=" + response.storeKey+"&fileName="+response.oriFileName +"&contentType=" + response.contentType);
+				}else{
+					  if(response.uploadSuccess=='overMax'){
+						showDiv('mask_box',response.errorMessage);
+						return false;
+					}
+
+				}
+            }
+        });
+    	});
+	});
+
+
+
+	function deleteFile(myid,rtem,item){
+		var obj=$('#hidden_'+myid);
+		var id = $('#id');
+		jQuery.ajax( {
+            url:'../file/delete.htm?'+obj.val()+'&kind='+rtem+'&code='+item +'&id='+id.val(),// 跳转到 action
+            type:'post',
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				$('#'+myid).text('立即上传');
+				$("#text_" + myid).hide();
+				$('#hidden_'+myid).val("");
+				$('#'+myid).css('display','inline');
+             },
+             error : function() {
+             }
+        });
+	}
+
+	function updateCreditFile(){
+		var obj=$('#hidden_tiantiandaizhengxin_B');
+		var id = $('#id');
+		var formParam = $("#date_form").serialize();//序列化表格内容为字符串
+		jQuery.ajax( {
+            url:'../debitAudit/updateFileInfo.htm',// 跳转到 action
+			data:formParam,
+            type:'post',
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				alert('同步成功');
+             },
+             error : function() {
+             }
+        });
+	}
+
+
+</script>
+<form id="date_form" name="date_form">
+<input type="hidden" id="id" name="id" value="${applyPO.id}">
+<div class="content main_box">
+	<div class="ban_table clearfix">
+		<div class="ban_left l">
+			#foreach($risk in $riskModel.types)
+				<a href="#h_$velocityCount" class="on">$risk.desc</a>
+			#end
+		</div>
+		<div class="ban_right l">
+			<h2>额度申请表</h2>
+			<table>
+				<tr>
+				  <td height="50">申请额度:</td>
+				  <td  height="50" align="center">$!NumberUtils.format(${applyPO.lendAmount})</td>
+				</tr>
+				<tr>
+					<td height="35">额度期限:</td>
+				  	<td height="35" align="center">
+				  		#showDate($!{applyPO.policyStartTime}) ~ #showDate($!{applyPO.policyEndTime})
+				  	</td>
+				</tr>
+				<tr>
+					<td height="35">审批利率:</td>
+				  	<td height="35" align="center">
+						日息$!{fRate}%
+				  	</td>
+				</tr>
+				<tr>
+					<td height="35">平台手续费:</td>
+				  	<td height="35" align="center">
+						按日$!{sRate}%
+				  	</td>
+				</tr>
+			</table>
+
+			#foreach($risk in $riskModel.types)
+			<h3 id="h_$velocityCount">$risk.desc</h3>
+			<table>
+				#foreach($item in $risk.items)
+
+					#if($risk.code =='tiantiandaizhengxin' && $item.code=='B')
+							<tr>
+    							<td height="35" colspan="2">请提供征信网站用户名密码或上传征信记录</td>
+						    </tr>
+
+							<tr>
+    							<td height="35">征信网站登录用户名</td>
+    							<td height="35">
+    									<input type="text" id="creditUserName" name="creditUserName" value="$!creditUserName">
+    							</td>
+						    </tr>
+
+							<tr>
+    							<td height="35">征信网站登录密码</td>
+    							<td height="35">
+    									<input type="text" id="creditPassword" name="creditPassword" value="$!creditPassword">
+    							</td>
+						    </tr>
+
+							<tr>
+								<td height="35">$item.desc</td>
+								<td height="35">
+									<a id="${risk.code}_${item.code}" href="javascript:;" name="${risk.code}_${item.code}" class="upload" #if($item.hasAttach =="No") style="display:inline" #else style="display:none" #end>立即上传</a>
+    								<div id="text_${risk.code}_${item.code}" name="text_${risk.code}_${item.code}"  #if($item.hasAttach =="Yes") style="display:inline" #else style="display:none" #end>
+    									<span id="file_${risk.code}_${item.code}" name="file_${risk.code}_${item.code}"style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{item.userInputFileName}">$!{item.userInputFileName}</span>
+
+										<a href="javascript:deleteFile('${risk.code}_${item.code}','${risk.code}','${item.code}');" >删除</a>
+
+										<a href="javascript:showFileContent('$!{item.userInputUrl}');" >查看</a>
+    									<input id="hidden_${risk.code}_${item.code}" name="hidden_${risk.code}_${item.code}" type="hidden" value="$!{item.userInputUrl}"/>
+    								</div>
+									<p id="info_${risk.code}_${item.code}" name="info_${risk.code}_${item.code}"  #if($item.hasAttach =="No") style="color:red;font-size: 12px;display:inline;" #else style="color:red;font-size: 12px;display:none;" #end >上传文件最大支持20M</p>
+								<a href="#" class="btn2" id="uploadCreditButton" onclick="updateCreditFile()">上传文件确认同步</a>
+								</td>
+							</tr>
+						#else
+					<tr>
+				    	<td height="35">#if($item.isNeed=='true') <span>*</span> #end $item.desc</td>
+						#if($item.inputType=='Attachment')
+							<td height="35">
+								##<a id="${risk.code}_${item.code}" href="javascript:;" name="${risk.code}_${item.code}" class="upload">立即上传</a>
+								<div id="text_${risk.code}_${item.code}" name="text_${risk.code}_${item.code}"  #if($item.hasAttach =="Yes") style="display:inline" #else style="display:none" #end>
+									<span id="${risk.code}_${item.code}" name="${risk.code}_${item.code}">$!{item.userInputFileName}</span>
+    								<a href="javascript:showFileContent('$item.userInputUrl');" >查看</a>
+								</div>
+							</td>
+						#elseif($item.inputType=='EnumAttachment')
+							<td height="35">
+								#foreach($enum in $item.enums)
+									#if($item.userInputVal ==$enum.code) $!{enum.desc} #end
+								#end
+								<div id="text_${risk.code}_${item.code}" name="text_${risk.code}_${item.code}"  #if($item.hasAttach =="Yes") style="display:inline" #else style="display:none" #end>
+									<span id="file_${risk.code}_${item.code}" name="file_${risk.code}_${item.code}">$!{item.userInputFileName}</span>
+    								<a href="javascript:showFileContent('$item.userInputUrl');" >查看</a>
+									##<input id="hidden_${risk.code}_${item.code}" name="hidden_${risk.code}_${item.code}" type="hidden" value="$!{item.userInputUrl}"/>
+								</div>
+							</td>
+
+						#elseif($item.inputType=='Enum')
+							<td height="35">
+								#foreach($enum in $!item.enums)
+									#if($item.userInputVal ==$enum.code) $!{enum.desc} #end
+								#end
+							</td>
+						#elseif($item.inputType=='Text')
+							<td height="35">
+								$!{item.userInputVal}
+							</td>
+						#end
+					</tr>
+					#end
+				#end
+			</table>
+			#end
+		</div>
+	</div>
+</div>
+</form>

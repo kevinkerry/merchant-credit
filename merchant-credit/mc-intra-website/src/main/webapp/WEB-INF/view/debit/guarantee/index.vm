@@ -1,0 +1,209 @@
+#set($page_title = '拓展方代理资质管理')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/promoter/ajaxPaging/guaranteeList.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+		    <tr>
+		    	<td class="lbl" >拓展方类型：</td>
+		        <td width="200">
+		            <select id="promoterType" name="promoterType" class="w130">
+		                <option value="">全部</option>
+		                <option value="0003" #if("$!{params.promoterType}"=="0003")selected#end>普通POS商户</option>
+		                <option value="0007" #if("$!{params.promoterType}"=="0007")selected#end>MPOS商户</option>
+		            </select>
+		        </td>
+		        <td class="lbl">拓展方名称：</td>
+		        <td width="200"><input type="text" id="promoterName" name="promoterName" style="width: 139px"
+		                   value="$!{params.promoterName}" class="txt130"/></td>
+		        <td class="lbl" >拓展方商户号：</td>
+		        <td width="200"><input type="text" id="promoterNo" name="promoterNo" style="width: 139px" class="txt130"
+		                               value="$!{params.promoterNo}"/></td>
+				<td class="lbl">
+		          	  拓展方状态：
+		        </td>
+		        <td>
+		            <select id="status" name="status" class="w130">
+						<option value="">---请选择---</option>
+						<option value="3">正常</option>
+						<option value="0,1,2,4">关闭</option>
+					</select>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td class="lbl">
+		          	  商务经理：
+		        </td>
+		        <td width="200"><input type="text" id="businessManager" name="businessManager" style="width: 139px" class="txt130"
+		                               value="$!{params.businessManager}"/>
+		        </td>
+		    	<td  class="lbl">可拓展区域：</td>
+		        <td  colspan="3" >
+		        	<select name="countryId" id="countryId"  onchange="changeProvinceSelect(this);"  class="w130">
+		                <option value="" >--------</option>
+		                #foreach($p in $!{countryList})
+		                    <option value="$!{p.id}" >$!{p.districtName}</option>
+		                #end
+		            </select>
+		            <select name="provinceDistrictId" id="provinceDistrictId"  onchange="changeCitySelect(this);"  class="w130">
+		                <option value="" >--------</option>
+		            </select>
+		            <select name="cityDistrictId" id="cityDistrictId" class="w130">
+		                <option value="" >--------</option>
+		            </select>
+		        </td>
+
+		    </tr>
+		    <tr>
+		    	<td class="lbl">创建时间：</td>
+		        <td colspan="7">
+		            <input type="text" id="createTimeStartStr" name="createTimeStartStr" class="date txt130" onclick="xDatePicker(2);"/>
+		            ~
+		            <input type="text" id="createTimeEndStr" name="createTimeEndStr" class="date txt130" onclick="xDatePicker(2);"/>
+		            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('createTimeStartStr'), 0, elm('createTimeEndStr') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('createTimeStartStr'), 0, elm('createTimeEndStr') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('createTimeStartStr'), 0, elm('createTimeEndStr') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('createTimeStartStr'), 0, elm('createTimeEndStr') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('createTimeStartStr'), -1, elm('createTimeEndStr') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('createTimeStartStr'), 0, elm('createTimeEndStr') );return false;" title="交易时间范围：今天">今</a>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td colspan="6" align="center">
+		            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging()">查询</a>
+		            <span class="gray" id="querying" style="display:none;">查询中...</span>
+		            ###<a href="#springUrl("/promoter/toAdd.do")" class="btn2" id="addBtn" target="_blank">新增</a>
+		            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+		        </td>
+		    </tr>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	window.onload=function(){
+		//setTimeStartEnd(0,elm("txnTimeStartStr"),0,elm("txnTimeEndStr"));
+	};
+	var ALL_COND_ID = ['promoterType', 'promoterName', 'promoterNo','businessManager', 'status','countryId', 'provinceDistrictId', 'cityDistrictId', 'createTimeStartStr', 'createTimeEndStr'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var pageNo=jQuery("#pageNo_submitForm").val();
+    	pageNo=pageNo?pageNo:1;
+    	var data = {"pageNo":pageNo};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/promoter/ajaxPaging/guaranteeList.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+
+    ////---切换省份
+    function changeProvinceSelect(po){
+		if (!po) {
+			return;
+		}
+		if(!po.value){
+			var co = elm('provinceDistrictId');
+			for ( var i = co.options.length - 1; i >= 0; i--) {
+				co.options.remove(i);
+			}
+			var v = new Option("--------", "");
+			co.options.add(v);
+			return ;
+		}
+		var co = elm('provinceDistrictId');
+		for ( var i = co.options.length - 1; i >= 0; i--) {
+			co.options.remove(i);
+		}
+
+		var v = new Option("--------", "");
+		co.options.add(v);
+		ajax(contextPath + '/common/dictionary/forSelectProvinces.do?pid=' + po.value, null,function(d) {
+			d = eval(d);
+			for ( var n = 0; n < d.length; n++) {
+				var o = new Option(d[n].districtName, d[n].id);
+				co.options.add(o);
+			}
+		});
+	}
+
+	//省份下拉改变时，改变城市的下拉项
+	function changeCitySelect(po) {
+		if (!po) {
+			return;
+		}
+		if(!po.value){
+			var co = elm('cityDistrictId');
+			for ( var i = co.options.length - 1; i >= 0; i--) {
+				co.options.remove(i);
+			}
+			var v = new Option("--------", "");
+			co.options.add(v);
+			return ;
+		}
+		var co = elm('cityDistrictId');
+		for ( var i = co.options.length - 1; i >= 0; i--) {
+			co.options.remove(i);
+		}
+
+		var v = new Option("--------", "");
+		co.options.add(v);
+		ajax(contextPath + '/common/dictionary/forSelectCities.do?pid=' + po.value, null,function(d) {
+			d = eval(d);
+			for ( var n = 0; n < d.length; n++) {
+				var o = new Option(d[n].districtName, d[n].id);
+				co.options.add(o);
+			}
+		});
+	}
+
+
+	//开通Or关闭代理商担保资格
+    function openAgentPower(promoterNo,promoterName){
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/promoter/ajaxPaging/openOrCloseAgentPower.do')" ,
+			data: {"promoterNo":promoterNo,"doFlag":1,"promoterName":promoterName} ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data){
+		    		alert(data.errorMessage);
+					ajaxPaging();
+		    	}
+		    }
+		});
+    }
+	function closeAgentPower(promoterNo,promoterName){
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/promoter/ajaxPaging/openOrCloseAgentPower.do')" ,
+		    data: {"promoterNo":promoterNo,"doFlag":0,"promoterName":promoterName} ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data){
+		    		alert(data.errorMessage);
+		    		ajaxPaging();
+		    	}
+		    }
+		});
+    }
+</script>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DM_AGENT_MERCHANT_SETTING_LIST" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="AGENT_MERCHANT_NO" property="agentMerchantNo" jdbcType="VARCHAR" />
+    <result column="AGENT_MERCHANT_NAME" property="agentMerchantName" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="EXT_INFO" property="extInfo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, AGENT_MERCHANT_NO, AGENT_MERCHANT_NAME, CREATE_TIME, UPDATE_TIME, STATUS, EXT_INFO
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Base_Column_List" />
+    from DM_AGENT_MERCHANT_SETTING_LIST
+    <isParameterPresent >
+      <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    select 
+    <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Base_Column_List" />
+    from DM_AGENT_MERCHANT_SETTING_LIST
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    delete from DM_AGENT_MERCHANT_SETTING_LIST
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListExample" >
+    delete from DM_AGENT_MERCHANT_SETTING_LIST
+    <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DM_AGENT_SETTING_LIST.nextval from dual
+    </selectKey>
+    insert into DM_AGENT_MERCHANT_SETTING_LIST (ID, AGENT_MERCHANT_NO, AGENT_MERCHANT_NAME, CREATE_TIME, 
+      UPDATE_TIME, STATUS, EXT_INFO)
+    values (#id:DECIMAL#, #agentMerchantNo:VARCHAR#, #agentMerchantName:VARCHAR#, #createTime#, 
+      #updateTime#, #status:VARCHAR#, #extInfo:VARCHAR#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DM_AGENT_SETTING_LIST.nextval from dual
+    </selectKey>
+    insert into DM_AGENT_MERCHANT_SETTING_LIST
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="agentMerchantNo" >
+        AGENT_MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="agentMerchantName" >
+        AGENT_MERCHANT_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="extInfo" >
+        EXT_INFO
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="agentMerchantNo" >
+        #agentMerchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="agentMerchantName" >
+        #agentMerchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="extInfo" >
+        #extInfo:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListExample" resultClass="java.lang.Integer" >
+    select count(*) from DM_AGENT_MERCHANT_SETTING_LIST
+    <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DM_AGENT_MERCHANT_SETTING_LIST
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.agentMerchantNo" >
+        AGENT_MERCHANT_NO = #record.agentMerchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.agentMerchantName" >
+        AGENT_MERCHANT_NAME = #record.agentMerchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.status" >
+        STATUS = #record.status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.extInfo" >
+        EXT_INFO = #record.extInfo:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DM_AGENT_MERCHANT_SETTING_LIST
+    set ID = #record.id:DECIMAL#,
+      AGENT_MERCHANT_NO = #record.agentMerchantNo:VARCHAR#,
+      AGENT_MERCHANT_NAME = #record.agentMerchantName:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      STATUS = #record.status:VARCHAR#,
+      EXT_INFO = #record.extInfo:VARCHAR#
+    <isParameterPresent >
+      <include refid="DM_AGENT_MERCHANT_SETTING_LIST.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    update DM_AGENT_MERCHANT_SETTING_LIST
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="agentMerchantNo" >
+        AGENT_MERCHANT_NO = #agentMerchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="agentMerchantName" >
+        AGENT_MERCHANT_NAME = #agentMerchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        STATUS = #status:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="extInfo" >
+        EXT_INFO = #extInfo:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DmAgentMerchantSettingListPO" >
+    update DM_AGENT_MERCHANT_SETTING_LIST
+    set AGENT_MERCHANT_NO = #agentMerchantNo:VARCHAR#,
+      AGENT_MERCHANT_NAME = #agentMerchantName:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      STATUS = #status:VARCHAR#,
+      EXT_INFO = #extInfo:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

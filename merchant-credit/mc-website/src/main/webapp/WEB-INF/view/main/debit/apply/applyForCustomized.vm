@@ -1,0 +1,640 @@
+#parse("/control/passwordjs.vm")
+<script type="text/javascript" src="#staticResource('/js/jquery.uploadify.min.js')?version=1"></script>
+<link rel="stylesheet" href="#staticResource('/css/uploadify.css')?version=1" type="text/css" />
+<link rel="stylesheet" href="#staticResource('/css/style.css')?version=1" type="text/css" />
+<link rel="stylesheet" href="#staticResource('/css/inc.css')?version=1" type="text/css" />
+<meta name="renderer" content="webkit">
+<script type="text/javascript" src="#staticResource('/js/ajaxupload.js')?version=1"></script>
+<script type="text/javascript" src="#staticResource('/js/credit/mask.js')?version=1"></script>
+
+<script type="text/javascript">
+	$(function(){
+		if(navigator.userAgent.indexOf("Window") < 0) {
+	        $("#password").show();
+	        $("#_ocx_password_str").hide();
+	        $("#_ocx_password").hide();
+	    }
+	});
+
+		function tempSaveOrUpdate(){
+		//支付密码
+    	if(navigator.userAgent.indexOf("Window") < 0) {
+             $("#encryptedKey").val("");
+        } else {
+             $("#encryptedKey").val(editor.GetKey());
+             $("#password").val(editor.GetValue());
+        }
+		var query = $("#date_form").serialize();//序列化表格内容为字符串
+		jQuery.ajax( {
+            url:'../credit/tempSave.htm',
+			data:query,
+            type:'post',
+            cache:false,
+            success:function(data) {
+				if (data.code!='0'){
+					showDiv('mask_box',data.msg);
+				} else{
+					showDiv('mask_box','临时保存成功');
+				}
+             },
+             error : function() {
+             }
+        });
+	}
+	
+	
+	
+
+	$(function(){
+		$(".upload").each
+        (function () {
+        var button = $(this), interval;
+        new AjaxUpload(button, {
+            action: '../file/upload.htm',
+            name: 'uploadfield',
+			responseType:'json',
+            onSubmit: function (file, ext) {
+				 if (!(ext && /^(jpg|jpeg|JPG|JPEG|PNG|png|gif|GIF|bmp|BMP|avi|AVI|MP4|mp4|WMA|wma|zip|ZIP|rar|RAR|wmv|WMV|rm|RM|rmvb|RMVB|3gp|3GP|mpeg|MPEG)$/.test(ext))) {
+                    showDiv('mask_box','文件格式不正确,请选择 正确的格式的文件!');
+                    return false;
+                }
+                button.text('上传中');
+                interval = window.setInterval(function () {
+                    var text = button.text();
+                    if (text.length < 10) {
+                        button.text(text + '|');
+                    } else {
+                        button.text('上传中');
+                    }
+                }, 200);
+            },
+            onComplete: function (file, response) {
+                window.clearInterval(interval);
+                // enable upload button
+                // this.enable();
+				if(response.uploadSuccess ==true){
+					alert('上传成功');
+					button.hide();
+					$("#file_" + button.attr("id")+"_oriFileName").text(response.oriFileName);
+					button.text('立刻上传');
+					$("#div_" + button.attr("id")).css("display","");
+					$("#hidden_" + button.attr("id") +"_storeKey").val(response.storeKey);
+					$("#hidden_" + button.attr("id") +"_oriFileName").val(response.oriFileName);
+					$("#hidden_" + button.attr("id") +"_contentType").val(response.contentType);
+				}else{
+					  if(response.uploadSuccess=='overMax'){
+						showDiv('mask_box',response.errorMessage);
+						return false;
+					}
+
+				}
+            }
+        });
+    	});
+	});
+	
+	
+	function deleteFile(id){
+		var storeKey=$('#hidden_'+id+'_storeKey').val();
+		jQuery.ajax( {
+            url:'../file/newDelete.htm?storeKey='+ storeKey,// 跳转到 action
+            type:'post',
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				$('#div_'+id).css('display','none');
+				$('#div_'+id +'_upload').css('display','');
+				$('#'+id).css('display','');
+				$("#file_" + id +"_oriFileName").text("");
+				$("#hidden_" + id+"_storeKey").val("");
+				$("#hidden_" + id +"_oriFileName").val("");
+				$("#hidden_" + id +"_contentType").val("");
+				alert('删除成功');
+             },
+             error : function() {
+             }
+        });
+	}
+	
+	function showFileContent(id){
+		var storeKey = $("#hidden_" + id +"_storeKey").val();
+		var oriFileName = $("#hidden_" + id +"_oriFileName").val();
+		var contentType = $("#hidden_" + id +"_contentType").val();
+		window.open("../file/newDownload.htm?storeKey=" + storeKey+"&oriFileName="+oriFileName+"&contentType="+contentType);
+	}
+	
+	function saveOrUpdate(){
+
+		//支付密码
+    	if(navigator.userAgent.indexOf("Window") < 0) {
+             $("#encryptedKey").val("");
+        } else {
+             $("#encryptedKey").val(editor.GetKey());
+             $("#password").val(editor.GetValue());
+        }
+		var formParam = $("#date_form").serialize();//序列化表格内容为字符串
+
+		jQuery.ajax( {
+            url:'../credit/saveOrUpdate.htm',
+			data:formParam,
+            type:'post',
+            cache:false,
+            dataType:'json',
+            success:function(data) {
+				if (data.code!='0'){
+					showDiv('mask_box',data.msg,'save');
+				} else{
+					showDiv('mask_box','申请提交成功');
+				}
+             },
+             error : function() {
+             }
+        });
+	}
+	
+	
+	
+	function showAgreement(type){
+		window.open("../credit/agreement.htm?type=" +type);
+	}
+	
+</script>
+<form id="date_form" name="date_form">
+<input type="hidden" id="sActivexPubKey" value="$!{sActivexPubKey}">
+<input type="hidden" id="certSerialNo" name="certSerialNo" value="$!{certSerialNo}">
+<input type="hidden" id="encryptedKey" name="encryptedKey" value="">
+<input type="hidden" id="saveOrUpdateFlag" name="saveOrUpdateFlag" value="$!{saveOrUpdateFlag}">
+	<div class="content main_box">
+		<br/><br/>
+			<div class="path clearfix" style="padding-left: 130px;">
+			<div class="step1 on l">
+				<span>1</span>
+				<p>上传资料</p>
+			</div>
+			<div class="step2  l">
+				<span>2</span>
+				<p>提交申请 等待审核</p>
+			</div>
+			<div class="step3 l">
+				<span>3</span>
+				<p>审核通过</p>
+			</div>
+			#*<div class="step4 l">
+				<span>✔</span>
+				<p>下载授信协议，签约盖章，额度生效</p>
+			</div>*#
+		</div>
+			<br>
+				<br>
+			<div class="l">
+				<div class="ban_left">
+					<a href="#h_1" class="on">申请人基础信息</a>
+					<a href="#h_2">申请贷款信息</a>
+					<a href="#h_3">申请人征信信息</a>
+					<a href="#h_4">申请人联系信息</a>
+				</div>
+				
+			</div>
+
+			<div class="ban_right l">
+				<h2>额度申请表</h2>
+				<table>
+					<tr>
+						 <td width="175" height="38" colspan="3">
+						#if($!failReason)
+					<div class="small-orange">$!failReason</div>
+				#end
+						</td>
+					</tr>
+				</table>
+
+			  <h3 id="h_1">申请人基础信息</h3>
+				<table class="mes_table">
+					<tr>
+						<td width="130" height="38"><span>*</span>姓名:</td>
+					  <td width="175" height="38" colspan="3"><input name= "applicantName" type="text" value="$!{creditLineApplyRequest.applicantName}"></td>
+				  </tr>				
+					<tr>
+						<td width="130" height="38"><span>*</span>身份证号：</td>
+					  <td width="175" height="38" colspan="3"><input name="applicantIdNo" type="text" value="$!{creditLineApplyRequest.applicantIdNo}"></td>
+				  </tr>
+
+					<tr>
+						<td width="130" height="38"><span>*</span>身份证正面照:</td>
+
+						<td width="" height="38" colspan="3">
+							<input type="hidden" id ='hidden_positiveCardFileInfo_storeKey' name="positiveCardFileInfo.storeKey" value="$!{creditLineApplyRequest.positiveCardFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_positiveCardFileInfo_contentType' name="positiveCardFileInfo.contentType" value="$!{creditLineApplyRequest.positiveCardFileInfo.contentType}">
+							<input type="hidden" id ='hidden_positiveCardFileInfo_oriFileName' name="positiveCardFileInfo.oriFileName" value="$!{creditLineApplyRequest.positiveCardFileInfo.oriFileName}">
+									
+							#if(!("$!{creditLineApplyRequest.positiveCardFileInfo.storeKey}"=="") && "$!{saveOrUpdateFlag}" == "1")
+							<div id="div_positiveCardFileInfo">
+							<span id="file_positiveCardFileInfo_oriFileName" name="positiveCardFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.positiveCardFileInfo.oriFileName}">$!{creditLineApplyRequest.positiveCardFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('positiveCardFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('positiveCardFileInfo');">查看</a>
+							</div>
+							<div id = "div_positiveCardFileInfo_upload" style="display:none">
+								<a id="positiveCardFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+							<div id = "div_positiveCardFileInfo" style="display:none">
+								<span id="file_positiveCardFileInfo_oriFileName" name="positiveCardFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.positiveCardFileInfo.oriFileName}">$!{creditLineApplyRequest.positiveCardFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('positiveCardFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('positiveCardFileInfo');">查看</a>
+							</div>
+							<div id="div_positiveCardFileInfo_upload">
+							<a id="positiveCardFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+						</td>
+					</tr>
+
+					<tr>
+						<td width="130" height="38"><span>*</span>身份证背面照:</td>
+						<td width="" height="38" colspan="3">
+							<input type="hidden" id ='hidden_backCardFileInfo_storeKey' name="backCardFileInfo.storeKey" value="$!{creditLineApplyRequest.backCardFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_backCardFileInfo_contentType' name="backCardFileInfo.contentType" value="$!{creditLineApplyRequest.backCardFileInfo.contentType}">
+							<input type="hidden" id ='hidden_backCardFileInfo_oriFileName' name="backCardFileInfo.oriFileName" value="$!{creditLineApplyRequest.backCardFileInfo.oriFileName}">
+							#if(!("$!{creditLineApplyRequest.backCardFileInfo.storeKey}"=="") && "$!{saveOrUpdateFlag}"=="1")
+								<div id="div_backCardFileInfo">
+							<span id="file_backCardFileInfo_oriFileName" name="backCardFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.backCardFileInfo.oriFileName}">$!{creditLineApplyRequest.backCardFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('backCardFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('backCardFileInfo');">查看</a>
+							</div>
+							<div id = "div_backCardFileInfo_upload" style="display:none">
+								<a id="backCardFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+								<div id = "div_backCardFileInfo" style="display:none">
+								<span id="file_backCardFileInfo_oriFileName" name="backCardFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.backCardFileInfo.oriFileName}">$!{creditLineApplyRequest.backCardFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('backCardFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('backCardFileInfo');">查看</a>
+							</div>
+							<div id="div_backCardFileInfo_upload">
+							<a id="backCardFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+						</td>
+					</tr>
+					<tr>
+						<td width="130" height="38"><span>*</span>性别：</td>
+						<td width="175" height="38" colspan="3">
+							<label class="label-input">
+								<input type="radio" name="applicantSex" #if("$!{creditLineApplyRequest.applicantSex}"=="a")checked #elseif("$!{creditLineApplyRequest.applicantSex}"=="")checked #end value="a">男</label>
+							<label class="label-input">
+								<input type="radio" name="applicantSex" #if("$!{creditLineApplyRequest.applicantSex}"=="b")checked #end value="b">女</label>
+						</td>
+				  </tr>
+	
+					<tr>
+						<td width="130" height="38"><span>*</span>婚姻状况：</td>
+						<td width="105" height="38">
+							<select name="maritalStatus">
+								<option value="a" #if("$!{creditLineApplyRequest.maritalStatus}"==""||"$!{creditLineApplyRequest.maritalStatus}" == "a") selected #end>未婚</option>
+								<option value="b" #if("$!{creditLineApplyRequest.maritalStatus}" == "b") selected #end>已婚</option>
+								<option value="c" #if("$!{creditLineApplyRequest.maritalStatus}" == "c") selected #end>离异</option>
+								<option value="d" #if("$!{creditLineApplyRequest.maritalStatus}" == "d") selected #end>丧偶</option>
+							</select>
+						</td>
+				  	<td width="185" height="38">上传本人及子女户口本信息:</td>
+						<td height="38">
+							<input type="hidden" id ='hidden_accountBookFileInfo_storeKey' name="accountBookFileInfo.storeKey" value="$!{creditLineApplyRequest.accountBookFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_accountBookFileInfo_contentType' name="accountBookFileInfo.contentType" value="$!{creditLineApplyRequest.accountBookFileInfo.contentType}">
+							<input type="hidden" id ='hidden_accountBookFileInfo_oriFileName' name="accountBookFileInfo.oriFileName" value="$!{creditLineApplyRequest.accountBookFileInfo.oriFileName}">
+							#if(!("$!{creditLineApplyRequest.accountBookFileInfo.storeKey}" =="") && "$!{saveOrUpdateFlag}"=="1")
+								<div id="div_accountBookFileInfo">
+							<span id="file_accountBookFileInfo_oriFileName" name="accountBookFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.accountBookFileInfo.oriFileName}">$!{creditLineApplyRequest.accountBookFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('accountBookFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('accountBookFileInfo');">查看</a>
+							</div>
+							<div id = "div_accountBookFileInfo_upload" style="display:none">
+								<a id="accountBookFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+								<div id = "div_accountBookFileInfo" style="display:none">
+								<span id="file_accountBookFileInfo_oriFileName" name="accountBookFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.accountBookFileInfo.oriFileName}">$!{creditLineApplyRequest.accountBookFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('accountBookFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('accountBookFileInfo');">查看</a>
+							</div>
+							<div id="div_accountBookFileInfo_upload">
+							<a id="accountBookFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+						</td>
+				  </tr>
+					<tr>
+						<td width="130" height="38"><span>*</span>子女数量：</td>
+						<td width="175" height="38" colspan="3"><input id="quantityOfChildren" name= "quantityOfChildren" type="text" value="$!{creditLineApplyRequest.quantityOfChildren}">人</td>
+
+				  </tr>
+					<tr>
+						<td></td>
+						<td colspan="3" height="38"><p class="small-orange">
+							所有上传的附件都必须是原件照片，需要上传户口本所有成员页原件照片、身份证正反面原件<br>照片，复印件照片一概审核不通过。（多张照片请压缩后打包上传，附件大小不超过20M。）</p></td>
+					</tr>
+				</table>
+
+			  <h3 id="h_2">申请贷款信息</h3>
+				<table class="mes_table">
+					<tr>
+						<td width="130" height="38"><span>*</span>申请额度:</td>
+					  <td width="175" height="38">
+						<select name="applicantAmount">
+					<option value="">请选择</option>
+						#foreach($applicantAmountEnum in $!applicantAmounts)
+							#if("$!{applicantAmountEnum.code}" == "$!{creditLineApplyRequest.applicantAmount}")
+							<option value="$!{applicantAmountEnum.code}" selected>$!{applicantAmountEnum.code}</option>
+							#else
+							<option value="$!{applicantAmountEnum.code}" >$!{applicantAmountEnum.code}</option>
+							#end
+						#end
+						</select>
+					  </td>
+						<td width="120" height="38" colspan="5"></td>
+				  </tr>				
+					<tr>
+						<td width="130" height="38"><span>*</span>盛付通个人<br/>&nbsp&nbsp钱包账号：</td>
+					  <td width="175" height="38"><input id="persionalLoginName" name="persionalLoginName" value="$!{creditLineApplyRequest.persionalLoginName}" type="text"></td>
+						<td width="70" height="38">钱包支付密码:</td>
+					  <td width="175" height="38"><div id="_ocx_password_str"></div><input id="password" type="password" name="password" style="display:none" class="s_input"></td>
+					  <td height="38" colspan="2">&nbsp;<a href=$!redisteredUrl target="_blank" class="">注册</a></td>
+						
+				  </tr>		
+				  <tr>
+				  	<td width="130" height="38"></td>
+				  	<td colspan="6" class="small-orange">$!showTip</td>
+				  </tr>	
+				</table>
+
+
+			<h3 id="h_3">申请人征信信息</h3>
+				<table class="mes_table">
+
+					  <tr>
+					    <td width="130" height="38"><span>*</span>上传商户营<br>&nbsp&nbsp业执照：</td>
+						<td width="150"  height="38" colspan="3">
+							<input type="hidden" id ='hidden_businessLicenseFileInfo_storeKey' name="businessLicenseFileInfo.storeKey" value="$!{creditLineApplyRequest.businessLicenseFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_businessLicenseFileInfo_contentType' name="businessLicenseFileInfo.contentType" value="$!{creditLineApplyRequest.businessLicenseFileInfo.contentType}">
+							<input type="hidden" id ='hidden_businessLicenseFileInfo_oriFileName' name="businessLicenseFileInfo.oriFileName" value="$!{creditLineApplyRequest.businessLicenseFileInfo.oriFileName}">
+							#if(!("$!{creditLineApplyRequest.businessLicenseFileInfo.storeKey}"=="") && "$!{saveOrUpdateFlag}"=="1")
+								<div id="div_businessLicenseFileInfo">
+							<span id="file_businessLicenseFileInfo_oriFileName" name="businessLicenseFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.businessLicenseFileInfo.oriFileName}">$!{creditLineApplyRequest.businessLicenseFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('businessLicenseFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('businessLicenseFileInfo');">查看</a>
+							</div>
+							<div id = "div_businessLicenseFileInfo_upload" style="display:none">
+								<a id="businessLicenseFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+								<div id = "div_businessLicenseFileInfo" style="display:none">
+								<span id="file_businessLicenseFileInfo_oriFileName" name="businessLicenseFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.businessLicenseFileInfo.oriFileName}">$!{creditLineApplyRequest.businessLicenseFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('businessLicenseFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('businessLicenseFileInfo');">查看</a>
+							</div>
+							<div id="div_businessLicenseFileInfo_upload">
+							<a id="businessLicenseFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+							
+						</td>
+					  </tr>
+					  <tr>
+					    <td width="130"><span>*</span>个人征信报告：</td>
+					    <td width="150">上传人行征信报告：</td>
+						<td height="38">
+							<input type="hidden" id ='hidden_creditReportFileInfo_storeKey' name="creditReportFileInfo.storeKey" value="$!{creditLineApplyRequest.creditReportFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_creditReportFileInfo_contentType' name="creditReportFileInfo.contentType" value="$!{creditLineApplyRequest.creditReportFileInfo.contentType}">
+							<input type="hidden" id ='hidden_creditReportFileInfo_oriFileName' name="creditReportFileInfo.oriFileName" value="$!{creditLineApplyRequest.creditReportFileInfo.oriFileName}">
+							#if(!("$!{creditLineApplyRequest.creditReportFileInfo.storeKey}"=="") && "$!{saveOrUpdateFlag}"=="1")
+								<div id="div_creditReportFileInfo">
+							<span id="file_creditReportFileInfo_oriFileName" name="creditReportFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.creditReportFileInfo.oriFileName}">$!{creditLineApplyRequest.creditReportFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('creditReportFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('creditReportFileInfo');">查看</a>
+							</div>
+							<div id = "div_creditReportFileInfo_upload" style="display:none">
+								<a id="creditReportFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+								<div id = "div_creditReportFileInfo" style="display:none">
+								<span id="file_creditReportFileInfo_oriFileName" name="creditReportFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.creditReportFileInfo.oriFileName}">$!{creditLineApplyRequest.creditReportFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('creditReportFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('creditReportFileInfo');">查看</a>
+							</div>
+							<div id="div_creditReportFileInfo_upload">
+							<a id="creditReportFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+							</td>
+					  </tr>
+					  <tr>
+						<td width="130" height="38">&nbsp;</td>
+					    <td colspan="3"  class="td_indent">
+							<span>或</span>
+						</td>
+					  </tr>
+					  <tr>
+					    <td width="130" height="38">&nbsp;</td>
+					    <td colspan="3" class="">提供人行报告网络查询密码：<br>
+							用户名:<input id="creditUserName" name="creditUserName" value="$!{creditLineApplyRequest.creditUserName}">&nbsp;
+							查询密码:<input type="password" id="creditPassword" name="creditPassword" value="$!{creditLineApplyRequest.creditPassword}">
+						</td>
+					   
+					  </tr>
+					  <tr>
+					    <td width="130">经营房地产<br />
+					    情况：</td>
+					    <td width="175"><input name= "qiantityOfHouse" type="text" value="$!{creditLineApplyRequest.qiantityOfHouse}">套</td>
+					    <td>上传房产证明：</td>
+					    <td>
+							<input type="hidden" id ='hidden_housePropertyFileInfo_storeKey' name="housePropertyFileInfo.storeKey" value="$!{creditLineApplyRequest.housePropertyFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_housePropertyFileInfo_contentType' name="housePropertyFileInfo.contentType" value="$!{creditLineApplyRequest.housePropertyFileInfo.contentType}">
+							<input type="hidden" id ='hidden_housePropertyFileInfo_oriFileName' name="housePropertyFileInfo.oriFileName" value="$!{creditLineApplyRequest.housePropertyFileInfo.oriFileName}">
+							#if(!("$!{creditLineApplyRequest.housePropertyFileInfo.storeKey}"=="") && "$!{saveOrUpdateFlag}"=="1")
+								<div id="div_housePropertyFileInfo">
+							<span id="file_housePropertyFileInfo_oriFileName" name="housePropertyFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.housePropertyFileInfo.oriFileName}">$!{creditLineApplyRequest.housePropertyFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('housePropertyFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('housePropertyFileInfo');">查看</a>
+							</div>
+							<div id = "div_housePropertyFileInfo_upload" style="display:none">
+								<a id="housePropertyFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+								<div id = "div_housePropertyFileInfo" style="display:none">
+								<span id="file_housePropertyFileInfo_oriFileName" name="housePropertyFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.housePropertyFileInfo.oriFileName}">$!{creditLineApplyRequest.housePropertyFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('housePropertyFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('housePropertyFileInfo');">查看</a>
+							</div>
+							<div id="div_housePropertyFileInfo_upload">
+							<a id="housePropertyFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+						</td>
+					  </tr>
+					<tr>
+
+						<td  width="130">上传其他财产证明：<br><label class="small-orange">（如车辆、存款等）</label></td>
+						<td colspan="3">
+								<input type="hidden" id ='hidden_otherPropertyFileInfo_storeKey' name="otherPropertyFileInfo.storeKey" value="$!{creditLineApplyRequest.otherPropertyFileInfo.storeKey}">
+							<input type="hidden" id ='hidden_otherPropertyFileInfo_contentType' name="otherPropertyFileInfo.contentType" value="$!{creditLineApplyRequest.otherPropertyFileInfo.contentType}">
+							<input type="hidden" id ='hidden_otherPropertyFileInfo_oriFileName' name="otherPropertyFileInfo.oriFileName" value="$!{creditLineApplyRequest.otherPropertyFileInfo.oriFileName}">
+							#if(!("$!{creditLineApplyRequest.otherPropertyFileInfo.storeKey}"=="") && "$!{saveOrUpdateFlag}"=="1")
+								<div id="div_otherPropertyFileInfo">
+							<span id="file_otherPropertyFileInfo_oriFileName" name="otherPropertyFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.otherPropertyFileInfo.oriFileName}">$!{creditLineApplyRequest.otherPropertyFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('otherPropertyFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('otherPropertyFileInfo');">查看</a>
+							</div>
+							<div id = "div_otherPropertyFileInfo_upload" style="display:none">
+								<a id="otherPropertyFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#else
+								<div id = "div_otherPropertyFileInfo" style="display:none">
+								<span id="file_otherPropertyFileInfo_oriFileName" name="otherPropertyFileInfo.oriFileName" style="width:50px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;display:inline-block;" title="$!{creditLineApplyRequest.otherPropertyFileInfo.oriFileName}">$!{creditLineApplyRequest.otherPropertyFileInfo.oriFileName}</span>
+								<a href="javascript:deleteFile('otherPropertyFileInfo');">删除</a>&nbsp;&nbsp;<a href="javascript:showFileContent('otherPropertyFileInfo');">查看</a>
+							</div>
+							<div id="div_otherPropertyFileInfo_upload">
+							<a id="otherPropertyFileInfo" href="javascript:;" class="upload">立刻上传<input type="file"></a>&nbsp;<label class="small-orange">上传文件最大支持20M</label>
+							</div>
+							#end
+						</td>
+					</tr>
+				</table>				
+
+				
+			<h3 id="h_4">申请人联系信息</h3>
+				<table class="mes_table">
+				  <tr>
+				    <td width="130"><span>*</span>申请人手机：</td>
+				    <td width="150"><input name= "applicantPhone" type="text" value="$!{creditLineApplyRequest.applicantPhone}"/></td>
+				    <td width="100">办公电话：</td>
+				    <td><input type="text" class="sort-input" name= "telephoneAreaCode" value="$!{creditLineApplyRequest.telephoneAreaCode}"/>
+				      -
+				      <input type="text" class="base-input" name= "telephone" value="$!{creditLineApplyRequest.telephone}"/>
+				      -
+				      <input type="text" class="base-input" name= "extensionTelephone" value="$!{creditLineApplyRequest.extensionTelephone}"/></td>
+				  </tr>
+				  <tr>
+				    <td><span>*</span>居住地址：</td>
+				    <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner-table">
+				      <tr>
+				        <td><input type="text" class="base-input" name= "residentialProvice" value="$!{creditLineApplyRequest.residentialProvice}"/>
+				          省</td>
+				        <td><input type="text" class="base-input" name= "residentialCity" value="$!{creditLineApplyRequest.residentialCity}"/>
+				          市</td>
+				        <td><input type="text" class="long-input" name= "residentialStreet" value="$!{creditLineApplyRequest.residentialStreet}"/></td>
+				      </tr>
+				    </table></td>
+				  </tr>
+				  <tr>
+				    <td><span>*</span>经营地址：</td>
+				    <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner-table">
+				      <tr>
+				        <td><input type="text" class="base-input" name= "manageProvice" value="$!{creditLineApplyRequest.manageProvice}"/>
+				          省</td>
+				        <td><input type="text" class="base-input" name= "manageCity" value="$!{creditLineApplyRequest.manageCity}"/>
+				          市</td>
+				        <td><input type="text" class="long-input" name= "manageStreet" value="$!{creditLineApplyRequest.manageStreet}"/></td>
+				      </tr>
+				    </table></td>
+				  </tr>
+				  <tr>
+				    <td>其他联系<br />
+				    方式：</td>
+				    <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner-table">
+				      <tr>
+				        <td>电子邮件
+				          <input type="text" name= "email" value="$!{creditLineApplyRequest.email}"/></td>
+				        <td>QQ号
+				          <input type="text" name= "qqNo" value="$!{creditLineApplyRequest.qqNo}"/></td>
+				        <td>微信号
+				          <input type="text" name= "weChatNo" value="$!{creditLineApplyRequest.weChatNo}"/></td>
+				      </tr>
+				    </table></td>
+				  </tr>
+				  <tr>
+				    <td><span>*</span>其他联系人<br />
+				    信息：</td>
+				    <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner-table">
+				      <tr>
+				        <td>配偶姓名
+				          <input type="text" name= "spouseName" value="$!{creditLineApplyRequest.spouseName}"/></td>
+				        <td>手机号码
+				          <input type="text" name= "spousePhone" value="$!{creditLineApplyRequest.spousePhone}"/></td>
+				        <td>身份证
+				          <input type="text" name= "spouseIdNo" value="$!{creditLineApplyRequest.spouseIdNo}"/></td>
+				      </tr>
+				    </table></td>
+				  </tr>
+				  <tr>
+				    <td>&nbsp;</td>
+				    <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner-table">
+					      <tr>
+					        <td>
+							<select name="relative1">
+								<option value="a" #if("$!{creditLineApplyRequest.relative1}"==""||"$!{creditLineApplyRequest.relative1}" == "a") selected #end>其他亲戚</option>
+								<option value="b" #if("$!{creditLineApplyRequest.relative1}" == "b") selected #end>朋友</option>
+							</select>
+					        </td>
+					        <td>姓名
+					          <input type="text" name= "relativeName1" value="$!{creditLineApplyRequest.relativeName1}"/></td>
+					        <td>手机号码
+					          <input type="text" name= "relativePhone1" value="$!{creditLineApplyRequest.relativePhone1}"/></td>
+					      </tr>
+					    </table></td>
+				  </tr>
+				  <tr>
+				    <td>&nbsp;</td>
+				    <td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="inner-table">
+					      <tr>
+					        <td>
+								<select name="relative2">
+								<option value="a" #if("$!{creditLineApplyRequest.relative2}"==""||"$!{creditLineApplyRequest.relative2}" == "a") selected #end>其他亲戚</option>
+								<option value="b" #if("$!{creditLineApplyRequest.relative2}" == "b") selected #end>朋友</option>
+							</select>
+							</td>
+					        <td>姓名
+					          <input type="text" name= "relativeName2" value="$!{creditLineApplyRequest.relativeName2}"/></td>
+					        <td>手机号码
+					          <input type="text" name= "relativePhone2" value="$!{creditLineApplyRequest.relativePhone2}"/></td>
+					      </tr>
+					    </table></td>
+				  </tr>
+				  <tr>
+				    <td>&nbsp;</td>
+				    <td colspan="3" class="small-orange">已婚者必须填写配偶信息和一个联系人信息，单身者须填写两名联系人信息</td>
+				  </tr>
+				</table>
+				<table class="mes_table">
+					<tr>
+						<td width="130"></td>
+						<td><label class="label-input"><input type="checkbox" name="isNeedAgentGuarantee" value="1" checked disabled/>提交代理商确认</label>
+						<input type="hidden" name="isNeedAgentGuarantee" value="1" />
+						</td>
+						<td><label class="label-input"><input type="checkbox" checked disabled/>天天贷协议</label></td>
+					</tr>
+					<tr>
+						<td width="130"></td>
+						<td colspan="2">
+							<a href="javascript:showAgreement(0);" >已接盛畅金融服务合作协议 </a>
+							<a href="javascript:showAgreement(1);">已接委托扣款授权书 </a>
+							</td>
+					</tr>
+					<tr>
+						<td width="130">特别申明</td>
+						<td colspan="2"><textarea name="textarea" id="textarea" style="overflow-y:auto" cols="60" rows="4" readonly>
+								1.本人、本人配偶已阅读全部申请资料，充分了解并清楚知晓上海盛畅网络科技有限公司天天贷产品的相关信息，愿意遵守盛付通的各项规则。
+								2.本人除自行提供人行征信报告外，授权上海盛畅网络科技有限公司使用本人信息，并向各类机构查询使用及报送本人及配偶信息，包括但不限于中国人民银行个人信用信息基础数据库、企业信用、信息基础数据库等。
+								3.如贷款到期后未及时完成还款，本人无条件同意并授权上海盛畅网络科技有限公司扣划所有授信POS和银行的资金流水用以偿付贷款未尽款项。
+						</textarea></td>
+						<td width="100"></td>
+					</tr>					
+				</table>
+
+				<div class="sub_btn">
+					<a href="javascript:tempSaveOrUpdate();">保存修改</a>
+					<a href="javascript:saveOrUpdate();">提交申请</a>
+				</div>
+				<div class="tips">
+					<p>申请人必须在完善资料上传之后，方可提交额度申请。上传的资料经过保存之后，用户可以再借款管理的认证信息中查询相关认证情况。</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="mask"></div>
+<div class="mask_box" id="mask_box">
+	<h2>提示</h2>
+	<p id="msgContent"></p>
+	<div class="confirm">
+		<a href="javascript:;" class="close_btn">关闭</a>
+	</div>
+</div>
+
+	</div>
+</form>

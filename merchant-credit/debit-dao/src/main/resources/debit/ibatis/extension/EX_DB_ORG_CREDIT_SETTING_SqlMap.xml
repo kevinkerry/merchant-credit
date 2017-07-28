@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DB_ORG_CREDIT_SETTING" >
+  <sql id="Query_Example_Where_Clause" >
+    <iterate property="example.oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="example.oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="example.oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $example.oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="example.oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $example.oredCriteria[].criteriaWithSingleValue[].condition$ #example.oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="example.oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $example.oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="example.oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #example.oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="example.oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $example.oredCriteria[].criteriaWithBetweenValue[].condition$
+          #example.oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #example.oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+    <select id="selectByQuery" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.ext.dataobject.DbOrgCreditSettingDTO" >
+  	select t.* from (select tt.*, ROWNUM rnum from (
+	    select
+	    <include refid="DB_ORG_CREDIT_SETTING.Base_Column_List" />
+	    from DB_ORG_CREDIT_SETTING
+	    <include refid="DB_ORG_CREDIT_SETTING.Query_Example_Where_Clause" />
+	   	<isNotNull property="example.orderByClause" >
+        order by $example.orderByClause$
+      	</isNotNull>
+    ) tt) t where   t.rnum <![CDATA[<=]]> #pageLastItem:NUMERIC#  and t.rnum <![CDATA[>=]]> #pageFristItem:NUMERIC#
+  </select>
+</sqlMap>

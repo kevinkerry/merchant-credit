@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<classPathEntry location="E:\working\maven_lib\com\oracle\ojdbc14\10.2.0.2.0\ojdbc14-10.2.0.2.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.newt0.dao" targetProject="..\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="..\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.newt0.dao.mapper"  targetProject="..\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.newt0.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage=" com.sdp.mc.newt0.manager" implementationPackage=" com.sdp.mc.newt0.manager.impl" generatorEnable="true"  targetProject="..\withdraw-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="NEWT0_AUDIT_INFO" domainObjectName="NewT0AuditInfoDO">
+		<generatedKey column="ID" sqlStatement="select seq_newt0_audit_info.nextval from dual" type="pre" />
+		<columnOverride column="ID" 						property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="OBJ_NO" 			property="objNo" 			javaType="java.lang.String" />
+    	<columnOverride column="OBJ_ID" 		property="objId" 				javaType="java.lang.Long"/>
+    	<columnOverride column="OBJ_TYPE" 			property="objType" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="OP_TYPE" 			property="opType" 			javaType="java.lang.Integer" />
+    	<columnOverride column="REQUEST_LOG" 			property="requestLog" 			javaType="java.lang.String"/>
+    	<columnOverride column="STATUS" 						property="status" 				javaType="java.lang.Integer"/>
+    	<columnOverride column="CREATE_TIME" 					property="createTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 					property="updateTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="OPERATOR" 					property="operator" 			javaType="java.lang.String"/>
+    	<columnOverride column="OPERATOR_ID" 					property="operatorId" 			javaType="java.lang.String"/>
+    	<columnOverride column="EXPIRE_TIME" 					property="expireTime" 			jdbcType="TIMESTAMP"/>
+    	<columnOverride column="MCTYPE" 					property="mcType" 			javaType="java.lang.String"/>
+    	<columnOverride column="audit_time" 					property="auditTime" 			jdbcType="TIMESTAMP"/>
+    </table>
+  </context>
+</generatorConfiguration>

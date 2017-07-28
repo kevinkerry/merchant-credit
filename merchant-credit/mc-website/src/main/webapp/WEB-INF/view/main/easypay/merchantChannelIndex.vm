@@ -1,0 +1,162 @@
+<form id="submitForm" name="submitForm" action="#relativeUrl('/easypay/merchant/channelList.htm')" method="post">
+<div class="caption">云收银商户支付渠道管理</div>
+		<table class="qryTb" cellspacing="0" cellpadding="0" >
+		    <tbody>
+		    <tr>
+		    <td width="10%" class="lbl">盛付通商户号：</td>
+		    <td width="25%"><input type="text" id="merchantNo" name="merchantNo" class="txt w120"></td>
+			<td width="10%" class="lbl">商户名称：</td>
+			<td width="25%"><input type="text" id="merchantName" name="merchantName" class="txt w200"></td>
+			<td width="10%" class="lbl">支付通道：</td>
+			<td width="35%">
+				<select id="channelStatus" name="channelStatus" >
+					<option value="">全部</option>
+					<option value="alValid">支付宝开</option>
+					<option value="alInValid">支付宝关</option>
+					<option value="wxValid">微信开</option>
+					<option value="wxInValid">微信关</option>
+                </select>
+			</td>
+		</tr>
+			    <tr>
+					<td width="10%" class="lbl">二维码号段：</td>
+        			<td width="25%">
+        				 <input type="text" id="qrCodeStart" name="qrCodeStart" class="txt w100 ">
+			            ~
+			            <input type="text" id="qrCodeEnd" name="qrCodeEnd" class="txt w100 " >
+        			</td>
+			        <td class="lbl">注册时间：</td>
+			        <td colspan="3">
+			            <input type="text" id="createStartTime" name="createStartTime" class="txt w180 date" onclick="xDatePicker(1);">
+			            ~
+			            <input type="text" id="createEndTime" name="createEndTime" class="txt w180 date" onclick="xDatePicker(1);">
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('createStartTime'), 0, elm('createEndTime') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('createStartTime'), 0, elm('createEndTime') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('createStartTime'), 0, elm('createEndTime') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('createStartTime'), 0, elm('createEndTime') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('createStartTime'), -1, elm('createEndTime') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('createStartTime'), 0, elm('createEndTime') );return false;" title="交易时间范围：今天">今</a>
+					</td>
+			    </tr>
+			    <tr>
+			        <td colspan="6" align="center">
+			            <a href="#" class="btn2" id="queryBtn" onclick="queryInfo(); return false;">查询</a>
+			            <span class="gray" id="querying" style="display: none;">查询中...</span>
+			            <a href="#" class="smBtn mgL10" onclick="clearAll();return false;" title="清除所有查询条件">清</a>
+			        </td>
+			    </tr>
+			</tbody>
+		</table>
+		<!--分页容器-->
+<div id="container"></div>
+        </form>
+<script type="text/javascript">
+	var ALL_COND_ID = ['merchantNo','merchantName','createStartTime', 'createEndTime','channelStatus','qrCodeStart','qrCodeEnd'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+			jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+	
+	window.onload=function(){
+		setTimeStartEnd(0,elm("createStartTime"),0,elm("createEndTime"));
+		ajaxPaging();
+	};
+	
+	function setTimeStartEnd(a, c, b, d) {
+        var e = new Date,
+        f = e.getFullYear(),
+        g = e.getMonth(),
+        e = e.getDate();
+        c.value = formatDate(new Date(f, g, e + a), 'yyyy-MM-dd') ;
+        d.value = formatDate(new Date(f, g, e + b), 'yyyy-MM-dd') ;
+	}
+	
+	function queryInfo(){
+		/*
+		var dateStr1 = jQuery("#createStartTime").val();
+		var dateStr2 = jQuery("#createEndTime").val();
+		if(dateStr1 == null || dateStr1 == ""){
+			alert("请录入起始时间");
+			return false;
+		}
+		var dateEnd;
+		var dateBegin = new Date(dateStr1.replace(/-/g, "/"));
+		if(dateStr2 == null || dateStr2 == ""){
+			dateEnd = new Date();
+		}
+		dateEnd = new Date(dateStr2.replace(/-/g, "/"));
+
+		var dateDiff = dateEnd.getTime() - dateBegin.getTime();
+		var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));
+		
+		if(dayDiff > 30){
+			 alert("时间大于30天");
+			return false;
+		}*/
+    		ajaxPaging();
+	}
+
+    //ajax翻页
+    function ajaxPaging(){
+    	loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":15};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/merchant/channelList.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+    }
+	function checkboxSwap(action){
+    	if(action=='selectAll'){
+    		jQuery("input[name='merchantNoArray']").attr("checked",true);
+    	}else{
+    		jQuery("input[name='merchantNoArray']").each(function(){
+    		   
+    			var checkEm=jQuery(this);
+    			if(checkEm.attr('checked')){
+    				checkEm.attr("checked",false);
+    			}else{
+    				checkEm.attr("checked",true);
+    			}
+    		});
+    	}
+	} 
+	function channelSwitch(channel,channelAction){
+		var merchantNoArray='';
+		jQuery("input[name='merchantNoArray']:checked").each(function(){
+			merchantNoArray+=this.value+',';
+		});
+		if(merchantNoArray=='') return;
+		loading(!0);
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage,"pageSize":15,"channel":channel,"channelAction":channelAction,"merchantNoArray":merchantNoArray};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/easypay/merchant/channelList.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    	loading(!1);
+		    }
+		});
+		
+	}
+</script>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PromoterDAOAbstract">
+	<resultMap id="result" class="com.sdp.mc.dao.readonly.promoter.PromoterEO">
+		<result property="promoterId" column="PROMOTER_ID"/>
+		<result property="createAt" column="CREATE_TIME"/>
+		<result property="updateAt" column="UPDATE_TIME"/>
+		<result property="fastSettleMargin" column="PROMOTER_FS_MARGIN"/>
+		<result property="fastSettleLimit" column="PROMOTER_FS_LIMIT"/>
+		<result property="pmtFastSettleFlag" column="PROMOTER_FS_FLAG"/>
+		<result property="mcId" column="PROMOTER_ID" />
+		<result property="mcMerchantNo" column="PROMOTER_MERCHANT_NO" />
+		<result property="mcType" column="PROMOTER_TYPE" />
+		<result property="mcMerchantName" column="PROMOTER_NAME" />
+
+	</resultMap>
+	<resultMap id="promoterResult" class="com.sdp.mc.dao.readonly.promoter.PromoterEO" >
+		<result property="promoterId" column="PROMOTER_ID"/>
+		<result property="createAt" column="CREATE_TIME"/>
+		<result property="updateAt" column="UPDATE_TIME"/>
+		<result property="fastSettleMargin" column="PROMOTER_FS_MARGIN"/>
+		<result property="fastSettleLimit" column="PROMOTER_FS_LIMIT"/>
+		<result property="pmtFastSettleFlag" column="PROMOTER_FS_FLAG"/>
+		<result property="loaningType" column="LOANING_TYPE"/>
+		<result property="merchantNo" column="merchant_no"/>
+		<result property="mcType" column="mc_type"/>
+	</resultMap>
+
+	<select id="selectListByIdList" parameterClass="java.util.Map" resultMap="result">
+		select *
+		from ppcpay.CM_PROMOTER promoter, ppcpay.CM_MERCHANT_CONTRACT contract
+		where contract.mc_id_n = promoter.pmt_id_n
+        <iterate property="idList" prepend=" and promoter.PMT_ID_N in " open="(" close=")" conjunction=",">
+            #idList[]:NUMERIC#
+        </iterate>
+        <dynamic>
+            <isEqual property="isLock" compareValue="true">
+                for update
+            </isEqual>
+        </dynamic>
+	</select>
+
+	<select id="countByEO" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO" resultClass="java.lang.Integer">
+		select count(promoter.pmt_id_n)
+		from ppcpay.CM_PROMOTER promoter, ppcpay.CM_MERCHANT_CONTRACT contract
+		where contract.mc_id_n = promoter.pmt_id_n
+		<isNotEmpty prepend="and" property="mcLoginAccount">
+            	contract.MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcRegType">
+            	contract.MC_REG_TYPE_N=#mcRegType:NUMERIC#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcCertiType">
+            	contract.MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcCertiValue">
+            	contract.MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcContractBeginDate">
+            	contract.MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcContractEndDate">
+            	contract.MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcContractRealEndDate">
+            	contract.MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcId">
+            	contract.MC_ID_N=#mcId:NUMERIC#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcMerchantNo">
+            	contract.MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcContractNo">
+            	contract.MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+		</isNotEmpty>
+
+		<isNotNull prepend="and" property="exceptMcStatusArr">
+			<iterate property="exceptMcStatusArr" prepend=" contract.MC_STATUS_C not in " open="(" close=")" conjunction=",">
+				#exceptMcStatusArr[]:VARCHAR#
+			</iterate>
+		</isNotNull>
+
+		<isNotEmpty prepend="and" property="mcStatus">
+            	contract.MC_STATUS_C=#mcStatus:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcType">
+            	contract.MC_TYPE_C=#mcType:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcVersion">
+            	contract.MC_VERSION_N=#mcVersion:NUMERIC#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcCreateTime">
+            	contract.MC_CREATE_TIME_T=#mcCreateTime:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcLastUpdateTime">
+            	contract.MC_LAST_UPDATE_TIME_T=#mcLastUpdateTime:TIMESTAMP#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcMerchantName">
+            	contract.MC_MERCHANT_NAME_V like '%'||#mcMerchantName:VARCHAR#||'%'
+		</isNotEmpty>
+	</select>
+
+	<delete id="delete" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO" >
+		delete from ppcpay.CM_PROMOTER promoter
+		where promoter.pmt_id_n=#promoterId:NUMBERIC#
+		  and promoter.pmt_version_n=#pmtVersion:NUMBERIC#
+	</delete>
+
+	<insert id="insertHasId" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO" >
+		insert into cm_promoter(PMT_VERSION_N,PMT_CREATE_TIME_T,PMT_LAST_UPDATE_TIME_T
+			<dynamic>
+				<isNotNull prepend="," property="promoterId">
+					PMT_ID_N
+				</isNotNull>
+			</dynamic>
+			<dynamic>
+				<isNotNull prepend="," property="businessManager">
+					PMT_BUSINESS_MANAGER_V
+				</isNotNull>
+			</dynamic>
+		)
+		values(1,systimestamp,systimestamp
+			<dynamic>
+				<isNotNull prepend="," property="promoterId">
+					#promoterId:NUMBERIC#
+				</isNotNull>
+			</dynamic>
+			<dynamic>
+				<isNotNull prepend="," property="businessManager">
+					#businessManager:VARCHAR#
+				</isNotNull>
+			</dynamic>
+		)
+	</insert>
+
+	<insert id="insert" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO">
+		<selectKey keyProperty="promoterId" resultClass="java.lang.Long">
+			select to_char(sysdate,'yyyymmdd')||SEQ_PMT_ID_N.nextval from dual
+		</selectKey>
+		insert into cm_promoter(PMT_VERSION_N,PMT_CREATE_TIME_T,PMT_LAST_UPDATE_TIME_T,PMT_ID_N
+			<dynamic>
+				<isNotNull prepend="," property="businessManager">
+					PMT_BUSINESS_MANAGER_V
+				</isNotNull>
+			</dynamic>
+		)
+		values(1,systimestamp,systimestamp,#promoterId:NUMBERIC#
+			<dynamic>
+				<isNotNull prepend="," property="businessManager">
+					#businessManager:VARCHAR#
+				</isNotNull>
+			</dynamic>
+		)
+	</insert>
+
+	<select id="select" parameterClass="java.lang.Long" resultMap="result">
+		select *
+		from ppcpay.CM_PROMOTER prom , ppcpay.CM_MERCHANT_CONTRACT cmc
+		where prom.pmt_id_n = cmc.mc_id_n
+		  and cmc.mc_id_n= #id:NUMBERIC#
+	</select>
+
+	<select id="selectAndLock" parameterClass="java.util.Map" resultMap="result">
+		select *
+		from ppcpay.CM_PROMOTER prom , ppcpay.CM_MERCHANT_CONTRACT cmc
+		where prom.pmt_id_n = cmc.mc_id_n
+		  and cmc.mc_id_n= #id:NUMBERIC#
+		  for update
+	</select>
+
+	<select id="selectEOByEO" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO" resultMap="result">
+		select *
+		from ppcpay.CM_PROMOTER prom , ppcpay.CM_MERCHANT_CONTRACT contract
+		where prom.pmt_id_n = cmc.mc_id_n
+		<isNotEmpty prepend="and" property="mcLoginAccount">
+            	contract.MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcRegType">
+            	contract.MC_REG_TYPE_N=#mcRegType:NUMERIC#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcCertiType">
+            	contract.MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcCertiValue">
+            	contract.MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcContractBeginDate">
+            	contract.MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcContractEndDate">
+            	contract.MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcContractRealEndDate">
+            	contract.MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcId">
+            	contract.MC_ID_N=#mcId:NUMERIC#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcMerchantNo">
+            	contract.MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcContractNo">
+            	contract.MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+		</isNotEmpty>
+
+		<isNotNull prepend="and" property="exceptMcStatusArr">
+			<iterate property="exceptMcStatusArr" prepend=" contract.MC_STATUS_C not in " open="(" close=")" conjunction=",">
+				#exceptMcStatusArr[]:VARCHAR#
+			</iterate>
+		</isNotNull>
+
+		<isNotEmpty prepend="and" property="mcStatus">
+            	contract.MC_STATUS_C=#mcStatus:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcType">
+            	contract.MC_TYPE_C=#mcType:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcVersion">
+            	contract.MC_VERSION_N=#mcVersion:NUMERIC#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcCreateTime">
+            	contract.MC_CREATE_TIME_T=#mcCreateTime:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcLastUpdateTime">
+            	contract.MC_LAST_UPDATE_TIME_T=#mcLastUpdateTime:TIMESTAMP#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcMerchantName">
+            	contract.MC_MERCHANT_NAME_V like '%'||#mcMerchantName:VARCHAR#||'%'
+		</isNotEmpty>
+	</select>
+
+	<select id="selectListByEO" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO" resultMap="result">
+		select *
+		from ppcpay.CM_PROMOTER prom , ppcpay.CM_MERCHANT_CONTRACT contract
+		where prom.pmt_id_n = cmc.mc_id_n
+		<isNotEmpty prepend="and" property="mcLoginAccount">
+            	contract.MC_LOGIN_ACCOUNT_V=#mcLoginAccount:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcRegType">
+            	contract.MC_REG_TYPE_N=#mcRegType:NUMERIC#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcCertiType">
+            	contract.MC_CERTI_TYPE_N=#mcCertiType:NUMERIC#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcCertiValue">
+            	contract.MC_CERTI_VALUE_V=#mcCertiValue:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcContractBeginDate">
+            	contract.MC_CONTRACT_BEGIN_DATE_D=#mcContractBeginDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcContractEndDate">
+            	contract.MC_CONTRACT_END_DATE_D=#mcContractEndDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcContractRealEndDate">
+            	contract.MC_CONTRACT_REAL_END_DATE_D=#mcContractRealEndDate:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcId">
+            	contract.MC_ID_N=#mcId:NUMERIC#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcMerchantNo">
+            	contract.MC_MERCHANT_NO_V=#mcMerchantNo:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcContractNo">
+            	contract.MC_CONTRACT_NO_V=#mcContractNo:VARCHAR#
+		</isNotEmpty>
+
+		<isNotNull prepend="and" property="exceptMcStatusArr">
+			<iterate property="exceptMcStatusArr" prepend=" contract.MC_STATUS_C not in " open="(" close=")" conjunction=",">
+				#exceptMcStatusArr[]:VARCHAR#
+			</iterate>
+		</isNotNull>
+
+		<isNotEmpty prepend="and" property="mcStatus">
+            	contract.MC_STATUS_C=#mcStatus:VARCHAR#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="mcType">
+            	contract.MC_TYPE_C=#mcType:VARCHAR#
+		</isNotEmpty>
+		<isNotNull prepend="and" property="mcVersion">
+            	contract.MC_VERSION_N=#mcVersion:NUMERIC#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcCreateTime">
+            	contract.MC_CREATE_TIME_T=#mcCreateTime:TIMESTAMP#
+		</isNotNull>
+		<isNotNull prepend="and" property="mcLastUpdateTime">
+            	contract.MC_LAST_UPDATE_TIME_T=#mcLastUpdateTime:TIMESTAMP#
+		</isNotNull>
+		<isNotEmpty prepend="and" property="mcMerchantName">
+            	contract.MC_MERCHANT_NAME_V like '%'||#mcMerchantName:VARCHAR#||'%'
+		</isNotEmpty>
+	</select>
+
+	<update id="update" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO">
+		update ppcpay.CM_PROMOTER prom
+		set prom.pmt_version_n=prom.pmt_version_n+1,prom.pmt_last_update_time_t=systimestamp
+		<dynamic>
+			<isNotNull prepend="," property="businessManager">
+				prom.PMT_BUSINESS_MANAGER_V=#businessManager:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="createAt">
+				prom.pmt_create_time_t= #createAt#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="promoterId">
+				prom.pmt_id_n=#promoterId:NUMBERIC#
+			</isNotNull>
+		</dynamic>
+		where prom.pmt_id_n=#promoterId:NUMBERIC#
+	</update>
+
+	<update id="updateByField" parameterClass="com.sdp.mc.dao.readonly.promoter.PromoterEO">
+		update ppcpay.CM_PROMOTER prom
+		set prom.pmt_version_n=prom.pmt_version_n+1,prom.pmt_last_update_time_t=systimestamp
+		<dynamic>
+			<isNotNull prepend="," property="createAt">
+				prom.pmt_create_time_t= #createAt#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="promoterId">
+				prom.pmt_id_n=#promoterId:NUMBERIC#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="businessManager">
+				prom.PMT_BUSINESS_MANAGER_V=#businessManager:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="depositmarginReceivable">
+				prom.PMT_DEPOSITMARGIN_RECEIVABLE_A=#depositmarginReceivable:VARCHAR#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="fastSettleMargin">
+				prom.PMT_FAST_SETTLE_MARGIN=#fastSettleMargin#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="fastConfigureLimit">
+				prom.PMT_FAST_CONFIGURE_LIMIT=#fastConfigureLimit#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="fastSettleLimit">
+				prom.PMT_FAST_SETTLE_LIMIT=#fastSettleLimit#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="pmtFastSettleFlag">
+				prom.PMT_FAST_SETTLE_FLAG=#pmtFastSettleFlag#
+			</isNotNull>
+		</dynamic>
+		<dynamic>
+			<isNotNull prepend="," property="pmtFastSettleRatio">
+				prom.PMT_FAST_SETTLE_RATIO_N=#pmtFastSettleRatio#
+			</isNotNull>
+		</dynamic>
+		where prom.pmt_id_n=#promoterId:NUMBERIC#
+	</update>
+</sqlMap>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DM_MERCHANT_DEBIT_LOG_INFO" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="ORGANIZATION_CODE" property="organizationCode" jdbcType="VARCHAR" />
+    <result column="BEFORE_AMOUNT" property="beforeAmount" jdbcType="DECIMAL" />
+    <result column="AFTER_AMOUNT" property="afterAmount" jdbcType="DECIMAL" />
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL" />
+    <result column="OPERATE_TYPE" property="operateType" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_NO, ORGANIZATION_CODE, BEFORE_AMOUNT, AFTER_AMOUNT, AMOUNT, OPERATE_TYPE, 
+    CREATE_TIME, UPDATE_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Base_Column_List" />
+    from DM_MERCHANT_DEBIT_LOG_INFO
+    <isParameterPresent >
+      <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    select 
+    <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Base_Column_List" />
+    from DM_MERCHANT_DEBIT_LOG_INFO
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    delete from DM_MERCHANT_DEBIT_LOG_INFO
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoExample" >
+    delete from DM_MERCHANT_DEBIT_LOG_INFO
+    <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DM_MERCHANT_DEBIT_LOG_INFO.nextval from dual
+    </selectKey>
+    insert into DM_MERCHANT_DEBIT_LOG_INFO (ID, MERCHANT_NO, ORGANIZATION_CODE, BEFORE_AMOUNT, 
+      AFTER_AMOUNT, AMOUNT, OPERATE_TYPE, CREATE_TIME, 
+      UPDATE_TIME)
+    values (#id:DECIMAL#, #merchantNo:VARCHAR#, #organizationCode:VARCHAR#, #beforeAmount:DECIMAL#, 
+      #afterAmount:DECIMAL#, #amount:DECIMAL#, #operateType:VARCHAR#, #createTime#, 
+      #updateTime#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DM_MERCHANT_DEBIT_LOG_INFO.nextval from dual
+    </selectKey>
+    insert into DM_MERCHANT_DEBIT_LOG_INFO
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="beforeAmount" >
+        BEFORE_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="afterAmount" >
+        AFTER_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="amount" >
+        AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="operateType" >
+        OPERATE_TYPE
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="beforeAmount" >
+        #beforeAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="afterAmount" >
+        #afterAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="amount" >
+        #amount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="operateType" >
+        #operateType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoExample" resultClass="java.lang.Integer" >
+    select count(*) from DM_MERCHANT_DEBIT_LOG_INFO
+    <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DM_MERCHANT_DEBIT_LOG_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.organizationCode" >
+        ORGANIZATION_CODE = #record.organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.beforeAmount" >
+        BEFORE_AMOUNT = #record.beforeAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.afterAmount" >
+        AFTER_AMOUNT = #record.afterAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.amount" >
+        AMOUNT = #record.amount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.operateType" >
+        OPERATE_TYPE = #record.operateType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DM_MERCHANT_DEBIT_LOG_INFO
+    set ID = #record.id:DECIMAL#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      ORGANIZATION_CODE = #record.organizationCode:VARCHAR#,
+      BEFORE_AMOUNT = #record.beforeAmount:DECIMAL#,
+      AFTER_AMOUNT = #record.afterAmount:DECIMAL#,
+      AMOUNT = #record.amount:DECIMAL#,
+      OPERATE_TYPE = #record.operateType:VARCHAR#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#
+    <isParameterPresent >
+      <include refid="DM_MERCHANT_DEBIT_LOG_INFO.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    update DM_MERCHANT_DEBIT_LOG_INFO
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE = #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="beforeAmount" >
+        BEFORE_AMOUNT = #beforeAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="afterAmount" >
+        AFTER_AMOUNT = #afterAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="amount" >
+        AMOUNT = #amount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="operateType" >
+        OPERATE_TYPE = #operateType:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DmMerchantDebitLogInfoPO" >
+    update DM_MERCHANT_DEBIT_LOG_INFO
+    set MERCHANT_NO = #merchantNo:VARCHAR#,
+      ORGANIZATION_CODE = #organizationCode:VARCHAR#,
+      BEFORE_AMOUNT = #beforeAmount:DECIMAL#,
+      AFTER_AMOUNT = #afterAmount:DECIMAL#,
+      AMOUNT = #amount:DECIMAL#,
+      OPERATE_TYPE = #operateType:VARCHAR#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

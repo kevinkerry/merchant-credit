@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmPosMerchantNewDAO">
+
+	<!-- 根据代理商ID查询 代理商商户号 -->
+	<select id="selectPromoterNoByPromoterId" parameterClass="java.lang.Long"
+		resultClass="java.lang.String">
+		<![CDATA[
+			select t.mc_merchant_no_v from ppcpay.cm_merchant_contract t
+			where t.mc_status_c = '3' and t.mc_id_n = #promoterId#
+		]]>
+	</select>
+
+	<resultMap id="contractResult"
+		class="com.sdp.mc.dao.readonly.merchantcontract.CmMerchantContractEO">
+		<result property="mcLoginAccount" column="MC_LOGIN_ACCOUNT_V" />
+		<result property="mcRegType" column="MC_REG_TYPE_N" />
+		<result property="mcCertiType" column="MC_CERTI_TYPE_N" />
+		<result property="mcCertiValue" column="MC_CERTI_VALUE_V" />
+		<result property="mcContractBeginDate" column="MC_CONTRACT_BEGIN_DATE_D" />
+		<result property="mcContractEndDate" column="MC_CONTRACT_END_DATE_D" />
+		<result property="mcContractRealEndDate" column="MC_CONTRACT_REAL_END_DATE_D" />
+		<result property="mcId" column="MC_ID_N" />
+		<result property="mcMerchantNo" column="MC_MERCHANT_NO_V" />
+		<result property="mcContractNo" column="MC_CONTRACT_NO_V" />
+		<result property="mcStatus" column="MC_STATUS_C" />
+		<result property="mcType" column="MC_TYPE_C" />
+		<result property="mcVersion" column="MC_VERSION_N" />
+		<result property="mcCreateTime" column="MC_CREATE_TIME_T" />
+		<result property="mcLastUpdateTime" column="MC_LAST_UPDATE_TIME_T" />
+		<result property="mcMerchantName" column="MC_MERCHANT_NAME_V" />
+	</resultMap>
+
+	<!-- 商户进网时间 -->
+	<select id="selectContractInfo" parameterClass="java.lang.String"
+		resultMap="contractResult">
+		<![CDATA[
+			select * from ppcpay.CM_MERCHANT_CONTRACT cmt
+			 where cmt.mc_status_c = '3'
+			   and (cmt.mc_type_c = '0001' or cmt.mc_type_c = '0006')
+			   and cmt.mc_merchant_no_v = #merchantNo#
+		]]>
+	</select>
+	<!-- 商户连续开单六个月 -->
+	<select id="selectOPenContract" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+			  select count(1) from ppcpay.CM_MERCHANT_CONTRACT cmc
+	              where cmc.mc_merchant_no_v =  #merchantNo#
+	               and cmc.mc_status_c = '3'
+	               and cmc.mc_type_c in ('0001', '0006')
+	               and cmc.mc_contract_begin_date_d <= add_months(trunc(sysdate), #monthCount#)
+		]]>
+	</select>
+	<resultMap id="fastAmountResult"
+		class="com.sdp.mc.dao.readonly.merchant.CmPosMerchantFastEOExt">
+		<result property="amount" column="sumAmount" />
+		<result property="promoterIdStr" column="promoterId" />
+		<result property="pmtFastSettleMargin" column="pmtFastSettleMargin" />
+		<result property="memberId" column="memberId" />
+		<result property="merchantNo" column="merchant_no" />
+		<result property="promoterName" column="proName" />
+		<result property="mctype" column="mctype" />
+
+
+	</resultMap>
+
+	<select id="selectFastAmount" parameterClass="java.util.Map"
+		resultMap="fastAmountResult">
+
+  SELECT mar.member_id memberId,
+         mar.merchant_no,
+         SUM (NVL (PI.FAST_SETTLE_MARGIN, 0)) pmtFastSettleMargin,
+         SUM (NVL (mart.amount, 0)) sumAmount,
+         PI.POS_MERCHANT_ID promoterId,
+         PI.MERCHANT_NAME proName,
+          PI.MERCHANT_TYPE mctype,
+      mar.account_type  
+    FROM MCREDIT.FW_POS_MERCHANT_INFO pi,
+         MCREDIT.TB_PROMOTER_FS_REQ pfsq,
+         mcredit.tb_margin_account_req mar,
+         (  SELECT SUM (NVL (mor.amount, 0)) amount, mor.promoter_id promoterid
+              FROM mcredit.TB_MARGIN_OP_REQ mor
+             WHERE 1 = 1
+                   AND ( (mor.op_type = 3
+                          AND (mor.status = '101' OR mor.status = '-102'))
+                        OR (mor.op_type = 4
+                            AND (   mor.status = '201'
+                                 OR mor.status = '-202'
+                                 OR mor.status = '-300'
+                                 OR mor.status = '220')))
+          GROUP BY mor.promoter_id) mart
+   WHERE     PI.MERCHANT_TYPE IN ('0003', '0007', '0101')
+         AND PI.POS_MERCHANT_ID = PFSQ.PROMOTER_ID
+         AND PFSQ.MARGIN_ACCOUNT = MAR.ACCOUNT_ID
+         AND PI.POS_MERCHANT_ID = mart.promoterid(+)
+         AND mar.status = '1'
+GROUP BY mar.merchant_no, mar.member_id, PI.POS_MERCHANT_ID,PI.MERCHANT_NAME, mar.account_type, PI.MERCHANT_TYPE
+
+
+
+	</select>
+	<!-- 根据代理商ID查询商户信息 -->
+	<select id="selecMerchantInfo" parameterClass="java.lang.String"
+		resultMap="contractResult">
+		<![CDATA[
+			  select * from ppcpay.CM_MERCHANT_CONTRACT t where t.mc_id_n=#promoterId#
+		]]>
+	</select>
+
+</sqlMap>

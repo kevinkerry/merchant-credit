@@ -1,0 +1,30 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>生效开始日</td>
+		<td>配资额度</td>
+		<td>生效结束日</td>
+		<td>可使用额度</td>
+		<td>冻结额度</td>
+		<td>已使用额度</td>
+		<td>创建日期</td>
+		<td>修改日期</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+		<td>#showDate($!{o.startTime})</td>
+		<td>$!{o.quota}</td>
+		<td>#showDate($!{o.endTime})</td>
+		<td>$!{o.canUseQuota}</td>
+		<td>$!{o.frozenQuota}</td>
+		<td>$!{o.usedQuota}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>#showDateTime($!{o.updateTime})</td>
+		<td>#if(!$!{o.startTime.before($!dateUtil.getCurrentTS())}||"$!dateUtil.format($!{o.startTime}, 'yyyy-MM-dd')"=="$!dateUtil.format($!dateUtil.getCurrentTS(), 'yyyy-MM-dd')")<a href="#springUrl('/newT0/initEdit.do')?po.id=$!{o.id}" target="_blank" title="修改">修改</a>#end</td>
+	</tr>
+	#end
+</table>
+

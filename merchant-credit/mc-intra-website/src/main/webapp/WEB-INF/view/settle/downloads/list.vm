@@ -1,0 +1,33 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/control/settle_page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td ></td>
+		<td>业务描述</td>
+		<td>任务状态</td>
+		<td>操作人</td>
+		<td>创建时间</td>
+		<td>下载</td>
+	</tr>
+	#foreach($o in $!{page.downloadsTaskDatas})
+	<tr class="settle_ttl">
+		<td>$!{velocityCount}</td>
+		<td>
+			#if($!o.bizKeyDesc)
+				$!{o.bizKeyDesc}
+			#else
+			$!{o.bizKey}
+			#end
+			</td>
+		<td>$!{o.statusDesc}</td>
+		<td>$!{o.opratorName}</td>
+		<td>$!{o.createTime}</td>
+        <!-- <td><a href="#springUrl('/settle/downloads/view.do?key="+$!{o.fileKey}"+"&fileName="+"$!{o.descInfo}"')">$!{o.fileKey} $!{o.descInfo}下载</a>$!{o.fileKey}</td> -->
+		<td>#if($!o.fileKey)
+			<a class="lk1" href="#springUrl('/settle/downloads/view.do')?key=$!{o.fileKey}&fileName=$!{o.descInfo}" target="_blank">下载</a>
+			#end
+		</td>
+	</tr>
+	#end
+</table>

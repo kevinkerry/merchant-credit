@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AuthDAO">
+    <resultMap id="ruleResult" class="com.sdp.mc.dao.authorize.RuleEO">
+        <result property="id" column="ID_N" />
+        <result property="version" column="VERSION_N" />
+        <result property="createTime" column="CREATE_TIME_T" />
+        <result property="lastUpdateTime" column="LAST_UPDATE_TIME_T" />
+        <result property="ruleCode" column="RULE_CODE_V" />
+        <result property="ruleName" column="RULE_NAME_V" />
+        <result property="ruleGroup" column="RULE_GROUP_N" />
+        <result property="ruleMerchantType" column="RULE_MERCHANT_TYPE_V" />
+        <result property="rulePriority" column="RULE_PRIORITY_N" />
+    </resultMap>
+    
+    <resultMap id="roleResult" class="com.sdp.mc.dao.authorize.RoleEO">
+        <result property="id" column="ID_N" />
+        <result property="version" column="VERSION_N" />
+        <result property="createTime" column="CREATE_TIME_T" />
+        <result property="lastUpdateTime" column="LAST_UPDATE_TIME_T" />
+        <result property="memberId" column="MEMBER_ID_V" />
+        <result property="roleName" column="ROLE_NAME_V" />
+        <result property="roleRemark" column="ROLE_REMARK_V" />
+        <result property="createOperatorId" column="CREATE_OPERATOR_ID_V" />
+    </resultMap>
+    
+    
+    <resultMap id="ruleUrlMap" class="java.util.HashMap">
+        <result property="rule_code_v" column="RULE_CODE_V" javaType="java.lang.String"/>
+        <result property="url_value_v" column="URL_VALUE_V" javaType="java.lang.String"/>
+    </resultMap>
+    <resultMap id="ruleTypeMap" class="java.util.HashMap">
+        <result property="type" column="type" javaType="java.lang.String"/>
+    </resultMap>
+    
+    <resultMap id="operatorRuleMap" class="java.util.HashMap">
+        <result property="menu_code" column="MENU_CODE" javaType="java.lang.String"/>
+        <result property="sub_code" column="SUB_CODE" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="getAllRules" resultMap="ruleResult">
+        select * from PPCPAY.MSP_rule order by rule_group_n,rule_order_n
+    </select>
+    <select id="getRuleUrl" resultMap="ruleUrlMap">
+        select r.rule_code_v,u.url_value_v from PPCPAY.MSP_rule r,PPCPAY.MSP_url u ,PPCPAY.MSP_rule_url ru where r.id_n=ru.rule_id_n and u.id_n=ru.url_id_n
+    </select>
+
+    <select id="getRoleNumByName" resultClass="java.lang.Integer" parameterClass="com.sdp.mc.dao.authorize.RoleEO">
+        select count(1) from PPCPAY.MSP_role where role_name_v=#roleName# and id_n != #id#
+    </select>
+
+   <insert id="insertRole" parameterClass="com.sdp.mc.dao.authorize.RoleEO">    
+        <selectKey keyProperty="id" resultClass="java.lang.Long" type="pre">    
+              select SEQ_PPCPAY.MSP_ROLE.nextval as id from dual    
+        </selectKey>    
+        insert into PPCPAY.MSP_role (ID_N,MEMBER_ID_V,ROLE_NAME_V,ROLE_REMARK_V,CREATE_OPERATOR_ID_V,CREATE_TIME_T,LAST_UPDATE_TIME_T)values(#id#,#memberId#,#roleName#,#roleRemark#,#createOperatorId#,systimestamp,systimestamp)
+   </insert>
+   <update id="updateRole" parameterClass="com.sdp.mc.dao.authorize.RoleEO">
+        update PPCPAY.MSP_role set MEMBER_ID_V=#memberId#,ROLE_NAME_V=#roleName#,ROLE_REMARK_V=#roleRemark#,LAST_UPDATE_TIME_T=systimestamp where id_n=#id#
+   </update>
+   <insert id="insertRoleRule" parameterClass="java.util.Map">  
+             insert into PPCPAY.MSP_ROLE_RULE 
+                (ID_N,MEMBER_ID_V,ROLE_ID_N,RULE_ID_N,CREATE_TIME_T,LAST_UPDATE_TIME_T)
+             values 
+                (SEQ_PPCPAY.MSP_ROLE_RULE.nextval,#memberId#,#roleId#,#ruleId#,systimestamp,systimestamp) 
+   </insert>  
+   <insert id="insertRoleOper" parameterClass="java.util.Map">  
+            insert into PPCPAY.MSP_OPERATOR_ROLE
+                (ID_N,MEMBER_ID_V,ROLE_ID_N,OPERATOR_ID_V,CREATE_TIME_T,LAST_UPDATE_TIME_T)
+            values
+                (SEQ_PPCPAY.MSP_OPERATOR_ROLE.nextval,#memberId#,#roleId#,#operId#,systimestamp,systimestamp)
+   </insert>
+   <delete id="deleteRoleRule" parameterClass="java.lang.Long">
+       delete from PPCPAY.MSP_ROLE_RULE where ROLE_ID_N=#roleId#
+   </delete>  
+   <delete id="deleteRoleOper" parameterClass="java.lang.Long">
+       delete from PPCPAY.MSP_OPERATOR_ROLE where ROLE_ID_N=#roleId#
+   </delete>  
+   <delete id="deleteRole" parameterClass="java.lang.Long">
+       delete from PPCPAY.MSP_role where ID_N=#roleId#
+   </delete>  
+   
+   <!-- 分页 -->
+   <sql id="where_queryRole">
+        where role.MEMBER_ID_V=#memberId#
+        <isNotEmpty prepend="and" property="roleName">
+            role.ROLE_NAME_V like '%' || #roleName# || '%'
+        </isNotEmpty>
+    </sql>
+    
+    <select id="getRoleCount" parameterClass="com.sdp.mc.dao.authorize.RoleQueryCond" resultClass="java.lang.Integer">
+        select count(1)
+        from PPCPAY.MSP_role role
+        <include refid="where_queryRole"/>
+    </select>
+
+    <select id="getRoles" parameterClass="com.sdp.mc.dao.authorize.RoleQueryCond" resultMap="roleResult">
+        select *
+        from PPCPAY.MSP_role role
+        <include refid="where_queryRole"/>
+        order by id_n desc
+    </select>
+    
+    <select id="getRoleById" parameterClass="java.lang.Long" resultMap="roleResult">
+        select * from PPCPAY.MSP_role where id_n=#roleId#
+    </select>
+    
+    <select id="getRuleListByRoleId" parameterClass="java.lang.Long" resultClass="java.lang.Long">
+        select RULE_ID_N from PPCPAY.MSP_ROLE_RULE where ROLE_ID_N=#roleId#
+    </select>
+    
+    <select id="getOperListByRoleId" parameterClass="java.lang.Long" resultClass="java.lang.String">
+        select OPERATOR_ID_V from PPCPAY.MSP_OPERATOR_ROLE where ROLE_ID_N=#roleId#
+    </select>
+    <select id="getOperatorRule" parameterClass="java.lang.String" resultMap="operatorRuleMap">
+        SELECT DISTINCT mr.rule_code_v menu_code,
+          sub.sub_code
+        FROM PPCPAY.MSP_rule mr,
+          (SELECT ru.id_n,
+            ru.rule_code_v sub_code,
+            ru.rule_name_v,
+            ru.rule_group_n
+          FROM PPCPAY.MSP_role ro ,
+            PPCPAY.MSP_rule ru ,
+            PPCPAY.MSP_role_rule rr,
+            PPCPAY.MSP_operator_role opr
+          WHERE ro.id_n        =rr.role_id_n
+          AND ru.id_n          =rr.rule_id_n
+          AND opr.operator_id_v=#operatorId#
+          AND ro.id_n          =opr.role_id_n
+          ) sub
+        WHERE mr.id_n=sub.rule_group_n
+    </select>
+	<select id="getAllRuleType" resultMap="ruleTypeMap">
+		select RULE_MERCHANT_TYPE_V type,min(RULE_ORDER_N) ord from PPCPAY.MSP_rule group
+		by RULE_MERCHANT_TYPE_V order by ord
+	</select>
+</sqlMap>

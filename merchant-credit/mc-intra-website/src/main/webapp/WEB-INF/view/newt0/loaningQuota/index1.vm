@@ -1,0 +1,88 @@
+#set($page_title = '垫资额度管理') 
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" enctype='multipart/form-data'>
+			<table width="60%" border="0" align="center" cellpadding="0"
+				cellspacing="4">
+				<tr>
+					<td class="lbl">额度日历：</td>
+					<td width="200"><input type="text" id="startTime" name="startTime" class="txt w150 date" onclick="xDatePicker(1);" readonly="readonly"/></td>
+					<td><a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging()">查询</a>
+					 <span class="gray" id="querying" style="display:none;">查询中...</span>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="file" size="40" filefilter="xls" id="file" name="file" /></td>
+					<td><input class="bluebtn" type="button" onclick="opExcel(0);" value="上传" style="cursor:pointer"/>
+						<span class="_tip"></span>
+						<p>请上传xls文件</p>
+						<p></p>
+						<p style="color: red">$!{msg.errorMessage}</p>
+					</td>
+					<td><input class="bluebtn" type="button" onclick="opExcel(1);" value="下载" style="cursor:pointer"/>
+						<span></span>
+						<p>模板下载</p>
+						<p></p>
+						<p>&nbsp;</p>
+                    </td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<div class="TableForm">
+	<h2 class="Mtit">额度使用记录</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	window.onload = function() {
+
+	};
+	function opExcel(op){
+		if(op==0){
+			jQuery("#submitForm").attr("action","#springUrl('/newT0/upload.do')");
+		}else{
+			jQuery("#submitForm").attr("action","#springUrl('/newT0/download.do')");
+		}
+		jQuery("#submitForm").submit();
+	}
+	var ALL_COND_ID = [ 'startTime'];
+	function clearAll() {
+		for (i in ALL_COND_ID) {
+			jQuery("#" + ALL_COND_ID[i]).val("");
+		}
+	}
+	//ajax翻页
+	function ajaxPaging() {
+		var currentPage = jQuery("#currentPage_submitForm").val();
+		currentPage = currentPage ? currentPage : 1;
+		var startTime = jQuery("#startTime").val();
+		var data;
+		if(startTime!=null && startTime!=''){
+			data = {
+					"currentPage" : currentPage,
+					"startTime" :startTime 
+				};
+		}else{
+			data = {
+					"currentPage" : currentPage
+				};
+		}
+		for (i in ALL_COND_ID) {
+			data[ALL_COND_ID[i]] = jQuery("#" + ALL_COND_ID[i]).val();
+		}
+		jQuery.ajax({
+			type : 'POST',
+			url : "#springUrl('/newT0/ajaxPaging/loaningQuotaQuery.do')",
+			data : data,
+			dataType : "html",
+			success : function(data) {
+				jQuery("#container").html(data);
+			}
+		});
+	}
+</script>

@@ -1,0 +1,143 @@
+#parse("/main/debit/overdue/passwordjs.vm")
+<style>
+	.password {height:49px;margin-top:15px; clear:both;overflow:hidden;font-size:16px}
+	.password span{float:left;margin-top:7px;margin-right:16px;}
+	.password #_ocx_password_str{ float:left;}
+	.password em{float:left; margin-left:20px;margin-top:10px;}
+</style>
+
+<form id="submitForm" name="submitForm">
+<div class="content main_box">
+	<div class="ban_table clearfix">
+		<div class="ban_left l">
+			<a href="#relativeUrl('/debit/myDebitOrders.htm')">我的借款</a>
+			<a href="#relativeUrl('/debit/debitRecordIndex.htm')">借款申请记录</a>
+			<a href="#relativeUrl('/overdue/index.htm')" class="on">逾期管理</a>
+			<a href="#relativeUrl('/credit/appStatusInfo.htm')">认证信息中心</a>
+		</div>
+		<div class="ban_right no_bor l">
+			<div class="search">
+				####<p class="search_list sum">逾期总额 <span>￥100100</span> （逾期本金<span>￥100000</span>，逾期费用 <span>￥ 100</span>）	<a href="javascript:showDiv('mask_box');">立即还款</a></p>
+				<div id="container"><div>
+				##<p class="page"><a href="javascript:;">上一页</a>/<a href="javascript:;">下一页</a></p>
+			</div>
+		</div>
+	</div>
+	<div class="tip">
+		<p class="title">温馨提示：</p>
+		<p>逾期会影响您的信用分数与下次贷款，强烈建议您避免逾期还款，若逾期请尽快还清借款。一旦发生逾期的，我们将按照借款合同冻结您的钱包出款服务与您的pos收单交易流水/您的当月分润收入。</p>
+	</div>
+</div>
+<div class="mask" style="z-index:1000;"></div>
+<div class="mask_box" id="mask_box" style="z-index:1000;">
+	<h2><a href="javascript:hidediv2('mask_box');" class="close">X</a>提示</h2>
+	<h3 style="font-weight: bold;">待还金额：<span id="paybackAmountTip"></span><i>盛付通钱包扣款</i></h3>
+	<p><span class="in_name">放款钱包帐户：</span>$!{loginName}</p>
+	<div class="password">
+		<span class="in_name">支付密码：</span>
+		<div id="_ocx_password_str"></div>
+		<input id="password" type="password" name="password" style="display:none" maxlength="13" class="s_input"/>
+	</div>
+	<p id="errorTip" class="tip" style="text-align:center"></p>###请输入放款钱包帐户的密码
+	<div class="confirm">
+		<a href="#" id="paybackBtn" class="close_btn">确定</a>
+	</div>
+</div>
+
+<input type="hidden" id="sActivexPubKey" value="$!{sActivexPubKey}">
+<input type="hidden" id="certSerialNo" name="certSerialNo" value="$!{certSerialNo}">
+<input type="hidden" id="encryptedKey" name="encryptedKey" value="">
+<input type="hidden" id="debitOrderId" name="id">
+</form>
+
+<script type="text/javascript" src="#staticResource('/js/mask.js')?version=1"></script>
+<script type="text/javascript">
+	jQuery(function(){
+		if(navigator.userAgent.indexOf("Window") < 0) {
+	        jQuery("#password").show();
+	        jQuery("#_ocx_password_str").hide();
+	        jQuery("#_ocx_password").hide();
+	    }
+		ajaxPaging();
+		jQuery("#paybackBtn").bind("click",overdueRepayment);
+	});
+	function hidediv(id){
+	}
+	function hidediv2(id){
+		var oMask=getByClass(document,'mask')[0];
+		var obj=document.getElementById(id);
+		obj.style.display="none";
+		oMask.style.display="none";
+		$("#_ocx_password_str").show();
+	    $("#_ocx_password").show();
+	}
+	
+	function showError(msg){
+		jQuery("#errorTip").html(msg);
+		//jQuery("#errorTip").show();
+		//淡出
+		//jQuery("#errorTip").fadeOut("slow");
+	}
+	//分页查询
+	function ajaxPaging(){
+		var currentPage=jQuery("#currentPage_submitForm").val();
+		currentPage=currentPage?currentPage:1;
+		var data = {"currentPage":currentPage};
+		data['timestamp'] = new Date().getTime();
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/ajaxPaging/queryMerchantDebitOrder.htm')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+	}
+	//弹出支付弹层
+	function popPayDiv(amount,id){
+		jQuery("#paybackAmountTip").html("￥"+amount);
+		jQuery("#mask_box").attr("debitOrderId",id);
+		jQuery("#debitOrderId").val(id);
+		jQuery("#password").val("");
+		jQuery("#errorTip").html("");
+		showDiv('mask_box');
+	}
+	/**
+	*逾期还款
+	**/
+	function overdueRepayment(){
+		/*var password = jQuery("#password").val();
+		if(password==""){
+			showError("请输入支付密码");
+			return false;
+		}*/
+		//支付密码
+		if(navigator.userAgent.indexOf("Window") < 0) {
+            jQuery("#encryptedKey").val("");
+        } else {
+            jQuery("#encryptedKey").val(editor.GetKey());
+            jQuery("#password").val(editor.GetValue());
+        }
+    	//var certSerialNo = jQuery("#certSerialNo").val();
+		//var data = {id:id,password:editor.GetValue(),encryptedKey:editor.GetKey(),certSerialNo:certSerialNo};
+		jQuery.ajax({
+			type: 'POST',
+		    url: "#relativeUrl('/overdue/overdueRepayment.json')" ,
+		    data: jQuery("#submitForm").serialize(),
+		    dataType: "json",
+		    success: function(data){
+		    	if(data){
+		    		showError(data.errorMessage);
+		    		if(data.success){
+		    			hidediv2('mask_box');
+		    			window.location.href="#relativeUrl('/overdue/index.htm')?timestamp="+new Date().getTime();
+		    		}
+		    	}else{
+		    		showError("系统繁忙，请稍后再试");
+		    	}
+		    }
+		});
+		return false;
+	}
+</script>

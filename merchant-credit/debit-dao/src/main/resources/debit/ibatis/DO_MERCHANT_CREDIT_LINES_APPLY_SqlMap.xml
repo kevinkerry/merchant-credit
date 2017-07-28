@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="DO_MERCHANT_CREDIT_LINES_APPLY" >
+  <resultMap id="BaseResultMap" class="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="MERCHANT_NO" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="APPLY_STATUS" property="applyStatus" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NO" property="promoterNo" jdbcType="VARCHAR" />
+    <result column="PROMOTER_NAME" property="promoterName" jdbcType="VARCHAR" />
+    <result column="APPLY_MERCHANT_INFO" property="applyMerchantInfo" jdbcType="VARCHAR" />
+    <result column="MERCHANT_APPLY_AGENT_TIME" property="merchantApplyAgentTime" />
+    <result column="IS_AGNET_GUARANTEE" property="isAgnetGuarantee" jdbcType="VARCHAR" />
+    <result column="IS_NEED_AGNET_GUARANTEE" property="isNeedAgnetGuarantee" jdbcType="VARCHAR" />
+    <result column="APPLY_START_TIME" property="applyStartTime" />
+    <result column="APPLY_RISK_TIME" property="applyRiskTime" />
+    <result column="RISK_ANSWER_TIME" property="riskAnswerTime" />
+    <result column="MERCHANT_SEND_DATA_TIME" property="merchantSendDataTime" />
+    <result column="BORROW_TIME" property="borrowTime" />
+    <result column="CREATE_TIME" property="createTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="RISK_LEVEL" property="riskLevel" jdbcType="VARCHAR" />
+    <result column="LEND_AMOUNT" property="lendAmount" jdbcType="DECIMAL" />
+    <result column="POLICY_START_TIME" property="policyStartTime" />
+    <result column="POLICY_END_TIME" property="policyEndTime" />
+    <result column="ORGANIZATION_CODE" property="organizationCode" jdbcType="VARCHAR" />
+    <result column="LEND_WALLER_ACCOUNT" property="lendWallerAccount" jdbcType="VARCHAR" />
+    <result column="LEND_MEMBER_ID" property="lendMemberId" jdbcType="VARCHAR" />
+    <result column="LEND_LOGIN_NAME" property="lendLoginName" jdbcType="VARCHAR" />
+    <result column="AUDITOR_NAME" property="auditorName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_MEMBERID" property="merchantMemberid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_NO, MERCHANT_NAME, APPLY_STATUS, PROMOTER_NO, PROMOTER_NAME, APPLY_MERCHANT_INFO, 
+    MERCHANT_APPLY_AGENT_TIME, IS_AGNET_GUARANTEE, IS_NEED_AGNET_GUARANTEE, APPLY_START_TIME, 
+    APPLY_RISK_TIME, RISK_ANSWER_TIME, MERCHANT_SEND_DATA_TIME, BORROW_TIME, CREATE_TIME, 
+    UPDATE_TIME, RISK_LEVEL, LEND_AMOUNT, POLICY_START_TIME, POLICY_END_TIME, ORGANIZATION_CODE, 
+    LEND_WALLER_ACCOUNT, LEND_MEMBER_ID, LEND_LOGIN_NAME, AUDITOR_NAME, MERCHANT_MEMBERID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyExample" >
+    select
+    <isParameterPresent >
+      <isEqual property="distinct" compareValue="true" >
+        distinct
+      </isEqual>
+    </isParameterPresent>
+    <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Base_Column_List" />
+    from DO_MERCHANT_CREDIT_LINES_APPLY
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    select 
+    <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Base_Column_List" />
+    from DO_MERCHANT_CREDIT_LINES_APPLY
+    where ID = #id:DECIMAL#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    delete from DO_MERCHANT_CREDIT_LINES_APPLY
+    where ID = #id:DECIMAL#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyExample" >
+    delete from DO_MERCHANT_CREDIT_LINES_APPLY
+    <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Example_Where_Clause" />
+  </delete>
+  <insert id="insert" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_ME_CREDIT_LINES_APPLY.nextval from dual
+    </selectKey>
+    insert into DO_MERCHANT_CREDIT_LINES_APPLY (ID, MERCHANT_NO, MERCHANT_NAME, APPLY_STATUS, 
+      PROMOTER_NO, PROMOTER_NAME, APPLY_MERCHANT_INFO, MERCHANT_APPLY_AGENT_TIME, 
+      IS_AGNET_GUARANTEE, IS_NEED_AGNET_GUARANTEE, APPLY_START_TIME, 
+      APPLY_RISK_TIME, RISK_ANSWER_TIME, MERCHANT_SEND_DATA_TIME, 
+      BORROW_TIME, CREATE_TIME, UPDATE_TIME, RISK_LEVEL, 
+      LEND_AMOUNT, POLICY_START_TIME, POLICY_END_TIME, ORGANIZATION_CODE, 
+      LEND_WALLER_ACCOUNT, LEND_MEMBER_ID, LEND_LOGIN_NAME, AUDITOR_NAME, 
+      MERCHANT_MEMBERID)
+    values (#id:DECIMAL#, #merchantNo:VARCHAR#, #merchantName:VARCHAR#, #applyStatus:VARCHAR#, 
+      #promoterNo:VARCHAR#, #promoterName:VARCHAR#, #applyMerchantInfo:VARCHAR#, #merchantApplyAgentTime#, 
+      #isAgnetGuarantee:VARCHAR#, #isNeedAgnetGuarantee:VARCHAR#, #applyStartTime#, 
+      #applyRiskTime#, #riskAnswerTime#, #merchantSendDataTime#, 
+      #borrowTime#, #createTime#, #updateTime#, #riskLevel:VARCHAR#, 
+      #lendAmount:DECIMAL#, #policyStartTime#, #policyEndTime#, #organizationCode:VARCHAR#, 
+      #lendWallerAccount:VARCHAR#, #lendMemberId:VARCHAR#, #lendLoginName:VARCHAR#, #auditorName:VARCHAR#, 
+      #merchantMemberid:VARCHAR#)
+  </insert>
+  <insert id="insertSelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    <selectKey resultClass="java.lang.Long" keyProperty="id" >
+      select SEQ_DO_ME_CREDIT_LINES_APPLY.nextval from dual
+    </selectKey>
+    insert into DO_MERCHANT_CREDIT_LINES_APPLY
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        ID
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        MERCHANT_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="applyStatus" >
+        APPLY_STATUS
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        PROMOTER_NO
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        PROMOTER_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="applyMerchantInfo" >
+        APPLY_MERCHANT_INFO
+      </isNotNull>
+      <isNotNull prepend="," property="merchantApplyAgentTime" >
+        MERCHANT_APPLY_AGENT_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="isAgnetGuarantee" >
+        IS_AGNET_GUARANTEE
+      </isNotNull>
+      <isNotNull prepend="," property="isNeedAgnetGuarantee" >
+        IS_NEED_AGNET_GUARANTEE
+      </isNotNull>
+      <isNotNull prepend="," property="applyStartTime" >
+        APPLY_START_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="applyRiskTime" >
+        APPLY_RISK_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="riskAnswerTime" >
+        RISK_ANSWER_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="merchantSendDataTime" >
+        MERCHANT_SEND_DATA_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="borrowTime" >
+        BORROW_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="riskLevel" >
+        RISK_LEVEL
+      </isNotNull>
+      <isNotNull prepend="," property="lendAmount" >
+        LEND_AMOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="policyStartTime" >
+        POLICY_START_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="policyEndTime" >
+        POLICY_END_TIME
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE
+      </isNotNull>
+      <isNotNull prepend="," property="lendWallerAccount" >
+        LEND_WALLER_ACCOUNT
+      </isNotNull>
+      <isNotNull prepend="," property="lendMemberId" >
+        LEND_MEMBER_ID
+      </isNotNull>
+      <isNotNull prepend="," property="lendLoginName" >
+        LEND_LOGIN_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="auditorName" >
+        AUDITOR_NAME
+      </isNotNull>
+      <isNotNull prepend="," property="merchantMemberid" >
+        MERCHANT_MEMBERID
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantNo" >
+        #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        #merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyStatus" >
+        #applyStatus:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        #promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        #promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyMerchantInfo" >
+        #applyMerchantInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantApplyAgentTime" >
+        #merchantApplyAgentTime#
+      </isNotNull>
+      <isNotNull prepend="," property="isAgnetGuarantee" >
+        #isAgnetGuarantee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="isNeedAgnetGuarantee" >
+        #isNeedAgnetGuarantee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyStartTime" >
+        #applyStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="applyRiskTime" >
+        #applyRiskTime#
+      </isNotNull>
+      <isNotNull prepend="," property="riskAnswerTime" >
+        #riskAnswerTime#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantSendDataTime" >
+        #merchantSendDataTime#
+      </isNotNull>
+      <isNotNull prepend="," property="borrowTime" >
+        #borrowTime#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="riskLevel" >
+        #riskLevel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendAmount" >
+        #lendAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="policyStartTime" >
+        #policyStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="policyEndTime" >
+        #policyEndTime#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendWallerAccount" >
+        #lendWallerAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendMemberId" >
+        #lendMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendLoginName" >
+        #lendLoginName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="auditorName" >
+        #auditorName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantMemberid" >
+        #merchantMemberid:VARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+  <select id="countByExample" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyExample" resultClass="java.lang.Integer" >
+    select count(*) from DO_MERCHANT_CREDIT_LINES_APPLY
+    <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update DO_MERCHANT_CREDIT_LINES_APPLY
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        ID = #record.id:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantNo" >
+        MERCHANT_NO = #record.merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantName" >
+        MERCHANT_NAME = #record.merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.applyStatus" >
+        APPLY_STATUS = #record.applyStatus:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.promoterNo" >
+        PROMOTER_NO = #record.promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.promoterName" >
+        PROMOTER_NAME = #record.promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.applyMerchantInfo" >
+        APPLY_MERCHANT_INFO = #record.applyMerchantInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantApplyAgentTime" >
+        MERCHANT_APPLY_AGENT_TIME = #record.merchantApplyAgentTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.isAgnetGuarantee" >
+        IS_AGNET_GUARANTEE = #record.isAgnetGuarantee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.isNeedAgnetGuarantee" >
+        IS_NEED_AGNET_GUARANTEE = #record.isNeedAgnetGuarantee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.applyStartTime" >
+        APPLY_START_TIME = #record.applyStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.applyRiskTime" >
+        APPLY_RISK_TIME = #record.applyRiskTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.riskAnswerTime" >
+        RISK_ANSWER_TIME = #record.riskAnswerTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantSendDataTime" >
+        MERCHANT_SEND_DATA_TIME = #record.merchantSendDataTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.borrowTime" >
+        BORROW_TIME = #record.borrowTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.createTime" >
+        CREATE_TIME = #record.createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.updateTime" >
+        UPDATE_TIME = #record.updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.riskLevel" >
+        RISK_LEVEL = #record.riskLevel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendAmount" >
+        LEND_AMOUNT = #record.lendAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="record.policyStartTime" >
+        POLICY_START_TIME = #record.policyStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.policyEndTime" >
+        POLICY_END_TIME = #record.policyEndTime#
+      </isNotNull>
+      <isNotNull prepend="," property="record.organizationCode" >
+        ORGANIZATION_CODE = #record.organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendWallerAccount" >
+        LEND_WALLER_ACCOUNT = #record.lendWallerAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendMemberId" >
+        LEND_MEMBER_ID = #record.lendMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.lendLoginName" >
+        LEND_LOGIN_NAME = #record.lendLoginName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.auditorName" >
+        AUDITOR_NAME = #record.auditorName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.merchantMemberid" >
+        MERCHANT_MEMBERID = #record.merchantMemberid:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update DO_MERCHANT_CREDIT_LINES_APPLY
+    set ID = #record.id:DECIMAL#,
+      MERCHANT_NO = #record.merchantNo:VARCHAR#,
+      MERCHANT_NAME = #record.merchantName:VARCHAR#,
+      APPLY_STATUS = #record.applyStatus:VARCHAR#,
+      PROMOTER_NO = #record.promoterNo:VARCHAR#,
+      PROMOTER_NAME = #record.promoterName:VARCHAR#,
+      APPLY_MERCHANT_INFO = #record.applyMerchantInfo:VARCHAR#,
+      MERCHANT_APPLY_AGENT_TIME = #record.merchantApplyAgentTime#,
+      IS_AGNET_GUARANTEE = #record.isAgnetGuarantee:VARCHAR#,
+      IS_NEED_AGNET_GUARANTEE = #record.isNeedAgnetGuarantee:VARCHAR#,
+      APPLY_START_TIME = #record.applyStartTime#,
+      APPLY_RISK_TIME = #record.applyRiskTime#,
+      RISK_ANSWER_TIME = #record.riskAnswerTime#,
+      MERCHANT_SEND_DATA_TIME = #record.merchantSendDataTime#,
+      BORROW_TIME = #record.borrowTime#,
+      CREATE_TIME = #record.createTime#,
+      UPDATE_TIME = #record.updateTime#,
+      RISK_LEVEL = #record.riskLevel:VARCHAR#,
+      LEND_AMOUNT = #record.lendAmount:DECIMAL#,
+      POLICY_START_TIME = #record.policyStartTime#,
+      POLICY_END_TIME = #record.policyEndTime#,
+      ORGANIZATION_CODE = #record.organizationCode:VARCHAR#,
+      LEND_WALLER_ACCOUNT = #record.lendWallerAccount:VARCHAR#,
+      LEND_MEMBER_ID = #record.lendMemberId:VARCHAR#,
+      LEND_LOGIN_NAME = #record.lendLoginName:VARCHAR#,
+      AUDITOR_NAME = #record.auditorName:VARCHAR#,
+      MERCHANT_MEMBERID = #record.merchantMemberid:VARCHAR#
+    <isParameterPresent >
+      <include refid="DO_MERCHANT_CREDIT_LINES_APPLY.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    update DO_MERCHANT_CREDIT_LINES_APPLY
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="merchantNo" >
+        MERCHANT_NO = #merchantNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantName" >
+        MERCHANT_NAME = #merchantName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyStatus" >
+        APPLY_STATUS = #applyStatus:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterNo" >
+        PROMOTER_NO = #promoterNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="promoterName" >
+        PROMOTER_NAME = #promoterName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyMerchantInfo" >
+        APPLY_MERCHANT_INFO = #applyMerchantInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantApplyAgentTime" >
+        MERCHANT_APPLY_AGENT_TIME = #merchantApplyAgentTime#
+      </isNotNull>
+      <isNotNull prepend="," property="isAgnetGuarantee" >
+        IS_AGNET_GUARANTEE = #isAgnetGuarantee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="isNeedAgnetGuarantee" >
+        IS_NEED_AGNET_GUARANTEE = #isNeedAgnetGuarantee:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="applyStartTime" >
+        APPLY_START_TIME = #applyStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="applyRiskTime" >
+        APPLY_RISK_TIME = #applyRiskTime#
+      </isNotNull>
+      <isNotNull prepend="," property="riskAnswerTime" >
+        RISK_ANSWER_TIME = #riskAnswerTime#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantSendDataTime" >
+        MERCHANT_SEND_DATA_TIME = #merchantSendDataTime#
+      </isNotNull>
+      <isNotNull prepend="," property="borrowTime" >
+        BORROW_TIME = #borrowTime#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="updateTime" >
+        UPDATE_TIME = #updateTime#
+      </isNotNull>
+      <isNotNull prepend="," property="riskLevel" >
+        RISK_LEVEL = #riskLevel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendAmount" >
+        LEND_AMOUNT = #lendAmount:DECIMAL#
+      </isNotNull>
+      <isNotNull prepend="," property="policyStartTime" >
+        POLICY_START_TIME = #policyStartTime#
+      </isNotNull>
+      <isNotNull prepend="," property="policyEndTime" >
+        POLICY_END_TIME = #policyEndTime#
+      </isNotNull>
+      <isNotNull prepend="," property="organizationCode" >
+        ORGANIZATION_CODE = #organizationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendWallerAccount" >
+        LEND_WALLER_ACCOUNT = #lendWallerAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendMemberId" >
+        LEND_MEMBER_ID = #lendMemberId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="lendLoginName" >
+        LEND_LOGIN_NAME = #lendLoginName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="auditorName" >
+        AUDITOR_NAME = #auditorName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="merchantMemberid" >
+        MERCHANT_MEMBERID = #merchantMemberid:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:DECIMAL#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.shengpay.debit.dal.dataobject.DoMerchantCreditLinesApplyPO" >
+    update DO_MERCHANT_CREDIT_LINES_APPLY
+    set MERCHANT_NO = #merchantNo:VARCHAR#,
+      MERCHANT_NAME = #merchantName:VARCHAR#,
+      APPLY_STATUS = #applyStatus:VARCHAR#,
+      PROMOTER_NO = #promoterNo:VARCHAR#,
+      PROMOTER_NAME = #promoterName:VARCHAR#,
+      APPLY_MERCHANT_INFO = #applyMerchantInfo:VARCHAR#,
+      MERCHANT_APPLY_AGENT_TIME = #merchantApplyAgentTime#,
+      IS_AGNET_GUARANTEE = #isAgnetGuarantee:VARCHAR#,
+      IS_NEED_AGNET_GUARANTEE = #isNeedAgnetGuarantee:VARCHAR#,
+      APPLY_START_TIME = #applyStartTime#,
+      APPLY_RISK_TIME = #applyRiskTime#,
+      RISK_ANSWER_TIME = #riskAnswerTime#,
+      MERCHANT_SEND_DATA_TIME = #merchantSendDataTime#,
+      BORROW_TIME = #borrowTime#,
+      CREATE_TIME = #createTime#,
+      UPDATE_TIME = #updateTime#,
+      RISK_LEVEL = #riskLevel:VARCHAR#,
+      LEND_AMOUNT = #lendAmount:DECIMAL#,
+      POLICY_START_TIME = #policyStartTime#,
+      POLICY_END_TIME = #policyEndTime#,
+      ORGANIZATION_CODE = #organizationCode:VARCHAR#,
+      LEND_WALLER_ACCOUNT = #lendWallerAccount:VARCHAR#,
+      LEND_MEMBER_ID = #lendMemberId:VARCHAR#,
+      LEND_LOGIN_NAME = #lendLoginName:VARCHAR#,
+      AUDITOR_NAME = #auditorName:VARCHAR#,
+      MERCHANT_MEMBERID = #merchantMemberid:VARCHAR#
+    where ID = #id:DECIMAL#
+  </update>
+</sqlMap>

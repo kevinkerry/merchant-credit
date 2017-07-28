@@ -1,0 +1,71 @@
+#set($page_title = '商户额度规则管理 ')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+</div>
+
+<div class="TableForm">
+	<h2 class="Mtit">商户额度规则列表</h2>
+	<div id="container" class="RealTb">
+	   <table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList" style="width:100%;">
+	<tr>
+		##<td>ID号</td>
+		<td width="15%">应用场景</td>
+		<td width="10%">状态</td>
+		<td width="60%">表达式</td>
+		<td width="15%">操作</td>
+	</tr>
+	#foreach($temp in $dataList)
+	<tr  class="jade_t">
+		##<td>$!{temp.id}</td>
+		<td>$!{temp.ruleName}</td>
+		<td>
+		#if("$!{temp.status}"=="0")禁用
+    		#elseif("$!{temp.status}"=="1")启用
+    		#else
+				$!{temp.status}
+    		#end
+		</td>
+		<td>$!{temp.lambdaDesc}</td>
+		<td>
+		   #if("$!{temp.status}"=="0")
+		   <a href="#"  onclick="javascript:updateStatus('$!{temp.id}','1');" class="look" >启用</a>
+    		#elseif("$!{temp.status}"=="1")
+    		<a href="javascript:void(0);" class="smBtn" onclick="javascript:updateStatus('$!{temp.id}','0');" class="look" >禁用</a>
+    		#end
+    		&nbsp;
+    		<a class="smBtn" href="#springUrl('/limitrule/edit.do')?id=$!{temp.id}" class="look" target="_blank">编辑</a>
+    		&nbsp;
+    		<a class="smBtn" href="#springUrl('/limitrule/trialInit.do')?id=$!{temp.id}" class="look" target="_blank">试算</a>
+		</td>
+	</tr>
+	#end
+</table>
+    </div>
+</div>
+
+<script type="text/javascript">
+function updateStatus(id,status){
+	var message= status==1?"启用":"禁用";
+	if(status==1){
+		if(!confirm("启用后，线上立即生效，是否确认启用？")){
+			return false;
+		}
+	}
+    if(confirm("是否进行"+message+"？")){
+	    var data = {"id":id,"status":status};
+		jQuery.ajax( {
+	        url:"#springUrl('/limitrule/updateStatus.do')", // 跳转到 action
+	        type:'post',
+			data: data ,
+	        cache:false,
+	        dataType:'json',
+	        success:function(data) {
+				alert(data.errorMessage);
+				document.location.href="#springUrl('/limitrule/index.do')?sessionId="+new Date().getTime();
+	         },
+	         error : function() {
+	         }
+	    });
+    }
+}
+</script>

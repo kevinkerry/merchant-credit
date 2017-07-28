@@ -1,0 +1,74 @@
+#set($page_title = 'POS商户自动开通快速结算操作 ') #set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post"
+			action="#springUrl('/test/test')">
+			<table>
+				<tr>
+					<td class="lbl">商户号：</td>
+					<td align="center" style="vertical-align: middle;" colspan="5"><textarea
+							rows="3" cols="100" id="merchantNos" name="merchantNos" value=""
+							class="txt130"></textarea></td>
+				</tr>
+				<tr>
+					<td class="lbl">节假日费率</td>
+					<td width="200"><input type="text" id="holidayFee"
+						name="holidayFee" maxlength="20" value="0" class="txt130"
+						size="20" /></td>
+					<td class="lbl">工作日费率</td>
+					<td width="200"><input type="text" id="workdayFee"
+						name="workdayFee" maxlength="20" value="0" class="txt130"
+						size="20" /></td>
+					<td class="lbl">额度</td>
+					<td width="200"><input type="text" id="fastSettleLimit"
+						name="fastSettleLimit" maxlength="20" value="100000"
+						class="txt130" size="20" /></td>
+				</tr>
+				<tr>
+					<td align="center" colspan="6"><a href="javascript:void(0);"
+						class="btn2" onclick="posAutoOpenT0()">批量开通</a><br /></td>
+				</tr>
+
+			</table>
+
+		</form>
+	</div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">结果</h2>
+	<div id="container" class="RealTb"></div>
+</div>
+
+<script type="text/javascript">
+	var waiting = '<div style="width: 100%;height: 200px;text-align: center;padding-top: 100px;"><h1>操作中...</h1></div>';
+	var flag = false;
+	var ALL_COND_ID = ['fastSettleLimit', 'workdayFee', 'holidayFee'];
+	function posAutoOpenT0() {
+		if (flag) {
+			return;
+		}
+		var merchantNos = jQuery("#merchantNos").val();
+		var data = {
+			merchantNos : merchantNos
+		};
+		for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+		if (confirm("确定要批量开通快速结算功能吗？")) {
+			flag = true;
+			jQuery("#container").html(waiting);
+			jQuery.ajax({
+				type : 'POST',
+				url : "#springUrl('/repair/posAutoOpenT0/save.do')?sessionId="
+						+ new Date().getTime(),
+				dataType : "html",
+				data : data,
+				success : function(data) {
+					jQuery("#container").html(data);
+					flag = false;
+				}
+			});
+		}
+	}
+</script>

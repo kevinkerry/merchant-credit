@@ -1,0 +1,63 @@
+<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+<div class="caption">快速结算资金管理</div>
+<table class="dtlTb" cellspacing="1" cellpadding="0">
+	<tr>
+		<td class="lbl">拓展方商户号：</td>
+		<td width="180" ><input type="hidden" name="promoterId" id="promoterId" value="$!{promoter.mcId}"/><input type="hidden" name="promoterNo" id="promoterNo" value="$!{promoter.mcMerchantNo}"/>$!{promoter.mcMerchantNo}</td>
+		<td class="lbl">拓展方名称：</td>
+		<td width="170" ><input type="hidden" name="promoterName" id="promoterName" value="$!{promoter.mcMerchantName}" maxlength="64"/>$!{promoter.mcMerchantName}</td>
+		<td class="lbl">拓展方类型：</td>
+		<td width="180" ><input type="hidden" name="promoterType" id="promoterType" value="$!{promoter.mcType}"/>
+			#if("$!{promoter.mcType}"=="0003")POS拓展方
+            #elseif("$!{promoter.mcType}"=="0007")MPOS拓展方
+            #elseif("$!{promoter.mcType}"=="0101")云收银拓展方#end
+		</td>
+	</tr>
+	<tr>
+		<td class="lbl">应收保证金：</td>
+		##<td ><input type="text" name="depositmarginReceivable" id="depositmarginReceivable" value="$!{promoter.depositmarginReceivable}" maxlength="18"/></td>
+		<td >$!{promoter.depositmarginReceivable}</td>
+		<td class="lbl">保证金账户余额：</td>
+        <td>
+            #if(!$!{promoter.remoteInvocationStatus})
+                <input type="hidden" name="marginAccountBalance" id="marginAccountBalance" value="$!{promoter.marginAccountBalance}"/>
+                <font class="accountBalance">$!{merchantBalance.marginAccountBalance}</font>
+           #end
+           #if($!{promoter.remoteInvocationStatus})
+                <input type="hidden" name="marginAccountBalance" id="marginAccountBalance" value="$!{promoter.marginAccountBalance}"/>$!{merchantBalance.marginAccountBalance}
+           #end
+        </td>
+        <td class="lbl">快速结算：</td>
+        ##<td ><input onchange="isSelectedFlag();" value="$!{promoter.pmtFastSettleFlag}" id="pmtFastSettleFlag" type="checkbox" #if("$!{promoter.pmtFastSettleFlag}"=="1")checked='checked'#end/>开通业务</td>
+        <td >#if("$!{promoter.pmtFastSettleFlag}"=="1")已开通#else已关闭#end</td>
+    </tr>
+	<tr>
+		<td class="lbl">快速结算保证金：</td>
+		##<td ><input type="text" id="fastSettleMargin" value="$!{promoter.fastSettleMargin}"/>元</td>
+		<td >
+		$!{fastSettleMargin}元(原保证金$!{promoter.fastSettleMargin}元,追加$!{amount}元)
+		</td>
+		<td class="lbl">快速结算额度：</td>
+		##<td ><input type="text" id="fastSettleLimit" value="$!{promoter.fastSettleLimit}"/>元</td>
+		<td >$!{promoter.fastSettleLimit}元</td>
+		<td class="lbl">快速结算剩余额度：</td>
+		<td style="font-size: 15px">$!{promoterDTO.validCredit}</td>
+	</tr>
+	<tr>
+		##<td class="lbl">t+0已申请配资金额：</td>
+		##<td >$NumberUtils.format($!{totalWithCapital})元</td>
+		<td class="lbl">垫资方：</td>
+		<td >#if($!{promoter.loaningType}==0) 代理商 #elseif($!{promoter.loaningType}==1) 盛付通 #end</td>
+		<td class="lbl"></td>
+		<td ></td>
+		<td class="lbl"></td>
+		<td ></td>
+		<td class="lbl"></td>
+		<td ></td>
+	</tr>
+</table>
+<div class="alC mgT10">
+	##<input type="button" id="settleBtn" onclick="doModifySettle('#springUrl('/')');" value="保存" />
+	<span class="gray" id="doing" style="display:none;">处理中...</span>
+	<input type="button" id="closeBtn" onclick="window.close();" value="关闭" />
+</div>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>#if($page_title) $!page_title #else T+0业务后台系统 #end</title>
+
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+	<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+	<META HTTP-EQUIV="Expires" CONTENT="0">
+
+	<LINK href="#springUrl('/htdocs/css/jquery.idtabs.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/jquery.nyroModal.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/Style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/supply_style.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/menu.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/css/datepick/ui-humanity.datepick.css')" type="text/css" rel="stylesheet">
+	<LINK href="#springUrl('/htdocs/artDialog/skins/default.css')" type="text/css" rel="stylesheet">
+
+
+	<script src="#springUrl('/htdocs/scripts/common.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/menuHover.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery-1.4.2.min.js')" type="text/javascript"></script>
+	<script type="text/javascript">
+		var rootPath = '#springUrl("")';
+		var j = jQuery.noConflict();
+		jQuery.fx.off = true;
+		var contextPath = "$rc.contextPath";
+	</script>
+    
+	<script src="#springUrl('/htdocs/scripts/validator.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.bgiframe.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.nyroModal-1.5.5.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.idTabs.min.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/datepick/jquery.datepick-zh-CN.js')" type="text/javascript"></script>
+	<script src="#springUrl('/htdocs/scripts/jquery.maxlength.js')" type="text/javascript"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/scripts/jquery.validate.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/artDialog/jquery.artDialog.js')"></script>
+	
+	<LINK href="#springUrl('/htdocs/msp/css/base.css')" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/js/base.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/js/baseExt.js')"></script>
+	<LINK href="#springUrl('/htdocs/msp/My97DatePicker/skin/WdatePicker.css')" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/My97DatePicker/WdatePicker.js')"></script>
+	<script type="text/javascript" src="#springUrl('/htdocs/msp/My97DatePicker/calendar.js')"></script>
+</head>
+<body>
+	<div class="Wrap">
+		#resultClosePageAndRefreshParentPage ($!needFresh,$!returnMsg)
+		$screen_content
+    </div>
+	#parse("/control/globalControl.vm")
+</body>
+</html>

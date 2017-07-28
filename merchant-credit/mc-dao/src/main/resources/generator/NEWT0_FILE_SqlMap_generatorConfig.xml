@@ -1,0 +1,49 @@
+<!-- <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <classPathEntry location="D:\tools\apache-maven-3.2.1-bin\.m2\repository\com\oracle\ojdbc14\10.2.0.3.0\ojdbc14-10.2.0.3.0.jar" />
+  <context id="Oracle2Tables" targetRuntime="MyBatis3" >
+
+	<property name="javaFileEncoding" value="UTF-8"/>
+	<jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@10.132.81.134:1521:DSDB1"
+        userId="MCredit"
+        password="MCredit">
+    </jdbcConnection>
+
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.sdp.mc.newt0.dao" targetProject="E:\workspace_pos_t_0\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+      <property name="rootQueryClass" value="com.sdp.emall.common.dao.QueryBase"/>
+      <property name="rootClass" value="com.sdp.emall.common.dao.BaseDO"/>
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="resources.sqlmap"  targetProject="E:\workspace_pos_t_0\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="com.sdp.mc.newt0.dao.mapper"  targetProject="E:\workspace_pos_t_0\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="generatorDAO" value="true" />
+      <property name="generatorDAOPackage" value="com.sdp.mc.newt0.dao.daointerface" />
+    </javaClientGenerator>
+
+    <managerGenerator type="SPRING" targetPackage="com.sdp.mc.newt0.manager" implementationPackage="com.sdp.mc.newt0.manager.impl" generatorEnable="true"  targetProject="E:\workspace_pos_t_0\merchant-credit\mc-dao\src\test\java">
+      <property name="enableSubPackages" value="true" />
+    </managerGenerator>
+
+	<table tableName="NEWT0_FILE" domainObjectName="LoaningQuotaDO">
+		<generatedKey column="ID" sqlStatement="select SEQ_NEWT0_FILE.nextval from dual" type="pre" />
+		<columnOverride column="ID" 						property="id" 				javaType="java.lang.Long" />
+    	<columnOverride column="FILEDATE" 					property="fileDate" 				javaType="java.lang.String" />
+    	<columnOverride column="QUOTA" 					    property="quota" 				javaType="java.lang.Long"/>
+    	<columnOverride column="CREATE_TIME" 				property="createTime" 				jdbcType="TIMESTAMP"/>
+    	<columnOverride column="UPDATE_TIME" 				property="updateTime" 			jdbcType="TIMESTAMP"/>
+    </table>
+  </context>
+</generatorConfiguration> -->

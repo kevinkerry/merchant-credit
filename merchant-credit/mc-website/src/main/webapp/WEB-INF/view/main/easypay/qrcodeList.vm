@@ -1,0 +1,29 @@
+#set($formName = 'submitForm')
+#set ($functionName="ajaxPaging()")
+#parse("/main/include/page_ajax.vm")
+<table class="listTb" cellspacing="0" cellpadding="0" id="Gv_MainList">
+	<tr class="ttl">
+		<td>序号</td>
+		<td>起始编号</td>
+		<td>结束编号</td>
+		<td>数量</td>
+		<td>下级代理商账号</td>
+		<td>下级代理商名称</td>
+		<td>操作日期</td>
+		<td>操作员</td>
+		<td>操作</td>
+	</tr>
+	#foreach($o in $!{dataList})
+	<tr>
+	    <td>$!{velocityCount}</td>
+		<td>$!{o.qrStartCode}</td>
+		<td>$!{o.qrEndCode}</td>
+		<td>$!{o.codeSum}</td>
+		<td>$!{o.childMerchantNo}</td>
+		<td>$!{o.childMerchantName}</td>
+		<td>#showDateTime($!{o.createTime})</td>
+		<td>$!{o.operatorId}</td>
+		<td><a href="#"  onclick="deleteQrcode('$!{o.parentMerchantNo}','$!{o.id}');"  > 删除</a></td>
+	</tr>
+	#end
+</table>

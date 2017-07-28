@@ -1,0 +1,127 @@
+#set($page_title = 't+0配资交易管理')
+#set($formName = 'submitForm')
+<div class="TableForm">
+	<h2 class="Mtit">$page_title</h2>
+	<div class="AreaTb">
+		<form id="submitForm" name="submitForm" method="post" action="#springUrl('/ajaxPaging/withFundingQuery.do')">
+		<table class="qryTb" cellspacing="0" cellpadding="0">
+			<tr>
+		    	<td class="lbl" >拓展方类型：</td>
+		        <td width="200">
+		            <select id="promoterType" name="promoterType" class="w130">
+		                <option value="">全部</option>
+		                <option value="0003" #if("$!{params.promoterType}"=="0003")selected#end>普通POS商户</option>
+		                <option value="0007" #if("$!{params.promoterType}"=="0007")selected#end>MPOS商户</option>
+		            </select>
+		        </td>
+		        <td class="lbl">拓展方名称：</td>
+		        <td width="200"><input type="text" id="promoterName" name="promoterName" style="width: 139px" value="$!{params.promoterName}" class="txt130"/></td>
+		        <td class="lbl" >拓展方商户号：</td>
+		        <td width="200"><input type="text" id="promoterNo" name="promoterNo" style="width: 139px" class="txt130" value="$!{params.promoterNo}"/></td>
+		    </tr>
+		     <tr>
+		   		<td class="lbl">t+0配资申请日期：</td>
+		        <td colspan="3">
+		            <input type="text" id="createTimeStart" name="createTimeStart" class="date txt130" onclick="xDatePicker(2);"/>
+		            ~
+		            <input type="text" id="createTimeEnd" name="createTimeEnd" class="date txt130" onclick="xDatePicker(2);"/>
+		            <a href="#" class="smBtn" onclick="setTimeStartEnd( -29, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：30天内">30</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -14, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：15天内">15</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -6, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：7天内">7</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -2, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：3天内">3</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( -1, elm('createTimeStart'), -1, elm('createTimeEnd') );return false;" title="交易时间范围：昨天">昨</a>
+					<a href="#" class="smBtn" onclick="setTimeStartEnd( 0, elm('createTimeStart'), 0, elm('createTimeEnd') );return false;" title="交易时间范围：今天">今</a>
+		        </td>
+				<td class="lbl">配资申请状态：</td>
+		        <td width="200">
+		        	<select id="status" name="status" class="w130">
+						<option value="">全部</option>
+						<option value="0">初始化</option>
+						<option value="1">处理中</option>
+						<option value="2">fos配资成功</option>
+						<option value="3">fos配资失败</option>
+						<option value="4">配资成功</option>
+						<option value="5">配资失败</option>
+						<option value="6">msp配资额度恢复成功</option>
+						<option value="7">msp配资额度恢复失败</option>
+						<option value="8">fos冲正成功</option>
+						<option value="9">fos冲正失败</option>
+		            </select>
+		        </td>
+		    </tr>
+		    <tr>
+		        <td colspan="6" align="center">
+		            <a href="#" class="btn2" id="queryBtn" onclick="ajaxPaging()">查询</a>
+		            <span class="gray" id="querying" style="display:none;">查询中...</span>
+		            <a href="#" class="smBtn mgL10" onclick="clearAll();" title="清除所有查询条件">清</a>
+		        </td>
+		    </tr>
+		</table>
+        </form>
+    </div>
+</div>
+<div class="TableForm">
+	<h2 class="Mtit">查询结果</h2>
+	<div id="container" class="RealTb">
+    </div>
+</div>
+
+<script type="text/javascript">
+	window.onload=function(){
+		//setTimeStartEnd(0,elm("txnTimeStartStr"),0,elm("txnTimeEndStr"));
+	};
+	var ALL_COND_ID = ['promoterType', 'promoterName', 'promoterNo', 'status', 'createTimeStart', 'createTimeEnd'];
+	function clearAll(){
+		for(i in ALL_COND_ID){
+    		jQuery("#"+ALL_COND_ID[i]).val("");
+    	}
+	}
+    //ajax翻页
+    function ajaxPaging(){
+    	var currentPage=jQuery("#currentPage_submitForm").val();
+    	currentPage=currentPage?currentPage:1;
+    	var data = {"currentPage":currentPage};
+    	for(i in ALL_COND_ID){
+    		data[ALL_COND_ID[i]] = jQuery("#"+ALL_COND_ID[i]).val();
+    	}
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/ajaxPaging/withFundingQuery.do')" ,
+		    data: data ,
+		    dataType: "html",
+		    success: function(data){
+		    	jQuery("#container").html(data);
+		    }
+		});
+    }
+    //重置msp配资
+    function resetCreditLimit(applyId){
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/resetCreditLimit.do')" ,
+		    data: {id:applyId} ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data){
+		    		alert(data.errorMessage);
+		    		ajaxPaging();
+		    	}
+		    }
+		});
+    }
+	//手续费已退款
+    function feeRefund(applyId){
+    	jQuery.ajax({
+			type: 'POST',
+		    url: "#springUrl('/fastSettle/feeRefund.do')" ,
+		    data: {id:applyId} ,
+		    dataType: "json",
+		    success: function(data){
+		    	if(data){
+		    		alert(data.errorMessage);
+		    		ajaxPaging();
+		    	}
+		    }
+		});
+    }
+</script>
